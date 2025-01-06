@@ -69,6 +69,7 @@ const MathChallenge = () => {
           type="number"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          placeholder=""
         />
       </div>
       <div
