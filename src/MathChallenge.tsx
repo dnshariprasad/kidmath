@@ -1,4 +1,10 @@
 import { useState, useEffect } from "react";
+import KidButton from "./components/KidButton";
+import {
+  CenteredContainerHorizontally,
+  CenteredContainerVertical,
+  StyledInput,
+} from "./KidStyles";
 
 const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
 const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
@@ -46,46 +52,24 @@ const MathChallenge = () => {
   };
 
   return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "10px",
-          fontSize: "24px",
-        }}
-      >
+    <CenteredContainerVertical>
+      <CenteredContainerHorizontally>
         <h2>
           {num1} {operation} {num2} =
         </h2>
-        <input
-          style={{
-            width: "60px",
-            height: "35px", // Increased height
-            textAlign: "center",
-            fontSize: "20px",
-          }}
+        <StyledInput
           type="number"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder=""
         />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "10px",
-          fontSize: "24px",
-        }}
-      >
-        <button onClick={handleReset}>Reset</button>
-        <button onClick={handleSubmit}>Submit</button>
-      </div>
+      </CenteredContainerHorizontally>
+      <CenteredContainerHorizontally>
+        <KidButton title="Reset" isActive={false} onClick={handleReset} />
+        <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
+      </CenteredContainerHorizontally>
       {feedback && <h1>{feedback}</h1>}
-    </div>
+    </CenteredContainerVertical>
   );
 };
 
