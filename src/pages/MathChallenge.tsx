@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import KidButton from "./components/KidButton";
+import KidButton from "../components/KidButton";
 import {
-  CenteredContainerHorizontally,
   CenteredContainerVertical,
+  CenteredContainerHorizontally,
   StyledInput,
-} from "./KidStyles";
+} from "../KidStyles";
 
 const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
 const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
