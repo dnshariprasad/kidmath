@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
 const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
