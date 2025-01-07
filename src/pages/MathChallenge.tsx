@@ -25,6 +25,9 @@ const MathChallenge = () => {
     setNum1(newNum1);
     setNum2(newNum2);
     setOperation(newOperation);
+    if ("-" === newOperation && newNum1 < newNum2) {
+      generateChallenge();
+    }
     setInputValue("");
     setFeedback("");
   };
@@ -70,6 +73,7 @@ const MathChallenge = () => {
           <KidButton title="Reset" isActive={false} onClick={handleReset} />
           <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
         </CenteredContainerHorizontally>
+        <br />
         {feedback && <h1>{feedback}</h1>}
       </CenteredContainerVertical>
     </CardDetail>
