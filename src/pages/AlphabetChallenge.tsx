@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  CardDetail,
   CenteredContainerHorizontally,
   CenteredContainerVertical,
 } from "../KidStyles";
@@ -29,14 +30,16 @@ const AlphabetChallenge = () => {
   };
 
   return (
-    <CenteredContainerVertical>
-      <h2>{randomString}</h2>
+    <CardDetail>
+      <CenteredContainerVertical>
+        <h2>{randomString}</h2>
 
-      <CenteredContainerHorizontally>
-        <KidButton isActive={true} title="Read" onClick={handleReadText} />
-        <KidButton isActive={true} title="Next" onClick={handleNext} />
-      </CenteredContainerHorizontally>
-    </CenteredContainerVertical>
+        <CenteredContainerHorizontally>
+          <KidButton isActive={true} title="Read" onClick={handleReadText} />
+          <KidButton isActive={true} title="Next" onClick={handleNext} />
+        </CenteredContainerHorizontally>
+      </CenteredContainerVertical>
+    </CardDetail>
   );
 };
 

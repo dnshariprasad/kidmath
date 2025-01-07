@@ -42,3 +42,9 @@ export const CardDetail = styled.div`
   max-height: 100%;
   max-width: 100%;
 `;
+
+export const Navbar = styled.nav`
+  padding: 0px 2opx; /* Adjust padding as needed */
+  background-color: #f8f9fa; /* Optional: Background color */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow */
+`;

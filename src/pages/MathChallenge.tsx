@@ -4,6 +4,7 @@ import {
   CenteredContainerVertical,
   CenteredContainerHorizontally,
   StyledInput,
+  CardDetail,
 } from "../KidStyles";
 
 const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
@@ -52,24 +53,26 @@ const MathChallenge = () => {
   };
 
   return (
-    <CenteredContainerVertical>
-      <CenteredContainerHorizontally>
-        <h2>
-          {num1} {operation} {num2} =
-        </h2>
-        <StyledInput
-          type="number"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder=""
-        />
-      </CenteredContainerHorizontally>
-      <CenteredContainerHorizontally>
-        <KidButton title="Reset" isActive={false} onClick={handleReset} />
-        <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
-      </CenteredContainerHorizontally>
-      {feedback && <h1>{feedback}</h1>}
-    </CenteredContainerVertical>
+    <CardDetail>
+      <CenteredContainerVertical>
+        <CenteredContainerHorizontally>
+          <h2>
+            {num1} {operation} {num2} =
+          </h2>
+          <StyledInput
+            type="number"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder=""
+          />
+        </CenteredContainerHorizontally>
+        <CenteredContainerHorizontally>
+          <KidButton title="Reset" isActive={false} onClick={handleReset} />
+          <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
+        </CenteredContainerHorizontally>
+        {feedback && <h1>{feedback}</h1>}
+      </CenteredContainerVertical>
+    </CardDetail>
   );
 };
 
