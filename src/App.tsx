@@ -9,19 +9,21 @@ const App: React.FC = () => {
   return (
     <HashRouter>
       <Navbar className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <Link to="/" className="navbar-brand">
-            <h2>kidoo</h2>
+        <div className="container">
+          <Link to="/" className="navbar-brand d-flex align-items-center">
+            kidoo
           </Link>
-          <Link to="/alphabet" className="nav-link d-inline-block">
-            Alphabet
-          </Link>
-          <Link to="/sight_words" className="nav-link d-inline-block">
-            Sight Words
-          </Link>
-          <Link to="/counting" className="nav-link d-inline-block">
-            Counting
-          </Link>
+          <div className="navbar-nav ml-auto d-flex align-items-center">
+            <Link to="/alphabet" className="nav-link">
+              Alphabets
+            </Link>
+            <Link to="/sight_words" className="nav-link">
+              Sight Words
+            </Link>
+            <Link to="/counting" className="nav-link">
+              Counting
+            </Link>
+          </div>
         </div>
       </Navbar>
       <Routes>
