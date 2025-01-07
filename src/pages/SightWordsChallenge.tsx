@@ -120,15 +120,15 @@ const SightWordsChallenge = () => {
         <CenteredContainerVertical>
           <h1>{stringList[count]}</h1>
           <CenteredContainerHorizontally>
-            <KidButton isActive={true} title="<" onClick={handleNext} />
+            <KidButton isActive={true} title=" < " onClick={handleNext} />
             <KidButton isActive={true} title="Read" onClick={handleReadText} />
-            <KidButton isActive={true} title=">" onClick={handleNext} />
+            <KidButton isActive={true} title=" > " onClick={handleNext} />
           </CenteredContainerHorizontally>
         </CenteredContainerVertical>
       </CardDetail>
 
-      <CardDetail>
-        {stringList.length > 0 && (
+      {stringList.length > 0 && (
+        <CardDetail>
           <TagList>
             {stringList.map((tag, index) => (
               <Tag key={index} onClick={() => handleTagClick(tag)}>
@@ -136,8 +136,26 @@ const SightWordsChallenge = () => {
               </Tag>
             ))}
           </TagList>
-        )}
-      </CardDetail>
+        </CardDetail>
+      )}
+      {/* {words.length > 0 && (
+        <CardDetail>
+          <div>
+            <ul>
+              {words.map((wordData) => (
+                <li key={wordData.word}>
+                  <strong>{wordData.word}</strong>
+                  <ul>
+                    {wordData.sentences.map((sentence, index) => (
+                      <li key={index}>{sentence}</li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </CardDetail>
+      )} */}
     </div>
   );
 };

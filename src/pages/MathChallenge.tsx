@@ -68,7 +68,7 @@ const MathChallenge = () => {
             onChange={(e) => setInputValue(e.target.value)}
             placeholder=""
           />
-          <KidButton title=">" isActive={true} onClick={handleReset} />
+          <KidButton title=" > " isActive={true} onClick={handleReset} />
         </CenteredContainerHorizontally>
         <CenteredContainerHorizontally>
           <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
