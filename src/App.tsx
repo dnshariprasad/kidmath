@@ -1,24 +1,39 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import "./App.css";
 import MathChallenge from "./pages/MathChallenge";
-import EnglishChallenge from "./pages/EnglishChallenge";
+import AlphabetChallenge from "./pages/AlphabetChallenge";
+import SightWordsChallenge from "./pages/SightWordsChallenge";
 const Navbar = () => {
   return (
     <nav style={{ padding: "10px", backgroundColor: "#3498db" }}>
       <ul style={{ listStyleType: "none", display: "flex", gap: "20px" }}>
-        {/* <li>
-          <Link to="/" style={{ color: "white", textDecoration: "none" }}>
-            kidmath
-          </Link>
-        </li> */}
         <li>
-          <Link to="/math" style={{ color: "white", textDecoration: "none" }}>
-            Math
+          <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+            kido
           </Link>
         </li>
         <li>
-          <Link to="/eng" style={{ color: "white", textDecoration: "none" }}>
-            Eng
+          <Link
+            to="/counting"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            Counting
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/sight_words"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            Sight Words
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/alphabet"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            Alphabet
           </Link>
         </li>
       </ul>
@@ -32,8 +47,9 @@ function App() {
       <div style={{ padding: "20px" }}>
         <Routes>
           <Route path="/" element={<MathChallenge />} />
-          <Route path="/math" element={<MathChallenge />} />
-          <Route path="/eng" element={<EnglishChallenge />} />
+          <Route path="/counting" element={<MathChallenge />} />
+          <Route path="/sight_words" element={<SightWordsChallenge />} />
+          <Route path="/alphabet" element={<AlphabetChallenge />} />
         </Routes>
       </div>
     </BrowserRouter>

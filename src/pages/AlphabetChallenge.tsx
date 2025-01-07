@@ -4,39 +4,17 @@ import {
   CenteredContainerVertical,
 } from "../KidStyles";
 import KidButton from "../components/KidButton";
-const stringList = [
-  "a",
-  "and",
-  "big",
-  "can",
-  "for",
-  "go",
-  "I",
-  "in",
-  "is",
-  "it",
-  "my",
-  "run",
-  "see",
-  "the",
-  "to",
-  "two",
-  "up",
-  "we",
-  "where",
-  "when",
-  "how",
-  "you",
-  "that",
-  "with",
+const alphabet = [
+  ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)), // A-Z
+  ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i)), // a-z
 ];
 
-const EnglishChallenge = () => {
+const AlphabetChallenge = () => {
   const [randomString, setRandomString] = useState<string>("");
 
   const generateChallenge = () => {
-    const randomIndex = Math.floor(Math.random() * stringList.length); // Get a random index
-    setRandomString(stringList[randomIndex]); // Return the string at that index
+    const randomIndex = Math.floor(Math.random() * alphabet.length); // Get a random index
+    setRandomString(alphabet[randomIndex]); // Return the string at that index
   };
 
   useEffect(() => {
@@ -62,4 +40,4 @@ const EnglishChallenge = () => {
   );
 };
 
-export default EnglishChallenge;
+export default AlphabetChallenge;
