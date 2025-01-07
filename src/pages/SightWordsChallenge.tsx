@@ -6,30 +6,58 @@ import {
 import KidButton from "../components/KidButton";
 const stringList = [
   "a",
+  "an",
   "and",
   "are",
+  "am",
   "can",
   "for",
-  "I",
+  "from",
   "in",
   "is",
   "it",
+  "no",
+  "on",
+  "of",
+  "bug",
+  "look",
+  "have",
+  "little",
+  "said",
+  "come",
+  "all",
+  "at",
+  "has",
+  "have",
+  "after",
+  "away",
   "my",
   "me",
   "run",
   "see",
   "the",
   "to",
-  "two",
   "up",
   "we",
-  "where",
-  "when",
-  "how",
   "you",
   "that",
   "this",
   "with",
+  "find",
+  "come",
+  "go",
+  "far",
+  "where",
+  "when",
+  "what",
+  "how",
+  "I",
+  "he",
+  "she",
+  "there",
+  "they",
+  "these",
+  "those",
 ];
 
 const SightWordsChallenge = () => {
@@ -53,7 +81,7 @@ const SightWordsChallenge = () => {
 
   return (
     <CenteredContainerVertical>
-      <h2>{randomString}</h2>
+      <h1>{randomString}</h1>
 
       <CenteredContainerHorizontally>
         <KidButton isActive={true} title="Read" onClick={handleReadText} />
