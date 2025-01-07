@@ -3,8 +3,11 @@ import {
   CardDetail,
   CenteredContainerHorizontally,
   CenteredContainerVertical,
+  Tag,
+  TagList,
 } from "../KidStyles";
 import KidButton from "../components/KidButton";
+import { readText } from "../util";
 const alphabet = [
   ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)), // A-Z
   ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i)), // a-z
@@ -30,16 +33,29 @@ const AlphabetChallenge = () => {
   };
 
   return (
-    <CardDetail>
-      <CenteredContainerVertical>
-        <h2>{randomString}</h2>
+    <div>
+      <CardDetail>
+        <CenteredContainerVertical>
+          <h2>{randomString}</h2>
 
-        <CenteredContainerHorizontally>
-          <KidButton isActive={true} title="Read" onClick={handleReadText} />
-          <KidButton isActive={true} title="Next" onClick={handleNext} />
-        </CenteredContainerHorizontally>
-      </CenteredContainerVertical>
-    </CardDetail>
+          <CenteredContainerHorizontally>
+            <KidButton isActive={true} title="Read" onClick={handleReadText} />
+            <KidButton isActive={true} title="Next" onClick={handleNext} />
+          </CenteredContainerHorizontally>
+        </CenteredContainerVertical>
+      </CardDetail>
+      <CardDetail>
+        {alphabet.length > 0 && (
+          <TagList>
+            {alphabet.map((tag, index) => (
+              <Tag key={index} onClick={() => readText(tag)}>
+                {tag}
+              </Tag>
+            ))}
+          </TagList>
+        )}
+      </CardDetail>
+    </div>
   );
 };
 

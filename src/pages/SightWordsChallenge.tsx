@@ -7,6 +7,7 @@ import {
   TagList,
 } from "../KidStyles";
 import KidButton from "../components/KidButton";
+import { readText } from "../util";
 const stringList = [
   "a",
   "an",
@@ -95,10 +96,7 @@ const stringList = [
   "can",
   "bug",
 ];
-function readText(text: string) {
-  const speech = new SpeechSynthesisUtterance(text);
-  window.speechSynthesis.speak(speech);
-}
+
 const SightWordsChallenge = () => {
   const [count, setCount] = useState<number>(0);
 
