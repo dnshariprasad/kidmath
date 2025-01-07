@@ -55,11 +55,9 @@ export const TagList = styled.div`
   gap: 10px;
   flex-wrap: wrap; /* Wrap tags to the next line */
   overflow: hidden; /* Prevent overflow outside the card */
-  max-height: 100px; /* Optional: Limit the height */
   padding-right: 5px; /* Space for scrollbar if needed */
   -webkit-line-clamp: 2; /* Limit to 2 lines */
   -webkit-box-orient: vertical; /* Define vertical orientation */
-  max-height: calc(2.5rem * 2); /* Adjust based on line height and spacing */
 `;
 
 export const Tag = styled.span`

@@ -10,57 +10,90 @@ import KidButton from "../components/KidButton";
 const stringList = [
   "a",
   "an",
+
+  "I",
   "am",
-  "and",
-  "are",
-  "away",
-  "run",
-  "see",
-  "look",
-  "to",
-  "with",
-  "find",
-  "no",
-  "yes",
-  "come",
-  "go",
-  "up",
-  "down",
-  "far",
-  "where",
-  "when",
-  "what",
-  "how",
+  "we",
   "me",
   "my",
-  "we",
   "you",
-  "I",
+  "your",
+
   "he",
   "she",
+
   "the",
   "there",
   "they",
+
+  "this",
+  "that",
+
+  "when",
+  "what",
+  "where",
+  "how",
+
   "these",
   "those",
-  "that",
-  "this",
+
   "has",
   "have",
+
+  "is",
+  "are",
+
+  "at",
+  "in",
   "on",
   "of",
   "it",
-  "is",
-  "at",
-  "for",
+
   "from",
-  "in",
+  "to",
+
   "can",
   "bug",
-  "little",
-  "said",
+
   "all",
+  "some",
+
   "after",
+  "before",
+
+  "and",
+  "or",
+  "also",
+
+  "big",
+  "small",
+  "little",
+
+  "said",
+
+  "far",
+  "near",
+
+  "up",
+  "down",
+
+  "come",
+  "go",
+
+  "for",
+  "with",
+
+  "find",
+  "run",
+
+  "away",
+  "near",
+
+  "see",
+  "look",
+
+  "yes",
+  "no",
 ];
 function readText(text: string) {
   const speech = new SpeechSynthesisUtterance(text);
