@@ -59,18 +59,18 @@ const MathChallenge = () => {
     <CardDetail>
       <CenteredContainerVertical>
         <CenteredContainerHorizontally>
-          <h2>
+          <h1>
             {num1} {operation} {num2} =
-          </h2>
+          </h1>
           <StyledInput
             type="number"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder=""
           />
+          <KidButton title=">" isActive={true} onClick={handleReset} />
         </CenteredContainerHorizontally>
         <CenteredContainerHorizontally>
-          <KidButton title="Reset" isActive={false} onClick={handleReset} />
           <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
         </CenteredContainerHorizontally>
         <br />
