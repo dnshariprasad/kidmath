@@ -30,3 +30,15 @@ export const StyledInput = styled.input`
     outline: none;
   }
 `;
+
+export const CardDetail = styled.div`
+  padding: 20px;
+  margin-bottom: 50px;
+  margin-top: 30px;
+  margin-left: 35px;
+  margin-right: 35px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  max-height: 100%;
+  max-width: 100%;
+`;

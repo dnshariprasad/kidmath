@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  CardDetail,
   CenteredContainerHorizontally,
   CenteredContainerVertical,
 } from "../KidStyles";
@@ -77,14 +78,16 @@ const SightWordsChallenge = () => {
   };
 
   return (
-    <CenteredContainerVertical>
-      <h1>{stringList[count]}</h1>
-
-      <CenteredContainerHorizontally>
-        <KidButton isActive={true} title="Read" onClick={handleReadText} />
-        <KidButton isActive={true} title="Next" onClick={handleNext} />
-      </CenteredContainerHorizontally>
-    </CenteredContainerVertical>
+    <CardDetail>
+      <CenteredContainerVertical>
+        <h1>{stringList[count]}</h1>
+        <CenteredContainerHorizontally>
+          <KidButton isActive={true} title="<" onClick={handleNext} />
+          <KidButton isActive={true} title="Read" onClick={handleReadText} />
+          <KidButton isActive={true} title=">" onClick={handleNext} />
+        </CenteredContainerHorizontally>
+      </CenteredContainerVertical>
+    </CardDetail>
   );
 };
 
