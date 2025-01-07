@@ -52,9 +52,6 @@ const stringList = [
   "from",
   "to",
 
-  "can",
-  "bug",
-
   "all",
   "some",
 
@@ -94,6 +91,9 @@ const stringList = [
 
   "yes",
   "no",
+
+  "can",
+  "bug",
 ];
 function readText(text: string) {
   const speech = new SpeechSynthesisUtterance(text);
