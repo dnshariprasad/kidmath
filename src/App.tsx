@@ -1,4 +1,4 @@
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { HashRouter, Link, Route, Routes } from "react-router-dom";
 import "./App.css";
 import MathChallenge from "./pages/MathChallenge";
 import AlphabetChallenge from "./pages/AlphabetChallenge";
@@ -42,7 +42,7 @@ const Navbar = () => {
 };
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Navbar /> {/* Navbar with Links */}
       <div style={{ padding: "20px" }}>
         <Routes>
@@ -52,7 +52,7 @@ function App() {
           <Route path="/alphabet" element={<AlphabetChallenge />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 export default App;
