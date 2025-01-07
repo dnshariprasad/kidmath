@@ -10,10 +10,10 @@ const App: React.FC = () => {
     <HashRouter>
       <Navbar className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container">
-          <Link to="/" className="navbar-brand d-flex align-items-center">
-            kidoo
-          </Link>
           <div className="navbar-nav ml-auto d-flex align-items-center">
+            <Link to="/" className="navbar-brand d-flex align-items-center">
+              kidoo
+            </Link>
             <Link to="/alphabet" className="nav-link">
               Alphabets
             </Link>
