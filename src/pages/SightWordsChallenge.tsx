@@ -7,81 +7,78 @@ import KidButton from "../components/KidButton";
 const stringList = [
   "a",
   "an",
+  "am",
   "and",
   "are",
-  "am",
-  "can",
-  "for",
-  "from",
-  "in",
-  "is",
-  "it",
-  "no",
-  "on",
-  "of",
-  "bug",
-  "look",
-  "have",
-  "little",
-  "said",
-  "come",
-  "all",
-  "at",
-  "has",
-  "have",
-  "after",
   "away",
-  "my",
-  "me",
   "run",
   "see",
-  "the",
+  "look",
   "to",
-  "up",
-  "we",
-  "you",
-  "that",
-  "this",
   "with",
   "find",
+  "no",
+  "yes",
   "come",
   "go",
+  "up",
+  "down",
   "far",
   "where",
   "when",
   "what",
   "how",
+  "me",
+  "my",
+  "we",
+  "you",
   "I",
   "he",
   "she",
+  "the",
   "there",
   "they",
   "these",
   "those",
+  "that",
+  "this",
+  "has",
+  "have",
+  "on",
+  "of",
+  "it",
+  "is",
+  "at",
+  "for",
+  "from",
+  "in",
+  "can",
+  "bug",
+  "little",
+  "said",
+  "all",
+  "after",
 ];
 
 const SightWordsChallenge = () => {
-  const [randomString, setRandomString] = useState<string>("");
+  const [count, setCount] = useState<number>(0);
 
-  const generateChallenge = () => {
-    const randomIndex = Math.floor(Math.random() * stringList.length); // Get a random index
-    setRandomString(stringList[randomIndex]); // Return the string at that index
-  };
-
-  useEffect(() => {
-    generateChallenge();
-  }, []);
   const handleReadText = () => {
-    const speech = new SpeechSynthesisUtterance(randomString); // Create a SpeechSynthesisUtterance with the text
-    window.speechSynthesis.speak(speech); // Use the SpeechSynthesis API to read the text
+    const speech = new SpeechSynthesisUtterance(stringList[count]);
+    window.speechSynthesis.speak(speech);
   };
   const handleNext = () => {
-    generateChallenge();
+    let tempCount = count + 1;
+    if (tempCount >= stringList.length) {
+      setCount(0);
+    } else {
+      setCount(tempCount);
+    }
   };
 
   return (
     <CenteredContainerVertical>
-      <h1>{randomString}</h1>
+      <h1>{stringList[count]}</h1>
 
       <CenteredContainerHorizontally>
         <KidButton isActive={true} title="Read" onClick={handleReadText} />
