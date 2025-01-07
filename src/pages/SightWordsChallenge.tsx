@@ -3,6 +3,8 @@ import {
   CardDetail,
   CenteredContainerHorizontally,
   CenteredContainerVertical,
+  Tag,
+  TagList,
 } from "../KidStyles";
 import KidButton from "../components/KidButton";
 const stringList = [
@@ -60,13 +62,15 @@ const stringList = [
   "all",
   "after",
 ];
-
+function readText(text: string) {
+  const speech = new SpeechSynthesisUtterance(text);
+  window.speechSynthesis.speak(speech);
+}
 const SightWordsChallenge = () => {
   const [count, setCount] = useState<number>(0);
 
   const handleReadText = () => {
-    const speech = new SpeechSynthesisUtterance(stringList[count]);
-    window.speechSynthesis.speak(speech);
+    readText(stringList[count]);
   };
   const handleNext = () => {
     let tempCount = count + 1;
@@ -76,18 +80,34 @@ const SightWordsChallenge = () => {
       setCount(tempCount);
     }
   };
-
+  const handleTagClick = (tag: string) => {
+    readText(tag);
+  };
   return (
-    <CardDetail>
-      <CenteredContainerVertical>
-        <h1>{stringList[count]}</h1>
-        <CenteredContainerHorizontally>
-          <KidButton isActive={true} title="<" onClick={handleNext} />
-          <KidButton isActive={true} title="Read" onClick={handleReadText} />
-          <KidButton isActive={true} title=">" onClick={handleNext} />
-        </CenteredContainerHorizontally>
-      </CenteredContainerVertical>
-    </CardDetail>
+    <div>
+      <CardDetail>
+        <CenteredContainerVertical>
+          <h1>{stringList[count]}</h1>
+          <CenteredContainerHorizontally>
+            <KidButton isActive={true} title="<" onClick={handleNext} />
+            <KidButton isActive={true} title="Read" onClick={handleReadText} />
+            <KidButton isActive={true} title=">" onClick={handleNext} />
+          </CenteredContainerHorizontally>
+        </CenteredContainerVertical>
+      </CardDetail>
+
+      <CardDetail>
+        {stringList.length > 0 && (
+          <TagList>
+            {stringList.map((tag, index) => (
+              <Tag key={index} onClick={() => handleTagClick(tag)}>
+                {tag}
+              </Tag>
+            ))}
+          </TagList>
+        )}
+      </CardDetail>
+    </div>
   );
 };
 
