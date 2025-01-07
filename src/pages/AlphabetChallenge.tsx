@@ -8,10 +8,9 @@ import {
 } from "../KidStyles";
 import KidButton from "../components/KidButton";
 import { readText } from "../util";
-const alphabet = [
-  ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)), // A-Z
-  ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i)), // a-z
-];
+import { big, small } from "../data/Alphabet";
+
+const alphabet = [...big, ...small];
 
 const AlphabetChallenge = () => {
   const [randomString, setRandomString] = useState<string>("");
@@ -47,7 +46,18 @@ const AlphabetChallenge = () => {
       <CardDetail>
         {alphabet.length > 0 && (
           <TagList>
-            {alphabet.map((tag, index) => (
+            {big.map((tag, index) => (
+              <Tag key={index} onClick={() => readText(tag)}>
+                {tag}
+              </Tag>
+            ))}
+          </TagList>
+        )}
+      </CardDetail>
+      <CardDetail>
+        {alphabet.length > 0 && (
+          <TagList>
+            {small.map((tag, index) => (
               <Tag key={index} onClick={() => readText(tag)}>
                 {tag}
               </Tag>
