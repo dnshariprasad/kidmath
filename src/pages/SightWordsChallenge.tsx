@@ -53,9 +53,7 @@ const SightWordsChallenge = () => {
             )}
             <br />
             <br />
-            <h1 title=" > " onClick={handleNext}>
-              {" > "}
-            </h1>
+            <h1 onClick={handleNext}>{" > "}</h1>
           </CenteredContainerHorizontally>
         </CardDetail>
       </CenteredContainerHorizontally>

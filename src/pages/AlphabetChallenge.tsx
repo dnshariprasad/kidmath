@@ -6,7 +6,6 @@ import {
   Tag,
   TagList,
 } from "../KidStyles";
-import KidButton from "../components/KidButton";
 import { readText } from "../util";
 import { big, small } from "../data/Alphabet";
 import SpeakIcon from "../components/SpeakIcon";
@@ -31,37 +30,42 @@ const AlphabetChallenge = () => {
 
   return (
     <div>
-      <CardDetail>
-        <CenteredContainerVertical>
-          <CenteredContainerHorizontally>
-            <h2>{randomString}</h2>
-            <SpeakIcon text={randomString} />
-          </CenteredContainerHorizontally>
-          <KidButton isActive={true} title="Next" onClick={handleNext} />
-        </CenteredContainerVertical>
-      </CardDetail>
-      <CardDetail>
-        {alphabet.length > 0 && (
-          <TagList>
-            {big.map((tag, index) => (
-              <Tag key={index} onClick={() => readText(tag)}>
-                {tag}
-              </Tag>
-            ))}
-          </TagList>
-        )}
-      </CardDetail>
-      <CardDetail>
-        {alphabet.length > 0 && (
-          <TagList>
-            {small.map((tag, index) => (
-              <Tag key={index} onClick={() => readText(tag)}>
-                {tag}
-              </Tag>
-            ))}
-          </TagList>
-        )}
-      </CardDetail>
+      <CenteredContainerVertical>
+        <CardDetail>
+          <CenteredContainerVertical>
+            <CenteredContainerHorizontally>
+              <h2>{randomString}</h2>
+              <SpeakIcon text={randomString} />
+              <br />
+              <br />
+              <br />
+              <h1 onClick={handleNext}>{" > "}</h1>
+            </CenteredContainerHorizontally>
+          </CenteredContainerVertical>
+        </CardDetail>
+        <CardDetail>
+          {alphabet.length > 0 && (
+            <TagList>
+              {big.map((tag, index) => (
+                <Tag key={index} onClick={() => readText(tag)}>
+                  {tag}
+                </Tag>
+              ))}
+            </TagList>
+          )}
+        </CardDetail>
+        <CardDetail>
+          {alphabet.length > 0 && (
+            <TagList>
+              {small.map((tag, index) => (
+                <Tag key={index} onClick={() => readText(tag)}>
+                  {tag}
+                </Tag>
+              ))}
+            </TagList>
+          )}
+        </CardDetail>
+      </CenteredContainerVertical>
     </div>
   );
 };
