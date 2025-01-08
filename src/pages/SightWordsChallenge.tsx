@@ -17,6 +17,11 @@ const SightWordsChallenge = () => {
   const handleReadText = () => {
     readText(stringList[count].word);
   };
+
+  const handleReadSentence = (sentence: string) => {
+    readText(sentence);
+  };
+
   const handleNext = () => {
     let tempCount = count + 1;
     if (tempCount >= stringList.length) {
@@ -46,7 +51,12 @@ const SightWordsChallenge = () => {
               <ul>
                 <li>
                   {stringList[count].sentences.map((sentence, index) => (
-                    <li key={index}>{sentence}</li>
+                    <li
+                      key={index}
+                      onClick={() => handleReadSentence(sentence)}
+                    >
+                      {sentence}
+                    </li>
                   ))}
                 </li>
               </ul>
