@@ -111,9 +111,7 @@ const SightWordsChallenge = () => {
       setCount(tempCount);
     }
   };
-  const handleTagClick = (tag: string) => {
-    readText(tag);
-  };
+
   return (
     <div>
       <CardDetail>
