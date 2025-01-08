@@ -111,7 +111,6 @@ const SightWordsChallenge = () => {
       setCount(tempCount);
     }
   };
-
   return (
     <div>
       <CardDetail>
@@ -136,24 +135,6 @@ const SightWordsChallenge = () => {
           </TagList>
         </CardDetail>
       )}
-      {{words.length > 0 && (
-        <CardDetail>
-          <div>
-            <ul>
-              {words.map((wordData) => (
-                <li key={wordData.word}>
-                  <strong>{wordData.word}</strong>
-                  <ul>
-                    {wordData.sentences.map((sentence, index) => (
-                      <li key={index}>{sentence}</li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </CardDetail>
-      )}}
     </div>
   );
 };
