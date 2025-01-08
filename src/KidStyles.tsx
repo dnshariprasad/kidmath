@@ -32,6 +32,7 @@ export const StyledInput = styled.input`
 `;
 
 export const CardDetail = styled.div`
+  display: inline-block;
   padding: 20px;
   margin-bottom: 50px;
   margin-top: 30px;
@@ -39,7 +40,7 @@ export const CardDetail = styled.div`
   margin-right: 35px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  max-height: 100%;
+  width: fit-content;
   max-width: 100%;
 `;
 
