@@ -65,7 +65,16 @@ export const wordsSentencesData = [
   },
   {
     word: "when",
-    sentences: ["When is your birthday?", "When do we go home?"],
+    sentences: [
+      "When is your birthday?",
+      "When do we go home?",
+      "Which book do you want to read?",
+      "Which way should we go?",
+    ],
+  },
+  {
+    word: "which",
+    sentences: ["Which color do you like", "Which toy is yours?"],
   },
   {
     word: "what",

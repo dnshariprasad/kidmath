@@ -7,20 +7,12 @@ import {
   TagList,
 } from "../KidStyles";
 import KidButton from "../components/KidButton";
-import { readText } from "../util";
 import { wordsSentencesData } from "../data/Words";
+import SpeakIcon from "../components/SpeakIcon";
 const stringList = wordsSentencesData;
 
 const SightWordsChallenge = () => {
   const [count, setCount] = useState<number>(0);
-
-  const handleReadText = () => {
-    readText(stringList[count].word);
-  };
-
-  const handleReadSentence = (sentence: string) => {
-    readText(sentence);
-  };
 
   const handleNext = () => {
     let tempCount = count + 1;
@@ -35,14 +27,12 @@ const SightWordsChallenge = () => {
       <CardDetail>
         <CenteredContainerHorizontally>
           <CenteredContainerVertical>
-            <h1>{stringList[count].word}</h1>
+            <CenteredContainerHorizontally>
+              <h1>{stringList[count].word}</h1>
+              <SpeakIcon text={stringList[count].word} />
+            </CenteredContainerHorizontally>
             <CenteredContainerHorizontally>
               <KidButton isActive={true} title=" < " onClick={handleNext} />
-              <KidButton
-                isActive={true}
-                title="Read"
-                onClick={handleReadText}
-              />
               <KidButton isActive={true} title=" > " onClick={handleNext} />
             </CenteredContainerHorizontally>
           </CenteredContainerVertical>
@@ -51,11 +41,8 @@ const SightWordsChallenge = () => {
               <ul>
                 <li>
                   {stringList[count].sentences.map((sentence, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleReadSentence(sentence)}
-                    >
-                      {sentence}
+                    <li key={index}>
+                      {sentence} <SpeakIcon text={sentence} />
                     </li>
                   ))}
                 </li>

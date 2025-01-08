@@ -6,6 +6,7 @@ import {
   StyledInput,
   CardDetail,
 } from "../KidStyles";
+import { readText } from "../util";
 
 const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
 const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
@@ -46,8 +47,10 @@ const MathChallenge = () => {
 
     if (userAnswer === result) {
       setFeedback("Correct! 🎉");
+      readText("Correct");
     } else {
-      setFeedback(`Wrong! The correct answer is ${result}.`);
+      setFeedback(`Wrong! Try gain!`);
+      readText(`Wrong! Try gain!`);
     }
   };
 

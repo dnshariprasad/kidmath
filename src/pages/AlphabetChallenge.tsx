@@ -9,6 +9,7 @@ import {
 import KidButton from "../components/KidButton";
 import { readText } from "../util";
 import { big, small } from "../data/Alphabet";
+import SpeakIcon from "../components/SpeakIcon";
 
 const alphabet = [...big, ...small];
 
@@ -23,10 +24,7 @@ const AlphabetChallenge = () => {
   useEffect(() => {
     generateChallenge();
   }, []);
-  const handleReadText = () => {
-    const speech = new SpeechSynthesisUtterance(randomString); // Create a SpeechSynthesisUtterance with the text
-    window.speechSynthesis.speak(speech); // Use the SpeechSynthesis API to read the text
-  };
+
   const handleNext = () => {
     generateChallenge();
   };
@@ -35,12 +33,11 @@ const AlphabetChallenge = () => {
     <div>
       <CardDetail>
         <CenteredContainerVertical>
-          <h2>{randomString}</h2>
-
           <CenteredContainerHorizontally>
-            <KidButton isActive={true} title="Read" onClick={handleReadText} />
-            <KidButton isActive={true} title="Next" onClick={handleNext} />
+            <h2>{randomString}</h2>
+            <SpeakIcon text={randomString} />
           </CenteredContainerHorizontally>
+          <KidButton isActive={true} title="Next" onClick={handleNext} />
         </CenteredContainerVertical>
       </CardDetail>
       <CardDetail>
