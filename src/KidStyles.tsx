@@ -64,5 +64,5 @@ export const Tag = styled.span`
   background-color: #bbdefb;
   padding: 5px 10px;
   border-radius: 5px;
-  font-size: 0.9rem;
+  font-size: 1rem;
 `;

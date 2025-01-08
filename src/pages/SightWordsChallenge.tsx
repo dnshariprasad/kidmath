@@ -131,7 +131,7 @@ const SightWordsChallenge = () => {
         <CardDetail>
           <TagList>
             {stringList.map((tag, index) => (
-              <Tag key={index} onClick={() => handleTagClick(tag)}>
+              <Tag key={index} onClick={() => setCount(index + 1)}>
                 {tag}
               </Tag>
             ))}
