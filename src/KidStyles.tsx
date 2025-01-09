@@ -8,15 +8,14 @@ export const CenteredContainerHorizontally = styled.div`
   gap: 10px;
 `;
 
-export const CenteredContainerVertical = styled.div`
-  padding: 10px;
+export const CenteredContainerVertical = styled.div<{ padding?: string }>`
+  padding: ${(props) => props.padding || "10px"}; /* Defaults to 10px */
   display: flex;
   flex-direction: column; /* Arranges items vertically */
-  align-items: center; /* Optional: Centers items horizontally */
+  align-items: center; /* Centers items horizontally */
   height: auto; /* Takes full height of the viewport */
   gap: 10px;
 `;
-
 export const StyledInput = styled.input`
   padding: 10px;
   margin: 10px 0;
@@ -34,7 +33,7 @@ export const StyledInput = styled.input`
 export const CardDetail = styled.div`
   display: inline-block;
   padding: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   margin-top: 30px;
   margin-left: 35px;
   margin-right: 35px;

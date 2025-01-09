@@ -57,9 +57,8 @@ const SightWordsChallenge = () => {
           <NextIcon onClick={handleNext} />
         </CenteredContainerHorizontally>
       </CardDetail>
-
-      {stringList.length > 0 && (
-        <CardDetail>
+      <CenteredContainerVertical padding="20px">
+        {stringList.length > 0 && (
           <TagList>
             {stringList.map((tag, index) => (
               <Tag key={index} onClick={() => setCount(index)}>
@@ -67,8 +66,8 @@ const SightWordsChallenge = () => {
               </Tag>
             ))}
           </TagList>
-        </CardDetail>
-      )}
+        )}
+      </CenteredContainerVertical>
     </CenteredContainerVertical>
   );
 };

@@ -40,28 +40,24 @@ const AlphabetChallenge = () => {
             </CenteredContainerHorizontally>
           </CenteredContainerVertical>
         </CardDetail>
-        <CardDetail>
-          {alphabet.length > 0 && (
-            <TagList>
-              {big.map((tag, index) => (
-                <Tag key={index} onClick={() => readText(tag)}>
-                  {tag}
-                </Tag>
-              ))}
-            </TagList>
-          )}
-        </CardDetail>
-        <CardDetail>
-          {alphabet.length > 0 && (
-            <TagList>
-              {small.map((tag, index) => (
-                <Tag key={index} onClick={() => readText(tag)}>
-                  {tag}
-                </Tag>
-              ))}
-            </TagList>
-          )}
-        </CardDetail>
+        {alphabet.length > 0 && (
+          <TagList>
+            {big.map((tag, index) => (
+              <Tag key={index} onClick={() => readText(tag)}>
+                {tag}
+              </Tag>
+            ))}
+          </TagList>
+        )}
+        {alphabet.length > 0 && (
+          <TagList>
+            {small.map((tag, index) => (
+              <Tag key={index} onClick={() => readText(tag)}>
+                {tag}
+              </Tag>
+            ))}
+          </TagList>
+        )}
       </CenteredContainerVertical>
     </div>
   );
