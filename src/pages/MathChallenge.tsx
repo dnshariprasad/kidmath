@@ -5,8 +5,11 @@ import {
   CenteredContainerHorizontally,
   StyledInput,
   CardDetail,
+  CardItem,
+  MiddleItem,
 } from "../KidStyles";
 import { readText } from "../util";
+import NextIcon from "../components/NextIcon";
 
 const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
 const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
@@ -49,8 +52,8 @@ const MathChallenge = () => {
       setFeedback("Correct! 🎉");
       readText("Correct");
     } else {
-      setFeedback(`Wrong! Try gain!`);
-      readText(`Wrong! Try gain!`);
+      setFeedback(`Try again!`);
+      readText(`Try again!`);
     }
   };
 
@@ -59,27 +62,32 @@ const MathChallenge = () => {
   };
 
   return (
-    <CardDetail>
-      <CenteredContainerVertical>
-        <CenteredContainerHorizontally>
-          <h1>
-            {num1} {operation} {num2} =
-          </h1>
-          <StyledInput
-            type="number"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder=""
-          />
-          <KidButton title=" > " isActive={true} onClick={handleReset} />
-        </CenteredContainerHorizontally>
-        <CenteredContainerHorizontally>
-          <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
-        </CenteredContainerHorizontally>
-        <br />
-        {feedback && <h1>{feedback}</h1>}
-      </CenteredContainerVertical>
-    </CardDetail>
+    <CenteredContainerVertical>
+      <CardDetail>
+        <MiddleItem>
+          <CenteredContainerVertical>
+            <CenteredContainerHorizontally>
+              <h1>
+                {num1} {operation} {num2} =
+              </h1>
+              <StyledInput
+                type="number"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder=""
+              />
+              <br />
+            </CenteredContainerHorizontally>
+            <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
+            <br />
+            {feedback && <h1>{feedback}</h1>}
+          </CenteredContainerVertical>
+        </MiddleItem>
+        <CardItem>
+          <NextIcon onClick={handleReset} />
+        </CardItem>
+      </CardDetail>
+    </CenteredContainerVertical>
   );
 };
 

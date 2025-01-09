@@ -1,8 +1,10 @@
 import { useState } from "react";
 import {
   CardDetail,
+  CardItem,
   CenteredContainerHorizontally,
   CenteredContainerVertical,
+  MiddleItem,
   Tag,
   TagList,
 } from "../KidStyles";
@@ -10,6 +12,7 @@ import { wordsSentencesData } from "../data/Words";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
 import PreviousIcon from "../components/PreviousIcon";
+
 const stringList = wordsSentencesData;
 
 const SightWordsChallenge = () => {
@@ -34,8 +37,10 @@ const SightWordsChallenge = () => {
   return (
     <CenteredContainerVertical>
       <CardDetail>
-        <CenteredContainerHorizontally>
+        <CardItem>
           <PreviousIcon onClick={handlePrevious} />
+        </CardItem>
+        <MiddleItem>
           <CenteredContainerVertical>
             <CenteredContainerHorizontally>
               <h1>{stringList[count].word}</h1>
@@ -54,8 +59,10 @@ const SightWordsChallenge = () => {
               </div>
             )}
           </CenteredContainerVertical>
+        </MiddleItem>
+        <CardItem>
           <NextIcon onClick={handleNext} />
-        </CenteredContainerHorizontally>
+        </CardItem>
       </CardDetail>
       <CenteredContainerVertical padding="20px">
         {stringList.length > 0 && (
