@@ -40,8 +40,7 @@ export const CardDetail = styled.div`
   margin-right: 35px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  width: fit-content;
-  max-width: 100%;
+  max-width: 75%;
 `;
 
 export const Navbar = styled.nav`

@@ -2,11 +2,14 @@ import { useState } from "react";
 import {
   CardDetail,
   CenteredContainerHorizontally,
+  CenteredContainerVertical,
   Tag,
   TagList,
 } from "../KidStyles";
 import { wordsSentencesData } from "../data/Words";
 import SpeakIcon from "../components/SpeakIcon";
+import NextIcon from "../components/NextIcon";
+import PreviousIcon from "../components/PreviousIcon";
 const stringList = wordsSentencesData;
 
 const SightWordsChallenge = () => {
@@ -29,34 +32,31 @@ const SightWordsChallenge = () => {
     }
   };
   return (
-    <div>
-      <CenteredContainerHorizontally>
-        <CardDetail>
-          <CenteredContainerHorizontally>
-            <h1 onClick={handlePrevious}>{" < "}</h1>
-            <br />
-            <br />
-            <h1>{stringList[count].word}</h1>
-            <SpeakIcon text={stringList[count].word} />
+    <CenteredContainerVertical>
+      <CardDetail>
+        <CenteredContainerHorizontally>
+          <PreviousIcon onClick={handlePrevious} />
+          <CenteredContainerVertical>
+            <CenteredContainerHorizontally>
+              <h1>{stringList[count].word}</h1>
+              <SpeakIcon text={stringList[count].word} />
+            </CenteredContainerHorizontally>
+
             {stringList.length > 0 && (
               <div>
-                <ul>
-                  <li>
-                    {stringList[count].sentences.map((sentence, index) => (
-                      <li key={index}>
-                        {sentence} <SpeakIcon text={sentence} />
-                      </li>
-                    ))}
-                  </li>
+                <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+                  {stringList[count].sentences.map((sentence, index) => (
+                    <li key={index} style={{ padding: "5px 0" }}>
+                      <SpeakIcon text={sentence} /> {sentence}
+                    </li>
+                  ))}
                 </ul>
               </div>
             )}
-            <br />
-            <br />
-            <h1 onClick={handleNext}>{" > "}</h1>
-          </CenteredContainerHorizontally>
-        </CardDetail>
-      </CenteredContainerHorizontally>
+          </CenteredContainerVertical>
+          <NextIcon onClick={handleNext} />
+        </CenteredContainerHorizontally>
+      </CardDetail>
 
       {stringList.length > 0 && (
         <CardDetail>
@@ -69,7 +69,7 @@ const SightWordsChallenge = () => {
           </TagList>
         </CardDetail>
       )}
-    </div>
+    </CenteredContainerVertical>
   );
 };
 

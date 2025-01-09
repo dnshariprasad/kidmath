@@ -36,9 +36,6 @@ const AlphabetChallenge = () => {
             <CenteredContainerHorizontally>
               <h2>{randomString}</h2>
               <SpeakIcon text={randomString} />
-              <br />
-              <br />
-              <br />
               <h1 onClick={handleNext}>{" > "}</h1>
             </CenteredContainerHorizontally>
           </CenteredContainerVertical>
