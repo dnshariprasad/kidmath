@@ -5,10 +5,9 @@ import { MAIN_MENU } from "./Constants";
 
 const MenuContainer = styled.div`
   width: 250px;
-  background-color: #f4f4f4;
+  background-color: #fbf5e5;
   padding: 10px;
   box-sizing: border-box;
-  border-right: 1px solid #ddd;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -22,14 +21,14 @@ const MenuSection = styled.div`
 `;
 
 const MenuHeading = styled.div`
+  color: #ffffff;
   font-weight: bold;
   cursor: pointer;
   padding: 10px;
-  background-color: #ddd;
+  background-color: #a35c7a;
   border-radius: 4px;
-
   @media (max-width: 768px) {
-    background-color: #f9f9f9;
+    background-color: #a35c7a;
     border-radius: 0;
     border-bottom: none;
   }
@@ -40,7 +39,7 @@ const MenuList = styled.ul<{ isVisible: boolean }>`
   padding: 0;
   margin: 0;
   display: ${(props) => (props.isVisible ? "block" : "none")};
-
+  color: #ffffff;
   @media (max-width: 768px) {
     padding-left: 10px;
   }
@@ -48,13 +47,14 @@ const MenuList = styled.ul<{ isVisible: boolean }>`
 
 const MenuItem = styled.li`
   padding: 8px;
-  background-color: #fff;
+  background-color: #c890a7;
   border-radius: 4px;
-  margin-bottom: 5px;
+  margin-top: 5px;
+
   cursor: pointer;
 
   &:hover {
-    background-color: #eee;
+    color: #eee;
   }
 `;
 

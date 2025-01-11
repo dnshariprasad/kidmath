@@ -1,25 +1,16 @@
-import { HashRouter, Link, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import MathChallenge from "./pages/MathChallenge";
 import AlphabetChallenge from "./pages/AlphabetChallenge";
 import SightWordsChallenge from "./pages/SightWordsChallenge";
-import { Navbar } from "./KidStyles";
 import Layout from "./LayoutContainer";
 import Welcome from "./pages/Welcome";
+import Navbar from "./components/Navbar";
 
 const App: React.FC = () => {
   return (
     <HashRouter>
-      <Navbar className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container">
-          <div className="navbar-nav ml-auto d-flex align-items-center">
-            <Link to="/" className="navbar-brand d-flex align-items-center">
-              kiddoo
-            </Link>
-          </div>
-        </div>
-      </Navbar>
-
+      <Navbar />
       <Routes>
         {/* Parent route with the Layout */}
         <Route path="/" element={<Layout />}>
