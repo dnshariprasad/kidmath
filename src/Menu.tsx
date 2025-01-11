@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { MAIN_MENU } from "./Constants";
 
 const MenuContainer = styled.div`
   width: 250px;
@@ -56,32 +57,6 @@ const MenuItem = styled.li`
     background-color: #eee;
   }
 `;
-
-// MAIN_MENU Array
-export const MAIN_MENU = [
-  {
-    main: "English",
-    sub: [
-      {
-        title: "Alphabet",
-        path: "/alphabet",
-      },
-      {
-        title: "Sight Words",
-        path: "/sight_words",
-      },
-    ],
-  },
-  {
-    main: "Math",
-    sub: [
-      {
-        title: "Counting",
-        path: "/counting",
-      },
-    ],
-  },
-];
 
 const Menu: React.FC = () => {
   const navigate = useNavigate();
