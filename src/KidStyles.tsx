@@ -84,4 +84,7 @@ export const MiddleItem = styled.div`
   flex-grow: 1;
   padding: 10px;
   margin: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

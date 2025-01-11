@@ -36,7 +36,7 @@ const AlphabetChallenge = () => {
       <CardDetail>
         <MiddleItem>
           <CenteredContainerHorizontally>
-            <h2>{randomString}</h2>
+            <h2 className="aa">{randomString}</h2>
             <SpeakIcon text={randomString} />
           </CenteredContainerHorizontally>
         </MiddleItem>
