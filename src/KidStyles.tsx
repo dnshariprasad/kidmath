@@ -88,3 +88,15 @@ export const MiddleItem = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const PageContainer = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
+`;

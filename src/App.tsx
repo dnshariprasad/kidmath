@@ -4,6 +4,8 @@ import MathChallenge from "./pages/MathChallenge";
 import AlphabetChallenge from "./pages/AlphabetChallenge";
 import SightWordsChallenge from "./pages/SightWordsChallenge";
 import { Navbar } from "./KidStyles";
+import Layout from "./LayoutContainer";
+import Welcome from "./pages/Welcome";
 
 const App: React.FC = () => {
   return (
@@ -12,25 +14,20 @@ const App: React.FC = () => {
         <div className="container">
           <div className="navbar-nav ml-auto d-flex align-items-center">
             <Link to="/" className="navbar-brand d-flex align-items-center">
-              kidoo
-            </Link>
-            <Link to="/alphabet" className="nav-link">
-              Alphabets
-            </Link>
-            <Link to="/sight_words" className="nav-link">
-              Sight Words
-            </Link>
-            <Link to="/counting" className="nav-link">
-              Counting
+              kiddoo
             </Link>
           </div>
         </div>
       </Navbar>
+
       <Routes>
-        <Route path="/" element={<MathChallenge />} />
-        <Route path="/counting" element={<MathChallenge />} />
-        <Route path="/sight_words" element={<SightWordsChallenge />} />
-        <Route path="/alphabet" element={<AlphabetChallenge />} />
+        {/* Parent route with the Layout */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Welcome />} />
+          <Route path="counting" element={<MathChallenge />} />
+          <Route path="sight_words" element={<SightWordsChallenge />} />
+          <Route path="alphabet" element={<AlphabetChallenge />} />
+        </Route>
       </Routes>
     </HashRouter>
   );
