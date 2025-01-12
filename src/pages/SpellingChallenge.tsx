@@ -34,7 +34,7 @@ const SpellingChallenge = () => {
     generateChallenge();
   };
   const handleSubmit = () => {
-    if (randomString === inputValue) {
+    if (randomString.toLowerCase() === inputValue.toLowerCase()) {
       setFeedback("Correct! 🎉");
       readText("Correct");
     } else {
