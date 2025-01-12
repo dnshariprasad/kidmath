@@ -6,7 +6,7 @@ export const NavbarContainer = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  background-color: ${(props) => props.theme.nav};
+  background-color: ${(props) => props.theme.colors.nav};
   color: white;
   box-sizing: border-box;
 
@@ -21,11 +21,11 @@ export const AppName = styled.div`
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;
-  color: ${(props) => props.theme.main};
+  color: ${(props) => props.theme.colors.main};
 
   &:hover {
     opacity: 0.8;
-    color: ${(props) => props.theme.main};
+    color: ${(props) => props.theme.colors.main};
   }
 `;
 

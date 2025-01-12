@@ -9,11 +9,11 @@ import SightWordsChallenge from "./pages/SightWordsChallenge.tsx";
 import Welcome from "./pages/Welcome.tsx";
 import Navbar from "./dashboard/nav/index.tsx";
 import { ThemeProvider } from "styled-components";
-import { COLORS } from "./theme/colors.ts";
+import { theme } from "./theme/theme.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider theme={COLORS}>
+    <ThemeProvider theme={theme}>
       <HashRouter>
         <Navbar />
         <Routes>

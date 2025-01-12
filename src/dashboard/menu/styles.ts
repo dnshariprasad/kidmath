@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MenuContainer = styled.div`
   width: 250px;
-  background-color: ${(props) => props.theme.nav};
+  background-color: ${(props) => props.theme.colors.nav};
   padding: 10px;
   box-sizing: border-box;
 
