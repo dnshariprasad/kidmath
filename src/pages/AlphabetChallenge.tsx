@@ -7,7 +7,7 @@ import {
   MiddleItem,
   Tag,
   TagList,
-} from "../KidStyles";
+} from "../components/KidStyles";
 import { readText } from "../util/util";
 import { big, small } from "../data/Alphabet";
 import SpeakIcon from "../components/SpeakIcon";

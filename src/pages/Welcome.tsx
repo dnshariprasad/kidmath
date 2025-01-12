@@ -1,4 +1,4 @@
-import { CenteredContainerVertical } from "../KidStyles";
+import { CenteredContainerVertical } from "../components/KidStyles";
 
 const Welcome = () => {
   return (
