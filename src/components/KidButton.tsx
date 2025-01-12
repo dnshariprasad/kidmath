@@ -8,14 +8,14 @@ interface ButtonProps {
 }
 
 const Button = styled.button`
-  background-color: #a35c7a;
-  color: #fbf5e5;
+  background-color: ${(props) => props.theme.main};
+  color: ${(props) => props.theme.nav};
   padding: 10px 20px;
   border: none;
   cursor: pointer;
 
   &:hover {
-    background-color: #c890a7;
+    background-color: ${(props) => props.theme.sub};
   }
 `;
 

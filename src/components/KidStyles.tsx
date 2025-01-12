@@ -43,7 +43,7 @@ export const TagList = styled.div`
 
 export const Tag = styled.span`
   color: #ffffff;
-  background-color: #c890a7;
+  background-color: {(props) => props.theme.sub};
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 1rem;

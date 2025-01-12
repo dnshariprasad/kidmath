@@ -8,20 +8,24 @@ import MathChallenge from "./pages/MathChallenge.tsx";
 import SightWordsChallenge from "./pages/SightWordsChallenge.tsx";
 import Welcome from "./pages/Welcome.tsx";
 import Navbar from "./dashboard/nav/index.tsx";
+import { ThemeProvider } from "styled-components";
+import { COLORS } from "./theme/colors.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <HashRouter>
-      <Navbar />
-      <Routes>
-        {/* Parent route with the Layout */}
-        <Route path="/" element={<Dashboard />}>
-          <Route index element={<Welcome />} />
-          <Route path="counting" element={<MathChallenge />} />
-          <Route path="sight_words" element={<SightWordsChallenge />} />
-          <Route path="alphabet" element={<AlphabetChallenge />} />
-        </Route>
-      </Routes>
-    </HashRouter>
+    <ThemeProvider theme={COLORS}>
+      <HashRouter>
+        <Navbar />
+        <Routes>
+          {/* Parent route with the Layout */}
+          <Route path="/" element={<Dashboard />}>
+            <Route index element={<Welcome />} />
+            <Route path="counting" element={<MathChallenge />} />
+            <Route path="sight_words" element={<SightWordsChallenge />} />
+            <Route path="alphabet" element={<AlphabetChallenge />} />
+          </Route>
+        </Routes>
+      </HashRouter>
+    </ThemeProvider>
   </StrictMode>
 );
