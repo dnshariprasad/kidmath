@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./dashboard/dashboard/index.tsx";
 import AlphabetChallenge from "./pages/AlphabetChallenge.tsx";
