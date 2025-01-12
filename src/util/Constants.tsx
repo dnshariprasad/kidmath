@@ -10,6 +10,10 @@ export const MAIN_MENU = [
         title: "Sight Words",
         path: "/sight_words",
       },
+      {
+        title: "Spellings",
+        path: "/spelling",
+      },
     ],
   },
   {

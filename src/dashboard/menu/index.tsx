@@ -24,7 +24,6 @@ const MainMenu: React.FC = () => {
 
   return (
     <MenuContainer>
-      {/* Dynamically create the menu based on MAIN_MENU */}
       {MAIN_MENU.map((menu, index) => (
         <MenuSection key={index}>
           <MenuHeading onClick={() => toggleSection(`section${index}`)}>

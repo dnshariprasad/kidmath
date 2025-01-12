@@ -10,6 +10,7 @@ import Welcome from "./pages/Welcome.tsx";
 import Navbar from "./dashboard/nav/index.tsx";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme/theme.ts";
+import SpellingChallenge from "./pages/SpellingChallenge.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,6 +24,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="counting" element={<MathChallenge />} />
             <Route path="sight_words" element={<SightWordsChallenge />} />
             <Route path="alphabet" element={<AlphabetChallenge />} />
+            <Route path="spelling" element={<SpellingChallenge />} />
           </Route>
         </Routes>
       </HashRouter>
