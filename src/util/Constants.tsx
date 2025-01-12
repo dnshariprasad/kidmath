@@ -14,6 +14,10 @@ export const MAIN_MENU = [
         title: "Spellings",
         path: "/spelling",
       },
+      {
+        title: "Missing Letters",
+        path: "/missing_letters",
+      },
     ],
   },
   {
