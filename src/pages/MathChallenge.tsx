@@ -7,7 +7,7 @@ import {
   CardDetail,
   CardItem,
   MiddleItem,
-} from "../components/KidStyles";
+} from "../theme/KidStyles";
 import { readText } from "../util/util";
 import NextIcon from "../components/NextIcon";
 

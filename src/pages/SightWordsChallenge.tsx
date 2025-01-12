@@ -7,7 +7,7 @@ import {
   MiddleItem,
   Tag,
   TagList,
-} from "../components/KidStyles";
+} from "../theme/KidStyles";
 import { wordsSentencesData } from "../data/Words";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
