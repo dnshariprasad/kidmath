@@ -1,4 +1,29 @@
 import styled from "styled-components";
+interface ContainerProps {
+  height?: string; // Optional prop for height
+  gap?: string; // Optional prop for gap
+  direction?: "row" | "column"; // Flex direction (row or column)
+  padding?: string; // Optional prop for padding
+  align?: "start" | "center" | "end" | "stretch"; // Align items (vertical)
+  justify?:
+    | "start"
+    | "center"
+    | "end"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"; // Justify content (horizontal)
+}
+
+export const Container = styled.div<ContainerProps>`
+  display: flex;
+  flex-direction: ${({ direction }) => direction || "row"};
+  align-items: ${({ align }) => align || "center"}; /* Vertical alignment */
+  justify-content: ${({ justify }) =>
+    justify || "center"}; /* Horizontal alignment */
+  height: ${({ height }) => height || "auto"};
+  gap: ${({ gap }) => gap || "10px"};
+  padding: ${({ padding }) => padding || "0px"};
+`;
 
 // Styled container that centers items horizontally
 export const CenteredContainerHorizontally = styled.div`
