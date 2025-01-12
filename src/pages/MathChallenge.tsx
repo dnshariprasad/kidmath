@@ -8,7 +8,7 @@ import {
   CardItem,
   MiddleItem,
 } from "../KidStyles";
-import { readText } from "../util";
+import { readText } from "../util/util";
 import NextIcon from "../components/NextIcon";
 
 const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10

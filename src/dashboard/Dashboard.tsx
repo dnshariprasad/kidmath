@@ -19,7 +19,7 @@ const ContentContainer = styled.div`
   overflow-y: auto;
 `;
 
-const Layout: React.FC = () => {
+const Dashboard: React.FC = () => {
   return (
     <LayoutContainer>
       {/* Menu remains visible */}
@@ -32,4 +32,4 @@ const Layout: React.FC = () => {
   );
 };
 
-export default Layout;
+export default Dashboard;

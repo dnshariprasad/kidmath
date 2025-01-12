@@ -1,4 +1,4 @@
-import { readText } from "../util";
+import { readText } from "../util/util";
 interface SpeakIconProps {
   text: string;
 }

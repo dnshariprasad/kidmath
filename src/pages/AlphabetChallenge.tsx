@@ -8,7 +8,7 @@ import {
   Tag,
   TagList,
 } from "../KidStyles";
-import { readText } from "../util";
+import { readText } from "../util/util";
 import { big, small } from "../data/Alphabet";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";

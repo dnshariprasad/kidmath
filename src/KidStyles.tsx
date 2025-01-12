@@ -30,12 +30,6 @@ export const StyledInput = styled.input`
   }
 `;
 
-export const Navbar = styled.nav`
-  padding: 0px 2opx; /* Adjust padding as needed */
-  background-color: #f8f9fa; /* Optional: Background color */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow */
-`;
-
 export const TagList = styled.div`
   margin-top: 10px;
   display: flex;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { MAIN_MENU } from "./Constants";
+import { MAIN_MENU } from "../util/Constants";
 
 const MenuContainer = styled.div`
   width: 250px;
