@@ -3,12 +3,12 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./dashboard/Dashboard.tsx";
+import Dashboard from "./dashboard/dashboard/index.tsx";
 import AlphabetChallenge from "./pages/AlphabetChallenge.tsx";
 import MathChallenge from "./pages/MathChallenge.tsx";
 import SightWordsChallenge from "./pages/SightWordsChallenge.tsx";
 import Welcome from "./pages/Welcome.tsx";
-import Navbar from "./dashboard/Navbar.tsx";
+import Navbar from "./dashboard/nav/index.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

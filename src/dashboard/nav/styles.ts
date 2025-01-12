@@ -1,9 +1,7 @@
-import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 // Navbar Container
-const NavbarContainer = styled.nav`
+export const NavbarContainer = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,7 +16,7 @@ const NavbarContainer = styled.nav`
 `;
 
 // App Name (Logo)
-const AppName = styled.div`
+export const AppName = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
@@ -32,13 +30,13 @@ const AppName = styled.div`
 `;
 
 // // Navigation Links Container
-// const NavLinks = styled.div`
+// export const NavLinks = styled.div`
 //   display: flex;
 //   align-items: center;
 // `;
 
 // // Individual Navigation Link
-// const NavLink = styled(Link)`
+// export const NavLink = styled(Link)`
 //   margin-left: 20px;
 //   color: white;
 //   text-decoration: none;
@@ -52,23 +50,3 @@ const AppName = styled.div`
 //     margin-left: 10px;
 //   }
 // `;
-
-const Navbar: React.FC = () => {
-  return (
-    <NavbarContainer>
-      {/* App Name with Link */}
-      <AppName as={Link} to="/">
-        kiddoo
-      </AppName>
-
-      {/* Navigation Links */}
-      {/* <NavLinks>
-        <NavLink to="/counting">Counting</NavLink>
-        <NavLink to="/sight_words">Sight Words</NavLink>
-        <NavLink to="/alphabet">Alphabet</NavLink>
-      </NavLinks> */}
-    </NavbarContainer>
-  );
-};
-
-export default Navbar;
