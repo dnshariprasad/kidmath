@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import {
   CardDetail,
-  CardItem,
   CenteredContainerVertical,
   MiddleItem,
   StyledInput,
 } from "../theme/KidStyles";
 import { wordsSentencesData } from "../data/Words";
 import SpeakIcon from "../components/SpeakIcon";
-import NextIcon from "../components/NextIcon";
 import KidButton from "../components/KidButton";
 import { readText } from "../util/util";
 
@@ -30,13 +28,11 @@ const SpellingChallenge = () => {
     generateChallenge();
   }, []);
 
-  const handleNext = () => {
-    generateChallenge();
-  };
   const handleSubmit = () => {
     if (randomString.toLowerCase() === inputValue.toLowerCase()) {
       setFeedback("Correct! 🎉");
       readText("Correct");
+      generateChallenge();
     } else {
       setFeedback(`Try again!`);
       readText(`Try again!`);
@@ -59,9 +55,6 @@ const SpellingChallenge = () => {
             {feedback && <h1>{feedback}</h1>}
           </CenteredContainerVertical>
         </MiddleItem>
-        <CardItem>
-          <NextIcon onClick={handleNext} />
-        </CardItem>
       </CardDetail>
     </CenteredContainerVertical>
   );

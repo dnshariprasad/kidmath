@@ -13,7 +13,8 @@ const Button = styled.button`
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-
+  color: white;
+  border-radius: 4px;
   &:hover {
     background-color: ${(props) => props.theme.colors.sub};
   }
