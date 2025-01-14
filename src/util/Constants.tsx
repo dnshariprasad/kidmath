@@ -28,7 +28,7 @@ export const MAIN_MENU = [
         path: "/counting",
       },
       {
-        title: "comparison",
+        title: "Comparison",
         path: "/comparison",
       },
     ],
