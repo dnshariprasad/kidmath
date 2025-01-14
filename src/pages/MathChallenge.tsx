@@ -68,7 +68,7 @@ const MathChallenge = () => {
         <MiddleItem>
           <CenteredContainerVertical>
             <CenteredContainerHorizontally>
-              <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+              <KidoText fontSize="50px" color="black" mobileFontSize="25px">
                 {num1} {operation} {num2} =
               </KidoText>
               <StyledInput

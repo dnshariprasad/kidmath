@@ -24,6 +24,7 @@ export const GreaterLessEqualGame: React.FC = () => {
       resetGame();
     } else {
       setMessage("Oops! Try Again. 😅");
+      readText("Oops! Try Again.");
     }
   };
 
