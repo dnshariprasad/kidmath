@@ -36,10 +36,16 @@ export const GreaterLessEqualGame: React.FC = () => {
 
   return (
     <Container>
-      <h1>Greater Than, Less Than, or Equal?</h1>
+      <br />
+      <br />
+      <KidoText fontSize="25px" color="black" mobileFontSize="20px">
+        Greater Than, Less Than, or Equal?
+      </KidoText>
+      <br />
       <KidoText fontSize="50px" color="black" mobileFontSize="30px">
         {num1} _ {num2}
       </KidoText>
+      <br />
       <div>
         <KidButton
           title=">"
