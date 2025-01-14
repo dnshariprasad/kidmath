@@ -12,6 +12,7 @@ import { wordsSentencesData } from "../data/Words";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
 import PreviousIcon from "../components/PreviousIcon";
+import { KidoText } from "../components/KidoText";
 
 const stringList = wordsSentencesData;
 
@@ -43,7 +44,9 @@ const SightWordsChallenge = () => {
         <MiddleItem>
           <CenteredContainerVertical>
             <CenteredContainerHorizontally>
-              <h1>{stringList[count].word}</h1>
+              <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+                {stringList[count].word}
+              </KidoText>
               <SpeakIcon text={stringList[count].word} />
             </CenteredContainerHorizontally>
 

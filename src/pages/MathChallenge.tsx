@@ -10,6 +10,7 @@ import {
 } from "../theme/KidStyles";
 import { readText } from "../util/util";
 import NextIcon from "../components/NextIcon";
+import { KidoText } from "../components/KidoText";
 
 const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
 const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
@@ -67,9 +68,9 @@ const MathChallenge = () => {
         <MiddleItem>
           <CenteredContainerVertical>
             <CenteredContainerHorizontally>
-              <h1>
+              <KidoText fontSize="50px" color="black" mobileFontSize="30px">
                 {num1} {operation} {num2} =
-              </h1>
+              </KidoText>
               <StyledInput
                 type="number"
                 value={inputValue}

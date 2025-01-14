@@ -12,6 +12,7 @@ import { readText } from "../util/util";
 import { big, small } from "../data/Alphabet";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
+import { KidoText } from "../components/KidoText";
 
 const alphabet = [...big, ...small];
 
@@ -36,7 +37,9 @@ const AlphabetChallenge = () => {
       <CardDetail>
         <MiddleItem>
           <CenteredContainerHorizontally>
-            <h2 className="aa">{randomString}</h2>
+            <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+              {randomString}
+            </KidoText>
             <SpeakIcon text={randomString} />
           </CenteredContainerHorizontally>
         </MiddleItem>

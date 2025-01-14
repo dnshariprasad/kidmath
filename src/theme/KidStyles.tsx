@@ -4,7 +4,6 @@ interface ContainerProps {
   gap?: string; // Optional prop for gap
   direction?: "row" | "column"; // Flex direction (row or column)
   padding?: string; // Optional prop for padding
-  align?: "start" | "center" | "end" | "stretch"; // Align items (vertical)
   justify?:
     | "start"
     | "center"
@@ -13,16 +12,15 @@ interface ContainerProps {
     | "space-around"
     | "space-evenly"; // Justify content (horizontal)
 }
-
+// Styled components
 export const Container = styled.div<ContainerProps>`
-  display: flex;
-  flex-direction: ${({ direction }) => direction || "row"};
-  align-items: ${({ align }) => align || "center"}; /* Vertical alignment */
-  justify-content: ${({ justify }) =>
-    justify || "center"}; /* Horizontal alignment */
-  height: ${({ height }) => height || "auto"};
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: ${({ padding }) => padding || "10px"};
   gap: ${({ gap }) => gap || "10px"};
   padding: ${({ padding }) => padding || "0px"};
+  justify-content: ${({ justify }) =>
+    justify || "center"}; /* Horizontal alignment */
 `;
 
 // Styled container that centers items horizontally

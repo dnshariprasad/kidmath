@@ -8,7 +8,7 @@ const SpeakIcon: React.FC<SpeakIconProps> = ({ text }) => {
       onClick={() => readText(text)}
       role="button"
       aria-label="Read sentence"
-      style={{ marginLeft: "8px", fontSize: "18px" }}
+      style={{ marginLeft: "8px", fontSize: "30px" }}
     >
       🔊
     </span>

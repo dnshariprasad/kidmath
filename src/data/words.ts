@@ -1,3 +1,31 @@
+export const words = [
+  {
+    words_family_mame: "th Words",
+    words_family_list: [
+      "the",
+      "those",
+      "their",
+      "these",
+      "those",
+      "them",
+      "that",
+      "this",
+    ],
+  },
+  {
+    words_family_mame: "wh Words",
+    words_family_list: ["what", "why", "where", "which", "whome", "when"],
+  },
+  {
+    words_family_mame: "wh Words",
+    words_family_list: ["a", "an"],
+  },
+  {
+    words_family_mame: "wh Words",
+    words_family_list: ["he", "she", "her", "his", "it"],
+  },
+];
+
 export const wordsSentencesData = [
   {
     word: "a",

@@ -12,6 +12,7 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./theme/theme.ts";
 import SpellingChallenge from "./pages/SpellingChallenge.tsx";
 import MissingLettersChallenge from "./pages/MissingLettersChallenge.tsx";
+import GreaterLessEqualGame from "./pages/GreaterLessEqualGame.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -26,6 +27,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="sight_words" element={<SightWordsChallenge />} />
             <Route path="alphabet" element={<AlphabetChallenge />} />
             <Route path="spelling" element={<SpellingChallenge />} />
+            <Route path="comparison" element={<GreaterLessEqualGame />} />
             <Route
               path="missing_letters"
               element={<MissingLettersChallenge />}

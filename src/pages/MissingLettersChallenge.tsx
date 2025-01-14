@@ -15,6 +15,7 @@ import {
   getRandomWord,
   randomNumber,
 } from "../data/WordUtil";
+import { KidoText } from "../components/KidoText";
 
 const stringList = getAllWords();
 
@@ -55,7 +56,9 @@ const MissingLettersChallenge = () => {
         <MiddleItem>
           <CenteredContainerVertical>
             <CenteredContainerHorizontally>
-              <h2>{randomStringWithMissingLetter}</h2>
+              <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+                {randomStringWithMissingLetter}
+              </KidoText>
               <SpeakIcon text={randomString} />
             </CenteredContainerHorizontally>
             <StyledInput

@@ -8,19 +8,25 @@ interface ButtonProps {
 }
 
 const Button = styled.button`
-  background-color: ${(props) => props.theme.colors.main};
-  color: ${(props) => props.theme.nav};
   padding: 10px 20px;
-  border: none;
-  cursor: pointer;
+  margin: 10px;
+  font-size: 18px;
   color: white;
-  border-radius: 4px;
+  background-color: ${(props) => props.theme.colors.main};
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
   &:hover {
-    background-color: ${(props) => props.theme.colors.sub};
+    opacity: 0.9;
   }
 `;
 
-const KidButton: React.FC<ButtonProps> = ({ title, isActive, onClick }) => {
+const KidButton: React.FC<ButtonProps> = ({
+  title,
+  onClick,
+  isActive = true,
+}) => {
   return (
     <Button
       className={isActive ? "btn btn-primary" : "btn btn-secondary"}
