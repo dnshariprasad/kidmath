@@ -4,9 +4,6 @@ import {
   CenteredContainerVertical,
   CenteredContainerHorizontally,
   StyledInput,
-  CardDetail,
-  CardItem,
-  MiddleItem,
 } from "../theme/KidStyles";
 import { readText } from "../util/util";
 import NextIcon from "../components/NextIcon";
@@ -64,30 +61,24 @@ const MathChallenge = () => {
 
   return (
     <CenteredContainerVertical>
-      <CardDetail>
-        <MiddleItem>
-          <CenteredContainerVertical>
-            <CenteredContainerHorizontally>
-              <KidoText fontSize="50px" color="black" mobileFontSize="25px">
-                {num1} {operation} {num2} =
-              </KidoText>
-              <StyledInput
-                type="number"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder=""
-              />
-              <br />
-            </CenteredContainerHorizontally>
-            <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
-            <br />
-            {feedback && <h1>{feedback}</h1>}
-          </CenteredContainerVertical>
-        </MiddleItem>
-        <CardItem>
-          <NextIcon onClick={handleReset} />
-        </CardItem>
-      </CardDetail>
+      <br />
+      <br />
+      <CenteredContainerHorizontally>
+        <KidoText fontSize="50px" color="black" mobileFontSize="25px">
+          {num1} {operation} {num2} =
+        </KidoText>
+        <StyledInput
+          type="number"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder=""
+        />
+        <br />
+        <NextIcon onClick={handleReset} />
+      </CenteredContainerHorizontally>
+      <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
+      <br />
+      {feedback && <h1>{feedback}</h1>}
     </CenteredContainerVertical>
   );
 };

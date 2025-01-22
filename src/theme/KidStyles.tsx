@@ -72,41 +72,6 @@ export const Tag = styled.span`
   font-size: 1rem;
 `;
 
-export const CardDetail = styled.div`
-  margin-top: 30px;
-  display: flex;
-  width: 90%; /* Fills most of the screen on smaller devices */
-  max-width: 800px; /* Sets a maximum width for larger screens */
-  padding: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-
-  @media (min-width: 768px) {
-    /* For larger screens (like tablets and desktops) */
-    width: 75%;
-  }
-
-  @media (min-width: 1024px) {
-    /* For desktops */
-    width: 50%;
-  }
-`;
-
-export const CardItem = styled.div`
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const MiddleItem = styled.div`
-  flex-grow: 1;
-  padding: 10px;
-  margin: 0 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 export const PageContainer = styled.div`
   padding: 20px;
   display: flex;

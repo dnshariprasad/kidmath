@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  CardDetail,
   CenteredContainerHorizontally,
   CenteredContainerVertical,
-  MiddleItem,
   StyledInput,
 } from "../theme/KidStyles";
 import SpeakIcon from "../components/SpeakIcon";
@@ -52,26 +50,22 @@ const MissingLettersChallenge = () => {
   };
   return (
     <CenteredContainerVertical>
-      <CardDetail>
-        <MiddleItem>
-          <CenteredContainerVertical>
-            <CenteredContainerHorizontally>
-              <KidoText fontSize="50px" color="black" mobileFontSize="30px">
-                {randomStringWithMissingLetter}
-              </KidoText>
-              <SpeakIcon text={randomString} />
-            </CenteredContainerHorizontally>
-            <StyledInput
-              type="string"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder=""
-            />
-            <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
-            {feedback && <h1>{feedback}</h1>}
-          </CenteredContainerVertical>
-        </MiddleItem>
-      </CardDetail>
+      <br />
+      <br />
+      <CenteredContainerHorizontally>
+        <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+          {randomStringWithMissingLetter}
+        </KidoText>
+        <SpeakIcon text={randomString} />
+      </CenteredContainerHorizontally>
+      <StyledInput
+        type="string"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder=""
+      />
+      <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
+      {feedback && <h1>{feedback}</h1>}
     </CenteredContainerVertical>
   );
 };

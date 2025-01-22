@@ -1,10 +1,7 @@
 import { useState } from "react";
 import {
-  CardDetail,
-  CardItem,
   CenteredContainerHorizontally,
   CenteredContainerVertical,
-  MiddleItem,
   Tag,
   TagList,
 } from "../theme/KidStyles";
@@ -37,36 +34,31 @@ const SightWordsChallenge = () => {
   };
   return (
     <CenteredContainerVertical>
-      <CardDetail>
-        <CardItem>
-          <PreviousIcon onClick={handlePrevious} />
-        </CardItem>
-        <MiddleItem>
-          <CenteredContainerVertical>
-            <CenteredContainerHorizontally>
-              <KidoText fontSize="50px" color="black" mobileFontSize="30px">
-                {stringList[count].word}
-              </KidoText>
-              <SpeakIcon text={stringList[count].word} />
-            </CenteredContainerHorizontally>
+      <br />
+      <CenteredContainerHorizontally>
+        <PreviousIcon onClick={handlePrevious} />
+        <CenteredContainerVertical>
+          <CenteredContainerHorizontally>
+            <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+              {stringList[count].word}
+            </KidoText>
+            <SpeakIcon text={stringList[count].word} />
+          </CenteredContainerHorizontally>
 
-            {stringList.length > 0 && (
-              <div>
-                <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
-                  {stringList[count].sentences.map((sentence, index) => (
-                    <li key={index} style={{ padding: "5px 0" }}>
-                      <SpeakIcon text={sentence} /> {sentence}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </CenteredContainerVertical>
-        </MiddleItem>
-        <CardItem>
-          <NextIcon onClick={handleNext} />
-        </CardItem>
-      </CardDetail>
+          {stringList.length > 0 && (
+            <div>
+              <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+                {stringList[count].sentences.map((sentence, index) => (
+                  <li key={index} style={{ padding: "5px 0" }}>
+                    <SpeakIcon text={sentence} /> {sentence}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </CenteredContainerVertical>
+        <NextIcon onClick={handleNext} />
+      </CenteredContainerHorizontally>
       <CenteredContainerVertical padding="20px">
         {stringList.length > 0 && (
           <TagList>

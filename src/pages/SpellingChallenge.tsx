@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  CardDetail,
-  CenteredContainerVertical,
-  MiddleItem,
-  StyledInput,
-} from "../theme/KidStyles";
+import { CenteredContainerVertical, StyledInput } from "../theme/KidStyles";
 import { wordsSentencesData } from "../data/Words";
 import SpeakIcon from "../components/SpeakIcon";
 import KidButton from "../components/KidButton";
@@ -40,22 +35,18 @@ const SpellingChallenge = () => {
   };
   return (
     <CenteredContainerVertical>
-      <CardDetail>
-        <MiddleItem>
-          <CenteredContainerVertical>
-            <SpeakIcon text={randomString} />
+      <br />
+      <br />
+      <SpeakIcon text={randomString} />
 
-            <StyledInput
-              type="string"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder=""
-            />
-            <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
-            {feedback && <h1>{feedback}</h1>}
-          </CenteredContainerVertical>
-        </MiddleItem>
-      </CardDetail>
+      <StyledInput
+        type="string"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder=""
+      />
+      <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
+      {feedback && <h1>{feedback}</h1>}
     </CenteredContainerVertical>
   );
 };

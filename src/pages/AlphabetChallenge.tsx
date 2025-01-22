@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
 import {
-  CardDetail,
-  CardItem,
   CenteredContainerHorizontally,
   CenteredContainerVertical,
-  MiddleItem,
   Tag,
   TagList,
 } from "../theme/KidStyles";
-import { readText } from "../util/util";
 import { big, small } from "../data/Alphabet";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
@@ -34,24 +30,21 @@ const AlphabetChallenge = () => {
 
   return (
     <CenteredContainerVertical>
-      <CardDetail>
-        <MiddleItem>
-          <CenteredContainerHorizontally>
-            <KidoText fontSize="50px" color="black" mobileFontSize="30px">
-              {randomString}
-            </KidoText>
-            <SpeakIcon text={randomString} />
-          </CenteredContainerHorizontally>
-        </MiddleItem>
-        <CardItem>
-          <NextIcon onClick={handleNext} />
-        </CardItem>
-      </CardDetail>
-
+      <br />
+      <br />
+      <CenteredContainerHorizontally>
+        <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+          {randomString}
+        </KidoText>
+        <SpeakIcon text={randomString} />
+        <NextIcon onClick={handleNext} />
+      </CenteredContainerHorizontally>
+      <br />
+      <br />
       {alphabet.length > 0 && (
         <TagList>
           {big.map((tag, index) => (
-            <Tag key={index} onClick={() => readText(tag)}>
+            <Tag key={index} onClick={() => setRandomString(tag)}>
               {tag}
             </Tag>
           ))}
@@ -60,7 +53,7 @@ const AlphabetChallenge = () => {
       {alphabet.length > 0 && (
         <TagList>
           {small.map((tag, index) => (
-            <Tag key={index} onClick={() => readText(tag)}>
+            <Tag key={index} onClick={() => setRandomString(tag)}>
               {tag}
             </Tag>
           ))}
