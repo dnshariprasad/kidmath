@@ -35,30 +35,32 @@ const SightWordsChallenge = () => {
       <br />
       <CenteredContainerHorizontally>
         <PreviousIcon onClick={handlePrevious} />
-        <CenteredContainerVertical>
-          <CenteredContainerHorizontally>
-            <KidoText fontSize="50px" color="black" mobileFontSize="30px">
-              {words[count]}
-            </KidoText>
-            <SpeakIcon text={words[count]} />
-          </CenteredContainerHorizontally>
-
-          {words.length > 0 && (
-            <div>
-              <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
-                {sentences
-                  .filter((s: string) => s.includes(words[count]))
-                  .slice(0, 5)
-                  .map((sentence, index) => (
-                    <li key={index} style={{ padding: "5px 0" }}>
-                      <SpeakIcon text={sentence} /> {sentence}
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          )}
-        </CenteredContainerVertical>
+        <br />
+        <br />
+        <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+          {words[count]}
+        </KidoText>
+        <SpeakIcon text={words[count]} />
+        <br />
+        <br />
         <NextIcon onClick={handleNext} />
+
+        {words.length > 0 && (
+          <div>
+            <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+              {sentences
+                .filter((s: string) =>
+                  s.toLowerCase().includes(words[count].toLowerCase())
+                )
+                .slice(0, 5)
+                .map((sentence, index) => (
+                  <li key={index} style={{ padding: "5px 0" }}>
+                    <SpeakIcon text={sentence} /> {sentence}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
       </CenteredContainerHorizontally>
       <CenteredContainerVertical padding="20px">
         {words.length > 0 && (

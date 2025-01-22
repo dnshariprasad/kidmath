@@ -220,4 +220,5 @@ export const sentences: string[] = [
   "Can you help me?",
   "There is a bug on the wall.",
   "I saw a bug in the garden.",
+  "They are good friends",
 ];
