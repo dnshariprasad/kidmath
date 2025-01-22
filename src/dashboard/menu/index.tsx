@@ -24,17 +24,19 @@ const MainMenu: React.FC = () => {
 
   return (
     <MenuContainer>
-      {MAIN_MENU.map((menu, index) => (
+      {MAIN_MENU.filter((menu) => menu.isEnabled).map((menu, index) => (
         <MenuSection key={index}>
           <MenuHeading onClick={() => toggleSection(`section${index}`)}>
             {menu.main}
           </MenuHeading>
           <MenuList isVisible={expandedSections[`section${index}`]}>
-            {menu.sub.map((item, subIndex) => (
-              <MenuItem key={subIndex} onClick={() => navigate(item.path)}>
-                {item.title}
-              </MenuItem>
-            ))}
+            {menu.sub
+              .filter((menu) => menu.isEnabled)
+              .map((item, subIndex) => (
+                <MenuItem key={subIndex} onClick={() => navigate(item.path)}>
+                  {item.title}
+                </MenuItem>
+              ))}
           </MenuList>
         </MenuSection>
       ))}
