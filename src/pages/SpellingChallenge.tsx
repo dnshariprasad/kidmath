@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { CenteredContainerVertical, StyledInput } from "../theme/KidStyles";
-import { wordsSentencesData } from "../data/Words";
 import SpeakIcon from "../components/SpeakIcon";
 import KidButton from "../components/KidButton";
 import { readText } from "../util/util";
-
-const stringList = wordsSentencesData.map((i) => i.word);
+import { words } from "../data/Words";
 
 const SpellingChallenge = () => {
   const [randomString, setRandomString] = useState<string>("");
@@ -13,8 +11,8 @@ const SpellingChallenge = () => {
   const [feedback, setFeedback] = useState("");
 
   const generateChallenge = () => {
-    const randomIndex = Math.floor(Math.random() * stringList.length); // Get a random index
-    setRandomString(stringList[randomIndex]); // Return the string at that index
+    const randomIndex = Math.floor(Math.random() * words.length); // Get a random index
+    setRandomString(words[randomIndex]); // Return the string at that index
     setInputValue("");
     setFeedback("");
   };

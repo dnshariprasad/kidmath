@@ -5,20 +5,18 @@ import {
   Tag,
   TagList,
 } from "../theme/KidStyles";
-import { wordsSentencesData } from "../data/Words";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
 import PreviousIcon from "../components/PreviousIcon";
 import { KidoText } from "../components/KidoText";
-
-const stringList = wordsSentencesData;
+import { sentences, words } from "../data/Words";
 
 const SightWordsChallenge = () => {
   const [count, setCount] = useState<number>(0);
 
   const handleNext = () => {
     let tempCount = count + 1;
-    if (tempCount >= stringList.length) {
+    if (tempCount >= words.length) {
       setCount(0);
     } else {
       setCount(tempCount);
@@ -27,7 +25,7 @@ const SightWordsChallenge = () => {
   const handlePrevious = () => {
     let tempCount = count - 1;
     if (tempCount <= 0) {
-      setCount(stringList.length - 1);
+      setCount(words.length - 1);
     } else {
       setCount(tempCount);
     }
@@ -40,19 +38,22 @@ const SightWordsChallenge = () => {
         <CenteredContainerVertical>
           <CenteredContainerHorizontally>
             <KidoText fontSize="50px" color="black" mobileFontSize="30px">
-              {stringList[count].word}
+              {words[count]}
             </KidoText>
-            <SpeakIcon text={stringList[count].word} />
+            <SpeakIcon text={words[count]} />
           </CenteredContainerHorizontally>
 
-          {stringList.length > 0 && (
+          {words.length > 0 && (
             <div>
               <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
-                {stringList[count].sentences.map((sentence, index) => (
-                  <li key={index} style={{ padding: "5px 0" }}>
-                    <SpeakIcon text={sentence} /> {sentence}
-                  </li>
-                ))}
+                {sentences
+                  .filter((s: string) => s.includes(words[count]))
+                  .slice(0, 5)
+                  .map((sentence, index) => (
+                    <li key={index} style={{ padding: "5px 0" }}>
+                      <SpeakIcon text={sentence} /> {sentence}
+                    </li>
+                  ))}
               </ul>
             </div>
           )}
@@ -60,11 +61,11 @@ const SightWordsChallenge = () => {
         <NextIcon onClick={handleNext} />
       </CenteredContainerHorizontally>
       <CenteredContainerVertical padding="20px">
-        {stringList.length > 0 && (
+        {words.length > 0 && (
           <TagList>
-            {stringList.map((tag, index) => (
+            {words.map((tag, index) => (
               <Tag key={index} onClick={() => setCount(index)}>
-                {tag.word}
+                {tag}
               </Tag>
             ))}
           </TagList>
