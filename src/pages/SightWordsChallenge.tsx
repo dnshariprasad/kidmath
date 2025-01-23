@@ -1,7 +1,10 @@
 import { useState } from "react";
 import {
   CenteredContainerHorizontally,
+  CenteredContainerHorizontallyDynamic,
   CenteredContainerVertical,
+  ListContainer,
+  ListItem,
   Tag,
   TagList,
 } from "../theme/KidStyles";
@@ -33,36 +36,36 @@ const SightWordsChallenge = () => {
   return (
     <CenteredContainerVertical>
       <br />
-      <CenteredContainerHorizontally>
-        <PreviousIcon onClick={handlePrevious} />
-        <br />
-        <br />
-        <KidoText fontSize="50px" color="black" mobileFontSize="30px">
-          {words[count]}
-        </KidoText>
-        <SpeakIcon text={words[count]} />
-        <br />
-        <br />
-        <NextIcon onClick={handleNext} />
-
+      <CenteredContainerHorizontallyDynamic>
+        <CenteredContainerHorizontally>
+          <PreviousIcon onClick={handlePrevious} />
+          <br />
+          <br />
+          <KidoText fontSize="50px" color="black" mobileFontSize="30px">
+            {words[count]}
+          </KidoText>
+          <SpeakIcon text={words[count]} />
+          <br />
+          <br />
+          <NextIcon onClick={handleNext} />
+        </CenteredContainerHorizontally>
         {words.length > 0 && (
-          <div>
+          <ListContainer>
             <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
               {sentences
                 .filter((s: string) => {
                   const wordsInSentence = s.toLowerCase().split(/[\s.,!?]+/);
                   return wordsInSentence.includes(words[count].toLowerCase());
                 })
-                .slice(0, 5)
                 .map((sentence, index) => (
-                  <li key={index} style={{ padding: "5px 0" }}>
+                  <ListItem key={index} style={{ padding: "5px 0" }}>
                     <SpeakIcon text={sentence} /> {sentence}
-                  </li>
+                  </ListItem>
                 ))}
             </ul>
-          </div>
+          </ListContainer>
         )}
-      </CenteredContainerHorizontally>
+      </CenteredContainerHorizontallyDynamic>
       <CenteredContainerVertical padding="20px">
         {words.length > 0 && (
           <TagList>

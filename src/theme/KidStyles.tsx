@@ -31,6 +31,19 @@ export const CenteredContainerHorizontally = styled.div`
   gap: 10px;
 `;
 
+export const CenteredContainerHorizontallyDynamic = styled.div`
+  display: flex;
+  align-items: center; /* Centers items vertically (optional) */
+  height: auto; /* Optional: Takes full height of the viewport */
+  gap: 10px;
+  @media (max-width: 768px) {
+    /* Mobile screens */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    width: 100%; /* Ensure the container takes full width */
+  }
+`;
+
 export const CenteredContainerVertical = styled.div<{ padding?: string }>`
   padding: ${(props) => props.padding || "10px"}; /* Defaults to 10px */
   display: flex;
@@ -82,4 +95,17 @@ export const PageContainer = styled.div`
   @media (max-width: 768px) {
     padding: 10px;
   }
+`;
+
+export const ListContainer = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px; /* Adjust height to fit ~5 items */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px; /* Optional: Add padding for spacing */
+`;
+
+export const ListItem = styled.li`
+  padding: 5px 0;
 `;
