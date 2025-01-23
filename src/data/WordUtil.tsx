@@ -1,4 +1,4 @@
-import { allWords } from "./Words";
+import { allWords } from "./WordsData";
 
 export const getRandomWord = (stringList: string[]) => {
   return stringList[randomNumber(stringList.length)];

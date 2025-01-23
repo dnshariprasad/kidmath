@@ -4,7 +4,7 @@ import SpeakIcon from "../components/SpeakIcon";
 import KidButton from "../components/KidButton";
 import { readText } from "../util/util";
 import { getRandomWord } from "../data/WordUtil";
-import { allWords } from "../data/Words";
+import { allWords } from "../data/WordsData";
 
 const SpellingChallenge = () => {
   const [randomString, setRandomString] = useState<string>("");

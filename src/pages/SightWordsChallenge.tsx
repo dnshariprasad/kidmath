@@ -12,7 +12,7 @@ import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
 import PreviousIcon from "../components/PreviousIcon";
 import { KidoText } from "../components/KidoText";
-import { allWords, sentences } from "../data/Words";
+import { allWords, sentences } from "../data/WordsData";
 
 const SightWordsChallenge = () => {
   const [words, setWords] = useState<string[]>([]);
