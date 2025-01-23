@@ -65,10 +65,6 @@ export const wordFamilies = [
   },
 ];
 
-export const allWords = () => {
-  return wordFamilies.filter((f) => f.enabled).flatMap((f) => f.words);
-};
-
 export const sentences: string[] = [
   "I have a ball.",
   "She gave me a book.",

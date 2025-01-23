@@ -12,12 +12,13 @@ import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
 import PreviousIcon from "../components/PreviousIcon";
 import { KidoText } from "../components/KidoText";
-import { allWords, sentences } from "../data/WordsData";
+import { sentences } from "../data/WordsData";
+import { getAllWords } from "../data/WordUtil";
 
 const SightWordsChallenge = () => {
   const [words, setWords] = useState<string[]>([]);
   useEffect(() => {
-    setWords(allWords());
+    setWords(getAllWords());
   }, []);
   const [count, setCount] = useState<number>(0);
 

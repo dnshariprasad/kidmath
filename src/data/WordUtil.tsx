@@ -1,11 +1,11 @@
-import { allWords } from "./WordsData";
+import { wordFamilies } from "./WordsData";
 
 export const getRandomWord = (stringList: string[]) => {
   return stringList[randomNumber(stringList.length)];
 };
 
 export const getAllWords = () => {
-  return allWords();
+  return wordFamilies.filter((f) => f.enabled).flatMap((f) => f.words);
 };
 
 export const randomNumber = (max: number) => {

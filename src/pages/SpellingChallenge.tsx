@@ -3,8 +3,7 @@ import { CenteredContainerVertical, StyledInput } from "../theme/KidStyles";
 import SpeakIcon from "../components/SpeakIcon";
 import KidButton from "../components/KidButton";
 import { readText } from "../util/util";
-import { getRandomWord } from "../data/WordUtil";
-import { allWords } from "../data/WordsData";
+import { getAllWords, getRandomWord } from "../data/WordUtil";
 
 const SpellingChallenge = () => {
   const [randomString, setRandomString] = useState<string>("");
@@ -12,7 +11,7 @@ const SpellingChallenge = () => {
   const [feedback, setFeedback] = useState("");
 
   const generateChallenge = () => {
-    const randomWord = getRandomWord(allWords());
+    const randomWord = getRandomWord(getAllWords());
     setRandomString(randomWord); // Return the string at that index
     setInputValue("");
     setFeedback("");
