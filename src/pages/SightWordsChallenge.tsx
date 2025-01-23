@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CenteredContainerHorizontally,
   CenteredContainerHorizontallyDynamic,
@@ -12,9 +12,13 @@ import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
 import PreviousIcon from "../components/PreviousIcon";
 import { KidoText } from "../components/KidoText";
-import { sentences, words } from "../data/Words";
+import { allWords, sentences } from "../data/Words";
 
 const SightWordsChallenge = () => {
+  const [words, setWords] = useState<string[]>([]);
+  useEffect(() => {
+    setWords(allWords());
+  }, []);
   const [count, setCount] = useState<number>(0);
 
   const handleNext = () => {

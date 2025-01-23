@@ -1,11 +1,11 @@
-import { words } from "./Words";
+import { allWords } from "./Words";
 
 export const getRandomWord = (stringList: string[]) => {
   return stringList[randomNumber(stringList.length)];
 };
 
 export const getAllWords = () => {
-  return words;
+  return allWords();
 };
 
 export const randomNumber = (max: number) => {
