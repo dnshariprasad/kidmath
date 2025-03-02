@@ -19,7 +19,7 @@ const ContainerV = styled.div`
   flex-direction: column;
   gap: 5px;
 `;
-const operations = ["+", "-", "*", "/"];
+const operations = ["+", "-", "x", "/"];
 const getRandomNumber = (max: number) => Math.floor(Math.random() * max) + 1; // Random number between 1 and 10
 const getRandomOperation = () =>
   operations[Math.floor(Math.random() * operations.length)];
@@ -92,7 +92,7 @@ const MathChallenge = () => {
         return num1 + num2;
       case "-":
         return num1 - num2;
-      case "*":
+      case "x":
         return num1 * num2;
       case "/":
         return num2 !== 0 ? (num1 / num2).toFixed(2) : "∞";
