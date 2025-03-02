@@ -71,7 +71,6 @@ const MathChallenge = () => {
     const result = calculateResult(num1, num2, operation);
     console.log("Result=", result);
     const userAnswer = Number(inputValue);
-
     if (userAnswer === result) {
       setFeedback("Correct! 🎉");
       readText("Correct");
@@ -104,7 +103,7 @@ const MathChallenge = () => {
       <br />
       <br />
       <ContainerV>
-        <label>Operations:</label>
+        <strong>Operations:</strong>
         <ContainerH>
           {operations.map((op) => (
             <label key={op}>
@@ -118,7 +117,7 @@ const MathChallenge = () => {
           ))}
         </ContainerH>
         <br />
-        <label>Complexity:</label>
+        <strong>Complexity:</strong>
         <label>
           <input
             type="checkbox"
