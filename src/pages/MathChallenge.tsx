@@ -12,9 +12,6 @@ import styled from "styled-components";
 import {
   calculateResult,
   generateChallenge,
-  getMaxNumber,
-  getRandomNumber,
-  getRandomOperation,
   operations,
 } from "../util/MathUtil";
 const ContainerH = styled.div`
@@ -26,6 +23,9 @@ const ContainerV = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
 `;
 
 const MathChallenge = () => {
@@ -104,6 +104,7 @@ const MathChallenge = () => {
       <br />
       <br />
       <ContainerV>
+        <label>Operations:</label>
         <ContainerH>
           {operations.map((op) => (
             <label key={op}>
@@ -116,6 +117,8 @@ const MathChallenge = () => {
             </label>
           ))}
         </ContainerH>
+        <br />
+        <label>Complexity:</label>
         <label>
           <input
             type="checkbox"
