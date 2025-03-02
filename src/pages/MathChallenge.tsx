@@ -9,25 +9,45 @@ import { readText } from "../util/util";
 import NextIcon from "../components/NextIcon";
 import { KidoText } from "../components/KidoText";
 
-const getRandomNumber = () => Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+const getRandomNumber = (max: number) => Math.floor(Math.random() * max) + 1; // Random number between 1 and 10
 const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
-
+const getMaxNumber = (digits: number): number => {
+  return 10 ** digits - 1;
+};
 const MathChallenge = () => {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [operation, setOperation] = useState("+");
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [singleDigit, setSingleDigit] = useState(true);
+  const [oneDoubleDigit, setOneDoubleDigit] = useState(false);
+  const [multiDigit, setMultiDigit] = useState(false);
+  const [maxDigits, setMaxDigits] = useState(1);
+  const [negativeCounting, setNegativeCounting] = useState(true);
 
   const generateChallenge = () => {
-    const newNum1 = getRandomNumber();
-    const newNum2 = getRandomNumber();
+    let newNum1 = 0;
+    let newNum2 = 0;
+
+    if (singleDigit) {
+      newNum1 = getRandomNumber(9);
+      newNum2 = getRandomNumber(9);
+    } else if (oneDoubleDigit) {
+      newNum1 = getRandomNumber(9);
+      newNum2 = getRandomNumber(99);
+    } else if (multiDigit) {
+      newNum1 = getRandomNumber(getMaxNumber(maxDigits));
+      newNum2 = getRandomNumber(getMaxNumber(maxDigits));
+    }
+
     const newOperation = getRandomOperation();
 
     setNum1(newNum1);
     setNum2(newNum2);
     setOperation(newOperation);
-    if ("-" === newOperation && newNum1 < newNum2) {
+
+    if ("-" === newOperation && !negativeCounting && newNum1 < newNum2) {
       generateChallenge();
     }
     setInputValue("");
@@ -79,6 +99,43 @@ const MathChallenge = () => {
       <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
       <br />
       {feedback && <h1>{feedback}</h1>}
+      <br />
+      <br />
+      <div>
+        <input
+          type="checkbox"
+          checked={singleDigit}
+          onChange={() => setSingleDigit(!singleDigit)}
+        />
+        Single Digits
+        <br />
+        <input
+          type="checkbox"
+          checked={oneDoubleDigit}
+          onChange={() => setOneDoubleDigit(!oneDoubleDigit)}
+        />
+        Single Double Digit
+        <br />
+        <input
+          type="checkbox"
+          checked={multiDigit}
+          onChange={() => setMultiDigit(!multiDigit)}
+        />
+        Multi Digit
+        <input
+          type="number"
+          value={maxDigits}
+          onChange={(e) => setMaxDigits(parseInt(e.target.value))}
+          min={2}
+        />
+        <br />
+        <input
+          type="checkbox"
+          checked={negativeCounting}
+          onChange={() => setNegativeCounting(!negativeCounting)}
+        />
+        Negative Counting
+      </div>
     </CenteredContainerVertical>
   );
 };
