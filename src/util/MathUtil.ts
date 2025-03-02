@@ -1,3 +1,5 @@
+import { COUNTING_COMPLEXITY } from "./Constants";
+
 export const operations = ["+", "-", "x", "/"];
 export const getMaxNumber = (digits: number): number => {
   return 10 ** digits - 1;
@@ -23,7 +25,7 @@ export const generateChallenge = (
   }
   //Default Complexity Level
   if (cplxty === undefined || cplxty === null || cplxty === "") {
-    cplxty = "singleDigit";
+    cplxty = COUNTING_COMPLEXITY.SINGLE_DIGIT;
   }
 
   //generate operation
@@ -52,10 +54,11 @@ function getNumbers(
 ) {
   let newNum1 = 0;
   let newNum2 = 0;
-  if (selectedOption === "singleDigit") {
+
+  if (selectedOption === COUNTING_COMPLEXITY.SINGLE_DIGIT) {
     newNum1 = getRandomNumber(9);
     newNum2 = getRandomNumber(9);
-  } else if (selectedOption === "oneDoubleDigit") {
+  } else if (selectedOption === COUNTING_COMPLEXITY.SINGLE_DOUBLEDIGIT) {
     if (Math.random() > 0.5) {
       newNum1 = getRandomNumber(9);
       newNum2 = getRandomNumber(99);
@@ -63,7 +66,7 @@ function getNumbers(
       newNum1 = getRandomNumber(99);
       newNum2 = getRandomNumber(9);
     }
-  } else if (selectedOption === "multiDigit") {
+  } else if (selectedOption === COUNTING_COMPLEXITY.MULTI_DIGIT) {
     newNum1 = getRandomNumber(getMaxNumber(maxDigits));
     newNum2 = getRandomNumber(getMaxNumber(maxDigits));
   }

@@ -1,3 +1,9 @@
+export const COUNTING_COMPLEXITY = {
+  SINGLE_DIGIT: "singleDigit",
+  SINGLE_DOUBLEDIGIT: "oneDoubleDigit",
+  MULTI_DIGIT: "multiDigit",
+};
+
 export const MAIN_MENU = [
   {
     isEnabled: true,

@@ -14,6 +14,7 @@ import {
   generateChallenge,
   operations,
 } from "../util/MathUtil";
+import { COUNTING_COMPLEXITY } from "../util/Constants";
 const ContainerH = styled.div`
   display: flex;
   gap: 10px;
@@ -30,7 +31,9 @@ const ContainerV = styled.div`
 
 const MathChallenge = () => {
   //config
-  const [complexity, setComplexity] = useState("singleDigit");
+  const [complexity, setComplexity] = useState(
+    COUNTING_COMPLEXITY.SINGLE_DIGIT
+  );
   const [selectedOperations, setSelectedOperations] = useState(["+"]);
   const [inputValue, setInputValue] = useState("");
   const [negativeCounting, setNegativeCounting] = useState(false);
@@ -134,35 +137,39 @@ const MathChallenge = () => {
         <label>
           <input
             type="checkbox"
-            checked={complexity === "singleDigit"}
-            onChange={() => handleSelection("singleDigit")}
+            checked={complexity === COUNTING_COMPLEXITY.SINGLE_DIGIT}
+            onChange={() => handleSelection(COUNTING_COMPLEXITY.SINGLE_DIGIT)}
           />
-          Single Digits
+          Single Digits (Ex: 5-7 or 5+7)
         </label>
         <label>
           <input
             type="checkbox"
-            checked={complexity === "oneDoubleDigit"}
-            onChange={() => handleSelection("oneDoubleDigit")}
+            checked={complexity === COUNTING_COMPLEXITY.SINGLE_DOUBLEDIGIT}
+            onChange={() =>
+              handleSelection(COUNTING_COMPLEXITY.SINGLE_DOUBLEDIGIT)
+            }
           />
-          Single Double Digit
+          Single Double Digit (Ex: 17-3 or 17+7)
         </label>
         <ContainerH>
           <label>
             <input
               type="checkbox"
-              checked={complexity === "multiDigit"}
-              onChange={() => handleSelection("multiDigit")}
+              checked={complexity === COUNTING_COMPLEXITY.MULTI_DIGIT}
+              onChange={() => handleSelection(COUNTING_COMPLEXITY.MULTI_DIGIT)}
             />
-            Multi Digit
+            Multi Digit (Ex: 17+13 or 17+107)
           </label>
-
-          <input
-            type="number"
-            value={maxDigits}
-            onChange={(e) => setMaxDigits(parseInt(e.target.value))}
-            min={2}
-          />
+          {complexity === "multiDigit" && (
+            <input
+              type="number"
+              value={maxDigits}
+              onChange={(e) => setMaxDigits(parseInt(e.target.value))}
+              min={2}
+              disabled={complexity !== "multiDigit"} // Disable if not multiDigit
+            />
+          )}
         </ContainerH>
         <br />
         <label>
@@ -171,7 +178,7 @@ const MathChallenge = () => {
             checked={negativeCounting}
             onChange={() => setNegativeCounting(!negativeCounting)}
           />
-          Negative Counting (Ex: 5-7 pr 5/7)
+          Negative Counting (Ex: 5-7 or 5/7)
         </label>
       </ContainerV>
     </CenteredContainerVertical>
