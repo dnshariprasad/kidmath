@@ -162,7 +162,7 @@ const MathChallenge = () => {
             Multi Digit (Ex: 17+13 or 17+107)
           </label>
           {complexity === "multiDigit" && (
-            <input
+            <StyledInput
               type="number"
               value={maxDigits}
               onChange={(e) => setMaxDigits(parseInt(e.target.value))}

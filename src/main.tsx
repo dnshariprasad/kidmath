@@ -14,6 +14,7 @@ import SpellingChallenge from "./pages/SpellingChallenge.tsx";
 import MissingLettersChallenge from "./pages/MissingLettersChallenge.tsx";
 import GreaterLessEqualGame from "./pages/GreaterLessEqualGame.tsx";
 import CrosswordSudoku from "./pages/SudokuGame.tsx";
+import NumberSorter from "./pages/NumberSorter.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -30,8 +31,10 @@ createRoot(document.getElementById("root")!).render(
             <Route path="spelling" element={<SpellingChallenge />} />
             <Route path="comparison" element={<GreaterLessEqualGame />} />
             <Route path="sudoku" element={<CrosswordSudoku />} />
+            <Route path="sorting_numbers" element={<NumberSorter />} />
+            <Route path="sorting_numbers" element={<NumberSorter />} />
             <Route
-              path="missing_letters"
+              path="missing_numbers"
               element={<MissingLettersChallenge />}
             />
           </Route>

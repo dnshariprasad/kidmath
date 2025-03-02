@@ -50,6 +50,16 @@ export const MAIN_MENU = [
         path: "/comparison",
         isEnabled: true,
       },
+      {
+        title: "Missing Numbers",
+        path: "/missing_numbers",
+        isEnabled: false,
+      },
+      {
+        title: "Number Sorting",
+        path: "/sorting_numbers",
+        isEnabled: true,
+      },
     ],
   },
 ];

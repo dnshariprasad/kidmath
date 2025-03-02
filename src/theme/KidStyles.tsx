@@ -52,13 +52,13 @@ export const CenteredContainerVertical = styled.div<{ padding?: string }>`
   height: auto; /* Takes full height of the viewport */
   gap: 10px;
 `;
-export const StyledInput = styled.input`
+export const StyledInput = styled.input<{ width?: string }>`
   padding: 10px;
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
-  width: 100px;
+  width: ${(props) => props.width || "100px"};
 
   &:focus {
     border-color: #3498db;
