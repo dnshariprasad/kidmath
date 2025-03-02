@@ -19,8 +19,10 @@ const ContainerV = styled.div`
   flex-direction: column;
   gap: 5px;
 `;
+const operations = ["+", "-", "*", "/"];
 const getRandomNumber = (max: number) => Math.floor(Math.random() * max) + 1; // Random number between 1 and 10
-const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
+const getRandomOperation = () =>
+  operations[Math.floor(Math.random() * operations.length)];
 const getMaxNumber = (digits: number): number => {
   return 10 ** digits - 1;
 };
@@ -30,8 +32,8 @@ const MathChallenge = () => {
   const [operation, setOperation] = useState("+");
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [maxDigits, setMaxDigits] = useState(1);
-  const [negativeCounting, setNegativeCounting] = useState(true);
+  const [maxDigits, setMaxDigits] = useState(2);
+  const [negativeCounting, setNegativeCounting] = useState(false);
   const [selectedOption, setSelectedOption] = useState("singleDigit");
   const handleSelection = (option: string) => {
     setSelectedOption(option);
@@ -52,6 +54,10 @@ const MathChallenge = () => {
         newNum2 = getRandomNumber(9);
       }
     } else if (selectedOption === "multiDigit") {
+      if (isNaN(maxDigits)) {
+        setMaxDigits(2);
+        generateChallenge();
+      }
       newNum1 = getRandomNumber(getMaxNumber(maxDigits));
       newNum2 = getRandomNumber(getMaxNumber(maxDigits));
     } else {
@@ -65,7 +71,11 @@ const MathChallenge = () => {
     setNum2(newNum2);
     setOperation(newOperation);
 
-    if ("-" === newOperation && !negativeCounting && newNum1 < newNum2) {
+    if (
+      ("-" === newOperation || "/" === newOperation) &&
+      !negativeCounting &&
+      newNum1 < newNum2
+    ) {
       generateChallenge();
     }
     setInputValue("");
@@ -77,11 +87,23 @@ const MathChallenge = () => {
   }, []);
 
   const calculateResult = () => {
-    return operation === "+" ? num1 + num2 : num1 - num2;
+    switch (operation) {
+      case "+":
+        return num1 + num2;
+      case "-":
+        return num1 - num2;
+      case "*":
+        return num1 * num2;
+      case "/":
+        return num2 !== 0 ? (num1 / num2).toFixed(2) : "∞";
+      default:
+        return 0;
+    }
   };
 
   const handleSubmit = () => {
     const result = calculateResult();
+    console.log("Result=", result);
     const userAnswer = Number(inputValue);
 
     if (userAnswer === result) {
@@ -160,7 +182,7 @@ const MathChallenge = () => {
             checked={negativeCounting}
             onChange={() => setNegativeCounting(!negativeCounting)}
           />
-          Negative Counting
+          Negative Counting (Ex: 5-7 pr 5/7)
         </label>
       </ContainerV>
     </CenteredContainerVertical>
