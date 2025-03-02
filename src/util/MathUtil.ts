@@ -10,7 +10,7 @@ export const getRandomOperation = (selectedOperations: string[]) =>
 
 export const generateChallenge = (
   maxDigits: number,
-  selectedOption: string,
+  cplxty: string,
   selectedOperations: string[],
   negativeCounting: boolean
 ) => {
@@ -22,12 +22,8 @@ export const generateChallenge = (
     maxDigits = 2;
   }
   //Default Complexity Level
-  if (
-    selectedOption === undefined ||
-    selectedOption === null ||
-    selectedOption === ""
-  ) {
-    selectedOption = "singleDigit";
+  if (cplxty === undefined || cplxty === null || cplxty === "") {
+    cplxty = "singleDigit";
   }
 
   //generate operation
@@ -35,7 +31,7 @@ export const generateChallenge = (
 
   //generate numbers
   ({ newNum1, newNum2 } = getNumbers(
-    selectedOption,
+    cplxty,
     maxDigits,
     newOperation,
     negativeCounting

@@ -29,31 +29,26 @@ const ContainerV = styled.div`
 `;
 
 const MathChallenge = () => {
+  //config
+  const [complexity, setComplexity] = useState("singleDigit");
+  const [selectedOperations, setSelectedOperations] = useState(["+"]);
+  const [inputValue, setInputValue] = useState("");
+  const [negativeCounting, setNegativeCounting] = useState(false);
+  const [maxDigits, setMaxDigits] = useState(2);
+
+  //challenge
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [operation, setOperation] = useState("+");
-  const [selectedOperations, setSelectedOperations] = useState(["+"]);
-  const [inputValue, setInputValue] = useState("");
+
+  //result
   const [feedback, setFeedback] = useState("");
-  const [maxDigits, setMaxDigits] = useState(2);
-  const [negativeCounting, setNegativeCounting] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("singleDigit");
-  const handleSelection = (option: string) => {
-    setSelectedOption(option);
-  };
-  const toggleOperation = (operation: string) => {
-    setSelectedOperations(
-      (prev) =>
-        prev.includes(operation)
-          ? prev.filter((op) => op !== operation) // Remove if already selected
-          : [...prev, operation] // Add if not selected
-    );
-    showNewChallenge();
-  };
+
+  //events
   const showNewChallenge = () => {
     const operation = generateChallenge(
       maxDigits,
-      selectedOption,
+      complexity,
       selectedOperations,
       negativeCounting
     );
@@ -63,9 +58,22 @@ const MathChallenge = () => {
     setFeedback("");
     setInputValue("");
   };
-  useEffect(() => {
-    showNewChallenge();
-  }, []);
+
+  const handleSelection = (option: string) => {
+    setComplexity(option);
+  };
+
+  const toggleOperation = (operation: string) => {
+    setSelectedOperations((prev) => {
+      if (prev.length === 1 && prev.includes(operation)) {
+        return prev; // Prevent unselecting the last option
+      }
+
+      return prev.includes(operation)
+        ? prev.filter((op) => op !== operation) // Remove if already selected
+        : [...prev, operation]; // Add if not selected
+    });
+  };
 
   const handleSubmit = () => {
     const result = calculateResult(num1, num2, operation);
@@ -79,6 +87,11 @@ const MathChallenge = () => {
       readText(`Try again!`);
     }
   };
+
+  //initial challenge
+  useEffect(() => {
+    showNewChallenge();
+  }, []);
 
   return (
     <CenteredContainerVertical>
@@ -121,7 +134,7 @@ const MathChallenge = () => {
         <label>
           <input
             type="checkbox"
-            checked={selectedOption === "singleDigit"}
+            checked={complexity === "singleDigit"}
             onChange={() => handleSelection("singleDigit")}
           />
           Single Digits
@@ -129,7 +142,7 @@ const MathChallenge = () => {
         <label>
           <input
             type="checkbox"
-            checked={selectedOption === "oneDoubleDigit"}
+            checked={complexity === "oneDoubleDigit"}
             onChange={() => handleSelection("oneDoubleDigit")}
           />
           Single Double Digit
@@ -138,7 +151,7 @@ const MathChallenge = () => {
           <label>
             <input
               type="checkbox"
-              checked={selectedOption === "multiDigit"}
+              checked={complexity === "multiDigit"}
               onChange={() => handleSelection("multiDigit")}
             />
             Multi Digit
