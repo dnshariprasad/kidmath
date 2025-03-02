@@ -109,3 +109,17 @@ export const ListContainer = styled.ul`
 export const ListItem = styled.li`
   padding: 5px 0;
 `;
+
+export const ContainerH = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+export const ContainerV = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+`;

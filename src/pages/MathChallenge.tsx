@@ -4,30 +4,18 @@ import {
   CenteredContainerVertical,
   CenteredContainerHorizontally,
   StyledInput,
+  ContainerV,
+  ContainerH,
 } from "../theme/KidStyles";
 import { readText } from "../util/util";
 import NextIcon from "../components/NextIcon";
 import { KidoText } from "../components/KidoText";
-import styled from "styled-components";
 import {
   calculateResult,
   generateChallenge,
   operations,
 } from "../util/MathUtil";
 import { COUNTING_COMPLEXITY } from "../util/Constants";
-const ContainerH = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: center;
-`;
-const ContainerV = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 10px;
-`;
 
 const MathChallenge = () => {
   //config
