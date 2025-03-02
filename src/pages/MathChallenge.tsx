@@ -9,6 +9,14 @@ import { readText } from "../util/util";
 import NextIcon from "../components/NextIcon";
 import { KidoText } from "../components/KidoText";
 import styled from "styled-components";
+import {
+  calculateResult,
+  generateChallenge,
+  getMaxNumber,
+  getRandomNumber,
+  getRandomOperation,
+  operations,
+} from "../util/MathUtil";
 const ContainerH = styled.div`
   display: flex;
   gap: 10px;
@@ -19,17 +27,12 @@ const ContainerV = styled.div`
   flex-direction: column;
   gap: 5px;
 `;
-const operations = ["+", "-", "x", "/"];
-const getRandomNumber = (max: number) => Math.floor(Math.random() * max) + 1; // Random number between 1 and 10
-const getRandomOperation = () =>
-  operations[Math.floor(Math.random() * operations.length)];
-const getMaxNumber = (digits: number): number => {
-  return 10 ** digits - 1;
-};
+
 const MathChallenge = () => {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [operation, setOperation] = useState("+");
+  const [selectedOperations, setSelectedOperations] = useState(["+"]);
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState("");
   const [maxDigits, setMaxDigits] = useState(2);
@@ -38,71 +41,34 @@ const MathChallenge = () => {
   const handleSelection = (option: string) => {
     setSelectedOption(option);
   };
-  const generateChallenge = () => {
-    let newNum1 = 0;
-    let newNum2 = 0;
-
-    if (selectedOption === "singleDigit") {
-      newNum1 = getRandomNumber(9);
-      newNum2 = getRandomNumber(9);
-    } else if (selectedOption === "oneDoubleDigit") {
-      if (Math.random() > 0.5) {
-        newNum1 = getRandomNumber(9);
-        newNum2 = getRandomNumber(99);
-      } else {
-        newNum1 = getRandomNumber(99);
-        newNum2 = getRandomNumber(9);
-      }
-    } else if (selectedOption === "multiDigit") {
-      if (isNaN(maxDigits)) {
-        setMaxDigits(2);
-        generateChallenge();
-      }
-      newNum1 = getRandomNumber(getMaxNumber(maxDigits));
-      newNum2 = getRandomNumber(getMaxNumber(maxDigits));
-    } else {
-      setSelectedOption("singleDigit");
-      generateChallenge();
-    }
-
-    const newOperation = getRandomOperation();
-
-    setNum1(newNum1);
-    setNum2(newNum2);
-    setOperation(newOperation);
-
-    if (
-      ("-" === newOperation || "/" === newOperation) &&
-      !negativeCounting &&
-      newNum1 < newNum2
-    ) {
-      generateChallenge();
-    }
-    setInputValue("");
-    setFeedback("");
+  const toggleOperation = (operation: string) => {
+    setSelectedOperations(
+      (prev) =>
+        prev.includes(operation)
+          ? prev.filter((op) => op !== operation) // Remove if already selected
+          : [...prev, operation] // Add if not selected
+    );
+    showNewChallenge();
   };
-
+  const showNewChallenge = () => {
+    const operation = generateChallenge(
+      maxDigits,
+      selectedOption,
+      selectedOperations,
+      negativeCounting
+    );
+    setNum1(operation.num1);
+    setNum2(operation.num2);
+    setOperation(operation.operation);
+    setFeedback("");
+    setInputValue("");
+  };
   useEffect(() => {
-    generateChallenge();
+    showNewChallenge();
   }, []);
 
-  const calculateResult = () => {
-    switch (operation) {
-      case "+":
-        return num1 + num2;
-      case "-":
-        return num1 - num2;
-      case "x":
-        return num1 * num2;
-      case "/":
-        return num2 !== 0 ? (num1 / num2).toFixed(2) : "∞";
-      default:
-        return 0;
-    }
-  };
-
   const handleSubmit = () => {
-    const result = calculateResult();
+    const result = calculateResult(num1, num2, operation);
     console.log("Result=", result);
     const userAnswer = Number(inputValue);
 
@@ -113,10 +79,6 @@ const MathChallenge = () => {
       setFeedback(`Try again!`);
       readText(`Try again!`);
     }
-  };
-
-  const handleReset = () => {
-    generateChallenge();
   };
 
   return (
@@ -134,7 +96,7 @@ const MathChallenge = () => {
           placeholder=""
         />
         <br />
-        <NextIcon onClick={handleReset} />
+        <NextIcon onClick={showNewChallenge} />
       </CenteredContainerHorizontally>
       <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
       <br />
@@ -142,6 +104,18 @@ const MathChallenge = () => {
       <br />
       <br />
       <ContainerV>
+        <ContainerH>
+          {operations.map((op) => (
+            <label key={op}>
+              <input
+                type="checkbox"
+                checked={selectedOperations.includes(op)}
+                onChange={() => toggleOperation(op)}
+              />
+              {op}
+            </label>
+          ))}
+        </ContainerH>
         <label>
           <input
             type="checkbox"
