@@ -8,7 +8,17 @@ import {
 import { readText } from "../util/util";
 import NextIcon from "../components/NextIcon";
 import { KidoText } from "../components/KidoText";
-
+import styled from "styled-components";
+const ContainerH = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+const ContainerV = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
 const getRandomNumber = (max: number) => Math.floor(Math.random() * max) + 1; // Random number between 1 and 10
 const getRandomOperation = () => (Math.random() > 0.5 ? "+" : "-"); // Randomly select + or -
 const getMaxNumber = (digits: number): number => {
@@ -20,25 +30,33 @@ const MathChallenge = () => {
   const [operation, setOperation] = useState("+");
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [singleDigit, setSingleDigit] = useState(true);
-  const [oneDoubleDigit, setOneDoubleDigit] = useState(false);
-  const [multiDigit, setMultiDigit] = useState(false);
   const [maxDigits, setMaxDigits] = useState(1);
   const [negativeCounting, setNegativeCounting] = useState(true);
-
+  const [selectedOption, setSelectedOption] = useState("singleDigit");
+  const handleSelection = (option: string) => {
+    setSelectedOption(option);
+  };
   const generateChallenge = () => {
     let newNum1 = 0;
     let newNum2 = 0;
 
-    if (singleDigit) {
+    if (selectedOption === "singleDigit") {
       newNum1 = getRandomNumber(9);
       newNum2 = getRandomNumber(9);
-    } else if (oneDoubleDigit) {
-      newNum1 = getRandomNumber(9);
-      newNum2 = getRandomNumber(99);
-    } else if (multiDigit) {
+    } else if (selectedOption === "oneDoubleDigit") {
+      if (Math.random() > 0.5) {
+        newNum1 = getRandomNumber(9);
+        newNum2 = getRandomNumber(99);
+      } else {
+        newNum1 = getRandomNumber(99);
+        newNum2 = getRandomNumber(9);
+      }
+    } else if (selectedOption === "multiDigit") {
       newNum1 = getRandomNumber(getMaxNumber(maxDigits));
       newNum2 = getRandomNumber(getMaxNumber(maxDigits));
+    } else {
+      setSelectedOption("singleDigit");
+      generateChallenge();
     }
 
     const newOperation = getRandomOperation();
@@ -101,41 +119,50 @@ const MathChallenge = () => {
       {feedback && <h1>{feedback}</h1>}
       <br />
       <br />
-      <div>
-        <input
-          type="checkbox"
-          checked={singleDigit}
-          onChange={() => setSingleDigit(!singleDigit)}
-        />
-        Single Digits
+      <ContainerV>
+        <label>
+          <input
+            type="checkbox"
+            checked={selectedOption === "singleDigit"}
+            onChange={() => handleSelection("singleDigit")}
+          />
+          Single Digits
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={selectedOption === "oneDoubleDigit"}
+            onChange={() => handleSelection("oneDoubleDigit")}
+          />
+          Single Double Digit
+        </label>
+        <ContainerH>
+          <label>
+            <input
+              type="checkbox"
+              checked={selectedOption === "multiDigit"}
+              onChange={() => handleSelection("multiDigit")}
+            />
+            Multi Digit
+          </label>
+
+          <input
+            type="number"
+            value={maxDigits}
+            onChange={(e) => setMaxDigits(parseInt(e.target.value))}
+            min={2}
+          />
+        </ContainerH>
         <br />
-        <input
-          type="checkbox"
-          checked={oneDoubleDigit}
-          onChange={() => setOneDoubleDigit(!oneDoubleDigit)}
-        />
-        Single Double Digit
-        <br />
-        <input
-          type="checkbox"
-          checked={multiDigit}
-          onChange={() => setMultiDigit(!multiDigit)}
-        />
-        Multi Digit
-        <input
-          type="number"
-          value={maxDigits}
-          onChange={(e) => setMaxDigits(parseInt(e.target.value))}
-          min={2}
-        />
-        <br />
-        <input
-          type="checkbox"
-          checked={negativeCounting}
-          onChange={() => setNegativeCounting(!negativeCounting)}
-        />
-        Negative Counting
-      </div>
+        <label>
+          <input
+            type="checkbox"
+            checked={negativeCounting}
+            onChange={() => setNegativeCounting(!negativeCounting)}
+          />
+          Negative Counting
+        </label>
+      </ContainerV>
     </CenteredContainerVertical>
   );
 };
