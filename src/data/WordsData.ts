@@ -63,6 +63,37 @@ export const wordFamilies = [
     ],
     enabled: true,
   },
+  {
+    mame: "Months",
+    words: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
+    enabled: true,
+  },
+  {
+    mame: "Days",
+    words: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+    enabled: true,
+  },
 ];
 
 export const sentences: string[] = [
