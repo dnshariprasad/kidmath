@@ -4,15 +4,23 @@ import {
   CenteredContainerVertical,
   Tag,
   TagList,
-} from "../theme/KidStyles";
-import { big, small } from "../data/Alphabet";
-import SpeakIcon from "../components/SpeakIcon";
-import NextIcon from "../components/NextIcon";
-import { KidoText } from "../components/KidoText";
+} from "../../theme/KidStyles";
+import SpeakIcon from "../../components/SpeakIcon";
+import NextIcon from "../../components/NextIcon";
+import { KidoText } from "../../components/KidoText";
+import {
+  hindiCombinedCharacters,
+  hindiConsonants,
+  hindiVowels,
+} from "../../data/HindiAlphabet";
 
-const alphabet = [...big, ...small];
+const alphabet = [
+  ...hindiVowels,
+  ...hindiConsonants,
+  ...hindiCombinedCharacters,
+];
 
-const AlphabetChallenge = () => {
+const AlphabetHindiChallenge = () => {
   const [randomString, setRandomString] = useState<string>("");
 
   const generateChallenge = () => {
@@ -41,18 +49,27 @@ const AlphabetChallenge = () => {
       </CenteredContainerHorizontally>
       <br />
       <br />
-      {alphabet.length > 0 && (
+      {hindiVowels.length > 0 && (
         <TagList>
-          {big.map((tag, index) => (
+          {hindiVowels.map((tag, index) => (
             <Tag key={index} onClick={() => setRandomString(tag)}>
               {tag}
             </Tag>
           ))}
         </TagList>
       )}
-      {alphabet.length > 0 && (
+      {hindiConsonants.length > 0 && (
         <TagList>
-          {small.map((tag, index) => (
+          {hindiConsonants.map((tag, index) => (
+            <Tag key={index} onClick={() => setRandomString(tag)}>
+              {tag}
+            </Tag>
+          ))}
+        </TagList>
+      )}
+      {hindiCombinedCharacters.length > 0 && (
+        <TagList>
+          {hindiCombinedCharacters.map((tag, index) => (
             <Tag key={index} onClick={() => setRandomString(tag)}>
               {tag}
             </Tag>
@@ -63,4 +80,4 @@ const AlphabetChallenge = () => {
   );
 };
 
-export default AlphabetChallenge;
+export default AlphabetHindiChallenge;

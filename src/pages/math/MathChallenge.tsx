@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
-import KidButton from "../components/KidButton";
+import KidButton from "../../components/KidButton";
+import { KidoText } from "../../components/KidoText";
+import NextIcon from "../../components/NextIcon";
 import {
   CenteredContainerVertical,
   CenteredContainerHorizontally,
   StyledInput,
   ContainerV,
   ContainerH,
-} from "../theme/KidStyles";
-import { readText } from "../util/util";
-import NextIcon from "../components/NextIcon";
-import { KidoText } from "../components/KidoText";
+} from "../../theme/KidStyles";
+import { COUNTING_COMPLEXITY } from "../../util/Constants";
 import {
-  calculateResult,
   generateChallenge,
+  calculateResult,
   operations,
-} from "../util/MathUtil";
-import { COUNTING_COMPLEXITY } from "../util/Constants";
+} from "../../util/MathUtil";
+import { readText } from "../../util/util";
 
 const MathChallenge = () => {
   //config

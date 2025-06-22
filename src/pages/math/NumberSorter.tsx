@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import { KidoText } from "../components/KidoText";
+import KidButton from "../../components/KidButton";
+import { KidoText } from "../../components/KidoText";
+import NextIcon from "../../components/NextIcon";
 import {
-  CenteredContainerHorizontally,
   CenteredContainerVertical,
-  ContainerH,
-  ContainerV,
-  StyledInput,
+  CenteredContainerHorizontally,
   Tag,
-} from "../theme/KidStyles";
-import KidButton from "../components/KidButton";
-import { readText } from "../util/util";
-import { getMaxNumber, getRandomNumber } from "../util/MathUtil";
-import NextIcon from "../components/NextIcon";
+  StyledInput,
+  ContainerV,
+  ContainerH,
+} from "../../theme/KidStyles";
+import { getRandomNumber, getMaxNumber } from "../../util/MathUtil";
+import { readText } from "../../util/util";
 
 export default function NumberSorter() {
   const [maxDigits, setMaxDigits] = useState(1);

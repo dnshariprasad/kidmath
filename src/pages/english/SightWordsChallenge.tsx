@@ -7,13 +7,13 @@ import {
   ListItem,
   Tag,
   TagList,
-} from "../theme/KidStyles";
-import SpeakIcon from "../components/SpeakIcon";
-import NextIcon from "../components/NextIcon";
-import PreviousIcon from "../components/PreviousIcon";
-import { KidoText } from "../components/KidoText";
-import { sentences } from "../data/WordsData";
-import { getAllWords } from "../data/WordUtil";
+} from "../../theme/KidStyles";
+import SpeakIcon from "../../components/SpeakIcon";
+import NextIcon from "../../components/NextIcon";
+import PreviousIcon from "../../components/PreviousIcon";
+import { KidoText } from "../../components/KidoText";
+import { sentences } from "../../data/WordsData";
+import { getAllWords } from "../../data/WordUtil";
 
 const SightWordsChallenge = () => {
   const [words, setWords] = useState<string[]>([]);

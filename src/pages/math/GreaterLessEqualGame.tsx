@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { KidoText } from "../components/KidoText";
-import KidButton from "../components/KidButton";
-import { readText } from "../util/util";
-import { Container } from "../theme/KidStyles";
+import KidButton from "../../components/KidButton";
+import { KidoText } from "../../components/KidoText";
+import { Container } from "../../theme/KidStyles";
+import { readText } from "../../util/util";
 
 export const GreaterLessEqualGame: React.FC = () => {
   const [num1, setNum1] = useState(Math.floor(Math.random() * 100));

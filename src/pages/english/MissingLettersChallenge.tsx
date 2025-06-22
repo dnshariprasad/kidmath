@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
+import KidButton from "../../components/KidButton";
+import { KidoText } from "../../components/KidoText";
+import SpeakIcon from "../../components/SpeakIcon";
 import {
-  CenteredContainerHorizontally,
-  CenteredContainerVertical,
-  StyledInput,
-} from "../theme/KidStyles";
-import SpeakIcon from "../components/SpeakIcon";
-import KidButton from "../components/KidButton";
-import { readText } from "../util/util";
-import {
-  createMissingLetterWord,
   getAllWords,
   getRandomWord,
+  createMissingLetterWord,
   randomNumber,
-} from "../data/WordUtil";
-import { KidoText } from "../components/KidoText";
+} from "../../data/WordUtil";
+import {
+  CenteredContainerVertical,
+  CenteredContainerHorizontally,
+  StyledInput,
+} from "../../theme/KidStyles";
+import { readText } from "../../util/util";
 
 const stringList = getAllWords();
 
