@@ -15,6 +15,7 @@ import MissingLettersChallenge from "./pages/MissingLettersChallenge.tsx";
 import GreaterLessEqualGame from "./pages/GreaterLessEqualGame.tsx";
 import CrosswordSudoku from "./pages/SudokuGame.tsx";
 import NumberSorter from "./pages/NumberSorter.tsx";
+import AlphabetHindiChallenge from "./pages/AlphabetHindiChallenge.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -40,6 +41,7 @@ createRoot(document.getElementById("root")!).render(
               path="missing_numbers"
               element={<MissingLettersChallenge />}
             />
+            <Route path="alphabet_hindi" element={<AlphabetHindiChallenge />} />
           </Route>
         </Routes>
       </HashRouter>

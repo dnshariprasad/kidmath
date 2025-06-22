@@ -62,4 +62,15 @@ export const MAIN_MENU = [
       },
     ],
   },
+  {
+    isEnabled: true,
+    main: "Hindi",
+    sub: [
+      {
+        title: "Alphabet",
+        path: "/alphabet_hindi",
+        isEnabled: true,
+      },
+    ],
+  },
 ];
