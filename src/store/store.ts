@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import AlphabetSlice from "./AlphabetSlice";
-import AlphabetSaga from "./AlphabetSaga";
+import AlphabetSlice from "./slice/AlphabetSlice";
+import AlphabetSaga from "./saga/AlphabetSaga";
 
 const sagaMiddleware = createSagaMiddleware();
 

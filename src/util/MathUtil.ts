@@ -1,4 +1,4 @@
-import { COUNTING_COMPLEXITY } from "./Constants";
+import { COUNTING_COMPLEXITY } from "../store/data/Constants";
 
 export const operations = ["+", "-", "x", "/"];
 export const getMaxNumber = (digits: number): number => {

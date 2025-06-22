@@ -12,7 +12,7 @@ import {
   hindiCombinedCharacters,
   hindiConsonants,
   hindiVowels,
-} from "../../data/HindiAlphabet";
+} from "../../store/data/HindiAlphabet";
 
 const alphabet = [
   ...hindiVowels,

@@ -12,8 +12,8 @@ import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
 import PreviousIcon from "../../components/PreviousIcon";
 import { KidoText } from "../../components/KidoText";
-import { sentences } from "../../data/WordsData";
-import { getAllWords } from "../../data/WordUtil";
+import { sentences } from "../../store/data/WordsData";
+import { getAllWords } from "../../store/data/WordUtil";
 
 const SightWordsChallenge = () => {
   const [words, setWords] = useState<string[]>([]);

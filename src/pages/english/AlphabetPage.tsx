@@ -13,7 +13,7 @@ import { AppDispatch, RootState } from "../../store/store";
 import {
   getSelectedAlphabet,
   setSelectedAlphabet,
-} from "../../store/AlphabetSlice";
+} from "../../store/slice/AlphabetSlice";
 
 const AlphabetChallenge = () => {
   const dispatch = useDispatch<AppDispatch>();

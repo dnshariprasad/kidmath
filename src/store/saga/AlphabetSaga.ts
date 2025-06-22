@@ -1,11 +1,12 @@
 import { put, takeEvery, select } from "redux-saga/effects";
+
 import {
   getAlphabets,
   getSelectedAlphabet,
   setAlphabets,
   setSelectedAlphabet,
-} from "./AlphabetSlice";
-import { RootState } from "./store";
+} from "../slice/AlphabetSlice";
+import { RootState } from "../store";
 
 function* handleAlphabetsAsync() {
   const alphabets: string[] = yield select((state: RootState) =>

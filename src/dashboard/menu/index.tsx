@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MAIN_MENU } from "../../util/Constants";
+import { MAIN_MENU } from "../../store/data/Constants";
 import {
   MenuContainer,
   MenuHeading,

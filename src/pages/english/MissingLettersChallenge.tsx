@@ -7,7 +7,7 @@ import {
   getRandomWord,
   createMissingLetterWord,
   randomNumber,
-} from "../../data/WordUtil";
+} from "../../store/data/WordUtil";
 import {
   CenteredContainerVertical,
   CenteredContainerHorizontally,

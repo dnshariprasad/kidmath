@@ -9,7 +9,7 @@ import {
   ContainerV,
   ContainerH,
 } from "../../theme/KidStyles";
-import { COUNTING_COMPLEXITY } from "../../util/Constants";
+import { COUNTING_COMPLEXITY } from "../../store/data/Constants";
 import {
   generateChallenge,
   calculateResult,

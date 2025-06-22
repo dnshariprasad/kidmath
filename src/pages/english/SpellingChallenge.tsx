@@ -3,7 +3,7 @@ import { CenteredContainerVertical, StyledInput } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
 import { readText } from "../../util/util";
-import { getAllWords, getRandomWord } from "../../data/WordUtil";
+import { getAllWords, getRandomWord } from "../../store/data/WordUtil";
 
 const SpellingChallenge = () => {
   const [randomString, setRandomString] = useState<string>("");
