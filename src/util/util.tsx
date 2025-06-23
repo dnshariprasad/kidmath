@@ -1,5 +1,5 @@
-export function readText(text: string) {
+export function readText(text: string, lang: string = "en-US") {
   const speech = new SpeechSynthesisUtterance(text);
-  speech.lang = "en-US";
+  speech.lang = lang;
   window.speechSynthesis.speak(speech);
 }

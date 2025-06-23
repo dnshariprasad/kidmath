@@ -44,7 +44,7 @@ const AlphabetHindiChallenge = () => {
         <KidoText fontSize="50px" color="black" mobileFontSize="30px">
           {randomString}
         </KidoText>
-        <SpeakIcon text={randomString} />
+        <SpeakIcon text={randomString} lang="hi-IN" />
         <NextIcon onClick={handleNext} />
       </CenteredContainerHorizontally>
       <br />
