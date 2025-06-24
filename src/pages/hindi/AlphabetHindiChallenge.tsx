@@ -9,14 +9,26 @@ import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
 import { KidoText } from "../../components/KidoText";
 import {
+  cha,
   hindiCombinedCharacters,
-  hindiConsonants,
   hindiVowels,
+  kha,
+  ta,
+  tha,
+  pa,
+  ya,
+  se,
 } from "../../store/data/HindiAlphabet";
 
 const alphabet = [
   ...hindiVowels,
-  ...hindiConsonants,
+  ...kha,
+  ...cha,
+  ...pa,
+  ...se,
+  ...ta,
+  ...tha,
+  ...ya,
   ...hindiCombinedCharacters,
 ];
 
@@ -58,9 +70,63 @@ const AlphabetHindiChallenge = () => {
           ))}
         </TagList>
       )}
-      {hindiConsonants.length > 0 && (
+      {kha.length > 0 && (
         <TagList>
-          {hindiConsonants.map((tag, index) => (
+          {kha.map((tag, index) => (
+            <Tag key={index} onClick={() => setRandomString(tag)}>
+              {tag}
+            </Tag>
+          ))}
+        </TagList>
+      )}
+      {cha.length > 0 && (
+        <TagList>
+          {cha.map((tag, index) => (
+            <Tag key={index} onClick={() => setRandomString(tag)}>
+              {tag}
+            </Tag>
+          ))}
+        </TagList>
+      )}
+      {ta.length > 0 && (
+        <TagList>
+          {ta.map((tag, index) => (
+            <Tag key={index} onClick={() => setRandomString(tag)}>
+              {tag}
+            </Tag>
+          ))}
+        </TagList>
+      )}
+      {tha.length > 0 && (
+        <TagList>
+          {tha.map((tag, index) => (
+            <Tag key={index} onClick={() => setRandomString(tag)}>
+              {tag}
+            </Tag>
+          ))}
+        </TagList>
+      )}
+      {pa.length > 0 && (
+        <TagList>
+          {pa.map((tag, index) => (
+            <Tag key={index} onClick={() => setRandomString(tag)}>
+              {tag}
+            </Tag>
+          ))}
+        </TagList>
+      )}
+      {ya.length > 0 && (
+        <TagList>
+          {ya.map((tag, index) => (
+            <Tag key={index} onClick={() => setRandomString(tag)}>
+              {tag}
+            </Tag>
+          ))}
+        </TagList>
+      )}
+      {se.length > 0 && (
+        <TagList>
+          {se.map((tag, index) => (
             <Tag key={index} onClick={() => setRandomString(tag)}>
               {tag}
             </Tag>
