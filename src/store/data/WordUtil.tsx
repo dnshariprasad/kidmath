@@ -1,4 +1,5 @@
 import { wordFamilies } from "./WordsData";
+import { sentences } from "../../store/data/WordsData";
 
 export const getRandomWord = (stringList: string[]) => {
   return stringList[randomNumber(stringList.length)];
@@ -17,4 +18,13 @@ export const createMissingLetterWord = (word: String, missingIndex: number) => {
     .split("")
     .map((char, index) => (index === missingIndex ? " _ " : char))
     .join("");
+};
+
+export const getSentencesOfWord = (word: String): string[] => {
+  return (
+    sentences.filter((s: string) => {
+      const wordsInSentence = s.toLowerCase().split(/[\s.,!?]+/);
+      return wordsInSentence.includes(word.toLowerCase());
+    }) || []
+  );
 };
