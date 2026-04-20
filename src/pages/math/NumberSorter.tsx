@@ -14,6 +14,7 @@ import {
   SidebarTitle,
   HeaderArea,
   SettingsCard,
+  ControlBar,
 } from "../../theme/KidStyles";
 import { getRandomNumber, getMaxNumber } from "../../util/MathUtil";
 import { readText } from "../../util/util";
@@ -65,9 +66,13 @@ const NumberPool = styled.div`
   flex-wrap: wrap;
   gap: 15px;
   justify-content: center;
-  margin: 10px 0 30px;
+  margin: 10px 0 20px;
   padding: 10px;
   width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 `;
 
 const SlotContainer = styled.div`
@@ -221,12 +226,12 @@ export default function NumberSorter() {
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ type: "spring", delay: index * 0.1 }}
                   >
-                    <Tag style={{ fontSize: "1.8rem", padding: "18px 30px" }}>{num}</Tag>
+                    <Tag style={{ fontSize: "clamp(1.2rem, 4vw, 1.8rem)", padding: "clamp(10px, 2vw, 18px) clamp(15px, 3vw, 30px)" }}>{num}</Tag>
                   </motion.div>
                 ))}
-                <div style={{ alignSelf: "center", marginLeft: "10px" }}>
+                <ControlBar style={{ marginTop: "10px", width: "auto" }}>
                   <NextIcon onClick={generateNewSet} />
-                </div>
+                </ControlBar>
               </NumberPool>
             </AnimatePresence>
 

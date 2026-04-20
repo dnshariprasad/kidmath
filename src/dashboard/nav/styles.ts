@@ -29,18 +29,12 @@ export const AppName = styled.div`
   align-items: center;
   gap: 8px;
   letter-spacing: -0.5px;
-
-  &::before {
-    content: "🎈";
-    font-size: 1.5rem;
-  }
+  transition: all 0.3s ease;
 
   &:hover {
     transform: scale(1.02);
     color: ${(props) => props.theme.colors.secondary};
   }
-
-  transition: all 0.3s ease;
 `;
 
 export const UserSection = styled.div`

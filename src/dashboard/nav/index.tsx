@@ -17,9 +17,11 @@ const Navbar: React.FC = () => {
         <MenuToggleButton onClick={() => dispatch(toggleMobileMenu())}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </MenuToggleButton>
-        <AppName as={Link} to="/" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <Balloon size={24} color="#FF7675" strokeWidth={2.5} fill="#FF767520" />
-          kiddoo
+        <AppName as={Link} to="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
+          <div style={{ background: "#6C5CE7", padding: "8px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 10px rgba(108, 92, 231, 0.3)" }}>
+            <Balloon size={24} color="white" strokeWidth={2.5} fill="rgba(255, 255, 255, 0.2)" />
+          </div>
+          <span style={{ fontSize: "1.8rem", letterSpacing: "-1px" }}>kiddoo</span>
         </AppName>
       </div>
 

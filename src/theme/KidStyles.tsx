@@ -220,9 +220,18 @@ export const SettingsCard = styled(Card)`
   background: rgba(255, 255, 255, 0.8);
   border: 3px solid #6C5CE720;
   max-width: none;
-  padding: 50px 20px;
+  padding: 32px 20px;
   
   &:hover {
     transform: translateY(-5px) scale(1.005);
   }
+`;
+
+export const ControlBar = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  width: 100%;
 `;

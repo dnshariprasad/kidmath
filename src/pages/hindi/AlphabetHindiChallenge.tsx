@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
-  CenteredContainerHorizontally,
   PageContainer,
   Tag,
   TagList,
   SidebarTitle,
   HeaderArea,
   SettingsCard,
+  ControlBar,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
+import PreviousIcon from "../../components/PreviousIcon";
 import { KidoText } from "../../components/KidoText";
 import { Languages } from "lucide-react";
 import {
@@ -68,15 +69,22 @@ const MainSide = styled.div`
 `;
 
 const HindiDisplay = styled(motion.div)`
-  font-size: 8rem;
+  font-size: clamp(4rem, 20vw, 8rem);
   font-weight: 900;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
   text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   @media (max-width: 768px) {
-    font-size: 5rem;
+    font-size: clamp(3rem, 25vw, 5rem);
   }
 `;
 
@@ -93,19 +101,15 @@ const alphabet = [
 ];
 
 const AlphabetHindiChallenge = () => {
-  const [randomString, setRandomString] = useState<string>("");
-
-  const generateChallenge = () => {
-    const randomIndex = Math.floor(Math.random() * alphabet.length);
-    setRandomString(alphabet[randomIndex]);
-  };
-
-  useEffect(() => {
-    generateChallenge();
-  }, []);
+  const [index, setIndex] = useState(0);
+  const randomString = alphabet[index];
 
   const handleNext = () => {
-    generateChallenge();
+    setIndex((prev) => (prev + 1) % alphabet.length);
+  };
+
+  const handlePrev = () => {
+    setIndex((prev) => (prev - 1 + alphabet.length) % alphabet.length);
   };
 
   return (
@@ -131,10 +135,11 @@ const AlphabetHindiChallenge = () => {
               </HindiDisplay>
             </AnimatePresence>
 
-            <CenteredContainerHorizontally style={{ marginTop: "20px" }}>
+            <ControlBar>
+              <PreviousIcon onClick={handlePrev} />
               <SpeakIcon text={randomString} lang="hi-IN" />
               <NextIcon onClick={handleNext} />
-            </CenteredContainerHorizontally>
+            </ControlBar>
           </Card>
         </MainSide>
 
@@ -147,13 +152,13 @@ const AlphabetHindiChallenge = () => {
           <SettingsCard>
             <SidebarTitle>Pick a character:</SidebarTitle>
             <TagList style={{ gap: "10px" }}>
-              {alphabet.map((tag, index) => (
+              {alphabet.map((tag, i) => (
                 <Tag
-                  key={index}
-                  onClick={() => setRandomString(tag)}
+                  key={i}
+                  onClick={() => setIndex(i)}
                   style={{
-                    background: randomString === tag ? "#00CEC9" : "",
-                    borderColor: randomString === tag ? "#6C5CE7" : "transparent",
+                    background: index === i ? "#00CEC9" : "",
+                    borderColor: index === i ? "#6C5CE7" : "transparent",
                   }}
                 >
                   {tag}

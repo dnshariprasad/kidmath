@@ -6,6 +6,7 @@ import {
   HeaderArea,
   SettingsCard,
   SidebarTitle,
+  ControlBar,
 } from "../../theme/KidStyles";
 import { KidoText } from "../../components/KidoText";
 import KidButton from "../../components/KidButton";
@@ -202,11 +203,11 @@ const CrosswordSudoku: React.FC = () => {
           </HeaderArea>
           <SettingsCard>
             <SidebarTitle>⚙️ Game Controls</SidebarTitle>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+            <ControlBar style={{ flexDirection: "column", gap: "15px", marginTop: "10px" }}>
               <KidButton onClick={validateSolution} title="Check Answers" variant="success" />
               <KidButton onClick={solvePuzzle} title="Show Solution" variant="primary" />
               <KidButton onClick={resetPuzzle} title="Reset Puzzle" variant="secondary" />
-            </div>
+            </ControlBar>
           </SettingsCard>
         </SidebarSide>
       </GameLayout>

@@ -9,11 +9,11 @@ import NextIcon from "../../components/NextIcon";
 import {
   PageContainer,
   Card,
-  CenteredContainerHorizontally,
   StyledInput,
   SidebarTitle,
   HeaderArea,
   SettingsCard,
+  ControlBar,
 } from "../../theme/KidStyles";
 import { COUNTING_COMPLEXITY } from "../../store/data/Constants";
 import {
@@ -70,19 +70,22 @@ const GameSide = styled.div`
 // Standardized HeaderArea is now imported from KidStyles.tsx
 
 const MathDisplay = styled(motion.div)`
-  font-size: 6rem;
+  font-size: clamp(3rem, 10vw, 6rem);
   font-weight: 900;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
-  margin: 30px 0;
+  margin: 20px 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
   text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
+  white-space: nowrap;
+  width: 100%;
 
   @media (max-width: 768px) {
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 15vw, 3.5rem);
+    gap: 10px;
   }
 `;
 
@@ -229,7 +232,7 @@ const MathChallenge = () => {
               </MathDisplay>
             </AnimatePresence>
 
-            <CenteredContainerHorizontally>
+            <ControlBar>
               <StyledInput
                 type="number"
                 value={inputValue}
@@ -240,7 +243,7 @@ const MathChallenge = () => {
                 autoFocus
               />
               <NextIcon onClick={showNewChallenge} />
-            </CenteredContainerHorizontally>
+            </ControlBar>
 
             <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center" }}>
               <KidButton title="Check Answer" onClick={handleSubmit} variant="success" />

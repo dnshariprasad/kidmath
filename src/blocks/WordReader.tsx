@@ -9,6 +9,7 @@ import {
   SidebarTitle,
   HeaderArea,
   SettingsCard,
+  ControlBar,
 } from "../theme/KidStyles";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
@@ -59,15 +60,22 @@ const MainSide = styled.div`
 `;
 
 const WordDisplay = styled(motion.div)`
-  font-size: 6rem;
+  font-size: clamp(3rem, 15vw, 6rem);
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
   text-shadow: 0 8px 16px ${(props) => props.theme.colors.shadow};
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   @media (max-width: 768px) {
-    font-size: 3.5rem;
+    font-size: clamp(2.5rem, 20vw, 4.5rem);
   }
 `;
 
@@ -134,11 +142,11 @@ const WordReader = (props: IWord) => {
               </WordDisplay>
             </AnimatePresence>
 
-            <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+            <ControlBar>
               <PreviousIcon onClick={handlePrevious} />
               <SpeakIcon text={currentWord} />
               <NextIcon onClick={handleNext} />
-            </div>
+            </ControlBar>
 
             <div style={{ marginTop: "40px", borderTop: "2px dashed #f0f0f0", paddingTop: "20px", width: "100%" }}>
               <SentenceReader sentence={getSentencesOfWord(currentWord)} />

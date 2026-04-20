@@ -5,7 +5,7 @@ import styled from "styled-components";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { Scale } from "lucide-react";
-import { Card, PageContainer, SidebarTitle, HeaderArea, SettingsCard } from "../../theme/KidStyles";
+import { Card, PageContainer, SidebarTitle, HeaderArea, SettingsCard, ControlBar } from "../../theme/KidStyles";
 import { readText } from "../../util/util";
 import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
@@ -63,7 +63,7 @@ const GameCard = styled(Card)`
 `;
 
 const NumberDisplay = styled(motion.div)`
-  font-size: 6rem;
+  font-size: clamp(3rem, 12vw, 6rem);
   font-weight: 900;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
@@ -72,9 +72,11 @@ const NumberDisplay = styled(motion.div)`
   justify-content: center;
   gap: 25px;
   text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
+  white-space: nowrap;
+  width: 100%;
 
   @media (max-width: 768px) {
-    font-size: 3.5rem;
+    font-size: clamp(2.5rem, 15vw, 4rem);
     gap: 15px;
   }
 `;
@@ -202,7 +204,7 @@ export const GreaterLessEqualGame: React.FC = () => {
               </NumberDisplay>
             </AnimatePresence>
 
-            <div style={{ display: "flex", gap: "15px", flexWrap: "wrap", justifyContent: "center", marginTop: "20px" }}>
+            <ControlBar>
               <KidButton
                 title=">"
                 onClick={() => handleChoice("greater")}
@@ -221,7 +223,7 @@ export const GreaterLessEqualGame: React.FC = () => {
                 variant="accent"
                 style={{ fontSize: "2rem", width: "80px", height: "80px" }}
               />
-            </div>
+            </ControlBar>
 
             <AnimatePresence>
               {feedback && (

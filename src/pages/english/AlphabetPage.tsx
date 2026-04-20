@@ -9,6 +9,7 @@ import {
   SidebarTitle,
   HeaderArea,
   SettingsCard,
+  ControlBar,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
@@ -102,15 +103,22 @@ const MainSide = styled.div`
 `;
 
 const BigLetter = styled(motion.div)`
-  font-size: 12rem;
+  font-size: clamp(5rem, 15vw, 12rem);
   font-weight: 900;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
   text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   @media (max-width: 768px) {
-    font-size: 8rem;
+    font-size: clamp(4rem, 20vw, 8rem);
   }
 `;
 
@@ -153,11 +161,11 @@ const AlphabetPage = () => {
               </BigLetter>
             </AnimatePresence>
 
-            <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+            <ControlBar>
               <PreviousIcon onClick={prevLetter} />
               <SpeakIcon text={currentLetter} />
               <NextIcon onClick={nextLetter} />
-            </div>
+            </ControlBar>
           </Card>
         </MainSide>
 

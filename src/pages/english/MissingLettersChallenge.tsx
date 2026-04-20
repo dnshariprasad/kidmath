@@ -10,6 +10,7 @@ import {
   SidebarTitle,
   HeaderArea,
   SettingsCard,
+  ControlBar,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
@@ -114,30 +115,25 @@ const MissingLettersChallenge = () => {
             </KidoText>
           </HeaderArea>
           <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
-            <KidoText fontSize="22px" color="textSecondary" margin="0 0 10px">
-              Fill in the missing letter:
-            </KidoText>
-            
-            <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "30px" }}>
-              <KidoText fontSize="5rem" color="primary" fontWeight={900} style={{ letterSpacing: "8px" }}>
+            <div style={{ width: "100%", textAlign: "center", marginBottom: "30px" }}>
+              <KidoText fontSize="clamp(3rem, 15vw, 6rem)" color="primary" fontWeight={900} style={{ letterSpacing: "8px", whiteSpace: "nowrap" }}>
                 {randomStringWithMissingLetter}
               </KidoText>
+            </div>
+            
+            <ControlBar>
+              <StyledInput
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="?"
+                width="160px"
+                onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
+                autoFocus
+              />
               <SpeakIcon text={randomString} />
-            </div>
-
-            <StyledInput
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="?"
-              width="200px"
-              onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
-              autoFocus
-            />
-
-            <div style={{ marginTop: "40px" }}>
               <KidButton title="Check Answer" onClick={handleSubmit} variant="success" />
-            </div>
+            </ControlBar>
 
             <AnimatePresence>
               {feedback && (
