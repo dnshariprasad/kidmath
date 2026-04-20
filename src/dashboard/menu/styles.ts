@@ -22,6 +22,7 @@ export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
     height: calc(100vh - 70px);
     box-shadow: 10px 0 30px rgba(0,0,0,0.05);
     background-color: #ffffff;
+    z-index: 1000;
   }
 `;
 
@@ -30,19 +31,20 @@ export const MenuSection = styled.div`
 `;
 
 export const MenuHeading = styled.div<{ $isActive?: boolean; $color?: string }>`
-  color: ${(props) => (props.$isActive ? props.$color || props.theme.colors.primary : props.theme.colors.textPrimary)};
+  color: ${(props) => (props.$isActive ? "#ffffff" : props.theme.colors.textPrimary)};
   font-family: ${(props) => props.theme.fonts.primary};
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
   padding: 12px 16px;
-  background-color: ${(props) => (props.$isActive ? (props.$color || props.theme.colors.primary) + "10" : "transparent")};
+  background-color: ${(props) => (props.$isActive ? props.$color || props.theme.colors.primary : "transparent")};
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s ease;
-  border: 1px solid ${(props) => (props.$isActive ? (props.$color || props.theme.colors.primary) + "30" : "transparent")};
+  border: 1px solid ${(props) => (props.$isActive ? props.$color || props.theme.colors.primary : "transparent")};
+  box-shadow: ${(props) => (props.$isActive ? `0 4px 12px ${(props.$color || props.theme.colors.primary)}40` : "none")};
 
   &:hover {
     background-color: #f8fafc;
@@ -61,7 +63,8 @@ export const MenuHeading = styled.div<{ $isActive?: boolean; $color?: string }>`
   span.arrow {
     transition: transform 0.3s ease;
     font-size: 0.7rem;
-    opacity: 0.3;
+    opacity: ${(props) => (props.$isActive ? "0.9" : "0.3")};
+    color: ${(props) => (props.$isActive ? "#ffffff" : "inherit")};
   }
 `;
 

@@ -5,18 +5,18 @@ export const theme = {
     onPrimary: "#FFFFFF",
     primaryContainer: "#EEF2FF",
     
-    secondary: "#06B6D4", // Sky Cyan
+    secondary: "#6366F1", // Unified Royal Indigo
     onSecondary: "#FFFFFF",
     
-    accent: "#F43F5E", // Strawberry Pink
+    accent: "#6366F1", // Unified Royal Indigo
     
-    success: "#10B981", // Emerald Green
-    warning: "#F59E0B", // Sun Orange
+    success: "#10B981", // Keep success as green for functional clarity unless specified otherwise, but for buttons I will use primary.
+    warning: "#F59E0B", 
     
-    // Subject Specific Identifiers
-    math: "#3B82F6", // Logic Blue
-    english: "#F97316", // Creative Orange
-    hindi: "#8B5CF6", // Heritage Purple
+    // Subject Specific Identifiers - Unified
+    math: "#6366F1",
+    english: "#6366F1",
+    hindi: "#6366F1",
     
     background: "#F8FAFC", // Fresh Paper White
     surface: "#FFFFFF",

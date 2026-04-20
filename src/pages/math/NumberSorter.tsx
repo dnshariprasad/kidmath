@@ -5,16 +5,17 @@ import { useDispatch } from "react-redux";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { Puzzle } from "lucide-react";
-import NextIcon from "../../components/NextIcon";
 import {
   PageContainer,
   Card,
   Tag,
   StyledInput,
   SidebarTitle,
-  HeaderArea,
   SettingsCard,
   ControlBar,
+  PageHeader,
+  PageTitle,
+  PageSubtitle,
 } from "../../theme/KidStyles";
 import { getRandomNumber, getMaxNumber } from "../../util/MathUtil";
 import { readText } from "../../util/util";
@@ -206,12 +207,13 @@ export default function NumberSorter() {
     <PageContainer data-testid="page-number-sorter">
       <GameLayout>
         <GameSide data-testid="layout-main-content">
-          <HeaderArea>
-            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-              <Puzzle size={32} strokeWidth={2.5} />
-              Number Sorting
-            </KidoText>
-          </HeaderArea>
+          <PageHeader>
+            <PageTitle>
+              <Puzzle size={40} color="#6C5CE7" strokeWidth={2.5} />
+              Number Sorter
+            </PageTitle>
+            <PageSubtitle>Drag and drop numbers to sort them in order!</PageSubtitle>
+          </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <KidoText fontSize="22px" color="textSecondary" margin="0 0 10px">
               Sort these numbers in <strong>{order}</strong> order:
@@ -230,7 +232,7 @@ export default function NumberSorter() {
                   </motion.div>
                 ))}
                 <ControlBar style={{ marginTop: "10px", width: "auto" }}>
-                  <NextIcon onClick={generateNewSet} />
+                  {/* NextIcon removed, replaced by Skip button below */}
                 </ControlBar>
               </NumberPool>
             </AnimatePresence>
@@ -250,8 +252,9 @@ export default function NumberSorter() {
               ))}
             </SlotContainer>
 
-            <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center" }}>
+            <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center", gap: "20px" }}>
               <KidButton title="Check Order" onClick={checkSortedOrder} variant="primary" />
+              <KidButton title="Skip" onClick={generateNewSet} variant="secondary" />
             </div>
 
             <AnimatePresence>
@@ -273,11 +276,12 @@ export default function NumberSorter() {
         </GameSide>
 
         <SettingsSide data-testid="layout-settings-panel">
-          <HeaderArea style={{ visibility: "hidden" }}>
-            <KidoText fontSize="32px" margin="0 0 10px">
-              Number Sorting
-            </KidoText>
-          </HeaderArea>
+          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+            <PageHeader>
+              <PageTitle>Ghost</PageTitle>
+              <PageSubtitle>Ghost</PageSubtitle>
+            </PageHeader>
+          </div>
           <SettingsCard>
             <SidebarTitle>⚙️ Game Rules</SidebarTitle>
             

@@ -20,22 +20,22 @@ export const Card = styled.div`
   border-radius: 28px;
   padding: 40px;
   box-shadow: 
-    0 10px 20px rgba(108, 92, 231, 0.04),
-    0 20px 40px rgba(108, 92, 231, 0.06),
+    0 10px 20px rgba(99, 102, 241, 0.04),
+    0 20px 40px rgba(99, 102, 241, 0.06),
     inset 0 0 0 1px rgba(255, 255, 255, 0.5);
   width: 100%;
   max-width: 800px;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid rgba(108, 92, 231, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.15);
   position: relative;
   overflow: hidden;
 
   &:hover {
     transform: translateY(-8px) scale(1.01);
     box-shadow: 
-      0 15px 30px rgba(108, 92, 231, 0.08),
-      0 30px 60px rgba(108, 92, 231, 0.12);
-    border-color: rgba(108, 92, 231, 0.3);
+      0 15px 30px rgba(99, 102, 241, 0.08),
+      0 30px 60px rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.3);
   }
 `;
 
@@ -118,15 +118,17 @@ export const TagList = styled.div`
 `;
 
 export const PageContainer = styled.div`
-  padding: 22px 20px;
+  padding: 24px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   background-color: ${(props) => props.theme.colors.background};
+  width: 100%;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 20px 10px;
+    padding: 20px 16px;
   }
 `;
 
@@ -216,9 +218,56 @@ export const HeaderArea = styled.div`
   justify-content: flex-start;
 `;
 
+export const PageHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 35px;
+  gap: 12px;
+`;
+
+export const PageTitle = styled.h1`
+  font-family: ${(props) => props.theme.fonts.primary};
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 800;
+  color: ${(props) => props.theme.colors.primary};
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  letter-spacing: -0.5px;
+  text-align: center;
+  position: relative;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 6px;
+    background: ${(props) => props.theme.colors.primary}25;
+    border-radius: 10px;
+  }
+`;
+
+export const PageSubtitle = styled.p`
+  font-family: ${(props) => props.theme.fonts.secondary};
+  font-size: 1.1rem;
+  color: ${(props) => props.theme.colors.textSecondary};
+  margin: 0;
+  margin-top: 5px;
+  opacity: 0.8;
+  max-width: 600px;
+  text-align: center;
+  font-weight: 500;
+`;
+
 export const SettingsCard = styled(Card)`
   background: rgba(255, 255, 255, 0.8);
-  border: 3px solid #6C5CE720;
+  border: 3px solid #6366F120;
   max-width: none;
   padding: 32px 20px;
   

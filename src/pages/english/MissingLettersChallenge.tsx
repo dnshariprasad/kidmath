@@ -8,14 +8,16 @@ import {
   Tag,
   TagList,
   SidebarTitle,
-  HeaderArea,
   SettingsCard,
   ControlBar,
+  PageHeader,
+  PageTitle,
+  PageSubtitle,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
-import { Search } from "lucide-react";
+import { Type } from "lucide-react";
 import { readText } from "../../util/util";
 import {
   getAllWords,
@@ -108,12 +110,13 @@ const MissingLettersChallenge = () => {
     <PageContainer data-testid="page-missing-letters">
       <GameLayout>
         <MainSide data-testid="layout-main-content">
-          <HeaderArea>
-            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-              <Search size={32} strokeWidth={2.5} />
+          <PageHeader>
+            <PageTitle>
+              <Type size={40} color="#6C5CE7" strokeWidth={2.5} />
               Missing Letters
-            </KidoText>
-          </HeaderArea>
+            </PageTitle>
+            <PageSubtitle>Fill in the gap to complete the word!</PageSubtitle>
+          </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <div style={{ width: "100%", textAlign: "center", marginBottom: "30px" }}>
               <KidoText fontSize="clamp(3rem, 15vw, 6rem)" color="primary" fontWeight={900} style={{ letterSpacing: "8px", whiteSpace: "nowrap" }}>
@@ -154,11 +157,12 @@ const MissingLettersChallenge = () => {
         </MainSide>
 
         <SidebarSide data-testid="layout-settings-panel">
-          <HeaderArea style={{ visibility: "hidden" }}>
-            <KidoText fontSize="32px" margin="0 0 10px">
-              Missing Letters
-            </KidoText>
-          </HeaderArea>
+          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+            <PageHeader>
+              <PageTitle>Ghost</PageTitle>
+              <PageSubtitle>Ghost</PageSubtitle>
+            </PageHeader>
+          </div>
           <SettingsCard>
             <SidebarTitle>✅ Solved Recently:</SidebarTitle>
             <TagList>

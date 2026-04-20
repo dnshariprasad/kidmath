@@ -3,17 +3,17 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import KidButton from "../../components/KidButton";
-import { KidoText } from "../../components/KidoText";
 import { Calculator } from "lucide-react";
-import NextIcon from "../../components/NextIcon";
 import {
   PageContainer,
   Card,
   StyledInput,
   SidebarTitle,
-  HeaderArea,
   SettingsCard,
   ControlBar,
+  PageHeader,
+  PageTitle,
+  PageSubtitle,
 } from "../../theme/KidStyles";
 import { COUNTING_COMPLEXITY } from "../../store/data/Constants";
 import {
@@ -197,11 +197,12 @@ const MathChallenge = () => {
     <PageContainer data-testid="page-math-challenge">
       <GameLayout>
         <GameSide data-testid="layout-main-content">
-          <HeaderArea>
-            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-              <Calculator size={32} strokeWidth={2.5} />
+          <PageHeader>
+            <PageTitle>
+              <Calculator size={40} color="#6C5CE7" strokeWidth={2.5} />
               Counting Fun
-            </KidoText>
+            </PageTitle>
+            <PageSubtitle>Solve fun math problems and win stars!</PageSubtitle>
             <SessionStats>
               {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
                 <motion.span
@@ -215,7 +216,7 @@ const MathChallenge = () => {
                 </motion.span>
               ))}
             </SessionStats>
-          </HeaderArea>
+          </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <AnimatePresence mode="wait">
               <MathDisplay
@@ -242,10 +243,10 @@ const MathChallenge = () => {
                 onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
                 autoFocus
               />
-              <NextIcon onClick={showNewChallenge} />
             </ControlBar>
 
-            <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center" }}>
+            <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center", gap: "20px" }}>
+              <KidButton title="Skip" onClick={showNewChallenge} variant="secondary" />
               <KidButton title="Check Answer" onClick={handleSubmit} variant="success" />
             </div>
 
@@ -268,14 +269,16 @@ const MathChallenge = () => {
         </GameSide>
 
         <SettingsSide data-testid="layout-settings-panel">
-          <HeaderArea style={{ visibility: "hidden" }}>
-            <KidoText fontSize="32px" margin="0 0 10px">
-              Counting Fun
-            </KidoText>
-            <SessionStats>
-               <span style={{ fontSize: "1.8rem" }}>⭐</span>
-            </SessionStats>
-          </HeaderArea>
+          {/* Header gap synchronized with main content */}
+          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+            <PageHeader>
+              <PageTitle>Ghost</PageTitle>
+              <PageSubtitle>Ghost</PageSubtitle>
+              <SessionStats>
+                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+              </SessionStats>
+            </PageHeader>
+          </div>
 
           <SettingsCard>
             <SidebarTitle>⚙️ Game Rules</SidebarTitle>

@@ -9,7 +9,7 @@ export const MAIN_MENU = [
     isEnabled: true,
     main: "English",
     iconName: "Book",
-    color: "#F97316", // Creative Orange
+    color: "#6366F1",
     sub: [
       {
         title: "ABC Alphabet",
@@ -37,7 +37,7 @@ export const MAIN_MENU = [
     isEnabled: true,
     main: "Math",
     iconName: "Calculator",
-    color: "#3B82F6", // Logic Blue
+    color: "#6366F1", // Logic Blue
     sub: [
       {
         title: "Counting Fun",
@@ -60,7 +60,7 @@ export const MAIN_MENU = [
     isEnabled: true,
     main: "Hindi",
     iconName: "Languages",
-    color: "#8B5CF6", // Heritage Purple
+    color: "#6366F1", // Heritage Purple
     sub: [
       {
         title: "Hindi Alphabet",

@@ -7,9 +7,11 @@ import {
   Tag,
   TagList,
   SidebarTitle,
-  HeaderArea,
   SettingsCard,
   ControlBar,
+  PageHeader,
+  PageTitle,
+  PageSubtitle,
 } from "../theme/KidStyles";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
@@ -123,12 +125,13 @@ const WordReader = (props: IWord) => {
     <PageContainer data-testid="page-sight-words">
       <GameLayout>
         <MainSide data-testid="layout-main-content">
-          <HeaderArea>
-            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-              <BookOpen size={32} strokeWidth={2.5} />
+          <PageHeader>
+            <PageTitle>
+              <BookOpen size={40} color="#6C5CE7" strokeWidth={2.5} />
               Sight Words
-            </KidoText>
-          </HeaderArea>
+            </PageTitle>
+            <PageSubtitle>Practice reading and speaking high-frequency words!</PageSubtitle>
+          </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <AnimatePresence mode="wait">
               <WordDisplay
@@ -155,11 +158,12 @@ const WordReader = (props: IWord) => {
         </MainSide>
 
         <SidebarSide data-testid="layout-settings-panel">
-          <HeaderArea style={{ visibility: "hidden" }}>
-            <KidoText fontSize="32px" margin="0 0 10px">
-              Sight Words
-            </KidoText>
-          </HeaderArea>
+          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+            <PageHeader>
+              <PageTitle>Ghost</PageTitle>
+              <PageSubtitle>Ghost</PageSubtitle>
+            </PageHeader>
+          </div>
           <SettingsCard>
             <SidebarTitle>Pick a word:</SidebarTitle>
             <TagList style={{ gap: "10px" }}>

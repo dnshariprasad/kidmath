@@ -7,14 +7,16 @@ import {
   Tag,
   TagList,
   SidebarTitle,
-  HeaderArea,
   SettingsCard,
   ControlBar,
+  PageHeader,
+  PageTitle,
+  PageSubtitle,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
-import { SpellCheck, Star, HelpCircle, Trophy, CheckCircle2, XCircle } from "lucide-react";
+import { SpellCheck, Star, HelpCircle, CheckCircle2, XCircle } from "lucide-react";
 import { readText } from "../../util/util";
 import { getAllWords, getRandomWord } from "../../store/data/WordUtil";
 import confetti from "canvas-confetti";
@@ -188,12 +190,13 @@ const SpellingChallenge = () => {
       
       <div style={{ display: "flex", gap: "30px", width: "100%", alignItems: "flex-start", flexDirection: window.innerWidth < 992 ? "column" : "row" }}>
         <div style={{ flex: 3, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <HeaderArea>
-            <KidoText fontSize="32px" color="primary" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Trophy size={32} color="#FFD700" />
-              Spelling Champion
-            </KidoText>
-          </HeaderArea>
+          <PageHeader>
+            <PageTitle>
+              <SpellCheck size={40} color="#6C5CE7" strokeWidth={2.5} />
+              Spelling Bee
+            </PageTitle>
+            <PageSubtitle>Listen to the word and spell it out!</PageSubtitle>
+          </PageHeader>
 
           <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none", position: "relative" }}>
             <BigSpeakWrapper 
@@ -201,7 +204,7 @@ const SpellingChallenge = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => readText(currentWord)}
             >
-              <SpeakIcon text={currentWord} size={60} />
+              <SpeakIcon text={currentWord} />
               <KidoText fontSize="0.9rem" color="textSecondary">Tap to listen</KidoText>
             </BigSpeakWrapper>
 
@@ -267,7 +270,12 @@ const SpellingChallenge = () => {
         </div>
 
         <div style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column" }}>
-          <HeaderArea style={{ visibility: "hidden", height: "auto" }} />
+          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+            <PageHeader>
+              <PageTitle>Ghost</PageTitle>
+              <PageSubtitle>Ghost</PageSubtitle>
+            </PageHeader>
+          </div>
           <SettingsCard>
             <SidebarTitle style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <SpellCheck size={20} color="#6C5CE7" />

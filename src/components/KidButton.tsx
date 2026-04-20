@@ -25,10 +25,10 @@ const StyledButton = styled(motion.button)<{ $variant: string }>`
   }};
   background: ${(props) => {
     switch (props.$variant) {
-      case "success": return props.theme.colors.success;
+      case "success": return props.theme.colors.primary;
       case "primary": return props.theme.colors.primary;
-      case "accent": return props.theme.colors.accent;
-      case "secondary": return props.theme.colors.secondary;
+      case "accent": return props.theme.colors.primary;
+      case "secondary": return props.theme.colors.primary;
       default: return props.theme.colors.primary;
     }
   }};

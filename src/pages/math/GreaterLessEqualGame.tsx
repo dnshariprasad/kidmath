@@ -5,7 +5,7 @@ import styled from "styled-components";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { Scale } from "lucide-react";
-import { Card, PageContainer, SidebarTitle, HeaderArea, SettingsCard, ControlBar } from "../../theme/KidStyles";
+import { Card, PageContainer, SidebarTitle, SettingsCard, ControlBar, PageHeader, PageTitle, PageSubtitle } from "../../theme/KidStyles";
 import { readText } from "../../util/util";
 import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
@@ -179,12 +179,13 @@ export const GreaterLessEqualGame: React.FC = () => {
     <PageContainer data-testid="page-greater-less-equal">
       <GameLayout>
         <GameSide data-testid="layout-main-content">
-          <HeaderArea>
-            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-              <Scale size={32} strokeWidth={2.5} />
+          <PageHeader>
+            <PageTitle>
+              <Scale size={40} color="#6C5CE7" strokeWidth={2.5} />
               Big or Small?
-            </KidoText>
-          </HeaderArea>
+            </PageTitle>
+            <PageSubtitle>Compare the numbers and pick the right sign!</PageSubtitle>
+          </PageHeader>
           <GameCard style={{ maxWidth: "none" }}>
             <KidoText fontSize="22px" color="textSecondary" margin="0 0 10px">
               Compare the numbers:
@@ -241,11 +242,12 @@ export const GreaterLessEqualGame: React.FC = () => {
         </GameSide>
 
         <SettingsSide data-testid="layout-settings-panel">
-          <HeaderArea style={{ visibility: "hidden" }}>
-            <KidoText fontSize="32px" margin="0 0 10px">
-              Big or Small?
-            </KidoText>
-          </HeaderArea>
+          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+            <PageHeader>
+              <PageTitle>Ghost</PageTitle>
+              <PageSubtitle>Ghost</PageSubtitle>
+            </PageHeader>
+          </div>
           <SettingsCard>
             <SidebarTitle>⚙️ Game Rules</SidebarTitle>
             
