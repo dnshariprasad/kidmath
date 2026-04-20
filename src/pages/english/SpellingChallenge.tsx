@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
   PageContainer,
@@ -20,6 +21,7 @@ import { SpellCheck, Star, HelpCircle, CheckCircle2, XCircle } from "lucide-reac
 import { readText } from "../../util/util";
 import { getAllWords, getRandomWord } from "../../store/data/WordUtil";
 import confetti from "canvas-confetti";
+import { RootState } from "../../store/store";
 
 const LetterSlots = styled.div`
   display: flex;
@@ -105,7 +107,17 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   }
 `;
 
+const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+`;
+
 const SpellingChallenge = () => {
+  const dispatch = useDispatch();
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [currentWord, setCurrentWord] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
@@ -196,6 +208,19 @@ const SpellingChallenge = () => {
               Spelling Bee
             </PageTitle>
             <PageSubtitle>Listen to the word and spell it out!</PageSubtitle>
+            <SessionStats>
+              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  style={{ fontSize: "1.8rem" }}
+                >
+                  ⭐
+                </motion.span>
+              ))}
+            </SessionStats>
           </PageHeader>
 
           <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none", position: "relative" }}>
@@ -274,6 +299,9 @@ const SpellingChallenge = () => {
             <PageHeader>
               <PageTitle>Ghost</PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
+              <SessionStats>
+                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+              </SessionStats>
             </PageHeader>
           </div>
           <SettingsCard>

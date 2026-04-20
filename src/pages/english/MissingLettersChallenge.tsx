@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
 import {
   Card,
   PageContainer,
@@ -26,6 +27,7 @@ import {
   randomNumber,
 } from "../../store/data/WordUtil";
 import confetti from "canvas-confetti";
+import { RootState } from "../../store/store";
 
 const GameLayout = styled.div`
   display: flex;
@@ -67,7 +69,16 @@ const MainSide = styled.div`
   }
 `;
 
+const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+`;
+
 const MissingLettersChallenge = () => {
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [randomString, setRandomString] = useState<string>("");
   const [randomStringWithMissingLetter, setRandomStringWithMissingLetter] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
@@ -116,6 +127,19 @@ const MissingLettersChallenge = () => {
               Missing Letters
             </PageTitle>
             <PageSubtitle>Fill in the gap to complete the word!</PageSubtitle>
+            <SessionStats>
+              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  style={{ fontSize: "1.8rem" }}
+                >
+                  ⭐
+                </motion.span>
+              ))}
+            </SessionStats>
           </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <div style={{ marginBottom: "30px" }}>
@@ -167,6 +191,9 @@ const MissingLettersChallenge = () => {
             <PageHeader>
               <PageTitle>Ghost</PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
+              <SessionStats>
+                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+              </SessionStats>
             </PageHeader>
           </div>
           <SettingsCard>

@@ -7,10 +7,16 @@ import {
   SettingsCard,
   SidebarTitle,
   ControlBar,
+  PageHeader,
+  PageTitle,
+  PageSubtitle,
 } from "../../theme/KidStyles";
 import { KidoText } from "../../components/KidoText";
 import KidButton from "../../components/KidButton";
 import { Grid as GridIcon } from "lucide-react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { motion } from "framer-motion";
 
 type Cell = {
   value: string;
@@ -132,7 +138,16 @@ const CellInput = styled.input<{ $isEditable: boolean }>`
   }
 `;
 
+const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+`;
+
 const CrosswordSudoku: React.FC = () => {
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [grid, setGrid] = useState<Grid>(initialGrid);
 
   const handleChange = (rowIndex: number, colIndex: number, value: string) => {
@@ -168,12 +183,26 @@ const CrosswordSudoku: React.FC = () => {
     <PageContainer data-testid="page-sudoku">
       <GameLayout>
         <MainSide data-testid="layout-main-content">
-          <HeaderArea>
-            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+          <PageHeader>
+            <PageTitle>
               <GridIcon size={32} strokeWidth={2.5} />
               Crossword Sudoku
-            </KidoText>
-          </HeaderArea>
+            </PageTitle>
+            <PageSubtitle>Solve the word puzzle by filling the grid!</PageSubtitle>
+            <SessionStats>
+              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  style={{ fontSize: "1.8rem" }}
+                >
+                  ⭐
+                </motion.span>
+              ))}
+            </SessionStats>
+          </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <SudokuGrid>
               {grid.map((row, rowIndex) => (
@@ -196,11 +225,13 @@ const CrosswordSudoku: React.FC = () => {
         </MainSide>
 
         <SidebarSide data-testid="layout-settings-panel">
-          <HeaderArea style={{ visibility: "hidden" }}>
-            <KidoText fontSize="32px" margin="0 0 10px">
-              Crossword Sudoku
-            </KidoText>
-          </HeaderArea>
+          <PageHeader style={{ visibility: "hidden" }}>
+            <PageTitle>Ghost</PageTitle>
+            <PageSubtitle>Ghost</PageSubtitle>
+            <SessionStats>
+              <span style={{ fontSize: "1.8rem" }}>⭐</span>
+            </SessionStats>
+          </PageHeader>
           <SettingsCard>
             <SidebarTitle>⚙️ Game Controls</SidebarTitle>
             <ControlBar style={{ flexDirection: "column", gap: "15px", marginTop: "10px" }}>

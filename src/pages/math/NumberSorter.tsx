@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { Puzzle } from "lucide-react";
@@ -21,6 +21,7 @@ import { getRandomNumber, getMaxNumber } from "../../util/MathUtil";
 import { readText } from "../../util/util";
 import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
+import { RootState } from "../../store/store";
 
 const GameLayout = styled.div`
   display: flex;
@@ -41,6 +42,7 @@ const SettingsSide = styled.div`
   top: 20px;
   display: flex;
   flex-direction: column;
+  /* Precisely calculated: Title(48) + SessionStats(35) + Margins(35) = 118px */
   margin-top: 0; 
 
   @media (max-width: 992px) {
@@ -74,6 +76,23 @@ const NumberPool = styled.div`
   overflow-x: auto;
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
+`;
+
+const BigNumber = styled(motion.div)`
+  font-size: clamp(3rem, 10vw, 5rem);
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.primary};
+  font-family: ${(props) => props.theme.fonts.primary};
+  text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    font-size: clamp(2rem, 15vw, 3.5rem);
+    padding: 5px;
+  }
 `;
 
 const SlotContainer = styled.div`
@@ -142,8 +161,17 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   }
 `;
 
+const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+`;
+
 export default function NumberSorter() {
   const dispatch = useDispatch();
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [maxDigits, setMaxDigits] = useState(1);
   const [numberSetSize, setNumberSetSize] = useState(4);
   const [order, setOrder] = useState<string>("ascending");
@@ -213,6 +241,19 @@ export default function NumberSorter() {
               Number Sorter
             </PageTitle>
             <PageSubtitle>Drag and drop numbers to sort them in order!</PageSubtitle>
+            <SessionStats>
+              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  style={{ fontSize: "1.8rem" }}
+                >
+                  ⭐
+                </motion.span>
+              ))}
+            </SessionStats>
           </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <KidoText fontSize="22px" color="textSecondary" margin="0 0 10px">
@@ -222,14 +263,14 @@ export default function NumberSorter() {
             <AnimatePresence mode="wait">
               <NumberPool key={numbers.join(",")}>
                 {numbers.map((num, index) => (
-                  <motion.div
+                  <BigNumber
                     key={`${num}-${index}`}
                     initial={{ scale: 0, rotate: -10 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ type: "spring", delay: index * 0.1 }}
                   >
-                    <Tag style={{ fontSize: "clamp(1.2rem, 4vw, 1.8rem)", padding: "clamp(10px, 2vw, 18px) clamp(15px, 3vw, 30px)" }}>{num}</Tag>
-                  </motion.div>
+                    {num}
+                  </BigNumber>
                 ))}
                 <ControlBar style={{ marginTop: "10px", width: "auto" }}>
                   {/* NextIcon removed, replaced by Skip button below */}
@@ -280,6 +321,9 @@ export default function NumberSorter() {
             <PageHeader>
               <PageTitle>Ghost</PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
+              <SessionStats>
+                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+              </SessionStats>
             </PageHeader>
           </div>
           <SettingsCard>

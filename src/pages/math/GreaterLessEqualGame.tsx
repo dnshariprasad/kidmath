@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import styled from "styled-components";
 import KidButton from "../../components/KidButton";
@@ -10,6 +10,7 @@ import { readText } from "../../util/util";
 import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
 import { getRandomNumber, getMaxNumber } from "../../util/MathUtil";
+import { RootState } from "../../store/store";
 
 const GameLayout = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const SettingsSide = styled.div`
   top: 20px;
   display: flex;
   flex-direction: column;
+  /* Precisely calculated: Title(48) + SessionStats(35) + Margins(35) = 118px */
   margin-top: 0; 
 
   @media (max-width: 992px) {
@@ -132,8 +134,17 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   }
 `;
 
+const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+`;
+
 export const GreaterLessEqualGame: React.FC = () => {
   const dispatch = useDispatch();
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [maxDigits, setMaxDigits] = useState(2);
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
@@ -185,6 +196,19 @@ export const GreaterLessEqualGame: React.FC = () => {
               Big or Small?
             </PageTitle>
             <PageSubtitle>Compare the numbers and pick the right sign!</PageSubtitle>
+            <SessionStats>
+              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  style={{ fontSize: "1.8rem" }}
+                >
+                  ⭐
+                </motion.span>
+              ))}
+            </SessionStats>
           </PageHeader>
           <GameCard style={{ maxWidth: "none" }}>
             <KidoText fontSize="22px" color="textSecondary" margin="0 0 10px">
@@ -246,6 +270,9 @@ export const GreaterLessEqualGame: React.FC = () => {
             <PageHeader>
               <PageTitle>Ghost</PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
+              <SessionStats>
+                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+              </SessionStats>
             </PageHeader>
           </div>
           <SettingsCard>

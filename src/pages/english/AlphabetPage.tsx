@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled, { useTheme } from "styled-components";
+import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
@@ -18,6 +19,7 @@ import NextIcon from "../../components/NextIcon";
 import PreviousIcon from "../../components/PreviousIcon";
 import { Type, ArrowLeftRight } from "lucide-react";
 import { big, small } from "../../store/data/Alphabet";
+import { RootState } from "../../store/store";
 
 const ConfigSection = styled.div`
   margin-bottom: 25px;
@@ -123,7 +125,16 @@ const BigLetter = styled(motion.div)`
   }
 `;
 
+const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+`;
+
 const AlphabetPage = () => {
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const theme = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isUppercase, setIsUppercase] = useState(true);
@@ -150,6 +161,19 @@ const AlphabetPage = () => {
               ABC Alphabet
             </PageTitle>
             <PageSubtitle>Learn letters and phonics with fun!</PageSubtitle>
+            <SessionStats>
+              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  style={{ fontSize: "1.8rem" }}
+                >
+                  ⭐
+                </motion.span>
+              ))}
+            </SessionStats>
           </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <AnimatePresence mode="wait">
@@ -177,6 +201,9 @@ const AlphabetPage = () => {
             <PageHeader>
               <PageTitle>Ghost</PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
+              <SessionStats>
+                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+              </SessionStats>
             </PageHeader>
           </div>
           <SettingsCard>

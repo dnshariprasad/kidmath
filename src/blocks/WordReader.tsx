@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import styled, { useTheme } from "styled-components";
+import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
@@ -20,6 +21,7 @@ import { KidoText } from "../components/KidoText";
 import { BookOpen } from "lucide-react";
 import SentenceReader from "./SentenceReader";
 import { getSentencesOfWord } from "../store/data/WordUtil";
+import { RootState } from "../store/store";
 
 const GameLayout = styled.div`
   display: flex;
@@ -81,6 +83,14 @@ const WordDisplay = styled(motion.div)`
   }
 `;
 
+const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+`;
+
 interface IWord {
   mame?: string;
   words?: string[];
@@ -88,6 +98,7 @@ interface IWord {
 }
 
 const WordReader = (props: IWord) => {
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const theme = useTheme();
   const words = props.words || [];
   const [count, setCount] = useState<number>(0);
@@ -132,6 +143,19 @@ const WordReader = (props: IWord) => {
               Sight Words
             </PageTitle>
             <PageSubtitle>Practice reading and speaking high-frequency words!</PageSubtitle>
+            <SessionStats>
+              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  style={{ fontSize: "1.8rem" }}
+                >
+                  ⭐
+                </motion.span>
+              ))}
+            </SessionStats>
           </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
             <AnimatePresence mode="wait">
@@ -163,6 +187,9 @@ const WordReader = (props: IWord) => {
             <PageHeader>
               <PageTitle>Ghost</PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
+              <SessionStats>
+                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+              </SessionStats>
             </PageHeader>
           </div>
           <SettingsCard>
