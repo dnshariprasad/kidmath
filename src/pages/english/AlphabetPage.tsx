@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
@@ -22,7 +22,7 @@ import { big, small } from "../../store/data/Alphabet";
 const ConfigSection = styled.div`
   margin-bottom: 25px;
   padding-bottom: 15px;
-  border-bottom: 2px dashed rgba(108, 92, 231, 0.1);
+  border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
 
   &:last-child {
     border-bottom: none;
@@ -44,7 +44,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   align-items: center;
   gap: 10px;
   padding: 10px 15px;
-  background: ${(props) => (props.$isActive ? "rgba(108, 92, 231, 0.1)" : "transparent")};
+  background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -52,7 +52,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
 
   &:hover {
-    background: rgba(108, 92, 231, 0.05);
+    background: ${(props) => props.theme.colors.primary}08;
   }
 
   input {
@@ -124,6 +124,7 @@ const BigLetter = styled(motion.div)`
 `;
 
 const AlphabetPage = () => {
+  const theme = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isUppercase, setIsUppercase] = useState(true);
 
@@ -145,7 +146,7 @@ const AlphabetPage = () => {
         <MainSide data-testid="layout-main-content">
           <PageHeader>
             <PageTitle>
-              <Type size={40} color="#6C5CE7" strokeWidth={2.5} />
+              <Type size={40} color="#6366F1" strokeWidth={2.5} />
               ABC Alphabet
             </PageTitle>
             <PageSubtitle>Learn letters and phonics with fun!</PageSubtitle>
@@ -211,8 +212,9 @@ const AlphabetPage = () => {
                   key={letter}
                   onClick={() => setCurrentIndex(index)}
                   style={{
-                    background: currentIndex === index ? "#00CEC9" : "",
-                    borderColor: currentIndex === index ? "#6C5CE7" : "transparent",
+                    background: currentIndex === index ? theme.colors.primary : "",
+                    borderColor: currentIndex === index ? theme.colors.primary : "transparent",
+                    color: currentIndex === index ? "white" : "",
                   }}
                 >
                   {letter}

@@ -89,10 +89,10 @@ const SudokuGrid = styled.div`
   grid-template-rows: repeat(9, 1fr);
   gap: 8px;
   justify-content: center;
-  background: rgba(108, 92, 231, 0.05);
+  background: ${(props) => props.theme.colors.primary}08;
   padding: 20px;
   border-radius: 20px;
-  border: 2px solid rgba(108, 92, 231, 0.1);
+  border: 2px solid ${(props) => props.theme.colors.primary}15;
 `;
 
 const SudokuRow = styled.div`
@@ -108,8 +108,8 @@ const CellInput = styled.input<{ $isEditable: boolean }>`
   font-size: 1.5rem;
   font-weight: 800;
   border-radius: 12px;
-  border: 2px solid ${(props) => (props.$isEditable ? "rgba(108, 92, 231, 0.2)" : "transparent")};
-  background-color: ${(props) => (props.$isEditable ? "white" : "rgba(108, 92, 231, 0.1)")};
+  border: 2px solid ${(props) => (props.$isEditable ? props.theme.colors.primary + "30" : "transparent")};
+  background-color: ${(props) => (props.$isEditable ? "white" : props.theme.colors.primary + "15")};
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
   transition: all 0.2s ease;
@@ -118,7 +118,7 @@ const CellInput = styled.input<{ $isEditable: boolean }>`
   &:focus {
     border-color: ${(props) => props.theme.colors.primary};
     transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.1);
+    box-shadow: 0 5px 15px ${(props) => props.theme.colors.primary}15;
   }
 
   &:disabled {

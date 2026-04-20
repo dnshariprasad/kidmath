@@ -108,7 +108,7 @@ const Welcome: React.FC = () => {
       <Card style={{ 
         marginTop: "60px", 
         textAlign: "center", 
-        background: "linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%)", 
+        background: "linear-gradient(135deg, #6366F1 0%, #a29bfe 100%)", 
         color: "white", 
         padding: "40px 20px",
         width: "100%",
@@ -134,7 +134,7 @@ const Welcome: React.FC = () => {
             title="Start Challenge" 
             variant="secondary" 
             onClick={() => navigate("/missing_letters")}
-            style={{ background: "white", color: "#6C5CE7", border: "none" }}
+            style={{ background: "white", color: "#6366F1", border: "none" }}
           />
         </div>
       </Card>

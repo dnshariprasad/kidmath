@@ -46,7 +46,7 @@ const LetterSlot = styled(motion.div)<{ $isActive: boolean; $isError: boolean; $
   font-size: 2.5rem;
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
-  box-shadow: ${(props) => props.$isActive ? "0 10px 20px rgba(108, 92, 231, 0.2)" : "none"};
+  box-shadow: ${(props) => props.$isActive ? "0 10px 20px rgba(99, 102, 241, 0.2)" : "none"};
   transition: all 0.2s ease;
 
   @media (max-width: 768px) {
@@ -86,7 +86,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   align-items: center;
   gap: 10px;
   padding: 10px 15px;
-  background: ${(props) => (props.$isActive ? "rgba(108, 92, 231, 0.1)" : "transparent")};
+  background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -95,7 +95,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   font-size: 0.95rem;
 
   &:hover {
-    background: rgba(108, 92, 231, 0.05);
+    background: ${(props) => props.theme.colors.primary}08;
   }
 
   input {
@@ -163,7 +163,7 @@ const SpellingChallenge = () => {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#6C5CE7", "#00CEC9", "#FF7675"],
+        colors: ["#6366F1", "#4F46E5", "#FF7675"],
       });
       setTimeout(generateChallenge, 2500);
     } else {
@@ -192,7 +192,7 @@ const SpellingChallenge = () => {
         <div style={{ flex: 3, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <PageHeader>
             <PageTitle>
-              <SpellCheck size={40} color="#6C5CE7" strokeWidth={2.5} />
+              <SpellCheck size={40} color="#6366F1" strokeWidth={2.5} />
               Spelling Bee
             </PageTitle>
             <PageSubtitle>Listen to the word and spell it out!</PageSubtitle>
@@ -278,7 +278,7 @@ const SpellingChallenge = () => {
           </div>
           <SettingsCard>
             <SidebarTitle style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <SpellCheck size={20} color="#6C5CE7" />
+              <SpellCheck size={20} color="#6366F1" />
               Game Difficulty
             </SidebarTitle>
             <div style={{ marginBottom: "20px" }}>

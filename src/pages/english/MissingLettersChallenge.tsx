@@ -97,7 +97,7 @@ const MissingLettersChallenge = () => {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#6C5CE7", "#00CEC9", "#FF7675"],
+        colors: ["#6366F1", "#4F46E5", "#FF7675"],
       });
       setTimeout(generateChallenge, 2000);
     } else {
@@ -112,30 +112,36 @@ const MissingLettersChallenge = () => {
         <MainSide data-testid="layout-main-content">
           <PageHeader>
             <PageTitle>
-              <Type size={40} color="#6C5CE7" strokeWidth={2.5} />
+              <Type size={40} color="#6366F1" strokeWidth={2.5} />
               Missing Letters
             </PageTitle>
             <PageSubtitle>Fill in the gap to complete the word!</PageSubtitle>
           </PageHeader>
-          <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
-            <div style={{ width: "100%", textAlign: "center", marginBottom: "30px" }}>
+          <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
+            <div style={{ marginBottom: "30px" }}>
+              <SpeakIcon text={randomString} />
+            </div>
+
+            <div style={{ width: "100%", textAlign: "center", marginBottom: "20px" }}>
               <KidoText fontSize="clamp(3rem, 15vw, 6rem)" color="primary" fontWeight={900} style={{ letterSpacing: "8px", whiteSpace: "nowrap" }}>
                 {randomStringWithMissingLetter}
               </KidoText>
             </div>
             
+            <StyledInput
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="?"
+              width="180px"
+              onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
+              autoFocus
+              style={{ marginBottom: "10px" }}
+            />
+
             <ControlBar>
-              <StyledInput
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="?"
-                width="160px"
-                onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
-                autoFocus
-              />
-              <SpeakIcon text={randomString} />
               <KidButton title="Check Answer" onClick={handleSubmit} variant="success" />
+              <KidButton title="Skip" onClick={generateChallenge} variant="secondary" />
             </ControlBar>
 
             <AnimatePresence>

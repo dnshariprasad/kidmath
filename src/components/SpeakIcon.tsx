@@ -12,13 +12,13 @@ const SpeakButton = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #06b6d4;
+  color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
-  border: 2px solid #06b6d4;
+  border: 2px solid ${(props) => props.theme.colors.primary};
   transition: all 0.2s ease;
 
   &:hover {
-    background: #06b6d4;
+    background: ${(props) => props.theme.colors.primary};
     color: white;
   }
 `;

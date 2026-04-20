@@ -165,17 +165,17 @@ export const ListItem = styled.li`
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
   border-radius: 16px;
-  border: 1px solid rgba(108, 92, 231, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.1);
   color: ${(props) => props.theme.colors.textPrimary};
   font-family: ${(props) => props.theme.fonts.secondary};
   font-weight: 500;
-  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.03);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.03);
   transition: all 0.2s ease;
 
   &:hover {
     transform: translateX(5px);
     background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 6px 16px rgba(108, 92, 231, 0.06);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.06);
   }
 `;
 
@@ -195,9 +195,9 @@ export const ContainerV = styled.div`
   border-radius: 28px;
   padding: 30px;
   box-shadow: 
-    0 8px 16px rgba(108, 92, 231, 0.04),
-    0 16px 32px rgba(108, 92, 231, 0.06);
-  border: 1px solid rgba(108, 92, 231, 0.1);
+    0 8px 16px rgba(99, 102, 241, 0.04),
+    0 16px 32px rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.1);
 `;
 
 export const CenteredContainerHorizontally = styled.div`
@@ -266,8 +266,8 @@ export const PageSubtitle = styled.p`
 `;
 
 export const SettingsCard = styled(Card)`
-  background: rgba(255, 255, 255, 0.8);
-  border: 3px solid #6366F120;
+  background: rgba(255, 255, 255, 0.85);
+  border: 3px solid ${(props) => props.theme.colors.primary}25;
   max-width: none;
   padding: 32px 20px;
   

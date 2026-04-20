@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
@@ -88,6 +88,7 @@ interface IWord {
 }
 
 const WordReader = (props: IWord) => {
+  const theme = useTheme();
   const words = props.words || [];
   const [count, setCount] = useState<number>(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -127,7 +128,7 @@ const WordReader = (props: IWord) => {
         <MainSide data-testid="layout-main-content">
           <PageHeader>
             <PageTitle>
-              <BookOpen size={40} color="#6C5CE7" strokeWidth={2.5} />
+              <BookOpen size={40} color="#6366F1" strokeWidth={2.5} />
               Sight Words
             </PageTitle>
             <PageSubtitle>Practice reading and speaking high-frequency words!</PageSubtitle>
@@ -172,8 +173,9 @@ const WordReader = (props: IWord) => {
                   key={index}
                   onClick={() => setCount(index)}
                   style={{
-                    background: count === index ? "#00CEC9" : "",
-                    borderColor: count === index ? "#6C5CE7" : "transparent",
+                    background: count === index ? theme.colors.primary : "",
+                    borderColor: count === index ? theme.colors.primary : "transparent",
+                    color: count === index ? "white" : "",
                   }}
                 >
                   {tag}

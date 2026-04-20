@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
@@ -102,6 +102,7 @@ const alphabet = [
 ];
 
 const AlphabetHindiChallenge = () => {
+  const theme = useTheme();
   const [index, setIndex] = useState(0);
   const randomString = alphabet[index];
 
@@ -119,7 +120,7 @@ const AlphabetHindiChallenge = () => {
         <MainSide data-testid="layout-main-content">
           <PageHeader>
             <PageTitle>
-              <Languages size={40} color="#6C5CE7" strokeWidth={2.5} />
+              <Languages size={40} color="#6366F1" strokeWidth={2.5} />
               Hindi Alphabet
             </PageTitle>
             <PageSubtitle>Explore the beautiful Hindi Varnamala!</PageSubtitle>
@@ -160,8 +161,9 @@ const AlphabetHindiChallenge = () => {
                   key={i}
                   onClick={() => setIndex(i)}
                   style={{
-                    background: index === i ? "#00CEC9" : "",
-                    borderColor: index === i ? "#6C5CE7" : "transparent",
+                    background: index === i ? theme.colors.primary : "",
+                    borderColor: index === i ? theme.colors.primary : "transparent",
+                    color: index === i ? "white" : "",
                   }}
                 >
                   {tag}

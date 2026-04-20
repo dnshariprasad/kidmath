@@ -101,7 +101,7 @@ const SlotLabel = styled.span`
 const ConfigSection = styled.div`
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px dashed rgba(108, 92, 231, 0.1);
+  border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
 
   &:last-child {
     border-bottom: none;
@@ -123,7 +123,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   align-items: center;
   gap: 10px;
   padding: 10px 15px;
-  background: ${(props) => (props.$isActive ? "rgba(108, 92, 231, 0.1)" : "transparent")};
+  background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -132,7 +132,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   font-size: 0.9rem;
 
   &:hover {
-    background: rgba(108, 92, 231, 0.05);
+    background: ${(props) => props.theme.colors.primary}08;
   }
 
   input {
@@ -193,7 +193,7 @@ export default function NumberSorter() {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#6C5CE7", "#00CEC9", "#FF7675"],
+        colors: ["#6366F1", "#4F46E5", "#FF7675"],
       });
       setTimeout(generateNewSet, 2000);
     } else {
@@ -209,7 +209,7 @@ export default function NumberSorter() {
         <GameSide data-testid="layout-main-content">
           <PageHeader>
             <PageTitle>
-              <Puzzle size={40} color="#6C5CE7" strokeWidth={2.5} />
+              <Puzzle size={40} color="#6366F1" strokeWidth={2.5} />
               Number Sorter
             </PageTitle>
             <PageSubtitle>Drag and drop numbers to sort them in order!</PageSubtitle>
@@ -253,8 +253,8 @@ export default function NumberSorter() {
             </SlotContainer>
 
             <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center", gap: "20px" }}>
-              <KidButton title="Check Order" onClick={checkSortedOrder} variant="primary" />
               <KidButton title="Skip" onClick={generateNewSet} variant="secondary" />
+              <KidButton title="Check Order" onClick={checkSortedOrder} variant="primary" />
             </div>
 
             <AnimatePresence>

@@ -91,7 +91,7 @@ const FeedbackMessage = styled(motion.h2)<{ $isCorrect: boolean }>`
 const ConfigSection = styled.div`
   margin-bottom: 25px;
   padding-bottom: 15px;
-  border-bottom: 2px dashed rgba(108, 92, 231, 0.1);
+  border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
 
   &:last-child {
     border-bottom: none;
@@ -113,7 +113,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   align-items: center;
   gap: 10px;
   padding: 10px 15px;
-  background: ${(props) => (props.$isActive ? "rgba(108, 92, 231, 0.1)" : "transparent")};
+  background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -122,7 +122,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   font-size: 0.95rem;
 
   &:hover {
-    background: rgba(108, 92, 231, 0.05);
+    background: ${(props) => props.theme.colors.primary}08;
   }
 
   input {
@@ -164,7 +164,7 @@ export const GreaterLessEqualGame: React.FC = () => {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#6C5CE7", "#00CEC9", "#FF7675"],
+        colors: ["#6366F1", "#4F46E5", "#FF7675"],
       });
       setTimeout(resetGame, 1500);
     } else {
@@ -181,7 +181,7 @@ export const GreaterLessEqualGame: React.FC = () => {
         <GameSide data-testid="layout-main-content">
           <PageHeader>
             <PageTitle>
-              <Scale size={40} color="#6C5CE7" strokeWidth={2.5} />
+              <Scale size={40} color="#6366F1" strokeWidth={2.5} />
               Big or Small?
             </PageTitle>
             <PageSubtitle>Compare the numbers and pick the right sign!</PageSubtitle>
