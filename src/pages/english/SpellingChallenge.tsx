@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Card,
   PageContainer,
@@ -13,6 +13,7 @@ import {
   PageHeader,
   PageTitle,
   PageSubtitle,
+  SessionStats,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
@@ -107,16 +108,7 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   }
 `;
 
-const SessionStats = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-`;
-
 const SpellingChallenge = () => {
-  const dispatch = useDispatch();
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [currentWord, setCurrentWord] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
@@ -297,7 +289,10 @@ const SpellingChallenge = () => {
         <div style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column" }}>
           <div style={{ visibility: "hidden", pointerEvents: "none" }}>
             <PageHeader>
-              <PageTitle>Ghost</PageTitle>
+              <PageTitle>
+                <SpellCheck size={40} />
+                Ghost
+              </PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
               <SessionStats>
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>

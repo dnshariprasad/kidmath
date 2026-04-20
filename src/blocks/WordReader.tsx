@@ -13,6 +13,7 @@ import {
   PageHeader,
   PageTitle,
   PageSubtitle,
+  SessionStats,
 } from "../theme/KidStyles";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
@@ -81,14 +82,6 @@ const WordDisplay = styled(motion.div)`
   @media (max-width: 768px) {
     font-size: clamp(2.5rem, 20vw, 4.5rem);
   }
-`;
-
-const SessionStats = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
 `;
 
 interface IWord {
@@ -185,10 +178,15 @@ const WordReader = (props: IWord) => {
         <SidebarSide data-testid="layout-settings-panel">
           <div style={{ visibility: "hidden", pointerEvents: "none" }}>
             <PageHeader>
-              <PageTitle>Ghost</PageTitle>
+              <PageTitle>
+                <BookOpen size={40} />
+                Ghost
+              </PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
               <SessionStats>
-                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+                {Array.from({ length: Math.min(1, streak) }).map((_, i) => (
+                  <span key={i} style={{ fontSize: "1.8rem" }}>⭐</span>
+                ))}
               </SessionStats>
             </PageHeader>
           </div>

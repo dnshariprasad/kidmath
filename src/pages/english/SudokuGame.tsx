@@ -3,15 +3,14 @@ import styled from "styled-components";
 import {
   Card,
   PageContainer,
-  HeaderArea,
   SettingsCard,
   SidebarTitle,
   ControlBar,
   PageHeader,
   PageTitle,
   PageSubtitle,
+  SessionStats,
 } from "../../theme/KidStyles";
-import { KidoText } from "../../components/KidoText";
 import KidButton from "../../components/KidButton";
 import { Grid as GridIcon } from "lucide-react";
 import { useSelector } from "react-redux";
@@ -138,14 +137,6 @@ const CellInput = styled.input<{ $isEditable: boolean }>`
   }
 `;
 
-const SessionStats = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-`;
-
 const CrosswordSudoku: React.FC = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [grid, setGrid] = useState<Grid>(initialGrid);
@@ -225,8 +216,11 @@ const CrosswordSudoku: React.FC = () => {
         </MainSide>
 
         <SidebarSide data-testid="layout-settings-panel">
-          <PageHeader style={{ visibility: "hidden" }}>
-            <PageTitle>Ghost</PageTitle>
+          <PageHeader style={{ visibility: "hidden", pointerEvents: "none" }}>
+            <PageTitle>
+              <GridIcon size={32} />
+              Ghost
+            </PageTitle>
             <PageSubtitle>Ghost</PageSubtitle>
             <SessionStats>
               <span style={{ fontSize: "1.8rem" }}>⭐</span>

@@ -13,6 +13,7 @@ import {
   PageHeader,
   PageTitle,
   PageSubtitle,
+  SessionStats,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
@@ -103,14 +104,6 @@ const alphabet = [
   ...hindiCombinedCharacters,
 ];
 
-const SessionStats = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-`;
-
 const AlphabetHindiChallenge = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const theme = useTheme();
@@ -173,7 +166,10 @@ const AlphabetHindiChallenge = () => {
         <SidebarSide data-testid="layout-settings-panel">
           <div style={{ visibility: "hidden", pointerEvents: "none" }}>
             <PageHeader>
-              <PageTitle>Ghost</PageTitle>
+              <PageTitle>
+                <Languages size={40} />
+                Ghost
+              </PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
               <SessionStats>
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>

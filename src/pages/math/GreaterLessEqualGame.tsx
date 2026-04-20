@@ -5,7 +5,7 @@ import styled from "styled-components";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { Scale } from "lucide-react";
-import { Card, PageContainer, SidebarTitle, SettingsCard, ControlBar, PageHeader, PageTitle, PageSubtitle } from "../../theme/KidStyles";
+import { Card, PageContainer, SidebarTitle, SettingsCard, ControlBar, PageHeader, PageTitle, PageSubtitle, SessionStats } from "../../theme/KidStyles";
 import { readText } from "../../util/util";
 import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
@@ -134,14 +134,6 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   }
 `;
 
-const SessionStats = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-`;
-
 export const GreaterLessEqualGame: React.FC = () => {
   const dispatch = useDispatch();
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
@@ -268,7 +260,10 @@ export const GreaterLessEqualGame: React.FC = () => {
         <SettingsSide data-testid="layout-settings-panel">
           <div style={{ visibility: "hidden", pointerEvents: "none" }}>
             <PageHeader>
-              <PageTitle>Ghost</PageTitle>
+              <PageTitle>
+                <Scale size={40} />
+                Ghost
+              </PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
               <SessionStats>
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>

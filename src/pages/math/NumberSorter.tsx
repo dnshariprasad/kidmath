@@ -8,7 +8,6 @@ import { Puzzle, ArrowLeftRight, Hash, Layers, Plus, Minus } from "lucide-react"
 import {
   PageContainer,
   Card,
-  Tag,
   StyledInput,
   SidebarTitle,
   SettingsCard,
@@ -16,6 +15,7 @@ import {
   PageHeader,
   PageTitle,
   PageSubtitle,
+  SessionStats,
 } from "../../theme/KidStyles";
 import { getRandomNumber, getMaxNumber } from "../../util/MathUtil";
 import { readText } from "../../util/util";
@@ -159,14 +159,6 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
     height: 18px;
     accent-color: ${(props) => props.theme.colors.primary};
   }
-`;
-
-const SessionStats = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
 `;
 
 export default function NumberSorter() {
@@ -317,9 +309,13 @@ export default function NumberSorter() {
         </GameSide>
 
         <SettingsSide data-testid="layout-settings-panel">
+          {/* Header gap synchronized with main content */}
           <div style={{ visibility: "hidden", pointerEvents: "none" }}>
             <PageHeader>
-              <PageTitle>Ghost</PageTitle>
+              <PageTitle>
+                <Puzzle size={40} />
+                Ghost
+              </PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
               <SessionStats>
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>
@@ -368,7 +364,7 @@ export default function NumberSorter() {
                   <Minus size={18} />
                 </KidButton>
                 <div style={{ flex: 1, textAlign: "center" }}>
-                  <KidoText fontSize="1.1rem" fontWeight="700" color="primary">{numberSetSize}</KidoText>
+                  <KidoText fontSize="1.1rem" fontWeight={700} color="primary">{numberSetSize}</KidoText>
                   <KidoText fontSize="0.7rem" color="textSecondary">Items</KidoText>
                 </div>
                 <KidButton 
@@ -395,7 +391,7 @@ export default function NumberSorter() {
                   <Minus size={18} />
                 </KidButton>
                 <div style={{ flex: 1, textAlign: "center" }}>
-                  <KidoText fontSize="1.1rem" fontWeight="700" color="primary">{maxDigits}</KidoText>
+                  <KidoText fontSize="1.1rem" fontWeight={700} color="primary">{maxDigits}</KidoText>
                   <KidoText fontSize="0.7rem" color="textSecondary">{maxDigits === 1 ? "Digit" : "Digits"}</KidoText>
                 </div>
                 <KidButton 

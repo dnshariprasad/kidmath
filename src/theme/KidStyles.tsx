@@ -13,6 +13,15 @@ export const elevation3 = css`
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 `;
 
+export const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 35px; /* Height of one row of stars (approx 1.8rem) + margins */
+  width: 100%;
+`;
+
 export const Card = styled.div`
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
@@ -223,8 +232,8 @@ export const PageHeader = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-bottom: 35px;
-  gap: 12px;
+  margin-bottom: 4px;
+  gap: 8px;
 `;
 
 export const PageTitle = styled.h1`

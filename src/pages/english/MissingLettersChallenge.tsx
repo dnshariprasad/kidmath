@@ -14,6 +14,7 @@ import {
   PageHeader,
   PageTitle,
   PageSubtitle,
+  SessionStats,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
@@ -67,14 +68,6 @@ const MainSide = styled.div`
   @media (max-width: 992px) {
     order: 1;
   }
-`;
-
-const SessionStats = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
 `;
 
 const MissingLettersChallenge = () => {
@@ -189,7 +182,10 @@ const MissingLettersChallenge = () => {
         <SidebarSide data-testid="layout-settings-panel">
           <div style={{ visibility: "hidden", pointerEvents: "none" }}>
             <PageHeader>
-              <PageTitle>Ghost</PageTitle>
+              <PageTitle>
+                <Type size={40} />
+                Ghost
+              </PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
               <SessionStats>
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>

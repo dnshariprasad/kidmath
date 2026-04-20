@@ -14,6 +14,7 @@ import {
   PageHeader,
   PageTitle,
   PageSubtitle,
+  SessionStats,
 } from "../../theme/KidStyles";
 import { COUNTING_COMPLEXITY } from "../../store/data/Constants";
 import {
@@ -130,14 +131,6 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
     height: 18px;
     accent-color: ${(props) => props.theme.colors.primary};
   }
-`;
-
-const SessionStats = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
 `;
 
 const MathChallenge = () => {
@@ -272,7 +265,10 @@ const MathChallenge = () => {
           {/* Header gap synchronized with main content */}
           <div style={{ visibility: "hidden", pointerEvents: "none" }}>
             <PageHeader>
-              <PageTitle>Ghost</PageTitle>
+              <PageTitle>
+                <Calculator size={40} />
+                Ghost
+              </PageTitle>
               <PageSubtitle>Ghost</PageSubtitle>
               <SessionStats>
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>
