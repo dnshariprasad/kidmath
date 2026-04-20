@@ -2,11 +2,12 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 interface ButtonProps {
-  title: string;
+  title?: string;
   isActive?: boolean;
   onClick: () => void;
   variant?: "primary" | "secondary" | "accent" | "success";
   style?: React.CSSProperties;
+  children?: React.ReactNode;
 }
 
 const StyledButton = styled(motion.button)<{ $variant: string }>`
@@ -43,7 +44,6 @@ const StyledButton = styled(motion.button)<{ $variant: string }>`
   outline: none;
   position: relative;
   letter-spacing: 0.1px;
-  min-width: 160px;
   transition: box-shadow 0.2s ease;
 
   &:hover {
@@ -57,6 +57,7 @@ const KidButton: React.FC<ButtonProps> = ({
   isActive = true,
   variant = "primary",
   style,
+  children,
 }) => {
   return (
     <StyledButton
@@ -74,6 +75,7 @@ const KidButton: React.FC<ButtonProps> = ({
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
     >
       {title}
+      {children}
     </StyledButton>
   );
 };

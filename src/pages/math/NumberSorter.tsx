@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
-import { Puzzle } from "lucide-react";
+import { Puzzle, ArrowLeftRight, Hash, Layers, Plus, Minus } from "lucide-react";
 import {
   PageContainer,
   Card,
@@ -330,7 +330,10 @@ export default function NumberSorter() {
             <SidebarTitle>⚙️ Game Rules</SidebarTitle>
             
             <ConfigSection>
-              <ConfigSubTitle>Sorting Order</ConfigSubTitle>
+              <ConfigSubTitle>
+                <ArrowLeftRight size={16} />
+                Sorting Order
+              </ConfigSubTitle>
               <OptionLabel $isActive={order === "ascending"}>
                 <input
                   type="radio"
@@ -352,26 +355,56 @@ export default function NumberSorter() {
             </ConfigSection>
 
             <ConfigSection>
-              <ConfigSubTitle>Difficulty</ConfigSubTitle>
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: "0.9rem" }}>Total Numbers:</span>
-                  <StyledInput
-                    type="number"
-                    onChange={(e) => setNumberSetSize(Math.max(2, Math.min(8, parseInt(e.target.value) || 2)))}
-                    value={numberSetSize}
-                    width="60px"
-                  />
+              <ConfigSubTitle>
+                <Hash size={16} />
+                Total Numbers
+              </ConfigSubTitle>
+              <div style={{ display: "flex", alignItems: "center", gap: "15px", background: "#f8f9fa", padding: "10px", borderRadius: "12px" }}>
+                <KidButton 
+                  onClick={() => setNumberSetSize(prev => Math.max(2, prev - 1))} 
+                  variant="secondary"
+                  style={{ minWidth: "40px", height: "40px", padding: 0 }}
+                >
+                  <Minus size={18} />
+                </KidButton>
+                <div style={{ flex: 1, textAlign: "center" }}>
+                  <KidoText fontSize="1.1rem" fontWeight="700" color="primary">{numberSetSize}</KidoText>
+                  <KidoText fontSize="0.7rem" color="textSecondary">Items</KidoText>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: "0.9rem" }}>Max Digits:</span>
-                  <StyledInput
-                    type="number"
-                    onChange={(e) => setMaxDigits(Math.max(1, Math.min(4, parseInt(e.target.value) || 1)))}
-                    value={maxDigits}
-                    width="60px"
-                  />
+                <KidButton 
+                  onClick={() => setNumberSetSize(prev => Math.min(10, prev + 1))} 
+                  variant="secondary"
+                  style={{ minWidth: "40px", height: "40px", padding: 0 }}
+                >
+                  <Plus size={18} />
+                </KidButton>
+              </div>
+            </ConfigSection>
+
+            <ConfigSection>
+              <ConfigSubTitle>
+                <Layers size={16} />
+                Max Digits
+              </ConfigSubTitle>
+              <div style={{ display: "flex", alignItems: "center", gap: "15px", background: "#f8f9fa", padding: "10px", borderRadius: "12px" }}>
+                <KidButton 
+                  onClick={() => setMaxDigits(prev => Math.max(1, prev - 1))} 
+                  variant="secondary"
+                  style={{ minWidth: "40px", height: "40px", padding: 0 }}
+                >
+                  <Minus size={18} />
+                </KidButton>
+                <div style={{ flex: 1, textAlign: "center" }}>
+                  <KidoText fontSize="1.1rem" fontWeight="700" color="primary">{maxDigits}</KidoText>
+                  <KidoText fontSize="0.7rem" color="textSecondary">{maxDigits === 1 ? "Digit" : "Digits"}</KidoText>
                 </div>
+                <KidButton 
+                  onClick={() => setMaxDigits(prev => Math.min(5, prev + 1))} 
+                  variant="secondary"
+                  style={{ minWidth: "40px", height: "40px", padding: 0 }}
+                >
+                  <Plus size={18} />
+                </KidButton>
               </div>
             </ConfigSection>
           </SettingsCard>
