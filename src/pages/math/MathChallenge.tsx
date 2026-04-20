@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
+import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
+import { Calculator } from "lucide-react";
 import NextIcon from "../../components/NextIcon";
 import {
-  CenteredContainerVertical,
+  PageContainer,
+  Card,
   CenteredContainerHorizontally,
   StyledInput,
-  ContainerV,
-  ContainerH,
+  SidebarTitle,
+  HeaderArea,
+  SettingsCard,
 } from "../../theme/KidStyles";
 import { COUNTING_COMPLEXITY } from "../../store/data/Constants";
 import {
@@ -16,160 +22,313 @@ import {
   operations,
 } from "../../util/MathUtil";
 import { readText } from "../../util/util";
+import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
+import confetti from "canvas-confetti";
+import { RootState } from "../../store/store";
+
+const GameLayout = styled.div`
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  align-items: flex-start;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const SettingsSide = styled.div`
+  flex: 1;
+  width: 100%;
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  /* Precisely calculated: Title(48) + SessionStats(35) + Margins(35) = 118px */
+  margin-top: 0; 
+
+  @media (max-width: 992px) {
+    order: 2;
+    position: static;
+    margin-top: 20px;
+  }
+`;
+
+const GameSide = styled.div`
+  flex: 3;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 992px) {
+    order: 1;
+  }
+`;
+
+// Standardized HeaderArea is now imported from KidStyles.tsx
+
+const MathDisplay = styled(motion.div)`
+  font-size: 6rem;
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.primary};
+  font-family: ${(props) => props.theme.fonts.primary};
+  margin: 30px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
+
+  @media (max-width: 768px) {
+    font-size: 3.5rem;
+  }
+`;
+
+const ConfigSection = styled.div`
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px dashed rgba(108, 92, 231, 0.1);
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const ConfigSubTitle = styled.h4`
+  color: #636E72;
+  font-family: ${(props) => props.theme.fonts.primary};
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const OptionLabel = styled.label<{ $isActive: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background: ${(props) => (props.$isActive ? "rgba(108, 92, 231, 0.1)" : "transparent")};
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 5px;
+  border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
+
+  &:hover {
+    background: rgba(108, 92, 231, 0.05);
+  }
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: ${(props) => props.theme.colors.primary};
+  }
+`;
+
+const SessionStats = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+`;
 
 const MathChallenge = () => {
-  //config
-  const [complexity, setComplexity] = useState(
-    COUNTING_COMPLEXITY.SINGLE_DIGIT
-  );
+  const dispatch = useDispatch();
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const [complexity, setComplexity] = useState(COUNTING_COMPLEXITY.SINGLE_DIGIT);
   const [selectedOperations, setSelectedOperations] = useState(["+"]);
   const [inputValue, setInputValue] = useState("");
   const [negativeCounting, setNegativeCounting] = useState(false);
-  const [maxDigits, setMaxDigits] = useState(2);
+  const [maxDigits] = useState(2);
 
-  //challenge
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [operation, setOperation] = useState("+");
+  const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
 
-  //result
-  const [feedback, setFeedback] = useState("");
-
-  //events
   const showNewChallenge = () => {
-    const operation = generateChallenge(
+    const challenge = generateChallenge(
       maxDigits,
       complexity,
       selectedOperations,
       negativeCounting
     );
-    setNum1(operation.num1);
-    setNum2(operation.num2);
-    setOperation(operation.operation);
-    setFeedback("");
+    setNum1(challenge.num1);
+    setNum2(challenge.num2);
+    setOperation(challenge.operation);
+    setFeedback(null);
     setInputValue("");
-  };
-
-  const handleSelection = (option: string) => {
-    setComplexity(option);
-  };
-
-  const toggleOperation = (operation: string) => {
-    setSelectedOperations((prev) => {
-      if (prev.length === 1 && prev.includes(operation)) {
-        return prev; // Prevent unselecting the last option
-      }
-
-      return prev.includes(operation)
-        ? prev.filter((op) => op !== operation) // Remove if already selected
-        : [...prev, operation]; // Add if not selected
-    });
   };
 
   const handleSubmit = () => {
     const result = calculateResult(num1, num2, operation);
-    console.log("Result=", result);
     const userAnswer = Number(inputValue);
     if (userAnswer === result) {
-      setFeedback("Correct! 🎉");
-      readText("Correct");
+      setFeedback({ message: "Brilliant! 🌟", isCorrect: true });
+      readText("Brilliant");
+      dispatch(incrementScore());
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#6C5CE7", "#00CEC9", "#FF7675"],
+      });
+      setTimeout(showNewChallenge, 2000);
     } else {
-      setFeedback(`Try again!`);
-      readText(`Try again!`);
+      setFeedback({ message: "Oops! Try again! 😅", isCorrect: false });
+      readText("Oops! Try again");
+      dispatch(resetStreak());
     }
   };
 
-  //initial challenge
   useEffect(() => {
     showNewChallenge();
-  }, []);
+  }, [complexity, selectedOperations, negativeCounting]);
 
   return (
-    <CenteredContainerVertical>
-      <br />
-      <br />
-      <CenteredContainerHorizontally>
-        <KidoText fontSize="50px" color="black" mobileFontSize="25px">
-          {num1} {operation} {num2} =
-        </KidoText>
-        <StyledInput
-          type="number"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder=""
-        />
-        <br />
-        <NextIcon onClick={showNewChallenge} />
-      </CenteredContainerHorizontally>
-      <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
-      <br />
-      {feedback && <h1>{feedback}</h1>}
-      <br />
-      <br />
-      <ContainerV>
-        <strong>Operations:</strong>
-        <ContainerH>
-          {operations.map((op) => (
-            <label key={op}>
-              <input
-                type="checkbox"
-                checked={selectedOperations.includes(op)}
-                onChange={() => toggleOperation(op)}
+    <PageContainer data-testid="page-math-challenge">
+      <GameLayout>
+        <GameSide data-testid="layout-main-content">
+          <HeaderArea>
+            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+              <Calculator size={32} strokeWidth={2.5} />
+              Counting Fun
+            </KidoText>
+            <SessionStats>
+              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  style={{ fontSize: "1.8rem" }}
+                >
+                  ⭐
+                </motion.span>
+              ))}
+            </SessionStats>
+          </HeaderArea>
+          <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
+            <AnimatePresence mode="wait">
+              <MathDisplay
+                key={`${num1}${operation}${num2}`}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -20, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <span>{num1}</span>
+                <span style={{ color: "#a29bfe" }}>{operation}</span>
+                <span>{num2}</span>
+                <span style={{ color: "#a29bfe" }}>=</span>
+              </MathDisplay>
+            </AnimatePresence>
+
+            <CenteredContainerHorizontally>
+              <StyledInput
+                type="number"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="?"
+                width="160px"
+                onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
+                autoFocus
               />
-              {op}
-            </label>
-          ))}
-        </ContainerH>
-        <br />
-        <strong>Complexity:</strong>
-        <label>
-          <input
-            type="checkbox"
-            checked={complexity === COUNTING_COMPLEXITY.SINGLE_DIGIT}
-            onChange={() => handleSelection(COUNTING_COMPLEXITY.SINGLE_DIGIT)}
-          />
-          Single Digits (Ex: 5-7 or 5+7)
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={complexity === COUNTING_COMPLEXITY.SINGLE_DOUBLEDIGIT}
-            onChange={() =>
-              handleSelection(COUNTING_COMPLEXITY.SINGLE_DOUBLEDIGIT)
-            }
-          />
-          Single Double Digit (Ex: 17-3 or 17+7)
-        </label>
-        <ContainerH>
-          <label>
-            <input
-              type="checkbox"
-              checked={complexity === COUNTING_COMPLEXITY.MULTI_DIGIT}
-              onChange={() => handleSelection(COUNTING_COMPLEXITY.MULTI_DIGIT)}
-            />
-            Multi Digit (Ex: 17+13 or 17+107)
-          </label>
-          {complexity === "multiDigit" && (
-            <StyledInput
-              type="number"
-              value={maxDigits}
-              onChange={(e) => setMaxDigits(parseInt(e.target.value))}
-              min={2}
-              disabled={complexity !== "multiDigit"} // Disable if not multiDigit
-            />
-          )}
-        </ContainerH>
-        <br />
-        <label>
-          <input
-            type="checkbox"
-            checked={negativeCounting}
-            onChange={() => setNegativeCounting(!negativeCounting)}
-          />
-          Negative Counting (Ex: 5-7 or 5/7)
-        </label>
-      </ContainerV>
-    </CenteredContainerVertical>
+              <NextIcon onClick={showNewChallenge} />
+            </CenteredContainerHorizontally>
+
+            <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center" }}>
+              <KidButton title="Check Answer" onClick={handleSubmit} variant="success" />
+            </div>
+
+            <AnimatePresence>
+              {feedback && (
+                <motion.h2
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  style={{
+                    color: feedback.isCorrect ? "#55EFC4" : "#FF7675",
+                    marginTop: "25px",
+                    fontSize: "2.2rem"
+                  }}
+                >
+                  {feedback.message}
+                </motion.h2>
+              )}
+            </AnimatePresence>
+          </Card>
+        </GameSide>
+
+        <SettingsSide data-testid="layout-settings-panel">
+          <HeaderArea style={{ visibility: "hidden" }}>
+            <KidoText fontSize="32px" margin="0 0 10px">
+              Counting Fun
+            </KidoText>
+            <SessionStats>
+               <span style={{ fontSize: "1.8rem" }}>⭐</span>
+            </SessionStats>
+          </HeaderArea>
+
+          <SettingsCard>
+            <SidebarTitle>⚙️ Game Rules</SidebarTitle>
+            
+            <ConfigSection>
+              <ConfigSubTitle>Operations</ConfigSubTitle>
+              {operations.map((op) => (
+                <OptionLabel key={op} $isActive={selectedOperations.includes(op)}>
+                  <input
+                    type="checkbox"
+                    checked={selectedOperations.includes(op)}
+                    onChange={() => {
+                      setSelectedOperations((prev) => {
+                        if (prev.length === 1 && prev.includes(op)) return prev;
+                        return prev.includes(op) ? prev.filter((o) => o !== op) : [...prev, op];
+                      });
+                    }}
+                  />
+                  {op === "+" ? "Addition ➕" : op === "-" ? "Subtraction ➖" : op === "*" ? "Multiplication ✖️" : "Division ➗"}
+                </OptionLabel>
+              ))}
+            </ConfigSection>
+
+            <ConfigSection>
+              <ConfigSubTitle>Difficulty</ConfigSubTitle>
+              {[
+                { id: COUNTING_COMPLEXITY.SINGLE_DIGIT, label: "Easy Peasy (1-9)" },
+                { id: COUNTING_COMPLEXITY.SINGLE_DOUBLEDIGIT, label: "Medium (10-99)" },
+                { id: COUNTING_COMPLEXITY.MULTI_DIGIT, label: "Super Hard! 🚀" },
+              ].map((lvl) => (
+                <OptionLabel key={lvl.id} $isActive={complexity === lvl.id}>
+                  <input
+                    type="radio"
+                    name="complexity"
+                    checked={complexity === lvl.id}
+                    onChange={() => setComplexity(lvl.id)}
+                  />
+                  {lvl.label}
+                </OptionLabel>
+              ))}
+            </ConfigSection>
+
+            <ConfigSection>
+              <OptionLabel $isActive={negativeCounting}>
+                <input
+                  type="checkbox"
+                  checked={negativeCounting}
+                  onChange={() => setNegativeCounting(!negativeCounting)}
+                />
+                Allow Negative (-) Numbers
+              </OptionLabel>
+            </ConfigSection>
+          </SettingsCard>
+        </SettingsSide>
+      </GameLayout>
+    </PageContainer>
   );
 };
 

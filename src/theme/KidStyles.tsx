@@ -1,125 +1,228 @@
-import styled from "styled-components";
-interface ContainerProps {
-  height?: string; // Optional prop for height
-  gap?: string; // Optional prop for gap
-  direction?: "row" | "column"; // Flex direction (row or column)
-  padding?: string; // Optional prop for padding
-  justify?:
-    | "start"
-    | "center"
-    | "end"
-    | "space-between"
-    | "space-around"
-    | "space-evenly"; // Justify content (horizontal)
-}
-// Styled components
-export const Container = styled.div<ContainerProps>`
+import styled, { css } from "styled-components";
+
+// Material 3 Elevation Levels
+export const elevation1 = css`
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+`;
+
+export const elevation2 = css`
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+`;
+
+export const elevation3 = css`
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+`;
+
+export const Card = styled.div`
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 28px;
+  padding: 40px;
+  box-shadow: 
+    0 10px 20px rgba(108, 92, 231, 0.04),
+    0 20px 40px rgba(108, 92, 231, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  width: 100%;
+  max-width: 800px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(108, 92, 231, 0.15);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 
+      0 15px 30px rgba(108, 92, 231, 0.08),
+      0 30px 60px rgba(108, 92, 231, 0.12);
+    border-color: rgba(108, 92, 231, 0.3);
+  }
+`;
+
+export const StyledInput = styled.input<{ width?: string }>`
+  padding: 24px 30px;
+  margin: 15px 0;
+  background: ${(props) => props.theme.colors.surfaceVariant};
+  border: none;
+  border-bottom: 2px solid ${(props) => props.theme.colors.textSecondary};
+  border-radius: 12px 12px 0 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  font-family: ${(props) => props.theme.fonts.primary};
+  width: ${(props) => props.width || "200px"};
+  color: ${(props) => props.theme.colors.textPrimary};
   text-align: center;
-  font-family: Arial, sans-serif;
-  padding: ${({ padding }) => padding || "10px"};
-  gap: ${({ gap }) => gap || "10px"};
-  padding: ${({ padding }) => padding || "0px"};
-  justify-content: ${({ justify }) =>
-    justify || "center"}; /* Horizontal alignment */
+  outline: none;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: ${(props) => props.theme.colors.textSecondary}80;
+  }
+
+  &:focus {
+    background: ${(props) => props.theme.colors.primaryContainer};
+    border-bottom: 3px solid ${(props) => props.theme.colors.primary};
+    border-radius: 12px;
+    transform: scale(1.02);
+  }
 `;
 
-// Styled container that centers items horizontally
-export const CenteredContainerHorizontally = styled.div`
-  display: flex;
-  align-items: center; /* Centers items vertically (optional) */
-  height: auto; /* Optional: Takes full height of the viewport */
-  gap: 10px;
+export const Tag = styled.span`
+  color: ${(props) => props.theme.colors.onPrimaryContainer};
+  background: ${(props) => props.theme.colors.primaryContainer};
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: ${(props) => props.theme.fonts.primary};
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.primary};
+    color: white;
+    transform: translateY(-2px);
+    ${elevation2}
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
-export const CenteredContainerHorizontallyDynamic = styled.div`
+export const SidebarTitle = styled.h4`
+  color: ${(props) => props.theme.colors.textPrimary};
+  font-family: ${(props) => props.theme.fonts.primary};
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  padding: 0 16px;
+  letter-spacing: 0.1px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  opacity: 0.6;
+`;
+
+export const TagList = styled.div`
   display: flex;
-  align-items: center; /* Centers items vertically (optional) */
-  height: auto; /* Optional: Takes full height of the viewport */
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+export const PageContainer = styled.div`
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: ${(props) => props.theme.colors.background};
+
   @media (max-width: 768px) {
-    /* Mobile screens */
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center items horizontally */
-    width: 100%; /* Ensure the container takes full width */
+    padding: 20px 10px;
   }
 `;
 
 export const CenteredContainerVertical = styled.div<{ padding?: string }>`
-  padding: ${(props) => props.padding || "10px"}; /* Defaults to 10px */
-  display: flex;
-  flex-direction: column; /* Arranges items vertically */
-  align-items: center; /* Centers items horizontally */
-  height: auto; /* Takes full height of the viewport */
-  gap: 10px;
-`;
-export const StyledInput = styled.input<{ width?: string }>`
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  width: ${(props) => props.width || "100px"};
-
-  &:focus {
-    border-color: #3498db;
-    outline: none;
-  }
-`;
-
-export const TagList = styled.div`
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap; /* Wrap tags to the next line */
-  overflow: hidden; /* Prevent overflow outside the card */
-  padding-right: 5px; /* Space for scrollbar if needed */
-  -webkit-line-clamp: 2; /* Limit to 2 lines */
-  -webkit-box-orient: vertical; /* Define vertical orientation */
-`;
-
-export const Tag = styled.span`
-  color: #ffffff;
-  background-color: ${(props) => props.theme.colors.sub};
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 1rem;
-`;
-
-export const PageContainer = styled.div`
-  padding: 20px;
+  padding: ${(props) => props.padding || "20px"};
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 20px;
+  width: 100%;
+`;
 
+export const CenteredContainerVerticalDynamic = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
   @media (max-width: 768px) {
-    padding: 10px;
+    flex-direction: column;
+    width: 100%;
   }
 `;
 
 export const ListContainer = styled.ul`
   list-style-type: none;
   padding: 0;
-  margin: 0;
-  max-height: 200px; /* Adjust height to fit ~5 items */
-  overflow-y: auto; /* Enable vertical scrolling */
-  padding: 10px; /* Optional: Add padding for spacing */
+  margin: 20px 0;
+  width: 100%;
+  max-width: 400px;
 `;
 
 export const ListItem = styled.li`
-  padding: 5px 0;
+  padding: 16px 24px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(108, 92, 231, 0.1);
+  color: ${(props) => props.theme.colors.textPrimary};
+  font-family: ${(props) => props.theme.fonts.secondary};
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.03);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 6px 16px rgba(108, 92, 231, 0.06);
+  }
 `;
 
 export const ContainerH = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
+  justify-content: center;
 `;
+
 export const ContainerV = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 10px;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 
+    0 8px 16px rgba(108, 92, 231, 0.04),
+    0 16px 32px rgba(108, 92, 231, 0.06);
+  border: 1px solid rgba(108, 92, 231, 0.1);
+`;
+
+export const CenteredContainerHorizontally = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
+export const HeaderArea = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Precisely calculated to accommodate title and 1-2 rows of stats/stars */
+  min-height: 110px;
+  justify-content: flex-start;
+`;
+
+export const SettingsCard = styled(Card)`
+  background: rgba(255, 255, 255, 0.8);
+  border: 3px solid #6C5CE720;
+  max-width: none;
+  padding: 50px 20px;
+  
+  &:hover {
+    transform: translateY(-5px) scale(1.005);
+  }
 `;

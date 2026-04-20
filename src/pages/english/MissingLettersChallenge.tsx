@@ -1,37 +1,84 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Card,
+  PageContainer,
+  StyledInput,
+  Tag,
+  TagList,
+  SidebarTitle,
+  HeaderArea,
+  SettingsCard,
+} from "../../theme/KidStyles";
+import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
-import SpeakIcon from "../../components/SpeakIcon";
+import { Search } from "lucide-react";
+import { readText } from "../../util/util";
 import {
   getAllWords,
   getRandomWord,
   createMissingLetterWord,
   randomNumber,
 } from "../../store/data/WordUtil";
-import {
-  CenteredContainerVertical,
-  CenteredContainerHorizontally,
-  StyledInput,
-} from "../../theme/KidStyles";
-import { readText } from "../../util/util";
+import confetti from "canvas-confetti";
 
-const stringList = getAllWords();
+const GameLayout = styled.div`
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  align-items: flex-start;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const SidebarSide = styled.div`
+  flex: 1;
+  width: 100%;
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0; 
+
+  @media (max-width: 992px) {
+    order: 2;
+    position: static;
+    margin-top: 20px;
+  }
+`;
+
+const MainSide = styled.div`
+  flex: 3;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 992px) {
+    order: 1;
+  }
+`;
 
 const MissingLettersChallenge = () => {
   const [randomString, setRandomString] = useState<string>("");
-  const [randomStringWithMissingLetter, setRandomStringWithMissingLetter] =
-    useState<string>("");
+  const [randomStringWithMissingLetter, setRandomStringWithMissingLetter] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
+  const [history, setHistory] = useState<string[]>([]);
 
   const generateChallenge = () => {
-    let rs = getRandomWord(stringList);
+    let rs = getRandomWord(getAllWords());
     setRandomString(rs);
     setRandomStringWithMissingLetter(
       createMissingLetterWord(rs, randomNumber(rs.length))
     );
     setInputValue("");
-    setFeedback("");
+    setFeedback(null);
   };
 
   useEffect(() => {
@@ -40,33 +87,100 @@ const MissingLettersChallenge = () => {
 
   const handleSubmit = () => {
     if (randomString.toLowerCase() === inputValue.toLowerCase()) {
-      setFeedback("Correct! 🎉");
-      readText("Correct");
-      generateChallenge();
+      setFeedback({ message: "You got it! 🌟", isCorrect: true });
+      readText("You got it");
+      setHistory((prev) => [randomString, ...prev].slice(0, 5));
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#6C5CE7", "#00CEC9", "#FF7675"],
+      });
+      setTimeout(generateChallenge, 2000);
     } else {
-      setFeedback(`Try again!`);
-      readText(`Try again!`);
+      setFeedback({ message: "Not quite, try again! 😅", isCorrect: false });
+      readText("Try again");
     }
   };
+
   return (
-    <CenteredContainerVertical>
-      <br />
-      <br />
-      <CenteredContainerHorizontally>
-        <KidoText fontSize="50px" color="black" mobileFontSize="30px">
-          {randomStringWithMissingLetter}
-        </KidoText>
-        <SpeakIcon text={randomString} />
-      </CenteredContainerHorizontally>
-      <StyledInput
-        type="string"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder=""
-      />
-      <KidButton title="Submit" isActive={true} onClick={handleSubmit} />
-      {feedback && <h1>{feedback}</h1>}
-    </CenteredContainerVertical>
+    <PageContainer data-testid="page-missing-letters">
+      <GameLayout>
+        <MainSide data-testid="layout-main-content">
+          <HeaderArea>
+            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+              <Search size={32} strokeWidth={2.5} />
+              Missing Letters
+            </KidoText>
+          </HeaderArea>
+          <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
+            <KidoText fontSize="22px" color="textSecondary" margin="0 0 10px">
+              Fill in the missing letter:
+            </KidoText>
+            
+            <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "30px" }}>
+              <KidoText fontSize="5rem" color="primary" fontWeight={900} style={{ letterSpacing: "8px" }}>
+                {randomStringWithMissingLetter}
+              </KidoText>
+              <SpeakIcon text={randomString} />
+            </div>
+
+            <StyledInput
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="?"
+              width="200px"
+              onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
+              autoFocus
+            />
+
+            <div style={{ marginTop: "40px" }}>
+              <KidButton title="Check Answer" onClick={handleSubmit} variant="success" />
+            </div>
+
+            <AnimatePresence>
+              {feedback && (
+                <motion.h2
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  style={{
+                    color: feedback.isCorrect ? "#55EFC4" : "#FF7675",
+                    marginTop: "25px",
+                    fontSize: "2.2rem"
+                  }}
+                >
+                  {feedback.message}
+                </motion.h2>
+              )}
+            </AnimatePresence>
+          </Card>
+        </MainSide>
+
+        <SidebarSide data-testid="layout-settings-panel">
+          <HeaderArea style={{ visibility: "hidden" }}>
+            <KidoText fontSize="32px" margin="0 0 10px">
+              Missing Letters
+            </KidoText>
+          </HeaderArea>
+          <SettingsCard>
+            <SidebarTitle>✅ Solved Recently:</SidebarTitle>
+            <TagList>
+              {history.length === 0 ? (
+                <KidoText color="#636E72" fontSize="0.9rem">Start solving to see your list! ✍️</KidoText>
+              ) : (
+                history.map((word, index) => (
+                  <Tag key={index}>{word}</Tag>
+                ))
+              )}
+            </TagList>
+            <div style={{ marginTop: "30px", textAlign: "center" }}>
+              <KidButton title="New Challenge" onClick={generateChallenge} variant="secondary" />
+            </div>
+          </SettingsCard>
+        </SidebarSide>
+      </GameLayout>
+    </PageContainer>
   );
 };
 

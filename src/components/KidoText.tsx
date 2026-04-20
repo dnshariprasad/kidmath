@@ -1,26 +1,32 @@
 import styled from "styled-components";
+import React from "react";
 
 interface KidoProps {
-  fontSize?: string; // Font size for larger screens (default)
-  mobileFontSize?: string; // Font size specifically for mobile
-  fontWeight?: "normal" | "bold" | "lighter" | number; // Font weight
-  color?: string; // Text color
-  textAlign?: "left" | "center" | "right" | "justify"; // Text alignment
-  margin?: string; // Margin
-  padding?: string; // Padding
+  fontSize?: string;
+  mobileFontSize?: string;
+  fontWeight?: "normal" | "bold" | "lighter" | number;
+  color?: string;
+  textAlign?: "left" | "center" | "right" | "justify";
+  margin?: string;
+  padding?: string;
+  width?: string;
+  children?: React.ReactNode;
 }
 
 export const KidoText = styled.p<KidoProps>`
-  font-size: ${({ fontSize }) => fontSize || "16px"};
-  font-weight: ${({ fontWeight }) => fontWeight || "normal"};
-  color: ${({ color }) => color || "#000"};
+  font-family: ${(props) => props.theme.fonts.primary};
+  font-size: ${({ fontSize }) => fontSize || "1.1rem"};
+  font-weight: ${({ fontWeight }) => fontWeight || "700"};
+  color: ${({ color, theme }) => theme.colors[color as keyof typeof theme.colors] || color || theme.colors.textPrimary};
   text-align: ${({ textAlign }) => textAlign || "center"};
   margin: ${({ margin }) => margin || "0"};
   padding: ${({ padding }) => padding || "0"};
+  width: ${({ width }) => width || "100%"};
+  line-height: 1.5;
+  display: block;
 
-  /* Mobile-specific styles using a media query */
   @media (max-width: 768px) {
     font-size: ${({ mobileFontSize, fontSize }) =>
-      mobileFontSize || fontSize || "14px"};
+      mobileFontSize || fontSize || "1rem"};
   }
 `;

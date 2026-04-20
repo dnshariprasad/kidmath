@@ -3,15 +3,17 @@ import styled from "styled-components";
 export const LayoutContainer = styled.div`
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  min-height: 100vh;
+  background-color: ${(props) => props.theme.colors.background};
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Stack menu and content vertically on mobile */
-    height: auto;
+    flex-direction: column;
   }
 `;
 
 export const ContentContainer = styled.div`
-  flex: 1;
-  overflow-y: auto;
+  flex: 4;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
 `;

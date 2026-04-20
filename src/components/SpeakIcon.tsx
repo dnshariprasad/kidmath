@@ -1,18 +1,46 @@
 import { readText } from "../util/util";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import { Volume2 } from "lucide-react";
+
+const SpeakButton = styled(motion.div)`
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0; /* Prevents squashing in flex containers */
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #06b6d4;
+  cursor: pointer;
+  border: 2px solid #06b6d4;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #06b6d4;
+    color: white;
+  }
+`;
+
 interface SpeakIconProps {
   text: string;
   lang?: string;
 }
+
 const SpeakIcon: React.FC<SpeakIconProps> = ({ text, lang = "en-US" }) => {
   return (
-    <span
+    <SpeakButton
+      data-testid="comp-speak-icon"
       onClick={() => readText(text, lang)}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
       role="button"
-      aria-label="Read sentence"
-      style={{ marginLeft: "8px", fontSize: "30px" }}
+      aria-label="Read text"
     >
-      🔊
-    </span>
+      <Volume2 size={28} strokeWidth={2.5} />
+    </SpeakButton>
   );
 };
+
 export default SpeakIcon;

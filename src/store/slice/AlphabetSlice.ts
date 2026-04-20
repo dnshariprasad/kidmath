@@ -7,6 +7,12 @@ interface KiddooState {
   smallAlphabets: string[];
   alphabets: string[];
   loading: boolean;
+  userStats: {
+    score: number;
+    streak: number;
+    lastPlayed: string | null;
+  };
+  isMobileMenuOpen: boolean;
 }
 
 const initialState: KiddooState = {
@@ -15,6 +21,12 @@ const initialState: KiddooState = {
   smallAlphabets: small,
   alphabets: [],
   loading: false,
+  userStats: {
+    score: 0,
+    streak: 0,
+    lastPlayed: null,
+  },
+  isMobileMenuOpen: false,
 };
 
 const kiddooSlice = createSlice({
@@ -25,7 +37,7 @@ const kiddooSlice = createSlice({
       state.loading = true;
     },
     setAlphabets: (state, action: PayloadAction<string[]>) => {
-      state.loading = true;
+      state.loading = false;
       state.alphabets = action.payload;
     },
     getSelectedAlphabet: (state) => {
@@ -35,6 +47,20 @@ const kiddooSlice = createSlice({
       state.selectedAlphabet = action.payload;
       state.loading = false;
     },
+    incrementScore: (state) => {
+      state.userStats.score += 10;
+      state.userStats.streak += 1;
+      state.userStats.lastPlayed = new Date().toISOString();
+    },
+    resetStreak: (state) => {
+      state.userStats.streak = 0;
+    },
+    toggleMobileMenu: (state) => {
+      state.isMobileMenuOpen = !state.isMobileMenuOpen;
+    },
+    closeMobileMenu: (state) => {
+      state.isMobileMenuOpen = false;
+    },
   },
 });
 
@@ -43,6 +69,10 @@ export const {
   setAlphabets,
   getSelectedAlphabet,
   setSelectedAlphabet,
+  incrementScore,
+  resetStreak,
+  toggleMobileMenu,
+  closeMobileMenu,
 } = kiddooSlice.actions;
 
 export default kiddooSlice.reducer;

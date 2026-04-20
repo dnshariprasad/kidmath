@@ -8,9 +8,11 @@ export const MAIN_MENU = [
   {
     isEnabled: true,
     main: "English",
+    iconName: "Book",
+    color: "#F97316", // Creative Orange
     sub: [
       {
-        title: "Alphabet",
+        title: "ABC Alphabet",
         path: "/alphabet",
         isEnabled: true,
       },
@@ -29,34 +31,26 @@ export const MAIN_MENU = [
         path: "/missing_letters",
         isEnabled: true,
       },
-      {
-        title: "Sudoku",
-        path: "/sudoku",
-        isEnabled: false,
-      },
     ],
   },
   {
     isEnabled: true,
     main: "Math",
+    iconName: "Calculator",
+    color: "#3B82F6", // Logic Blue
     sub: [
       {
-        title: "Counting",
+        title: "Counting Fun",
         path: "/counting",
         isEnabled: true,
       },
       {
-        title: "Comparison",
+        title: "Big or Small?",
         path: "/comparison",
         isEnabled: true,
       },
       {
-        title: "Missing Numbers",
-        path: "/missing_numbers",
-        isEnabled: false,
-      },
-      {
-        title: "Number Sorting",
+        title: "Number Sorter",
         path: "/sorting_numbers",
         isEnabled: true,
       },
@@ -65,9 +59,11 @@ export const MAIN_MENU = [
   {
     isEnabled: true,
     main: "Hindi",
+    iconName: "Languages",
+    color: "#8B5CF6", // Heritage Purple
     sub: [
       {
-        title: "Alphabet",
+        title: "Hindi Alphabet",
         path: "/alphabet_hindi",
         isEnabled: true,
       },

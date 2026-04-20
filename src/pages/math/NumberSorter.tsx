@@ -1,43 +1,162 @@
 import { useState, useEffect } from "react";
+import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
+import { useDispatch } from "react-redux";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
+import { Puzzle } from "lucide-react";
 import NextIcon from "../../components/NextIcon";
 import {
-  CenteredContainerVertical,
-  CenteredContainerHorizontally,
+  PageContainer,
+  Card,
   Tag,
   StyledInput,
-  ContainerV,
-  ContainerH,
+  SidebarTitle,
+  HeaderArea,
+  SettingsCard,
 } from "../../theme/KidStyles";
 import { getRandomNumber, getMaxNumber } from "../../util/MathUtil";
 import { readText } from "../../util/util";
+import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
+import confetti from "canvas-confetti";
+
+const GameLayout = styled.div`
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  align-items: flex-start;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const SettingsSide = styled.div`
+  flex: 1;
+  width: 100%;
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0; 
+
+  @media (max-width: 992px) {
+    order: 2;
+    position: static;
+    margin-top: 20px;
+  }
+`;
+
+const GameSide = styled.div`
+  flex: 3;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 992px) {
+    order: 1;
+  }
+`;
+
+const NumberPool = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin: 10px 0 30px;
+  padding: 10px;
+  width: 100%;
+`;
+
+const SlotContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 35px 0;
+`;
+
+const NumberSlot = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+const SlotLabel = styled.span`
+  font-size: 0.9rem;
+  color: #636e72;
+  font-weight: 700;
+  font-family: ${(props) => props.theme.fonts.primary};
+`;
+
+const ConfigSection = styled.div`
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px dashed rgba(108, 92, 231, 0.1);
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const ConfigSubTitle = styled.h4`
+  color: #636E72;
+  font-family: ${(props) => props.theme.fonts.primary};
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const OptionLabel = styled.label<{ $isActive: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background: ${(props) => (props.$isActive ? "rgba(108, 92, 231, 0.1)" : "transparent")};
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 5px;
+  border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
+  font-size: 0.9rem;
+
+  &:hover {
+    background: rgba(108, 92, 231, 0.05);
+  }
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: ${(props) => props.theme.colors.primary};
+  }
+`;
 
 export default function NumberSorter() {
+  const dispatch = useDispatch();
   const [maxDigits, setMaxDigits] = useState(1);
-  const [numberSetSize, setNumberSetSize] = useState(5);
+  const [numberSetSize, setNumberSetSize] = useState(4);
   const [order, setOrder] = useState<string>("ascending");
+  const [numbers, setNumbers] = useState<number[]>([]);
+  const [userInput, setUserInput] = useState<string[]>([]);
+  const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
 
-  const generateRandomNumbers = () => {
-    return Array.from({ length: numberSetSize }, () =>
+  const generateNewSet = () => {
+    const newNumbers = Array.from({ length: numberSetSize }, () =>
       getRandomNumber(getMaxNumber(maxDigits))
     );
+    setNumbers(newNumbers);
+    setUserInput(Array(numberSetSize).fill(""));
+    setFeedback(null);
   };
 
-  const [numbers, setNumbers] = useState<number[]>(generateRandomNumbers);
-  const [userInput, setUserInput] = useState<string[]>(Array(5).fill(""));
-  const [message, setMessage] = useState<string>("");
-  const handleSelection = (option: string) => {
-    setOrder(option);
-  };
-  const showNewChallenge = () => {
-    setNumbers(generateRandomNumbers());
-    setUserInput(Array(numberSetSize).fill(""));
-    setMessage("");
-  };
   useEffect(() => {
-    showNewChallenge();
-  }, []);
+    generateNewSet();
+  }, [numberSetSize, maxDigits]);
 
   const handleChange = (index: number, value: string) => {
     const updatedInput = [...userInput];
@@ -55,79 +174,156 @@ export default function NumberSorter() {
       .map((num) => parseInt(num, 10))
       .filter((num) => !isNaN(num));
 
+    if (userSorted.length !== numbers.length) {
+      setFeedback({ message: "Fill all boxes! 📝", isCorrect: false });
+      return;
+    }
+
     if (JSON.stringify(sortedNumbers) === JSON.stringify(userSorted)) {
-      setMessage("Correct!");
-      readText("Correct");
+      setFeedback({ message: "Perfect Sorting! 🌟", isCorrect: true });
+      readText("Perfect Sorting");
+      dispatch(incrementScore());
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#6C5CE7", "#00CEC9", "#FF7675"],
+      });
+      setTimeout(generateNewSet, 2000);
     } else {
-      setMessage("Oops! Try Again. 😅");
-      readText("Oops! Try Again.");
+      setFeedback({ message: "Not quite right! 😅", isCorrect: false });
+      readText("Try again");
+      dispatch(resetStreak());
     }
   };
 
   return (
-    <CenteredContainerVertical>
-      <br />
-      <br />
-      <KidoText fontSize="25px" color="black" mobileFontSize="20px">
-        Sort in {order} order
-      </KidoText>
-      <br />
-      <CenteredContainerHorizontally>
-        {numbers.map((num, index) => (
-          <Tag key={index}>{num}</Tag>
-        ))}
-        <NextIcon onClick={showNewChallenge} />
-      </CenteredContainerHorizontally>
-      <CenteredContainerHorizontally>
-        {userInput.map((value, index) => (
-          <StyledInput
-            width="30px"
-            key={index}
-            type="number"
-            value={value}
-            onChange={(e) => handleChange(index, e.target.value)}
-          />
-        ))}
-      </CenteredContainerHorizontally>
-      <KidButton title="Submit" isActive={true} onClick={checkSortedOrder} />
+    <PageContainer data-testid="page-number-sorter">
+      <GameLayout>
+        <GameSide data-testid="layout-main-content">
+          <HeaderArea>
+            <KidoText fontSize="32px" color="primary" margin="0 0 10px" textAlign="center" width="100%" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+              <Puzzle size={32} strokeWidth={2.5} />
+              Number Sorting
+            </KidoText>
+          </HeaderArea>
+          <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
+            <KidoText fontSize="22px" color="textSecondary" margin="0 0 10px">
+              Sort these numbers in <strong>{order}</strong> order:
+            </KidoText>
 
-      {message && <h3>{message}</h3>}
+            <AnimatePresence mode="wait">
+              <NumberPool key={numbers.join(",")}>
+                {numbers.map((num, index) => (
+                  <motion.div
+                    key={`${num}-${index}`}
+                    initial={{ scale: 0, rotate: -10 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", delay: index * 0.1 }}
+                  >
+                    <Tag style={{ fontSize: "1.8rem", padding: "18px 30px" }}>{num}</Tag>
+                  </motion.div>
+                ))}
+                <div style={{ alignSelf: "center", marginLeft: "10px" }}>
+                  <NextIcon onClick={generateNewSet} />
+                </div>
+              </NumberPool>
+            </AnimatePresence>
 
-      <ContainerV>
-        <label>Order:</label>
-        <label>
-          <input
-            type="checkbox"
-            checked={order === "ascending"}
-            onChange={() => handleSelection("ascending")}
-          />
-          Ascending Order
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={order === "descending"}
-            onChange={() => handleSelection("descending")}
-          />
-          Descending Order
-        </label>
-        <ContainerH>
-          <label>Range:</label>
-          <StyledInput
-            type="number"
-            onChange={(e) => setMaxDigits(parseInt(e.target.value))}
-            value={maxDigits}
-          />
-        </ContainerH>
-        <ContainerH>
-          <label>Numbers:</label>
-          <StyledInput
-            type="number"
-            onChange={(e) => setNumberSetSize(parseInt(e.target.value))}
-            value={numberSetSize}
-          />
-        </ContainerH>
-      </ContainerV>
-    </CenteredContainerVertical>
+            <SlotContainer>
+              {userInput.map((value, index) => (
+                <NumberSlot key={index}>
+                  <SlotLabel>{index + 1}{index === 0 ? "st" : index === 1 ? "nd" : index === 2 ? "rd" : "th"}</SlotLabel>
+                  <StyledInput
+                    width="80px"
+                    type="number"
+                    value={value}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                    placeholder="?"
+                  />
+                </NumberSlot>
+              ))}
+            </SlotContainer>
+
+            <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center" }}>
+              <KidButton title="Check Order" onClick={checkSortedOrder} variant="primary" />
+            </div>
+
+            <AnimatePresence>
+              {feedback && (
+                <motion.h2
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  style={{
+                    color: feedback.isCorrect ? "#55EFC4" : "#FF7675",
+                    marginTop: "25px",
+                    fontSize: "2rem"
+                  }}
+                >
+                  {feedback.message}
+                </motion.h2>
+              )}
+            </AnimatePresence>
+          </Card>
+        </GameSide>
+
+        <SettingsSide data-testid="layout-settings-panel">
+          <HeaderArea style={{ visibility: "hidden" }}>
+            <KidoText fontSize="32px" margin="0 0 10px">
+              Number Sorting
+            </KidoText>
+          </HeaderArea>
+          <SettingsCard>
+            <SidebarTitle>⚙️ Game Rules</SidebarTitle>
+            
+            <ConfigSection>
+              <ConfigSubTitle>Sorting Order</ConfigSubTitle>
+              <OptionLabel $isActive={order === "ascending"}>
+                <input
+                  type="radio"
+                  name="order"
+                  checked={order === "ascending"}
+                  onChange={() => setOrder("ascending")}
+                />
+                Smallest to Biggest (1, 2, 3)
+              </OptionLabel>
+              <OptionLabel $isActive={order === "descending"}>
+                <input
+                  type="radio"
+                  name="order"
+                  checked={order === "descending"}
+                  onChange={() => setOrder("descending")}
+                />
+                Biggest to Smallest (3, 2, 1)
+              </OptionLabel>
+            </ConfigSection>
+
+            <ConfigSection>
+              <ConfigSubTitle>Difficulty</ConfigSubTitle>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: "0.9rem" }}>Total Numbers:</span>
+                  <StyledInput
+                    type="number"
+                    onChange={(e) => setNumberSetSize(Math.max(2, Math.min(8, parseInt(e.target.value) || 2)))}
+                    value={numberSetSize}
+                    width="60px"
+                  />
+                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: "0.9rem" }}>Max Digits:</span>
+                  <StyledInput
+                    type="number"
+                    onChange={(e) => setMaxDigits(Math.max(1, Math.min(4, parseInt(e.target.value) || 1)))}
+                    value={maxDigits}
+                    width="60px"
+                  />
+                </div>
+              </div>
+            </ConfigSection>
+          </SettingsCard>
+        </SettingsSide>
+      </GameLayout>
+    </PageContainer>
   );
 }

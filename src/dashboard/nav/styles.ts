@@ -1,52 +1,72 @@
 import styled from "styled-components";
 
-// Navbar Container
 export const NavbarContainer = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: ${(props) => props.theme.colors.nav};
-  color: white;
+  padding: 16px 40px;
+  background-color: ${(props) => props.theme.colors.surface};
+  color: ${(props) => props.theme.colors.textPrimary};
+  box-shadow: 0 2px 10px ${(props) => props.theme.colors.shadow};
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 10px 15px;
+    padding: 12px 20px;
   }
 `;
 
-// App Name (Logo)
 export const AppName = styled.div`
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-family: ${(props) => props.theme.fonts.primary};
+  font-size: 1.8rem;
+  font-weight: 800;
   cursor: pointer;
   text-decoration: none;
-  color: ${(props) => props.theme.colors.main};
+  color: ${(props) => props.theme.colors.primary};
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.5px;
+
+  &::before {
+    content: "🎈";
+    font-size: 1.5rem;
+  }
 
   &:hover {
-    opacity: 0.8;
-    color: ${(props) => props.theme.colors.main};
+    transform: scale(1.02);
+    color: ${(props) => props.theme.colors.secondary};
+  }
+
+  transition: all 0.3s ease;
+`;
+
+export const UserSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: ${(props) => props.theme.fonts.secondary};
+  font-weight: 600;
+  color: ${(props) => props.theme.colors.textSecondary};
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    gap: 8px;
   }
 `;
 
-// // Navigation Links Container
-// export const NavLinks = styled.div`
-//   display: flex;
-//   align-items: center;
-// `;
+export const MenuToggleButton = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  color: ${(props) => props.theme.colors.primary};
 
-// // Individual Navigation Link
-// export const NavLink = styled(Link)`
-//   margin-left: 20px;
-//   color: white;
-//   text-decoration: none;
-//   font-size: 1rem;
-
-//   &:hover {
-//     opacity: 0.8;
-//   }
-
-//   @media (max-width: 768px) {
-//     margin-left: 10px;
-//   }
-// `;
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
