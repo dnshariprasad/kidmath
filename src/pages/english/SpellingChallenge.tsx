@@ -58,6 +58,7 @@ const LetterSlot = styled(motion.div)<{
   font-size: 2.5rem;
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
+  font-family: ${(props) => props.theme.fonts.primary};
   box-shadow: ${(props) => (props.$isActive ? "0 10px 20px rgba(99, 102, 241, 0.2)" : "none")};
   transition: all 0.2s ease;
 

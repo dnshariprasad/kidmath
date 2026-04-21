@@ -49,6 +49,7 @@ const SortItem = styled(Reorder.Item)`
   font-size: 2.2rem;
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
+  font-family: ${(props) => props.theme.fonts.primary};
   cursor: grab;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 

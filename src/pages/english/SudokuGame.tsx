@@ -53,6 +53,7 @@ const SudokuCell = styled(motion.div)<{ $isActive: boolean; $isFixed: boolean; $
   font-size: 2.2rem;
   font-weight: 800;
   color: ${(props) => (props.$isFixed ? "#636E72" : props.theme.colors.primary)};
+  font-family: ${(props) => props.theme.fonts.primary};
   cursor: ${(props) => (props.$isFixed ? "default" : "pointer")};
   box-shadow: ${(props) => (props.$isActive ? "0 8px 16px rgba(99, 102, 241, 0.15)" : "none")};
   transition: all 0.2s ease;
