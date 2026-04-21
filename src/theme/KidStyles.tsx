@@ -46,6 +46,11 @@ export const Card = styled.div`
       0 30px 60px rgba(99, 102, 241, 0.12);
     border-color: rgba(99, 102, 241, 0.3);
   }
+
+  @media (max-width: 768px) {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
 `;
 
 export const StyledInput = styled.input<{ width?: string }>`
@@ -302,4 +307,30 @@ export const ControlBar = styled.div`
   justify-content: center;
   margin-top: 40px;
   width: 100%;
+  flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+    
+    & > [data-testid="comp-kid-button"] {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+  }
+`;
+
+export const NavControlBar = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    gap: 15px;
+    margin-top: 25px;
+  }
 `;

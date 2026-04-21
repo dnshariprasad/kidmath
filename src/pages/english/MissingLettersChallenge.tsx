@@ -136,7 +136,30 @@ const MissingLettersChallenge = () => {
               ))}
             </SessionStats>
           </PageHeader>
-          <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
+          <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none", position: "relative" }}>
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={generateChallenge}
+              style={{
+                position: "absolute",
+                top: "20px",
+                right: "20px",
+                cursor: "pointer",
+                color: "#dfe6e9",
+                transition: "color 0.2s ease"
+              }}
+              title="Skip to next"
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#6366F1")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#dfe6e9")}
+            >
+              <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m6 17 5-5-5-5M13 17l5-5-5-5"/>
+                </svg>
+              </motion.div>
+            </motion.div>
+
             <div style={{ marginBottom: "30px" }}>
               <SpeakIcon text={randomString} />
             </div>
@@ -159,8 +182,12 @@ const MissingLettersChallenge = () => {
             />
 
             <ControlBar>
-              <KidButton title="Check Answer" onClick={handleSubmit} variant="success" />
-              <KidButton title="Skip" onClick={generateChallenge} variant="secondary" />
+              <KidButton 
+                title="Check Answer" 
+                onClick={handleSubmit} 
+                variant="success" 
+                style={{ minWidth: "220px" }}
+              />
             </ControlBar>
 
             <AnimatePresence>
@@ -205,9 +232,6 @@ const MissingLettersChallenge = () => {
                 ))
               )}
             </TagList>
-            <div style={{ marginTop: "30px", textAlign: "center" }}>
-              <KidButton title="New Challenge" onClick={generateChallenge} variant="secondary" />
-            </div>
           </SettingsCard>
         </SidebarSide>
       </GameLayout>

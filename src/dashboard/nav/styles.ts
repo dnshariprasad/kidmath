@@ -8,8 +8,12 @@ export const NavbarContainer = styled.nav`
   background-color: ${(props) => props.theme.colors.surface};
   color: ${(props) => props.theme.colors.textPrimary};
   box-shadow: 0 2px 10px ${(props) => props.theme.colors.shadow};
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 70px;
   z-index: 1000;
   box-sizing: border-box;
 

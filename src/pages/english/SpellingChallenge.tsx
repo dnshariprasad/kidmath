@@ -254,6 +254,46 @@ const SpellingChallenge = () => {
           </PageHeader>
 
           <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none", position: "relative" }}>
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setShowHint(true)}
+              style={{
+                position: "absolute",
+                top: "20px",
+                left: "20px",
+                cursor: "pointer",
+                color: showHint ? "#6366F1" : "#dfe6e9",
+                transition: "color 0.2s ease"
+              }}
+              title="Need a hint?"
+            >
+              <HelpCircle size={28} />
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={generateChallenge}
+              style={{
+                position: "absolute",
+                top: "20px",
+                right: "20px",
+                cursor: "pointer",
+                color: "#dfe6e9",
+                transition: "color 0.2s ease"
+              }}
+              title="Skip to next"
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#6366F1")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#dfe6e9")}
+            >
+              <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m6 17 5-5-5-5M13 17l5-5-5-5"/>
+                </svg>
+              </motion.div>
+            </motion.div>
+
             <BigSpeakWrapper 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -301,12 +341,6 @@ const SpellingChallenge = () => {
 
             {!feedback && (
               <ControlBar>
-                <KidButton 
-                  title="Hint" 
-                  variant="secondary" 
-                  onClick={() => setShowHint(true)}
-                  style={{ minWidth: "120px" }}
-                />
                 <KidButton 
                   title="Check Spelling" 
                   variant="success" 
@@ -374,9 +408,6 @@ const SpellingChallenge = () => {
                 ))
               )}
             </TagList>
-            <div style={{ marginTop: "30px", borderTop: "2px dashed #f0f0f0", paddingTop: "20px" }}>
-              <KidButton title="Skip Word" onClick={generateChallenge} variant="secondary" style={{ width: "100%", minWidth: "auto" }} />
-            </div>
           </SettingsCard>
         </SidebarSide>
       </GameLayout>

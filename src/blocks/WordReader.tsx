@@ -9,7 +9,7 @@ import {
   TagList,
   SidebarTitle,
   SettingsCard,
-  ControlBar,
+  NavControlBar,
   PageHeader,
   PageTitle,
   PageSubtitle,
@@ -165,11 +165,11 @@ const WordReader = (props: IWord) => {
               </WordDisplay>
             </AnimatePresence>
 
-            <ControlBar>
+            <NavControlBar>
               <PreviousIcon onClick={handlePrevious} />
               <SpeakIcon text={currentWord} />
               <NextIcon onClick={handleNext} />
-            </ControlBar>
+            </NavControlBar>
 
             <div style={{ marginTop: "40px", borderTop: "2px dashed #f0f0f0", paddingTop: "20px", width: "100%" }}>
               <SentenceReader sentence={getSentencesOfWord(currentWord)} />

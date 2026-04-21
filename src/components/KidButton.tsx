@@ -12,7 +12,6 @@ interface ButtonProps {
 
 const StyledButton = styled(motion.button)<{ $variant: string }>`
   padding: 16px 32px;
-  margin: 10px;
   font-size: 1.1rem;
   font-weight: 700;
   color: ${(props) => {

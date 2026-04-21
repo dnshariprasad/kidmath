@@ -9,7 +9,7 @@ import {
   TagList,
   SidebarTitle,
   SettingsCard,
-  ControlBar,
+  NavControlBar,
   PageHeader,
   PageTitle,
   PageSubtitle,
@@ -183,11 +183,11 @@ const AlphabetPage = () => {
               </BigLetter>
             </AnimatePresence>
 
-            <ControlBar>
+            <NavControlBar>
               <PreviousIcon onClick={prevLetter} />
               <SpeakIcon text={currentLetter} />
               <NextIcon onClick={nextLetter} />
-            </ControlBar>
+            </NavControlBar>
           </Card>
         </MainSide>
 

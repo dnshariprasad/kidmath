@@ -213,6 +213,31 @@ const MathChallenge = () => {
             </SessionStats>
           </PageHeader>
           <Card style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={showNewChallenge}
+              style={{
+                position: "absolute",
+                top: "20px",
+                right: "20px",
+                cursor: "pointer",
+                color: "#dfe6e9",
+                transition: "color 0.2s ease"
+              }}
+              title="Skip to next"
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#6366F1")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#dfe6e9")}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m6 17 5-5-5-5M13 17l5-5-5-5"/>
+                  </svg>
+                </motion.div>
+              </div>
+            </motion.div>
+
             <AnimatePresence mode="wait">
               <MathDisplay
                 key={`${num1}${operation}${num2}`}
@@ -240,10 +265,14 @@ const MathChallenge = () => {
               />
             </ControlBar>
 
-            <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "center", gap: "20px" }}>
-              <KidButton title="Skip" onClick={showNewChallenge} variant="secondary" />
-              <KidButton title="Check Answer" onClick={handleSubmit} variant="success" />
-            </div>
+            <ControlBar>
+              <KidButton 
+                title="Check Answer" 
+                onClick={handleSubmit} 
+                variant="success" 
+                style={{ minWidth: "220px" }}
+              />
+            </ControlBar>
 
             <AnimatePresence>
               {feedback && (

@@ -9,7 +9,7 @@ import {
   TagList,
   SidebarTitle,
   SettingsCard,
-  ControlBar,
+  NavControlBar,
   PageHeader,
   PageTitle,
   PageSubtitle,
@@ -157,11 +157,11 @@ const AlphabetHindiChallenge = () => {
               </HindiDisplay>
             </AnimatePresence>
 
-            <ControlBar>
+            <NavControlBar>
               <PreviousIcon onClick={handlePrev} />
               <SpeakIcon text={randomString} lang="hi-IN" />
               <NextIcon onClick={handleNext} />
-            </ControlBar>
+            </NavControlBar>
           </Card>
         </MainSide>
 

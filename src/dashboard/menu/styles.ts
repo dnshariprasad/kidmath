@@ -1,14 +1,13 @@
 import styled from "styled-components";
 
 export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
-  flex: 1;
-  min-width: 280px;
+  flex: 0 0 300px; /* Fixed width on desktop */
+  width: 300px;
   background-color: #ffffff;
   padding: 40px 16px;
   box-sizing: border-box;
   height: calc(100vh - 70px);
-  position: sticky;
-  top: 70px;
+  position: relative; /* Part of flex flow on desktop */
   overflow-y: auto;
   transition: all 0.3s ease;
   border-right: 1px solid #f1f5f9;
