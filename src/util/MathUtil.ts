@@ -4,8 +4,7 @@ export const operations = ["+", "-", "x", "/"];
 export const getMaxNumber = (digits: number): number => {
   return 10 ** digits - 1;
 };
-export const getRandomNumber = (max: number) =>
-  Math.floor(Math.random() * max) + 1; // Random number between 1 and 10
+export const getRandomNumber = (max: number) => Math.floor(Math.random() * max) + 1; // Random number between 1 and 10
 
 export const getRandomOperation = (selectedOperations: string[]) =>
   selectedOperations[Math.floor(Math.random() * selectedOperations.length)];
@@ -14,11 +13,11 @@ export const generateChallenge = (
   maxDigits: number,
   cplxty: string,
   selectedOperations: string[],
-  negativeCounting: boolean
+  negativeCounting: boolean,
 ) => {
   let newNum1 = 0;
   let newNum2 = 0;
-  let newOperation;
+
   //Default max digits
   if (isNaN(maxDigits) || maxDigits < 1) {
     maxDigits = 2;
@@ -29,15 +28,10 @@ export const generateChallenge = (
   }
 
   //generate operation
-  newOperation = getRandomOperation(selectedOperations);
+  const newOperation = getRandomOperation(selectedOperations);
 
   //generate numbers
-  ({ newNum1, newNum2 } = getNumbers(
-    cplxty,
-    maxDigits,
-    newOperation,
-    negativeCounting
-  ));
+  ({ newNum1, newNum2 } = getNumbers(cplxty, maxDigits, newOperation, negativeCounting));
 
   return {
     num1: newNum1,
@@ -50,7 +44,7 @@ function getNumbers(
   selectedOption: string,
   maxDigits: number,
   newOperation: string,
-  negativeCounting: boolean
+  negativeCounting: boolean,
 ) {
   let newNum1 = 0;
   let newNum2 = 0;
@@ -71,11 +65,7 @@ function getNumbers(
     newNum2 = getRandomNumber(getMaxNumber(maxDigits));
   }
 
-  if (
-    ("-" === newOperation || "/" === newOperation) &&
-    !negativeCounting &&
-    newNum1 < newNum2
-  ) {
+  if (("-" === newOperation || "/" === newOperation) && !negativeCounting && newNum1 < newNum2) {
     getNumbers(selectedOption, maxDigits, newOperation, negativeCounting);
     newNum1 = newNum1 + newNum2;
     newNum2 = newNum1 - newNum2;
@@ -85,11 +75,7 @@ function getNumbers(
   return { newNum1, newNum2 };
 }
 
-export const calculateResult = (
-  num1: number,
-  num2: number,
-  operation: string
-) => {
+export const calculateResult = (num1: number, num2: number, operation: string) => {
   switch (operation) {
     case "+":
       return num1 + num2;

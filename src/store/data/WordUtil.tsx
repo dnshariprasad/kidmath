@@ -23,7 +23,7 @@ export const createMissingLetterWord = (word: string, missingIndex: number) => {
 
 export const getSentencesOfWord = (word: string | undefined): string[] => {
   if (!word) return [];
-  
+
   return (
     sentences.filter((s: string) => {
       const wordsInSentence = s.toLowerCase().split(/[\s.,!?]+/);

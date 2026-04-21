@@ -16,20 +16,7 @@ export const wordFamilies = [
   },
   {
     mame: "pronouns",
-    words: [
-      "I",
-      "me",
-      "my",
-      "we",
-      "she",
-      "her",
-      "his",
-      "it",
-      "you",
-      "your",
-      "he",
-      "him",
-    ],
+    words: ["I", "me", "my", "we", "she", "her", "his", "it", "you", "your", "he", "him"],
     enabled: true,
   },
   {
@@ -44,19 +31,7 @@ export const wordFamilies = [
   },
   {
     mame: "others",
-    words: [
-      "from",
-      "to",
-      "or",
-      "far",
-      "find",
-      "away",
-      "see",
-      "yes",
-      "no",
-      "can",
-      "bug",
-    ],
+    words: ["from", "to", "or", "far", "find", "away", "see", "yes", "no", "can", "bug"],
     enabled: true,
   },
   {
@@ -79,15 +54,7 @@ export const wordFamilies = [
   },
   {
     mame: "Days",
-    words: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ],
+    words: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
     enabled: true,
   },
 ];

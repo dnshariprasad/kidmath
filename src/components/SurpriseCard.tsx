@@ -9,26 +9,22 @@ interface SurpriseCardProps {
   buttonText?: string;
 }
 
-export const SurpriseCard: React.FC<SurpriseCardProps> = ({ 
-  title = "Ready for a surprise?", 
+export const SurpriseCard: React.FC<SurpriseCardProps> = ({
+  title = "Ready for a surprise?",
   onShuffle,
-  buttonText = "Magic Shuffle"
+  buttonText = "Magic Shuffle",
 }) => {
   return (
     <GhostHeader data-testid="ghost-area">
-      <KidoText 
-        fontSize="0.9rem" 
-        color="white" 
-        fontWeight="bold" 
+      <KidoText
+        fontSize="0.9rem"
+        color="white"
+        fontWeight="bold"
         style={{ marginBottom: "12px", opacity: 0.9, zIndex: 1 }}
       >
         {title}
       </KidoText>
-      <MagicButton 
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={onShuffle}
-      >
+      <MagicButton whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={onShuffle}>
         <Wand2 size={18} />
         {buttonText}
       </MagicButton>

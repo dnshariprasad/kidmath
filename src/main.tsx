@@ -37,24 +37,15 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="spelling" element={<SpellingChallenge />} />
                 <Route path="comparison" element={<GreaterLessEqualGame />} />
                 <Route path="sudoku" element={<CrosswordSudoku />} />
-                <Route
-                  path="missing_letters"
-                  element={<MissingLettersChallenge />}
-                />
+                <Route path="missing_letters" element={<MissingLettersChallenge />} />
                 <Route path="sorting_numbers" element={<NumberSorter />} />
-                <Route
-                  path="missing_numbers"
-                  element={<MissingLettersChallenge />}
-                />
-                <Route
-                  path="alphabet_hindi"
-                  element={<AlphabetHindiChallenge />}
-                />
+                <Route path="missing_numbers" element={<MissingLettersChallenge />} />
+                <Route path="alphabet_hindi" element={<AlphabetHindiChallenge />} />
               </Route>
             </Routes>
           </HashRouter>
         </ErrorBoundary>
       </ThemeProvider>
     </Provider>
-  </StrictMode>
+  </StrictMode>,
 );

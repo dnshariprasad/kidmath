@@ -31,7 +31,7 @@ const BigLetter = styled(motion.div)`
   font-size: clamp(12rem, 30vw, 24rem);
   font-weight: 900;
   color: #6366f1;
-  text-shadow: 
+  text-shadow:
     0 10px 0 #4f46e5,
     0 20px 30px rgba(99, 102, 241, 0.3);
   margin-bottom: 20px;
@@ -43,13 +43,13 @@ const AlphabetPage = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [index, setIndex] = useState(0);
   const [letterCase, setLetterCase] = useState<"big" | "small">("big");
-  
+
   const currentLetterData = big[index];
   const currentLetter = letterCase === "big" ? currentLetterData : currentLetterData.toLowerCase();
 
   const handleNext = () => setIndex((prev) => (prev + 1) % big.length);
   const handlePrevious = () => setIndex((prev) => (prev - 1 + big.length) % big.length);
-  
+
   const handleFeelingLucky = () => {
     const randomIndex = Math.floor(Math.random() * big.length);
     setIndex(randomIndex);
@@ -82,12 +82,19 @@ const AlphabetPage = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Ready for a surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Ready for a surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea data-testid="activity-area" style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <ActivityArea
+          data-testid="activity-area"
+          style={{
+            textAlign: "center",
+            minHeight: "500px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <AnimatePresence mode="wait">
             <BigLetter
               key={currentLetter}
@@ -134,11 +141,7 @@ const AlphabetPage = () => {
             <ConfigSubTitle>Pick a Letter</ConfigSubTitle>
             <TagList>
               {big.map((letter, i) => (
-                <Tag
-                  key={letter}
-                  $isActive={index === i}
-                  onClick={() => setIndex(i)}
-                >
+                <Tag key={letter} $isActive={index === i} onClick={() => setIndex(i)}>
                   {letter}
                 </Tag>
               ))}

@@ -46,15 +46,13 @@ const MissingLettersChallenge = () => {
 
   const generateChallenge = () => {
     let words = getAllWords();
-    if (complexity === "Easy") words = words.filter(w => w.length <= 4);
-    else if (complexity === "Medium") words = words.filter(w => w.length > 4 && w.length <= 7);
-    else words = words.filter(w => w.length > 7);
+    if (complexity === "Easy") words = words.filter((w) => w.length <= 4);
+    else if (complexity === "Medium") words = words.filter((w) => w.length > 4 && w.length <= 7);
+    else words = words.filter((w) => w.length > 7);
 
-    let rs = getRandomWord(words);
+    const rs = getRandomWord(words);
     setRandomString(rs);
-    setRandomStringWithMissingLetter(
-      createMissingLetterWord(rs, randomNumber(rs.length))
-    );
+    setRandomStringWithMissingLetter(createMissingLetterWord(rs, randomNumber(rs.length)));
     setInputValue("");
     setFeedback(null);
     setShowHint(false);
@@ -115,12 +113,20 @@ const MissingLettersChallenge = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Word surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Word surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea data-testid="activity-area" style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative" }}>
+        <ActivityArea
+          data-testid="activity-area"
+          style={{
+            textAlign: "center",
+            minHeight: "550px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
           <motion.div
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -134,13 +140,13 @@ const MissingLettersChallenge = () => {
               left: "20px",
               cursor: "pointer",
               color: showHint ? "#6366F1" : "#dfe6e9",
-              transition: "color 0.2s ease"
+              transition: "color 0.2s ease",
             }}
             title="Need a hint?"
           >
             <HelpCircle size={28} />
           </motion.div>
-          
+
           <div style={{ marginBottom: "30px" }}>
             <AnimatePresence mode="wait">
               <motion.div
@@ -149,10 +155,10 @@ const MissingLettersChallenge = () => {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
               >
-                <KidoText 
-                  fontSize="clamp(3rem, 15vw, 6rem)" 
-                  color="primary" 
-                  fontWeight={900} 
+                <KidoText
+                  fontSize="clamp(3rem, 15vw, 6rem)"
+                  color="primary"
+                  fontWeight={900}
                   style={{ letterSpacing: "8px", whiteSpace: "nowrap" }}
                 >
                   {showHint ? randomString : randomStringWithMissingLetter}
@@ -160,7 +166,7 @@ const MissingLettersChallenge = () => {
               </motion.div>
             </AnimatePresence>
           </div>
-          
+
           <StyledInput
             type="text"
             value={inputValue}
@@ -173,10 +179,10 @@ const MissingLettersChallenge = () => {
           />
 
           <ControlBar>
-            <KidButton 
-              title="Check Answer" 
-              onClick={handleSubmit} 
-              variant="success" 
+            <KidButton
+              title="Check Answer"
+              onClick={handleSubmit}
+              variant="success"
               style={{ minWidth: "220px" }}
             />
           </ControlBar>
@@ -220,7 +226,10 @@ const MissingLettersChallenge = () => {
             </SidebarTitle>
             <TagList>
               {history.map((word, i) => (
-                <Tag key={i} style={{ background: "#F0FFF4", color: "#2F855A", borderColor: "#C6F6D5" }}>
+                <Tag
+                  key={i}
+                  style={{ background: "#F0FFF4", color: "#2F855A", borderColor: "#C6F6D5" }}
+                >
                   {word}
                 </Tag>
               ))}

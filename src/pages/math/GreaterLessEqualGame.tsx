@@ -122,12 +122,18 @@ export const GreaterLessEqualGame: React.FC = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Size surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Size surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <ActivityArea
+          style={{
+            textAlign: "center",
+            minHeight: "450px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <AnimatePresence mode="wait">
             <NumberDisplay
               key={`${num1}-${num2}`}
@@ -142,22 +148,22 @@ export const GreaterLessEqualGame: React.FC = () => {
           </AnimatePresence>
 
           <ControlBar>
-            <KidButton 
-              title="<" 
-              onClick={() => handleChoice("less")} 
-              variant="secondary" 
+            <KidButton
+              title="<"
+              onClick={() => handleChoice("less")}
+              variant="secondary"
               style={{ fontSize: "2.5rem", width: "80px", height: "80px" }}
             />
-            <KidButton 
-              title="=" 
-              onClick={() => handleChoice("equal")} 
-              variant="secondary" 
+            <KidButton
+              title="="
+              onClick={() => handleChoice("equal")}
+              variant="secondary"
               style={{ fontSize: "2.5rem", width: "80px", height: "80px" }}
             />
-            <KidButton 
-              title=">" 
-              onClick={() => handleChoice("greater")} 
-              variant="secondary" 
+            <KidButton
+              title=">"
+              onClick={() => handleChoice("greater")}
+              variant="secondary"
               style={{ fontSize: "2.5rem", width: "80px", height: "80px" }}
             />
           </ControlBar>
@@ -170,7 +176,11 @@ export const GreaterLessEqualGame: React.FC = () => {
                 exit={{ y: -20, opacity: 0 }}
                 style={{ marginTop: "20px" }}
               >
-                <KidoText color={feedback.isCorrect ? "success" : "accent"} fontSize="1.5rem" fontWeight="bold">
+                <KidoText
+                  color={feedback.isCorrect ? "success" : "accent"}
+                  fontSize="1.5rem"
+                  fontWeight="bold"
+                >
                   {feedback.message}
                 </KidoText>
               </motion.div>
@@ -196,11 +206,17 @@ export const GreaterLessEqualGame: React.FC = () => {
 
           <ConfigSection>
             <ConfigSubTitle>Quick Tips</ConfigSubTitle>
-            <div style={{ padding: "15px", background: "rgba(99, 102, 241, 0.05)", borderRadius: "15px" }}>
+            <div
+              style={{
+                padding: "15px",
+                background: "rgba(99, 102, 241, 0.05)",
+                borderRadius: "15px",
+              }}
+            >
               <KidoText fontSize="0.9rem" color="textSecondary">
-                • <b>{">"}</b> means GREATER than<br/>
-                • <b>{"<"}</b> means LESS than<br/>
-                • <b>{"="}</b> means EQUAL to
+                • <b>{">"}</b> means GREATER than
+                <br />• <b>{"<"}</b> means LESS than
+                <br />• <b>{"="}</b> means EQUAL to
               </KidoText>
             </div>
           </ConfigSection>

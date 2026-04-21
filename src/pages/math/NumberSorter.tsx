@@ -138,17 +138,27 @@ export const NumberSorter: React.FC = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Shuffle surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Shuffle surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <ActivityArea
+          style={{
+            textAlign: "center",
+            minHeight: "550px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <KidoText fontSize="1.5rem" color="textSecondary" fontWeight="bold">
             Sort in {order} order
           </KidoText>
 
-          <SortContainer axis="y" values={numbers} onReorder={(newOrder) => setNumbers(newOrder as number[])}>
+          <SortContainer
+            axis="y"
+            values={numbers}
+            onReorder={(newOrder) => setNumbers(newOrder as number[])}
+          >
             <AnimatePresence>
               {numbers.map((num) => (
                 <SortItem key={num} value={num}>
@@ -159,10 +169,10 @@ export const NumberSorter: React.FC = () => {
           </SortContainer>
 
           <ControlBar>
-            <KidButton 
-              title="Check Order" 
-              onClick={checkOrder} 
-              variant="success" 
+            <KidButton
+              title="Check Order"
+              onClick={checkOrder}
+              variant="success"
               style={{ minWidth: "200px" }}
             />
           </ControlBar>

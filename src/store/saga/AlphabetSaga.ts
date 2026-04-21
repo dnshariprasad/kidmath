@@ -10,14 +10,14 @@ import { RootState } from "../store";
 
 function* handleAlphabetsAsync() {
   const alphabets: string[] = yield select((state: RootState) =>
-    state.alphabet.bigAlphabets.concat(state.alphabet.smallAlphabets)
+    state.alphabet.bigAlphabets.concat(state.alphabet.smallAlphabets),
   );
   yield put(setAlphabets(alphabets));
 }
 
 function* handleSelectedAlphabetAsync() {
   const alphabets: string[] = yield select((state: RootState) =>
-    state.alphabet.bigAlphabets.concat(state.alphabet.smallAlphabets)
+    state.alphabet.bigAlphabets.concat(state.alphabet.smallAlphabets),
   );
   const index = Math.floor(Math.random() * alphabets.length);
   const randomLetter = alphabets[index];

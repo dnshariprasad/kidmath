@@ -40,11 +40,12 @@ const SudokuGrid = styled.div`
 const SudokuCell = styled(motion.div)<{ $isActive: boolean; $isFixed: boolean; $isError: boolean }>`
   aspect-ratio: 1;
   background: ${(props) => (props.$isFixed ? "#F8F9FA" : "white")};
-  border: 3px solid ${(props) => {
-    if (props.$isError) return props.theme.colors.accent;
-    if (props.$isActive) return props.theme.colors.primary;
-    return "#F0F0F0";
-  }};
+  border: 3px solid
+    ${(props) => {
+      if (props.$isError) return props.theme.colors.accent;
+      if (props.$isActive) return props.theme.colors.primary;
+      return "#F0F0F0";
+    }};
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -53,7 +54,7 @@ const SudokuCell = styled(motion.div)<{ $isActive: boolean; $isFixed: boolean; $
   font-weight: 800;
   color: ${(props) => (props.$isFixed ? "#636E72" : props.theme.colors.primary)};
   cursor: ${(props) => (props.$isFixed ? "default" : "pointer")};
-  box-shadow: ${(props) => props.$isActive ? "0 8px 16px rgba(99, 102, 241, 0.15)" : "none"};
+  box-shadow: ${(props) => (props.$isActive ? "0 8px 16px rgba(99, 102, 241, 0.15)" : "none")};
   transition: all 0.2s ease;
 
   &:hover {
@@ -80,17 +81,17 @@ const SudokuGame: React.FC = () => {
   const generatePuzzle = () => {
     const newGrid: (number | null)[] = Array(16).fill(null);
     const newFixed: boolean[] = Array(16).fill(false);
-    
+
     const base = [
       [1, 2, 3, 4],
       [3, 4, 1, 2],
       [2, 1, 4, 3],
-      [4, 3, 2, 1]
+      [4, 3, 2, 1],
     ].flat();
 
     const fillCount = difficulty === "Easy" ? 8 : 4;
     const indices = Array.from({ length: 16 }, (_, i) => i).sort(() => Math.random() - 0.5);
-    
+
     for (let i = 0; i < fillCount; i++) {
       const idx = indices[i];
       newGrid[idx] = base[idx];
@@ -154,12 +155,18 @@ const SudokuGame: React.FC = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Sudoku surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Sudoku surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea style={{ textAlign: "center", minHeight: "600px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <ActivityArea
+          style={{
+            textAlign: "center",
+            minHeight: "600px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <SudokuGrid>
             {grid.map((val, i) => (
               <SudokuCell
@@ -195,8 +202,12 @@ const SudokuGame: React.FC = () => {
               <Trash2 size={24} />
             </KidButton>
           </NumberPad>
-          
-          {feedback && <KidoText color="primary" fontSize="1.2rem" style={{ marginTop: "20px" }}>{feedback}</KidoText>}
+
+          {feedback && (
+            <KidoText color="primary" fontSize="1.2rem" style={{ marginTop: "20px" }}>
+              {feedback}
+            </KidoText>
+          )}
         </ActivityArea>
 
         <SettingsArea data-testid="settings-area">
@@ -224,11 +235,18 @@ const SudokuGame: React.FC = () => {
 
           <ConfigSection>
             <ConfigSubTitle>How to Play</ConfigSubTitle>
-            <div style={{ padding: "15px", background: "rgba(99, 102, 241, 0.05)", borderRadius: "15px" }}>
+            <div
+              style={{
+                padding: "15px",
+                background: "rgba(99, 102, 241, 0.05)",
+                borderRadius: "15px",
+              }}
+            >
               <KidoText fontSize="0.9rem" color="textSecondary">
-                • Pick a white box<br/>
-                • Tap a number to fill it<br/>
-                • Every 2x2 box must have 1, 2, 3, and 4!
+                • Pick a white box
+                <br />
+                • Tap a number to fill it
+                <br />• Every 2x2 box must have 1, 2, 3, and 4!
               </KidoText>
             </div>
           </ConfigSection>

@@ -38,7 +38,7 @@ const WordDisplay = styled(motion.div)`
   margin: 40px 0;
   font-family: ${(props) => props.theme.fonts.primary};
   text-transform: capitalize;
-  text-shadow: 
+  text-shadow:
     0 10px 0 #4f46e5,
     0 20px 30px rgba(99, 102, 241, 0.2);
 `;
@@ -47,7 +47,7 @@ const WordReader = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [level, setLevel] = useState(1);
   const [count, setCount] = useState(0);
-  
+
   const allWords = getAllWords();
   const filteredWords = useMemo(() => {
     return allWords.filter((w) => {
@@ -65,12 +65,17 @@ const WordReader = () => {
 
   useEffect(() => {
     if (activeTabRef.current) {
-      activeTabRef.current.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      activeTabRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
     }
   }, [count]);
 
   const handleNext = () => setCount((prev) => (prev + 1) % filteredWords.length);
-  const handlePrevious = () => setCount((prev) => (prev - 1 + filteredWords.length) % filteredWords.length);
+  const handlePrevious = () =>
+    setCount((prev) => (prev - 1 + filteredWords.length) % filteredWords.length);
 
   const handleFeelingLucky = () => {
     const randomLvl = Math.floor(Math.random() * 3) + 1;
@@ -106,12 +111,18 @@ const WordReader = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Reading surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Reading surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <ActivityArea
+          style={{
+            textAlign: "center",
+            minHeight: "500px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           {filteredWords.length > 0 ? (
             <>
               <AnimatePresence mode="wait">
@@ -133,12 +144,26 @@ const WordReader = () => {
               </NavControlBar>
             </>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "30px", padding: "40px" }}>
-              <KidoText fontSize="1.8rem" color="textSecondary" fontWeight="bold" style={{ textAlign: "center", lineHeight: 1.4 }}>
-                No words found for this level.<br/>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "30px",
+                padding: "40px",
+              }}
+            >
+              <KidoText
+                fontSize="1.8rem"
+                color="textSecondary"
+                fontWeight="bold"
+                style={{ textAlign: "center", lineHeight: 1.4 }}
+              >
+                No words found for this level.
+                <br />
                 Let's try another! 🎈
               </KidoText>
-              <KidButton 
+              <KidButton
                 variant="primary"
                 onClick={handleFeelingLucky}
                 style={{ padding: "15px 40px" }}

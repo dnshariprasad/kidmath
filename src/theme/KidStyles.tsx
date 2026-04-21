@@ -3,15 +3,21 @@ import { motion } from "framer-motion";
 
 // Material 3 Elevation Levels
 export const elevation1 = css`
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
 `;
 
 export const elevation2 = css`
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
 `;
 
 export const elevation3 = css`
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
 `;
 
 export const SessionStats = styled.div`
@@ -28,7 +34,7 @@ export const Card = styled.div`
   -webkit-backdrop-filter: blur(10px);
   border-radius: 28px;
   padding: 40px;
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
   width: 100%;
@@ -40,7 +46,7 @@ export const Card = styled.div`
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 
+    box-shadow:
       0 6px 15px rgba(0, 0, 0, 0.05),
       0 12px 30px rgba(0, 0, 0, 0.08);
     border-color: rgba(99, 102, 241, 0.2);
@@ -82,7 +88,8 @@ export const StyledInput = styled.input<{ width?: string }>`
 
 export const Tag = styled.span<{ $isActive?: boolean }>`
   color: ${(props) => (props.$isActive ? "white" : props.theme.colors.onPrimaryContainer)};
-  background: ${(props) => (props.$isActive ? props.theme.colors.primary : props.theme.colors.primaryContainer)};
+  background: ${(props) =>
+    props.$isActive ? props.theme.colors.primary : props.theme.colors.primaryContainer};
   padding: 10px 18px;
   border-radius: 12px;
   font-size: 1rem;
@@ -209,7 +216,7 @@ export const ContainerV = styled.div`
   backdrop-filter: blur(10px);
   border-radius: 28px;
   padding: 30px;
-  box-shadow: 
+  box-shadow:
     0 8px 16px rgba(99, 102, 241, 0.04),
     0 16px 32px rgba(99, 102, 241, 0.06);
   border: 1px solid rgba(99, 102, 241, 0.1);
@@ -234,7 +241,7 @@ export const TitleArea = styled.div`
   background: white;
   border-radius: 24px;
   border: 1px solid rgba(99, 102, 241, 0.1);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
   padding: 20px;
@@ -257,7 +264,7 @@ export const GhostHeader = styled(TitleArea)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
   margin-bottom: 25px;
@@ -269,13 +276,17 @@ export const GhostHeader = styled(TitleArea)`
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
     animation: rotate 10s linear infinite;
   }
 
   @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   @media (max-width: 992px) {
@@ -318,10 +329,6 @@ export const MagicButton = styled(motion.button)`
   }
 `;
 
-
-
-
-
 export const PageHeader = styled.div`
   display: flex;
   flex-direction: column;
@@ -343,7 +350,7 @@ export const PageTitle = styled.h1`
   letter-spacing: -0.5px;
   text-align: center;
   position: relative;
-  
+
   &::after {
     content: "";
     position: absolute;
@@ -374,7 +381,7 @@ export const SettingsCard = styled(Card)`
   border: 1px solid ${(props) => props.theme.colors.primary}20;
   max-width: none;
   padding: 20px 25px;
-  
+
   &:hover {
     transform: translateY(-4px);
   }
@@ -401,7 +408,7 @@ export const ControlBar = styled.div`
     flex-direction: column;
     gap: 12px;
     margin-top: 25px;
-    
+
     & > [data-testid="comp-kid-button"] {
       width: 100% !important;
       margin: 0 !important;
@@ -458,7 +465,7 @@ export const ConfigSection = styled.div`
 `;
 
 export const ConfigSubTitle = styled.h4`
-  color: #636E72;
+  color: #636e72;
   font-family: ${(props) => props.theme.fonts.primary};
   font-size: 0.9rem;
   margin-bottom: 12px;

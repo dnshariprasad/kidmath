@@ -36,24 +36,29 @@ const LetterSlots = styled.div`
   margin: 40px 0;
 `;
 
-const LetterSlot = styled(motion.div)<{ $isActive: boolean; $isError: boolean; $isSuccess: boolean }>`
+const LetterSlot = styled(motion.div)<{
+  $isActive: boolean;
+  $isError: boolean;
+  $isSuccess: boolean;
+}>`
   width: 60px;
   height: 70px;
   border-radius: 16px;
   background: white;
-  border: 3px solid ${(props) => {
-    if (props.$isSuccess) return props.theme.colors.success;
-    if (props.$isError) return props.theme.colors.accent;
-    if (props.$isActive) return props.theme.colors.primary;
-    return "#F0F0F0";
-  }};
+  border: 3px solid
+    ${(props) => {
+      if (props.$isSuccess) return props.theme.colors.success;
+      if (props.$isError) return props.theme.colors.accent;
+      if (props.$isActive) return props.theme.colors.primary;
+      return "#F0F0F0";
+    }};
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
-  box-shadow: ${(props) => props.$isActive ? "0 10px 20px rgba(99, 102, 241, 0.2)" : "none"};
+  box-shadow: ${(props) => (props.$isActive ? "0 10px 20px rgba(99, 102, 241, 0.2)" : "none")};
   transition: all 0.2s ease;
 
   @media (max-width: 768px) {
@@ -68,14 +73,14 @@ const BigSpeakWrapper = styled(motion.div)`
   background: white;
   padding: 30px;
   border-radius: 40px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   border: 3px solid #f0f0f0;
-  
+
   &:hover {
     border-color: ${(props) => props.theme.colors.primary}40;
     transform: translateY(-5px);
@@ -99,14 +104,14 @@ const SpellingChallenge = () => {
 
   const generateChallenge = () => {
     let allWords = getAllWords();
-    
+
     // Filter by complexity
     if (complexity === "Easy") {
-      allWords = allWords.filter(w => w.length <= 4);
+      allWords = allWords.filter((w) => w.length <= 4);
     } else if (complexity === "Medium") {
-      allWords = allWords.filter(w => w.length > 4 && w.length <= 7);
+      allWords = allWords.filter((w) => w.length > 4 && w.length <= 7);
     } else if (complexity === "Hard") {
-      allWords = allWords.filter(w => w.length > 7);
+      allWords = allWords.filter((w) => w.length > 7);
     }
 
     const word = getRandomWord(allWords);
@@ -175,7 +180,7 @@ const SpellingChallenge = () => {
         onKeyDown={handleKeyDown}
         autoFocus
       />
-      
+
       <GameLayout>
         <TitleArea data-testid="title-area">
           <PageHeader>
@@ -200,12 +205,19 @@ const SpellingChallenge = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Spelling surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Spelling surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative" }}>
+        <ActivityArea
+          style={{
+            textAlign: "center",
+            minHeight: "550px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
           <motion.div
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -216,7 +228,7 @@ const SpellingChallenge = () => {
               left: "20px",
               cursor: "pointer",
               color: showHint ? "#6366F1" : "#dfe6e9",
-              transition: "color 0.2s ease"
+              transition: "color 0.2s ease",
             }}
             title="Need a hint?"
           >
@@ -233,26 +245,37 @@ const SpellingChallenge = () => {
               right: "20px",
               cursor: "pointer",
               color: "#dfe6e9",
-              transition: "color 0.2s ease"
+              transition: "color 0.2s ease",
             }}
             title="Skip to next"
             onMouseEnter={(e) => (e.currentTarget.style.color = "#6366F1")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "#dfe6e9")}
           >
             <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m6 17 5-5-5-5M13 17l5-5-5-5"/>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m6 17 5-5-5-5M13 17l5-5-5-5" />
               </svg>
             </motion.div>
           </motion.div>
 
-          <BigSpeakWrapper 
+          <BigSpeakWrapper
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => readText(currentWord)}
           >
             <SpeakIcon text={currentWord} />
-            <KidoText fontSize="1rem" color="textSecondary" fontWeight="bold">Click to listen</KidoText>
+            <KidoText fontSize="1rem" color="textSecondary" fontWeight="bold">
+              Click to listen
+            </KidoText>
           </BigSpeakWrapper>
 
           <LetterSlots>
@@ -266,7 +289,8 @@ const SpellingChallenge = () => {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: i * 0.1 }}
               >
-                {inputValue[i] || (showHint && (i === 0 || i === currentWord.length - 1) ? letter : "")}
+                {inputValue[i] ||
+                  (showHint && (i === 0 || i === currentWord.length - 1) ? letter : "")}
               </LetterSlot>
             ))}
           </LetterSlots>
@@ -279,7 +303,11 @@ const SpellingChallenge = () => {
                 exit={{ opacity: 0 }}
                 style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}
               >
-                {feedback.isCorrect ? <CheckCircle2 color="#4CAF50" /> : <XCircle color="#FF7675" />}
+                {feedback.isCorrect ? (
+                  <CheckCircle2 color="#4CAF50" />
+                ) : (
+                  <XCircle color="#FF7675" />
+                )}
                 <KidoText color={feedback.isCorrect ? "success" : "accent"} fontSize="1.2rem">
                   {feedback.message}
                 </KidoText>
@@ -287,7 +315,7 @@ const SpellingChallenge = () => {
             )}
           </AnimatePresence>
         </ActivityArea>
- 
+
         <SettingsArea data-testid="settings-area">
           <ConfigSection>
             <ConfigSubTitle>Difficulty</ConfigSubTitle>
@@ -299,13 +327,19 @@ const SpellingChallenge = () => {
                   checked={complexity === level}
                   onChange={() => setComplexity(level)}
                 />
-                {level === "Easy" ? "Short (3-4)" : level === "Medium" ? "Medium (5-7)" : "Long (8+)"}
+                {level === "Easy"
+                  ? "Short (3-4)"
+                  : level === "Medium"
+                    ? "Medium (5-7)"
+                    : "Long (8+)"}
               </OptionLabel>
             ))}
           </ConfigSection>
- 
+
           <ConfigSection>
-            <SidebarTitle style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}>
+            <SidebarTitle
+              style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}
+            >
               <Star size={20} fill="#FFD700" color="#FFD700" />
               Words Mastered
             </SidebarTitle>
@@ -313,11 +347,18 @@ const SpellingChallenge = () => {
               {history.length === 0 ? (
                 <div style={{ textAlign: "center", padding: "20px", width: "100%" }}>
                   <HelpCircle size={40} color="#dfe6e9" style={{ marginBottom: "10px" }} />
-                  <KidoText color="#636E72" fontSize="0.9rem">No words solved yet.<br/>Start typing to win!</KidoText>
+                  <KidoText color="#636E72" fontSize="0.9rem">
+                    No words solved yet.
+                    <br />
+                    Start typing to win!
+                  </KidoText>
                 </div>
               ) : (
                 history.map((word, index) => (
-                  <Tag key={index} style={{ background: "#F0FFF4", color: "#2F855A", borderColor: "#C6F6D5" }}>
+                  <Tag
+                    key={index}
+                    style={{ background: "#F0FFF4", color: "#2F855A", borderColor: "#C6F6D5" }}
+                  >
                     {word}
                   </Tag>
                 ))

@@ -104,7 +104,8 @@ export const MathChallenge: React.FC = () => {
   }, [maxDigits, operator]);
 
   const handleAnswer = (choice: number) => {
-    const correctAnswer = operator === "+" ? num1 + num2 : operator === "-" ? num1 - num2 : num1 * num2;
+    const correctAnswer =
+      operator === "+" ? num1 + num2 : operator === "-" ? num1 - num2 : num1 * num2;
     if (choice === correctAnswer) {
       setFeedback({ message: "Brilliant! 🌟", isCorrect: true });
       readText("Brilliant");
@@ -150,12 +151,20 @@ export const MathChallenge: React.FC = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Math surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Math surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea data-testid="activity-area" style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative" }}>
+        <ActivityArea
+          data-testid="activity-area"
+          style={{
+            textAlign: "center",
+            minHeight: "550px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
           <AnimatePresence mode="wait">
             <MathExpression
               key={`${num1}-${num2}-${operator}`}
@@ -191,9 +200,9 @@ export const MathChallenge: React.FC = () => {
                 exit={{ y: -20, opacity: 0 }}
                 style={{ marginTop: "30px" }}
               >
-                <KidoText 
-                  color={feedback.isCorrect ? "success" : "accent"} 
-                  fontSize="1.5rem" 
+                <KidoText
+                  color={feedback.isCorrect ? "success" : "accent"}
+                  fontSize="1.5rem"
                   fontWeight="bold"
                 >
                   {feedback.message}

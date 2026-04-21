@@ -76,8 +76,9 @@ const AlphabetHindiChallenge = () => {
   const currentLetter = filteredAlphabet[index % filteredAlphabet.length];
 
   const handleNext = () => setIndex((prev) => (prev + 1) % filteredAlphabet.length);
-  const handlePrev = () => setIndex((prev) => (prev - 1 + filteredAlphabet.length) % filteredAlphabet.length);
-  
+  const handlePrev = () =>
+    setIndex((prev) => (prev - 1 + filteredAlphabet.length) % filteredAlphabet.length);
+
   const handleFeelingLucky = () => {
     const randomIndex = Math.floor(Math.random() * filteredAlphabet.length);
     setIndex(randomIndex);
@@ -110,12 +111,18 @@ const AlphabetHindiChallenge = () => {
           </PageHeader>
         </TitleArea>
 
-        <SurpriseCard 
-          title="Hindi surprise?"
-          onShuffle={handleFeelingLucky}
-        />
+        <SurpriseCard title="Hindi surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        <ActivityArea
+          style={{
+            textAlign: "center",
+            minHeight: "500px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <AnimatePresence mode="wait">
             <HindiDisplay
               key={currentLetter}
@@ -155,11 +162,7 @@ const AlphabetHindiChallenge = () => {
             <ConfigSubTitle>Pick a Character</ConfigSubTitle>
             <TagList>
               {filteredAlphabet.map((char, i) => (
-                <Tag
-                  key={`${char}-${i}`}
-                  $isActive={index === i}
-                  onClick={() => setIndex(i)}
-                >
+                <Tag key={`${char}-${i}`} $isActive={index === i} onClick={() => setIndex(i)}>
                   {char}
                 </Tag>
               ))}

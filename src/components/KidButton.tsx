@@ -16,25 +16,36 @@ const StyledButton = styled(motion.button)<{ $variant: string }>`
   font-weight: 700;
   background: ${(props) => {
     switch (props.$variant) {
-      case "success": return props.theme.colors.success;
-      case "accent": return props.theme.colors.accent;
-      case "secondary": return props.theme.colors.primaryContainer;
-      case "sub": return "#F0F0F0";
+      case "success":
+        return props.theme.colors.success;
+      case "accent":
+        return props.theme.colors.accent;
+      case "secondary":
+        return props.theme.colors.primaryContainer;
+      case "sub":
+        return "#F0F0F0";
       case "primary":
-      default: return props.theme.colors.primary;
+      default:
+        return props.theme.colors.primary;
     }
   }};
   color: ${(props) => {
     switch (props.$variant) {
-      case "secondary": return props.theme.colors.primary;
-      case "sub": return "#999";
-      default: return "white";
+      case "secondary":
+        return props.theme.colors.primary;
+      case "sub":
+        return "#999";
+      default:
+        return "white";
     }
   }};
-  border: ${(props) => props.$variant === "secondary" ? `2px solid ${props.theme.colors.primary}30` : "none"};
+  border: ${(props) =>
+    props.$variant === "secondary" ? `2px solid ${props.theme.colors.primary}30` : "none"};
   border-radius: 20px;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
   font-family: ${(props) => props.theme.fonts.primary};
   display: flex;
   align-items: center;
@@ -45,7 +56,9 @@ const StyledButton = styled(motion.button)<{ $variant: string }>`
   transition: box-shadow 0.2s ease;
 
   &:hover {
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    box-shadow:
+      0 3px 6px rgba(0, 0, 0, 0.16),
+      0 3px 6px rgba(0, 0, 0, 0.23);
   }
 `;
 
@@ -63,9 +76,9 @@ const KidButton: React.FC<ButtonProps> = ({
       $variant={isActive ? variant : "sub"}
       onClick={onClick}
       style={style}
-      whileHover={{ 
-        scale: 1.02, 
-        y: -1
+      whileHover={{
+        scale: 1.02,
+        y: -1,
       }}
       whileTap={{ scale: 0.98 }}
       initial={{ opacity: 0, y: 5 }}
