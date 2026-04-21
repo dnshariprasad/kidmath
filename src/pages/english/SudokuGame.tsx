@@ -10,6 +10,7 @@ import {
   PageTitle,
   PageSubtitle,
   SessionStats,
+  GhostHeader,
 } from "../../theme/KidStyles";
 import KidButton from "../../components/KidButton";
 import { Grid as GridIcon } from "lucide-react";
@@ -59,6 +60,7 @@ const GameLayout = styled.div`
   @media (max-width: 992px) {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
 `;
 
@@ -85,7 +87,7 @@ const SidebarSide = styled.div`
   @media (max-width: 992px) {
     order: 2;
     position: static;
-    margin-top: 20px;
+    margin-top: 0;
   }
 `;
 
@@ -216,16 +218,18 @@ const CrosswordSudoku: React.FC = () => {
         </MainSide>
 
         <SidebarSide data-testid="layout-settings-panel">
-          <PageHeader style={{ visibility: "hidden", pointerEvents: "none" }}>
-            <PageTitle>
-              <GridIcon size={32} />
-              Ghost
-            </PageTitle>
-            <PageSubtitle>Ghost</PageSubtitle>
-            <SessionStats>
-              <span style={{ fontSize: "1.8rem" }}>⭐</span>
-            </SessionStats>
-          </PageHeader>
+          <GhostHeader>
+            <PageHeader>
+              <PageTitle>
+                <GridIcon size={32} />
+                Ghost
+              </PageTitle>
+              <PageSubtitle>Ghost</PageSubtitle>
+              <SessionStats>
+                <span style={{ fontSize: "1.8rem" }}>⭐</span>
+              </SessionStats>
+            </PageHeader>
+          </GhostHeader>
           <SettingsCard>
             <SidebarTitle>⚙️ Game Controls</SidebarTitle>
             <ControlBar style={{ flexDirection: "column", gap: "15px", marginTop: "10px" }}>

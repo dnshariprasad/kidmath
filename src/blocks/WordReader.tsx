@@ -14,6 +14,7 @@ import {
   PageTitle,
   PageSubtitle,
   SessionStats,
+  GhostHeader,
 } from "../theme/KidStyles";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
@@ -33,6 +34,7 @@ const GameLayout = styled.div`
   @media (max-width: 992px) {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
 `;
 
@@ -48,7 +50,7 @@ const SidebarSide = styled.div`
   @media (max-width: 992px) {
     order: 2;
     position: static;
-    margin-top: 20px;
+    margin-top: 0;
   }
 `;
 
@@ -176,7 +178,7 @@ const WordReader = (props: IWord) => {
         </MainSide>
 
         <SidebarSide data-testid="layout-settings-panel">
-          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+          <GhostHeader>
             <PageHeader>
               <PageTitle>
                 <BookOpen size={40} />
@@ -189,7 +191,7 @@ const WordReader = (props: IWord) => {
                 ))}
               </SessionStats>
             </PageHeader>
-          </div>
+          </GhostHeader>
           <SettingsCard>
             <SidebarTitle>Pick a word:</SidebarTitle>
             <TagList style={{ gap: "10px" }}>

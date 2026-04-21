@@ -15,6 +15,7 @@ import {
   PageTitle,
   PageSubtitle,
   SessionStats,
+  GhostHeader,
 } from "../../theme/KidStyles";
 import { COUNTING_COMPLEXITY } from "../../store/data/Constants";
 import {
@@ -36,6 +37,7 @@ const GameLayout = styled.div`
   @media (max-width: 992px) {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
 `;
 
@@ -52,7 +54,7 @@ const SettingsSide = styled.div`
   @media (max-width: 992px) {
     order: 2;
     position: static;
-    margin-top: 20px;
+    margin-top: 0;
   }
 `;
 
@@ -262,8 +264,7 @@ const MathChallenge = () => {
         </GameSide>
 
         <SettingsSide data-testid="layout-settings-panel">
-          {/* Header gap synchronized with main content */}
-          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+          <GhostHeader>
             <PageHeader>
               <PageTitle>
                 <Calculator size={40} />
@@ -274,7 +275,7 @@ const MathChallenge = () => {
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>
               </SessionStats>
             </PageHeader>
-          </div>
+          </GhostHeader>
 
           <SettingsCard>
             <SidebarTitle>⚙️ Game Rules</SidebarTitle>

@@ -15,6 +15,7 @@ import {
   PageTitle,
   PageSubtitle,
   SessionStats,
+  GhostHeader,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
@@ -39,6 +40,7 @@ const GameLayout = styled.div`
   @media (max-width: 992px) {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
 `;
 
@@ -54,7 +56,7 @@ const SidebarSide = styled.div`
   @media (max-width: 992px) {
     order: 2;
     position: static;
-    margin-top: 20px;
+    margin-top: 0;
   }
 `;
 
@@ -180,7 +182,7 @@ const MissingLettersChallenge = () => {
         </MainSide>
 
         <SidebarSide data-testid="layout-settings-panel">
-          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+          <GhostHeader>
             <PageHeader>
               <PageTitle>
                 <Type size={40} />
@@ -191,7 +193,7 @@ const MissingLettersChallenge = () => {
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>
               </SessionStats>
             </PageHeader>
-          </div>
+          </GhostHeader>
           <SettingsCard>
             <SidebarTitle>✅ Solved Recently:</SidebarTitle>
             <TagList>

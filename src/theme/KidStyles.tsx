@@ -18,7 +18,7 @@ export const SessionStats = styled.div`
   gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
-  min-height: 35px; /* Height of one row of stars (approx 1.8rem) + margins */
+  min-height: 40px; /* Synchronized height for stars */
   width: 100%;
 `;
 
@@ -225,6 +225,16 @@ export const HeaderArea = styled.div`
   /* Precisely calculated to accommodate title and 1-2 rows of stats/stars */
   min-height: 110px;
   justify-content: flex-start;
+`;
+
+export const GhostHeader = styled.div`
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+
+  @media (max-width: 992px) {
+    display: none;
+  }
 `;
 
 export const PageHeader = styled.div`

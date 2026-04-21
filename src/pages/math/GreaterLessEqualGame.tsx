@@ -5,7 +5,7 @@ import styled from "styled-components";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { Scale } from "lucide-react";
-import { Card, PageContainer, SidebarTitle, SettingsCard, ControlBar, PageHeader, PageTitle, PageSubtitle, SessionStats } from "../../theme/KidStyles";
+import { Card, PageContainer, SidebarTitle, SettingsCard, ControlBar, PageHeader, PageTitle, PageSubtitle, SessionStats, GhostHeader } from "../../theme/KidStyles";
 import { readText } from "../../util/util";
 import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
@@ -21,6 +21,7 @@ const GameLayout = styled.div`
   @media (max-width: 992px) {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
 `;
 
@@ -37,7 +38,7 @@ const SettingsSide = styled.div`
   @media (max-width: 992px) {
     order: 2;
     position: static;
-    margin-top: 20px;
+    margin-top: 0;
   }
 `;
 
@@ -258,7 +259,7 @@ export const GreaterLessEqualGame: React.FC = () => {
         </GameSide>
 
         <SettingsSide data-testid="layout-settings-panel">
-          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+          <GhostHeader>
             <PageHeader>
               <PageTitle>
                 <Scale size={40} />
@@ -269,7 +270,7 @@ export const GreaterLessEqualGame: React.FC = () => {
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>
               </SessionStats>
             </PageHeader>
-          </div>
+          </GhostHeader>
           <SettingsCard>
             <SidebarTitle>⚙️ Game Rules</SidebarTitle>
             

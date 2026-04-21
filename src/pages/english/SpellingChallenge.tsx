@@ -14,6 +14,7 @@ import {
   PageTitle,
   PageSubtitle,
   SessionStats,
+  GhostHeader,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
@@ -108,6 +109,43 @@ const OptionLabel = styled.label<{ $isActive: boolean }>`
   }
 `;
 
+const GameLayout = styled.div`
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  align-items: flex-start;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+`;
+
+const MainSide = styled.div`
+  flex: 3;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 992px) {
+    order: 1;
+  }
+`;
+
+const SidebarSide = styled.div`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 992px) {
+    order: 2;
+    margin-top: 0;
+  }
+`;
+
 const SpellingChallenge = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [currentWord, setCurrentWord] = useState<string>("");
@@ -192,8 +230,8 @@ const SpellingChallenge = () => {
         autoFocus
       />
       
-      <div style={{ display: "flex", gap: "30px", width: "100%", alignItems: "flex-start", flexDirection: window.innerWidth < 992 ? "column" : "row" }}>
-        <div style={{ flex: 3, width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <GameLayout>
+        <MainSide>
           <PageHeader>
             <PageTitle>
               <SpellCheck size={40} color="#6366F1" strokeWidth={2.5} />
@@ -284,10 +322,10 @@ const SpellingChallenge = () => {
               </KidoText>
             )}
           </Card>
-        </div>
+        </MainSide>
 
-        <div style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column" }}>
-          <div style={{ visibility: "hidden", pointerEvents: "none" }}>
+        <SidebarSide>
+          <GhostHeader>
             <PageHeader>
               <PageTitle>
                 <SpellCheck size={40} />
@@ -298,7 +336,7 @@ const SpellingChallenge = () => {
                 <span style={{ fontSize: "1.8rem" }}>⭐</span>
               </SessionStats>
             </PageHeader>
-          </div>
+          </GhostHeader>
           <SettingsCard>
             <SidebarTitle style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <SpellCheck size={20} color="#6366F1" />
@@ -340,8 +378,8 @@ const SpellingChallenge = () => {
               <KidButton title="Skip Word" onClick={generateChallenge} variant="secondary" style={{ width: "100%", minWidth: "auto" }} />
             </div>
           </SettingsCard>
-        </div>
-      </div>
+        </SidebarSide>
+      </GameLayout>
     </PageContainer>
   );
 };
