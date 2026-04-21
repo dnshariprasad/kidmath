@@ -59,9 +59,6 @@ const StyledButton = styled(motion.button)<{
     props.$variant === "secondary" ? `2px solid ${props.theme.colors.primary}30` : "none"};
   border-radius: 20px;
   cursor: pointer;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.24);
   font-family: ${(props) => props.theme.fonts.primary};
   display: flex;
   align-items: center;
@@ -70,12 +67,14 @@ const StyledButton = styled(motion.button)<{
   outline: none;
   position: relative;
   letter-spacing: 0.1px;
-  transition: box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 
   &:hover {
-    box-shadow:
-      0 3px 6px rgba(0, 0, 0, 0.16),
-      0 3px 6px rgba(0, 0, 0, 0.23);
+    background: ${(props) => {
+      if (props.$variant === "secondary") return props.theme.colors.primaryContainer;
+      return props.theme.colors.primary;
+    }};
+    opacity: 0.9;
   }
 `;
 
