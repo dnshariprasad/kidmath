@@ -13,6 +13,7 @@ interface KiddooState {
     lastPlayed: string | null;
   };
   isMobileMenuOpen: boolean;
+  isMuted: boolean;
 }
 
 const initialState: KiddooState = {
@@ -27,6 +28,7 @@ const initialState: KiddooState = {
     lastPlayed: null,
   },
   isMobileMenuOpen: false,
+  isMuted: false,
 };
 
 const kiddooSlice = createSlice({
@@ -61,6 +63,9 @@ const kiddooSlice = createSlice({
     closeMobileMenu: (state) => {
       state.isMobileMenuOpen = false;
     },
+    toggleMute: (state) => {
+      state.isMuted = !state.isMuted;
+    },
   },
 });
 
@@ -73,6 +78,7 @@ export const {
   resetStreak,
   toggleMobileMenu,
   closeMobileMenu,
+  toggleMute,
 } = kiddooSlice.actions;
 
 export default kiddooSlice.reducer;

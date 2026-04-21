@@ -13,32 +13,26 @@ npm run lint:fix
 echo "🏗️  Building project..."
 npm run build
 
-# 3. Ask for commit message
-echo ""
-echo "📝 Current Changes:"
-git status -s
-echo ""
-
-read -p "💬 Enter commit message (default: 'UI refinements and deployment'): " msg
-if [ -z "$msg" ]; then
-    msg="UI refinements and deployment"
-fi
-
-# 4. Commit and Push
-echo "💾 Committing changes..."
+# 3. Stage and Commit changes
+echo "💾 Staging all changes..."
 git add .
+
+# Set default commit message
+msg="Automated deployment: UI refinements and updates"
+
 # Check if there are changes to commit to avoid error
 if git diff-index --quiet HEAD --; then
     echo "ℹ️  No changes to commit."
 else
+    echo "📝 Committing changes..."
     git commit -m "$msg"
     echo "📤 Pushing to repository..."
     git push origin master
 fi
 
-# 5. Deploy to GH Pages
+# 4. Deploy to GitHub Pages
 echo "🌐 Deploying to GitHub Pages..."
-# Using the existing deploy script which ensures a fresh build
+# This command also runs 'npm run build' internally as per package.json
 npm run deploy
 
 echo ""
