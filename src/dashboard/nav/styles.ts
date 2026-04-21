@@ -175,3 +175,14 @@ export const DropdownItem = styled.div`
     color: ${(props) => props.theme.colors.primary};
   }
 `;
+export const ArrowRight = styled.div`
+  margin-left: auto;
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+`;
+
+export const BackItem = styled(DropdownItem)`
+  border-bottom: 1px solid ${(props) => props.theme.colors.primary}10;
+  margin-bottom: 5px;
+`;

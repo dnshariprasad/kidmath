@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   PageContainer,
   SettingsArea,
@@ -26,16 +26,20 @@ import {
 } from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
+import Certificate from "../../../components/Certificate";
+import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
 
 const SpellingChallenge = () => {
-  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const dispatch = useDispatch();
+  const streak = useSelector((state: RootState) => state.alphabet.gameStats.spelling.streak);
   const [currentWord, setCurrentWord] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
+  const [showCertificate, setShowCertificate] = useState(false);
 
-  const generateChallenge = () => {
+  const generateChallenge = useCallback(() => {
     let allWords = getAllWords();
 
     if (complexity === "Easy") {
@@ -51,7 +55,7 @@ const SpellingChallenge = () => {
     setInputValue("");
     setFeedback(null);
     setShowHint(false);
-  };
+  }, [complexity]);
 
   const handleFeelingLucky = () => {
     const complexites: ("Easy" | "Medium" | "Hard")[] = ["Easy", "Medium", "Hard"];
@@ -63,6 +67,12 @@ const SpellingChallenge = () => {
   useEffect(() => {
     generateChallenge();
   }, [complexity]);
+
+  useEffect(() => {
+    if (streak > 0 && streak % 10 === 0) {
+      setShowCertificate(true);
+    }
+  }, [streak]);
 
   useEffect(() => {
     const handleGlobalClick = () => {
@@ -83,6 +93,7 @@ const SpellingChallenge = () => {
     if (inputValue === currentWord) {
       setFeedback({ message: "Excellent! You spelled it right! 🌟", isCorrect: true });
       readText("Excellent");
+      dispatch(incrementScore("spelling"));
       confetti({
         particleCount: 150,
         spread: 70,
@@ -93,6 +104,7 @@ const SpellingChallenge = () => {
     } else {
       setFeedback({ message: "Almost! Try one more time! 💪", isCorrect: false });
       readText("Try again");
+      dispatch(resetStreak("spelling"));
       setInputValue("");
     }
   };
@@ -218,6 +230,19 @@ const SpellingChallenge = () => {
           />
         </SettingsArea>
       </GameLayout>
+
+      <AnimatePresence>
+        {showCertificate && (
+          <Certificate
+            onClose={() => {
+              setShowCertificate(false);
+              dispatch(resetAll());
+            }}
+            challengeName="Spelling Bee"
+            score={streak}
+          />
+        )}
+      </AnimatePresence>
     </PageContainer>
   );
 };

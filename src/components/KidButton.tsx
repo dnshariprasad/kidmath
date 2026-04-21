@@ -5,8 +5,9 @@ interface ButtonProps {
   title?: string;
   isActive?: boolean;
   onClick: () => void;
-  variant?: "primary" | "secondary" | "accent" | "success";
+  variant?: "primary" | "secondary" | "accent" | "success" | "sub";
   children?: React.ReactNode;
+  icon?: React.ReactNode;
   size?: string;
   width?: string;
   minWidth?: string;
@@ -24,7 +25,10 @@ const StyledButton = styled(motion.button)<{
   width: ${(props) => props.$size || props.$width || "auto"};
   min-width: ${(props) => props.$minWidth || "auto"};
   height: ${(props) => props.$size || "auto"};
-  font-size: ${(props) => props.$fontSize || "1.1rem"};
+  font-size: ${(props) => {
+    const size = props.$fontSize as keyof typeof props.theme.fontSize;
+    return props.theme.fontSize[size] || props.$fontSize || props.theme.fontSize.md;
+  }};
   font-weight: 700;
   background: ${(props) => {
     switch (props.$variant) {
@@ -62,6 +66,7 @@ const StyledButton = styled(motion.button)<{
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   outline: none;
   position: relative;
   letter-spacing: 0.1px;
@@ -84,6 +89,7 @@ const KidButton: React.FC<ButtonProps> = ({
   width,
   minWidth,
   fontSize,
+  icon,
 }) => {
   return (
     <StyledButton
@@ -103,6 +109,7 @@ const KidButton: React.FC<ButtonProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 400, damping: 20 }}
     >
+      {icon}
       {title}
       {children}
     </StyledButton>

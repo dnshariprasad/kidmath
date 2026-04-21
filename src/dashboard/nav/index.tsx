@@ -15,9 +15,16 @@ import {
   AppNameText,
   StatItem,
   StatText,
+  ArrowRight,
+  BackItem,
 } from "./styles";
 import { RootState } from "../../store/store";
-import { toggleMobileMenu, toggleMute, toggleTheme } from "../../store/slice/AlphabetSlice";
+import {
+  toggleMobileMenu,
+  toggleMute,
+  toggleTheme,
+  setFontSizeLevel,
+} from "../../store/slice/AlphabetSlice";
 import {
   Star,
   Flame,
@@ -29,6 +36,9 @@ import {
   MoreVertical,
   Sun,
   Moon,
+  Type,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 
 const Navbar: React.FC = () => {
@@ -39,6 +49,7 @@ const Navbar: React.FC = () => {
   const themeMode = useSelector((state: RootState) => state.alphabet.theme);
 
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [activeSubMenu, setActiveSubMenu] = useState<null | "fontSize">(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -46,6 +57,7 @@ const Navbar: React.FC = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMoreMenuOpen(false);
+        setActiveSubMenu(null);
       }
     };
 
@@ -90,25 +102,74 @@ const Navbar: React.FC = () => {
 
           {isMoreMenuOpen && (
             <DropdownMenu>
-              <DropdownItem
-                onClick={() => {
-                  dispatch(toggleMute());
-                  setIsMoreMenuOpen(false);
-                }}
-              >
-                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-                <span>{isMuted ? "Unmute Sound" : "Mute Sound"}</span>
-              </DropdownItem>
+              {!activeSubMenu ? (
+                <>
+                  <DropdownItem
+                    onClick={() => {
+                      dispatch(toggleMute());
+                      setIsMoreMenuOpen(false);
+                    }}
+                  >
+                    {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                    <span>{isMuted ? "Unmute Sound" : "Mute Sound"}</span>
+                  </DropdownItem>
 
-              <DropdownItem
-                onClick={() => {
-                  dispatch(toggleTheme());
-                  setIsMoreMenuOpen(false);
-                }}
-              >
-                {themeMode === "light" ? <Moon size={20} /> : <Sun size={20} />}
-                <span>{themeMode === "light" ? "Dark Mode" : "Light Mode"}</span>
-              </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      dispatch(toggleTheme());
+                      setIsMoreMenuOpen(false);
+                    }}
+                  >
+                    {themeMode === "light" ? <Moon size={20} /> : <Sun size={20} />}
+                    <span>{themeMode === "light" ? "Dark Mode" : "Light Mode"}</span>
+                  </DropdownItem>
+
+                  <DropdownItem onClick={() => setActiveSubMenu("fontSize")}>
+                    <Type size={20} />
+                    <span>Font Size</span>
+                    <ArrowRight>
+                      <ChevronRight size={18} />
+                    </ArrowRight>
+                  </DropdownItem>
+                </>
+              ) : (
+                <>
+                  <BackItem onClick={() => setActiveSubMenu(null)}>
+                    <ChevronLeft size={20} />
+                    <span>Back</span>
+                  </BackItem>
+                  <DropdownItem
+                    onClick={() => {
+                      dispatch(setFontSizeLevel("small"));
+                      setIsMoreMenuOpen(false);
+                      setActiveSubMenu(null);
+                    }}
+                  >
+                    <Type size={16} />
+                    <span>Small</span>
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      dispatch(setFontSizeLevel("medium"));
+                      setIsMoreMenuOpen(false);
+                      setActiveSubMenu(null);
+                    }}
+                  >
+                    <Type size={20} />
+                    <span>Medium</span>
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      dispatch(setFontSizeLevel("large"));
+                      setIsMoreMenuOpen(false);
+                      setActiveSubMenu(null);
+                    }}
+                  >
+                    <Type size={24} />
+                    <span>Large</span>
+                  </DropdownItem>
+                </>
+              )}
             </DropdownMenu>
           )}
         </MoreMenuWrapper>

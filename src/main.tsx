@@ -22,10 +22,19 @@ import ErrorBoundary from "./components/ErrorBoundary.tsx";
 
 const ConnectedThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const themeMode = useSelector((state: RootState) => state.alphabet.theme);
-  const currentTheme = themeMode === "dark" ? darkTheme : lightTheme;
+  const fontSizeLevel = useSelector((state: RootState) => state.alphabet.fontSizeLevel);
+  const baseTheme = themeMode === "dark" ? darkTheme : lightTheme;
+
+  // Merge the active font size scale into the theme colors/base
+  const currentTheme = {
+    ...baseTheme,
+    fontSize: baseTheme.fontSizes[fontSizeLevel],
+  };
 
   return <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>;
 };
+
+import SharedCertificate from "./components/SharedCertificate/index.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -34,6 +43,7 @@ createRoot(document.getElementById("root")!).render(
         <ErrorBoundary>
           <HashRouter>
             <Navbar />
+            <SharedCertificate />
             <Routes>
               {/* Parent route with the Layout */}
               <Route path="/" element={<Dashboard />}>

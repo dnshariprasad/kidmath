@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence } from "framer-motion";
 import KidButton from "../../../components/KidButton";
@@ -13,7 +13,7 @@ import {
   GameActivityArea,
 } from "../../../theme/globalStyles";
 import { readText } from "../../../utils/index";
-import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
+import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
 import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
 import { RootState } from "../../../store/store";
@@ -29,21 +29,23 @@ import {
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
+import Certificate from "../../../components/Certificate";
 
 export const GreaterLessEqualGame: React.FC = () => {
   const dispatch = useDispatch();
-  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const streak = useSelector((state: RootState) => state.alphabet.gameStats.comparison.streak);
   const [maxDigits, setMaxDigits] = useState(2);
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
+  const [showCertificate, setShowCertificate] = useState(false);
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     const maxVal = getMaxNumber(maxDigits);
     setNum1(getRandomNumber(maxVal));
     setNum2(getRandomNumber(maxVal));
     setFeedback(null);
-  };
+  }, [maxDigits]);
 
   const handleFeelingLucky = () => {
     const randomDigits = Math.floor(Math.random() * 3) + 1;
@@ -53,7 +55,13 @@ export const GreaterLessEqualGame: React.FC = () => {
 
   useEffect(() => {
     resetGame();
-  }, [maxDigits]);
+  }, [resetGame]);
+
+  useEffect(() => {
+    if (streak > 0 && streak % 10 === 0) {
+      setShowCertificate(true);
+    }
+  }, [streak]);
 
   const handleChoice = (choice: "greater" | "less" | "equal") => {
     let correct = false;
@@ -64,7 +72,7 @@ export const GreaterLessEqualGame: React.FC = () => {
     if (correct) {
       setFeedback({ message: "Correct! Awesome! 🌟", isCorrect: true });
       readText("Correct");
-      dispatch(incrementScore());
+      dispatch(incrementScore("comparison"));
       confetti({
         particleCount: 150,
         spread: 70,
@@ -75,7 +83,7 @@ export const GreaterLessEqualGame: React.FC = () => {
     } else {
       setFeedback({ message: "Oops! Try again! 😅", isCorrect: false });
       readText("Oops! Try again");
-      dispatch(resetStreak());
+      dispatch(resetStreak("comparison"));
       setTimeout(() => setFeedback(null), 1500);
     }
   };
@@ -154,6 +162,19 @@ export const GreaterLessEqualGame: React.FC = () => {
           </ConfigSection>
         </SettingsArea>
       </GameLayout>
+
+      <AnimatePresence>
+        {showCertificate && (
+          <Certificate
+            onClose={() => {
+              setShowCertificate(false);
+              dispatch(resetAll());
+            }}
+            challengeName="Big or Small?"
+            score={streak}
+          />
+        )}
+      </AnimatePresence>
     </PageContainer>
   );
 };

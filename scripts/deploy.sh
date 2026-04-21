@@ -13,7 +13,11 @@ npm run lint:fix
 echo "🏗️  Building project..."
 npm run build
 
-# 3. Stage and Commit changes
+# 3. Deploy to GitHub Pages
+echo "🌐 Deploying to GitHub Pages..."
+npm run deploy
+
+# 4. Stage and Commit changes (Only if deploy succeeded)
 echo "💾 Staging all changes..."
 git add .
 
@@ -30,10 +34,5 @@ else
     git push origin master
 fi
 
-# 4. Deploy to GitHub Pages
-echo "🌐 Deploying to GitHub Pages..."
-# This command also runs 'npm run build' internally as per package.json
-npm run deploy
-
 echo ""
-echo "✅ Deployment complete! Your changes are live."
+echo "✅ Deployment complete! Your changes are live and committed."

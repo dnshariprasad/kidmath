@@ -64,7 +64,7 @@ export const StyledInput = styled.input<{ width?: string }>`
   background: ${(props) => props.theme.colors.surface};
   border: 3px solid ${(props) => props.theme.colors.primary}20;
   border-radius: 16px;
-  font-size: 2.5rem;
+  font-size: ${(props) => props.theme.fontSize.xl};
   font-weight: 800;
   font-family: ${(props) => props.theme.fonts.primary};
   width: ${(props) => props.width || "120px"};
@@ -88,7 +88,7 @@ export const StyledInput = styled.input<{ width?: string }>`
 
   @media (max-width: 768px) {
     height: 64px;
-    font-size: 1.8rem;
+    font-size: ${(props) => props.theme.fontSize.lg};
     width: ${(props) => props.width || "100px"};
   }
 `;
@@ -106,7 +106,7 @@ export const Tag = styled.span<{
     (props.$isActive ? props.theme.colors.primary : props.theme.colors.surfaceVariant)};
   padding: 10px 18px;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: ${(props) => props.theme.fontSize.base};
   font-weight: 700;
   font-family: ${(props) => props.theme.fonts.primary};
   display: inline-flex;
@@ -139,7 +139,7 @@ export const SidebarTitle = styled.h4`
   font-weight: 700;
   margin: 0;
   letter-spacing: -0.2px;
-  font-size: 1.2rem;
+  font-size: ${(props) => props.theme.fontSize.md};
   display: flex;
   align-items: center;
   gap: 10px;
@@ -322,7 +322,7 @@ export const MagicButton = styled(motion.button)`
   padding: 12px 24px;
   border-radius: 50px;
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: ${(props) => props.theme.fontSize.md};
   display: flex;
   align-items: center;
   gap: 10px;
@@ -357,7 +357,7 @@ export const PageHeader = styled.div`
 
 export const PageTitle = styled.h1`
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-size: ${(props) => props.theme.fontSize.xl};
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
   margin: 0;
@@ -383,7 +383,7 @@ export const PageTitle = styled.h1`
 
 export const PageSubtitle = styled.p`
   font-family: ${(props) => props.theme.fonts.secondary};
-  font-size: 1.1rem;
+  font-size: ${(props) => props.theme.fontSize.base};
   color: ${(props) => props.theme.colors.textSecondary};
   margin: 0;
   margin-top: 5px;
@@ -427,7 +427,32 @@ export const GameActivityArea = styled(ActivityArea)`
 `;
 
 export const StarSpan = styled(motion.span)`
-  font-size: 1.8rem;
+  font-size: ${(props) => props.theme.fontSize.lg};
+`;
+
+export const NumberedStar = styled(StarSpan)`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StarNumber = styled.span`
+  position: absolute;
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin-top: 2px;
+`;
+
+export const StarEmoji = styled.span`
+  font-size: 1.5rem;
+`;
+
+export const PlusSign = styled.span`
+  margin-left: 5px;
+  font-weight: 800;
+  color: #ffd700;
 `;
 
 export const FeedbackWrapper = styled(motion.div)`
@@ -496,7 +521,7 @@ export const ConfigSection = styled.div`
 export const ConfigSubTitle = styled.h4`
   color: ${(props) => props.theme.colors.textSecondary};
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: 0.9rem;
+  font-size: ${(props) => props.theme.fontSize.sm};
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -514,7 +539,7 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
   transition: all 0.2s ease;
   margin-bottom: 5px;
   border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
-  font-size: 0.9rem;
+  font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.colors.textPrimary};
 
   &:hover {

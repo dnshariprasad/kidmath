@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   PageContainer,
   StyledInput,
@@ -25,18 +25,22 @@ import { RootState } from "../../../store/store";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
+import Certificate from "../../../components/Certificate";
+import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
 import { HintIconWrapper, ChallengeTextContainer, WordDisplay } from "./styles";
 
 const MissingLettersChallenge = () => {
-  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const dispatch = useDispatch();
+  const streak = useSelector((state: RootState) => state.alphabet.gameStats.missing_letters.streak);
   const [randomString, setRandomString] = useState<string>("");
   const [randomStringWithMissingLetter, setRandomStringWithMissingLetter] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
   const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
   const [showHint, setShowHint] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
 
-  const generateChallenge = () => {
+  const generateChallenge = useCallback(() => {
     let words = getAllWords();
     if (complexity === "Easy") words = words.filter((w) => w.length <= 4);
     else if (complexity === "Medium") words = words.filter((w) => w.length > 4 && w.length <= 7);
@@ -48,7 +52,7 @@ const MissingLettersChallenge = () => {
     setInputValue("");
     setFeedback(null);
     setShowHint(false);
-  };
+  }, [complexity]);
 
   const handleFeelingLucky = () => {
     const complexites: ("Easy" | "Medium" | "Hard")[] = ["Easy", "Medium", "Hard"];
@@ -61,10 +65,17 @@ const MissingLettersChallenge = () => {
     generateChallenge();
   }, [complexity]);
 
+  useEffect(() => {
+    if (streak > 0 && streak % 10 === 0) {
+      setShowCertificate(true);
+    }
+  }, [streak]);
+
   const handleSubmit = () => {
     if (randomString.toLowerCase() === inputValue.toLowerCase()) {
       setFeedback({ message: "You got it! 🌟", isCorrect: true });
       readText("You got it");
+      dispatch(incrementScore("missing_letters"));
       confetti({
         particleCount: 150,
         spread: 70,
@@ -75,6 +86,7 @@ const MissingLettersChallenge = () => {
     } else {
       setFeedback({ message: "Not quite, try again! 😅", isCorrect: false });
       readText("Try again");
+      dispatch(resetStreak("missing_letters"));
     }
   };
 
@@ -158,6 +170,19 @@ const MissingLettersChallenge = () => {
           />
         </SettingsArea>
       </GameLayout>
+
+      <AnimatePresence>
+        {showCertificate && (
+          <Certificate
+            onClose={() => {
+              setShowCertificate(false);
+              dispatch(resetAll());
+            }}
+            challengeName="Missing Letters"
+            score={streak}
+          />
+        )}
+      </AnimatePresence>
     </PageContainer>
   );
 };

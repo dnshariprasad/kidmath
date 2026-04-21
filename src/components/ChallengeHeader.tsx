@@ -5,7 +5,10 @@ import {
   PageTitle,
   PageSubtitle,
   SessionStats,
-  StarSpan,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../theme/globalStyles";
 import { LucideIcon } from "lucide-react";
 
@@ -33,16 +36,18 @@ const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({
         </PageTitle>
         <PageSubtitle>{subtitle}</PageSubtitle>
         <SessionStats>
-          {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
-            <StarSpan
+          {Array.from({ length: Math.min(10, streak) }).map((_, i) => (
+            <NumberedStar
               key={i}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
             >
-              ⭐
-            </StarSpan>
+              <StarEmoji>⭐</StarEmoji>
+              <StarNumber>{i + 1}</StarNumber>
+            </NumberedStar>
           ))}
+          {streak > 10 && <PlusSign>+</PlusSign>}
         </SessionStats>
       </PageHeader>
     </TitleArea>

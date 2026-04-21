@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import KidButton from "../../../components/KidButton";
 import { KidoText } from "../../../components/KidoText";
@@ -26,7 +26,7 @@ const SudokuGame: React.FC = () => {
   const [difficulty, setDifficulty] = useState<"Easy" | "Hard">("Easy");
   const [feedback] = useState<string | null>(null);
 
-  const generatePuzzle = () => {
+  const generatePuzzle = useCallback(() => {
     const newGrid: (number | null)[] = Array(16).fill(null);
     const newFixed: boolean[] = Array(16).fill(false);
 
@@ -49,7 +49,7 @@ const SudokuGame: React.FC = () => {
     setGrid(newGrid);
     setFixed(newFixed);
     setSelectedCell(null);
-  };
+  }, [difficulty]);
 
   const handleFeelingLucky = () => {
     const difficulties: ("Easy" | "Hard")[] = ["Easy", "Hard"];
@@ -60,7 +60,7 @@ const SudokuGame: React.FC = () => {
 
   useEffect(() => {
     generatePuzzle();
-  }, [difficulty]);
+  }, [generatePuzzle]);
 
   const handleCellClick = (index: number) => {
     if (!fixed[index]) {

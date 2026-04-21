@@ -9,6 +9,38 @@ const commonTheme = {
     large: "28px",
     round: "50%",
   },
+  fontSizes: {
+    small: {
+      xs: "0.75rem",
+      sm: "0.85rem",
+      base: "0.9rem",
+      md: "1rem",
+      lg: "1.2rem",
+      xl: "1.5rem",
+      xxl: "2rem",
+      huge: "3rem",
+    },
+    medium: {
+      xs: "0.85rem",
+      sm: "0.95rem",
+      base: "1rem",
+      md: "1.2rem",
+      lg: "1.5rem",
+      xl: "2rem",
+      xxl: "2.5rem",
+      huge: "4rem",
+    },
+    large: {
+      xs: "1rem",
+      sm: "1.1rem",
+      base: "1.2rem",
+      md: "1.5rem",
+      lg: "2rem",
+      xl: "2.5rem",
+      xxl: "3.5rem",
+      huge: "6rem",
+    },
+  },
 };
 
 export const lightTheme = {

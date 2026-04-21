@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import KidButton from "../../../components/KidButton";
@@ -10,7 +10,7 @@ import {
   GameLayout,
   GameActivityArea,
 } from "../../../theme/globalStyles";
-import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
+import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
 import { readText } from "../../../utils/index";
 import confetti from "canvas-confetti";
 import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
@@ -19,18 +19,20 @@ import { MathExpression, OperatorSpan, EqualSpan, QuestionSpan, AnswerGrid } fro
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
+import Certificate from "../../../components/Certificate";
 
 export const MathChallenge: React.FC = () => {
   const dispatch = useDispatch();
-  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const streak = useSelector((state: RootState) => state.alphabet.gameStats.math.streak);
   const [maxDigits, setMaxDigits] = useState(1);
   const [operator, setOperator] = useState<"+" | "-" | "*">("+");
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [options, setOptions] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
+  const [showCertificate, setShowCertificate] = useState(false);
 
-  const generateQuestion = () => {
+  const generateQuestion = useCallback(() => {
     const maxVal = getMaxNumber(maxDigits);
     let n1 = getRandomNumber(maxVal);
     let n2 = getRandomNumber(maxVal);
@@ -50,7 +52,7 @@ export const MathChallenge: React.FC = () => {
     }
     setOptions(Array.from(newOptions).sort(() => Math.random() - 0.5));
     setFeedback(null);
-  };
+  }, [maxDigits, operator]);
 
   const handleFeelingLucky = () => {
     const randomDigits = Math.floor(Math.random() * 3) + 1;
@@ -63,7 +65,13 @@ export const MathChallenge: React.FC = () => {
 
   useEffect(() => {
     generateQuestion();
-  }, [maxDigits, operator]);
+  }, [generateQuestion]);
+
+  useEffect(() => {
+    if (streak > 0 && streak % 10 === 0) {
+      setShowCertificate(true);
+    }
+  }, [streak]);
 
   const handleAnswer = (choice: number) => {
     const correctAnswer =
@@ -71,7 +79,7 @@ export const MathChallenge: React.FC = () => {
     if (choice === correctAnswer) {
       setFeedback({ message: "Brilliant! 🌟", isCorrect: true });
       readText("Brilliant");
-      dispatch(incrementScore());
+      dispatch(incrementScore("math"));
       confetti({
         particleCount: 150,
         spread: 70,
@@ -82,7 +90,7 @@ export const MathChallenge: React.FC = () => {
     } else {
       setFeedback({ message: "Keep trying! 💪", isCorrect: false });
       readText("Keep trying");
-      dispatch(resetStreak());
+      dispatch(resetStreak("math"));
       setTimeout(() => setFeedback(null), 1500);
     }
   };
@@ -158,6 +166,19 @@ export const MathChallenge: React.FC = () => {
           />
         </SettingsArea>
       </GameLayout>
+
+      <AnimatePresence>
+        {showCertificate && (
+          <Certificate
+            onClose={() => {
+              setShowCertificate(false);
+              dispatch(resetAll());
+            }}
+            challengeName="Math Magic"
+            score={streak}
+          />
+        )}
+      </AnimatePresence>
     </PageContainer>
   );
 };
