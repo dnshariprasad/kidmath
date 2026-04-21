@@ -158,7 +158,7 @@ const MissingLettersChallenge = () => {
             />
           </ControlBar>
 
-          <FeedbackDisplay feedback={feedback} fontSize="1.2rem" />
+          <FeedbackDisplay feedback={feedback} fontSize="md" />
         </GameActivityArea>
 
         <SettingsArea data-testid="settings-area">
@@ -180,6 +180,7 @@ const MissingLettersChallenge = () => {
             }}
             challengeName="Missing Letters"
             score={streak}
+            level={complexity}
           />
         )}
       </AnimatePresence>

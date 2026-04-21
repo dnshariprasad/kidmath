@@ -8,7 +8,7 @@ interface FeedbackDisplayProps {
   fontSize?: string;
 }
 
-const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ feedback, fontSize = "1.5rem" }) => {
+const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ feedback, fontSize = "lg" }) => {
   return (
     <AnimatePresence>
       {feedback && (

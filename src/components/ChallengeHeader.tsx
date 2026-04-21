@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   TitleArea,
   PageHeader,
@@ -54,4 +54,4 @@ const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({
   );
 };
 
-export default ChallengeHeader;
+export default memo(ChallengeHeader);

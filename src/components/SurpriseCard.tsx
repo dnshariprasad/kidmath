@@ -23,7 +23,7 @@ export const SurpriseCard: React.FC<SurpriseCardProps> = ({
 }) => {
   return (
     <GhostHeader data-testid="ghost-area">
-      <StyledSurpriseText fontSize="0.9rem" color="white" fontWeight="bold">
+      <StyledSurpriseText fontSize="sm" color="white" fontWeight="bold">
         {title}
       </StyledSurpriseText>
       <MagicButton whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={onShuffle}>

@@ -179,7 +179,7 @@ const SpellingChallenge = () => {
             onClick={() => readText(currentWord)}
           >
             <SpeakIcon text={currentWord} />
-            <KidoText fontSize="1rem" color="textSecondary" fontWeight="bold">
+            <KidoText fontSize="base" color="textSecondary" fontWeight="bold">
               Click to listen
             </KidoText>
           </BigSpeakWrapper>
@@ -213,7 +213,7 @@ const SpellingChallenge = () => {
                 ) : (
                   <XCircle color="#FF7675" />
                 )}
-                <KidoText color={feedback.isCorrect ? "success" : "accent"} fontSize="1.2rem">
+                <KidoText color={feedback.isCorrect ? "success" : "accent"} fontSize="md">
                   {feedback.message}
                 </KidoText>
               </FeedbackDisplayWrapper>
@@ -240,6 +240,7 @@ const SpellingChallenge = () => {
             }}
             challengeName="Spelling Bee"
             score={streak}
+            level={complexity}
           />
         )}
       </AnimatePresence>

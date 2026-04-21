@@ -118,7 +118,7 @@ const SudokuGame: React.FC = () => {
                 onClick={() => handleNumberInput(num)}
                 variant="secondary"
                 size="60px"
-                fontSize="1.5rem"
+                fontSize="lg"
               />
             ))}
             <KidButton
@@ -132,7 +132,7 @@ const SudokuGame: React.FC = () => {
           </NumberPad>
 
           {feedback && (
-            <KidoText color="primary" fontSize="1.2rem">
+            <KidoText color="primary" fontSize="md">
               {feedback}
             </KidoText>
           )}
@@ -150,7 +150,7 @@ const SudokuGame: React.FC = () => {
           <ConfigSection>
             <ConfigSubTitle>How to Play</ConfigSubTitle>
             <TipsBox>
-              <KidoText fontSize="0.9rem" color="textSecondary">
+              <KidoText fontSize="sm" color="textSecondary">
                 • Pick a white box
                 <br />
                 • Tap a number to fill it

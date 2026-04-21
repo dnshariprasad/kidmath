@@ -172,6 +172,7 @@ export const GreaterLessEqualGame: React.FC = () => {
             }}
             challengeName="Big or Small?"
             score={streak}
+            level={`${maxDigits} Digits`}
           />
         )}
       </AnimatePresence>

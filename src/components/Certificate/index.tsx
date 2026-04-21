@@ -30,9 +30,14 @@ interface CertificateProps {
   onClose: () => void;
   challengeName: string;
   score: number;
+  level?: string;
 }
 
-const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score }) => {
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+
+const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score, level }) => {
+  const userName = useSelector((state: RootState) => state.alphabet.userName);
   const [isDownloading, setIsDownloading] = React.useState(false);
 
   const handleDownloadImage = async () => {
@@ -66,28 +71,63 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
   };
 
   const handleShare = async () => {
-    // Generate a deep link for HashRouter
-    // Pattern: [base-url]#/?certName=...&certScore=...
-    const baseUrl = window.location.origin + window.location.pathname;
-    const shareUrl = `${baseUrl}#/?certName=${encodeURIComponent(challengeName)}&certScore=${score}`;
-
-    const shareData = {
-      title: "My Kiddoo Achievement!",
-      text: `I just achieved a streak of ${score} correct answers in the ${challengeName} challenge on Kiddoo! 🏆`,
-      url: shareUrl,
-    };
+    const element = document.getElementById("certificate-content");
+    if (!element) return;
 
     try {
-      if (navigator.share) {
+      setIsDownloading(true);
+
+      // Force width for consistent rendering during capture
+      const originalWidth = element.style.width;
+      element.style.width = "1000px";
+
+      const dataUrl = await toPng(element, {
+        cacheBust: true,
+        backgroundColor: "#ffffff",
+        pixelRatio: 2,
+        canvasWidth: 1200,
+        canvasHeight: 900,
+      });
+
+      element.style.width = originalWidth;
+
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const file = new File([blob], `Kiddoo_Certificate_${challengeName}.png`, {
+        type: "image/png",
+      });
+
+      const shareData = {
+        title: "My Kiddoo Achievement!",
+        text: `I just achieved a streak of ${score} correct answers in the ${challengeName} challenge on Kiddoo! 🏆`,
+        files: [file],
+      };
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share(shareData);
       } else {
-        await navigator.clipboard.writeText(
-          `${shareData.text} Check it out here: ${shareData.url}`,
-        );
-        alert("Achievement copied to clipboard! 📋");
+        // Fallback to URL sharing if files aren't supported
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareUrl = `${baseUrl}#/?certName=${encodeURIComponent(
+          challengeName,
+        )}&certScore=${score}`;
+
+        if (navigator.share) {
+          await navigator.share({
+            title: shareData.title,
+            text: shareData.text,
+            url: shareUrl,
+          });
+        } else {
+          await navigator.clipboard.writeText(`${shareData.text} Check it out here: ${shareUrl}`);
+          alert("Achievement link copied to clipboard! 📋");
+        }
       }
     } catch (err) {
       console.error("Error sharing:", err);
+      alert("Sharing failed. You can download the image instead! 😊");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -119,11 +159,12 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
           <CertificateSubHeader>Super Duper Achievement Award</CertificateSubHeader>
 
           <CertificateTitle>This award belongs to our amazing...</CertificateTitle>
-          <WinnerName>Super Star</WinnerName>
+          <WinnerName>{userName || "Super Star"}</WinnerName>
 
           <CertificateText>
-            For being an absolute legend in the <b>{challengeName}</b> challenge! You've smashed a
-            streak of <b>{score}</b> correct answers! Keep being awesome! 🚀✨
+            For being an absolute legend in the <b>{challengeName}</b> challenge
+            {level ? ` (${level} level)` : ""}! You've smashed a streak of <b>{score}</b> correct
+            answers! Keep being awesome! 🚀✨
           </CertificateText>
 
           <BadgeContainer>

@@ -46,7 +46,7 @@ export const WavingEmoji = styled(motion.span)`
 `;
 
 export const CategoryTitle = styled.h3`
-  font-size: 1.5rem;
+  font-size: ${(props) => props.theme.fontSize.lg};
   margin-bottom: 8px;
   color: ${(props) => props.theme.colors.textPrimary};
 `;
@@ -54,7 +54,7 @@ export const CategoryTitle = styled.h3`
 export const CategoryDesc = styled.p`
   color: ${(props) => props.theme.colors.textSecondary};
   margin-bottom: 20px;
-  font-size: 0.95rem;
+  font-size: ${(props) => props.theme.fontSize.sm};
 `;
 
 export const PromoCard = styled(Card)`
@@ -93,7 +93,7 @@ export const PromoTitle = styled.h2`
 `;
 
 export const PromoDesc = styled.p`
-  font-size: 1.1rem;
+  font-size: ${(props) => props.theme.fontSize.base};
   margin: 0 auto 25px;
   opacity: 0.9;
   max-width: 500px;

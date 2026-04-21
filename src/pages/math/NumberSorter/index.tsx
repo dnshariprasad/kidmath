@@ -108,7 +108,7 @@ export const NumberSorter: React.FC = () => {
         <SurpriseCard title="Shuffle surprise?" onShuffle={handleFeelingLucky} />
 
         <GameActivityArea>
-          <KidoText fontSize="1.5rem" color="textSecondary" fontWeight="bold">
+          <KidoText fontSize="xl" color="textSecondary" fontWeight="bold">
             Sort in {order} order
           </KidoText>
 
@@ -135,7 +135,7 @@ export const NumberSorter: React.FC = () => {
             />
           </ControlBar>
 
-          <FeedbackDisplay feedback={feedback} fontSize="1.2rem" />
+          <FeedbackDisplay feedback={feedback} fontSize="lg" />
         </GameActivityArea>
 
         <SettingsArea data-testid="settings-area">

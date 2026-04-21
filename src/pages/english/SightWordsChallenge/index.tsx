@@ -109,8 +109,8 @@ const SightWordsChallenge = () => {
             </>
           ) : (
             <EmptyStateWrapper>
-              <KidoText fontSize="1.8rem" color="textSecondary" fontWeight="bold">
-                No words found for this level.
+              <KidoText fontSize="xl" color="textSecondary" fontWeight="bold">
+                Tap the word you hear:
                 <br />
                 Let's try another! 🎈
               </KidoText>

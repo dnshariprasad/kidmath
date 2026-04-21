@@ -176,6 +176,7 @@ export const MathChallenge: React.FC = () => {
             }}
             challengeName="Math Magic"
             score={streak}
+            level={`${maxDigits} Digits`}
           />
         )}
       </AnimatePresence>
