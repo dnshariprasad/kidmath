@@ -9380,6 +9380,7 @@ Please change the parent <Route path="${C}"> to <Route path="${C==="/"?"*":`${C}
   font-size: 2.5rem;
   font-weight: 800;
   color: ${e=>e.theme.colors.primary};
+  font-family: ${e=>e.theme.fonts.primary};
   box-shadow: ${e=>e.$isActive?"0 10px 20px rgba(99, 102, 241, 0.2)":"none"};
   transition: all 0.2s ease;
 
@@ -9433,6 +9434,7 @@ Please change the parent <Route path="${C}"> to <Route path="${C==="/"?"*":`${C}
   font-size: 2.2rem;
   font-weight: 800;
   color: ${e=>e.$isFixed?"#636E72":e.theme.colors.primary};
+  font-family: ${e=>e.theme.fonts.primary};
   cursor: ${e=>e.$isFixed?"default":"pointer"};
   box-shadow: ${e=>e.$isActive?"0 8px 16px rgba(99, 102, 241, 0.15)":"none"};
   transition: all 0.2s ease;
@@ -9526,6 +9528,7 @@ Please change the parent <Route path="${C}"> to <Route path="${C==="/"?"*":`${C}
   font-size: 2.2rem;
   font-weight: 800;
   color: ${e=>e.theme.colors.primary};
+  font-family: ${e=>e.theme.fonts.primary};
   cursor: grab;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
