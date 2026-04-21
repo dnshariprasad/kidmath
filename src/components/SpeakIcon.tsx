@@ -1,4 +1,4 @@
-import { readText } from "../util/util";
+import { readText } from "../utils/index";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";

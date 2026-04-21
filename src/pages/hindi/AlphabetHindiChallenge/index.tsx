@@ -1,30 +1,23 @@
 import { useState, useMemo } from "react";
-import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import {
-  ActivityArea,
   PageContainer,
   Tag,
   TagList,
   SettingsArea,
   NavControlBar,
-  PageHeader,
-  PageTitle,
-  PageSubtitle,
-  SessionStats,
-  TitleArea,
   GameLayout,
   ConfigSection,
   ConfigSubTitle,
-  OptionLabel,
-} from "../../theme/KidStyles";
-import SpeakIcon from "../../components/SpeakIcon";
-import NextIcon from "../../components/NextIcon";
-import PreviousIcon from "../../components/PreviousIcon";
+  GameActivityArea,
+} from "../../../theme/globalStyles";
+import SpeakIcon from "../../../components/SpeakIcon";
+import NextIcon from "../../../components/NextIcon";
+import PreviousIcon from "../../../components/PreviousIcon";
 import { Languages } from "lucide-react";
-import { SurpriseCard } from "../../components/SurpriseCard";
-import { readText } from "../../util/util";
+import { SurpriseCard } from "../../../components/SurpriseCard";
+import { readText } from "../../../utils/index";
 import {
   cha,
   hindiCombinedCharacters,
@@ -35,22 +28,11 @@ import {
   pa,
   ya,
   se,
-} from "../../store/data/HindiAlphabet";
-import { RootState } from "../../store/store";
-
-const HindiDisplay = styled(motion.div)`
-  font-size: clamp(4rem, 20vw, 10rem);
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.primary};
-  font-family: ${(props) => props.theme.fonts.primary};
-  text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
-  margin-bottom: 20px;
-  line-height: 1.2;
-
-  @media (max-width: 768px) {
-    font-size: clamp(3rem, 25vw, 6rem);
-  }
-`;
+} from "../../../constants/hindiAlphabet";
+import { RootState } from "../../../store/store";
+import { HindiDisplay } from "./styles";
+import ChallengeHeader from "../../../components/ChallengeHeader";
+import DifficultyPicker from "../../../components/DifficultyPicker";
 
 const AlphabetHindiChallenge = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
@@ -85,44 +67,25 @@ const AlphabetHindiChallenge = () => {
     readText("Hindi Surprise!");
   };
 
+  const filterOptions = [
+    { value: "all", label: "All Characters" },
+    { value: "vowels", label: "Vowels (Svar)" },
+    { value: "consonants", label: "Consonants (Vyanjan)" },
+  ];
+
   return (
     <PageContainer data-testid="page-hindi-alphabet">
       <GameLayout>
-        <TitleArea data-testid="title-area">
-          <PageHeader>
-            <PageTitle>
-              <Languages size={40} color="#6366F1" strokeWidth={2.5} />
-              Hindi Alphabet
-            </PageTitle>
-            <PageSubtitle>Explore the beautiful Hindi Varnamala!</PageSubtitle>
-            <SessionStats>
-              {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
-                  style={{ fontSize: "1.8rem" }}
-                >
-                  ⭐
-                </motion.span>
-              ))}
-            </SessionStats>
-          </PageHeader>
-        </TitleArea>
+        <ChallengeHeader
+          icon={Languages}
+          title="Hindi Alphabet"
+          subtitle="Explore the beautiful Hindi Varnamala!"
+          streak={streak}
+        />
 
         <SurpriseCard title="Hindi surprise?" onShuffle={handleFeelingLucky} />
 
-        <ActivityArea
-          style={{
-            textAlign: "center",
-            minHeight: "500px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <GameActivityArea>
           <AnimatePresence mode="wait">
             <HindiDisplay
               key={currentLetter}
@@ -140,23 +103,16 @@ const AlphabetHindiChallenge = () => {
             <SpeakIcon text={currentLetter} lang="hi-IN" />
             <NextIcon onClick={handleNext} />
           </NavControlBar>
-        </ActivityArea>
+        </GameActivityArea>
 
         <SettingsArea data-testid="settings-area">
-          <ConfigSection>
-            <ConfigSubTitle>Filter</ConfigSubTitle>
-            {(["all", "vowels", "consonants"] as const).map((f) => (
-              <OptionLabel key={f} $isActive={filter === f}>
-                <input
-                  type="radio"
-                  name="filter"
-                  checked={filter === f}
-                  onChange={() => setFilter(f)}
-                />
-                {f.charAt(0).toUpperCase() + f.slice(1)}
-              </OptionLabel>
-            ))}
-          </ConfigSection>
+          <DifficultyPicker
+            title="Filter"
+            name="filter"
+            options={filterOptions}
+            currentValue={filter}
+            onChange={(val) => setFilter(val as "all" | "vowels" | "consonants")}
+          />
 
           <ConfigSection>
             <ConfigSubTitle>Pick a Character</ConfigSubTitle>

@@ -1,0 +1,225 @@
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
+import {
+  PageContainer,
+  SettingsArea,
+  GameLayout,
+  GameActivityArea,
+} from "../../../theme/globalStyles";
+import SpeakIcon from "../../../components/SpeakIcon";
+import { KidoText } from "../../../components/KidoText";
+import { SpellCheck, HelpCircle, CheckCircle2, XCircle } from "lucide-react";
+import { SurpriseCard } from "../../../components/SurpriseCard";
+import { readText } from "../../../utils/index";
+import { getAllWords, getRandomWord } from "../../../utils/wordUtils";
+import confetti from "canvas-confetti";
+import { RootState } from "../../../store/store";
+import {
+  LetterSlots,
+  LetterSlot,
+  BigSpeakWrapper,
+  HiddenInput,
+  HintIconWrapper,
+  SkipIconWrapper,
+  FeedbackDisplayWrapper,
+} from "./styles";
+import ChallengeHeader from "../../../components/ChallengeHeader";
+import DifficultyPicker from "../../../components/DifficultyPicker";
+
+const SpellingChallenge = () => {
+  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const [currentWord, setCurrentWord] = useState<string>("");
+  const [inputValue, setInputValue] = useState("");
+  const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
+  const [showHint, setShowHint] = useState(false);
+  const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
+
+  const generateChallenge = () => {
+    let allWords = getAllWords();
+
+    if (complexity === "Easy") {
+      allWords = allWords.filter((w) => w.length <= 4);
+    } else if (complexity === "Medium") {
+      allWords = allWords.filter((w) => w.length > 4 && w.length <= 7);
+    } else if (complexity === "Hard") {
+      allWords = allWords.filter((w) => w.length > 7);
+    }
+
+    const word = getRandomWord(allWords);
+    setCurrentWord(word.toUpperCase());
+    setInputValue("");
+    setFeedback(null);
+    setShowHint(false);
+  };
+
+  const handleFeelingLucky = () => {
+    const complexites: ("Easy" | "Medium" | "Hard")[] = ["Easy", "Medium", "Hard"];
+    const randomComp = complexites[Math.floor(Math.random() * complexites.length)];
+    setComplexity(randomComp);
+    readText("Spelling Surprise!");
+  };
+
+  useEffect(() => {
+    generateChallenge();
+  }, [complexity]);
+
+  useEffect(() => {
+    const handleGlobalClick = () => {
+      document.getElementById("spelling-input")?.focus();
+    };
+    window.addEventListener("click", handleGlobalClick);
+    return () => window.removeEventListener("click", handleGlobalClick);
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.toUpperCase();
+    if (val.length <= currentWord.length) {
+      setInputValue(val);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (inputValue === currentWord) {
+      setFeedback({ message: "Excellent! You spelled it right! 🌟", isCorrect: true });
+      readText("Excellent");
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#6366F1", "#4F46E5", "#FF7675"],
+      });
+      setTimeout(generateChallenge, 2000);
+    } else {
+      setFeedback({ message: "Almost! Try one more time! 💪", isCorrect: false });
+      readText("Try again");
+      setInputValue("");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSubmit();
+  };
+
+  const diffOptions = [
+    { value: "Easy", label: "Short (3-4)" },
+    { value: "Medium", label: "Medium (5-7)" },
+    { value: "Hard", label: "Long (8+)" },
+  ];
+
+  return (
+    <PageContainer data-testid="page-spelling-challenge">
+      <HiddenInput
+        id="spelling-input"
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        autoFocus
+      />
+
+      <GameLayout>
+        <ChallengeHeader
+          icon={SpellCheck}
+          title="Spelling Bee"
+          subtitle="Listen to the word and spell it out!"
+          streak={streak}
+        />
+
+        <SurpriseCard title="Spelling surprise?" onShuffle={handleFeelingLucky} />
+
+        <GameActivityArea>
+          <HintIconWrapper
+            $showHint={showHint}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setShowHint(true)}
+            title="Need a hint?"
+          >
+            <HelpCircle size={28} />
+          </HintIconWrapper>
+
+          <SkipIconWrapper
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={generateChallenge}
+            title="Skip to next"
+          >
+            <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m6 17 5-5-5-5M13 17l5-5-5-5" />
+              </svg>
+            </motion.div>
+          </SkipIconWrapper>
+
+          <BigSpeakWrapper
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => readText(currentWord)}
+          >
+            <SpeakIcon text={currentWord} />
+            <KidoText fontSize="1rem" color="textSecondary" fontWeight="bold">
+              Click to listen
+            </KidoText>
+          </BigSpeakWrapper>
+
+          <LetterSlots>
+            {currentWord.split("").map((letter, i) => (
+              <LetterSlot
+                key={i}
+                $isActive={inputValue.length === i}
+                $isError={feedback?.isCorrect === false && inputValue.length === currentWord.length}
+                $isSuccess={feedback?.isCorrect === true}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                {inputValue[i] ||
+                  (showHint && (i === 0 || i === currentWord.length - 1) ? letter : "")}
+              </LetterSlot>
+            ))}
+          </LetterSlots>
+
+          <AnimatePresence>
+            {feedback && (
+              <FeedbackDisplayWrapper
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                {feedback.isCorrect ? (
+                  <CheckCircle2 color="#4CAF50" />
+                ) : (
+                  <XCircle color="#FF7675" />
+                )}
+                <KidoText color={feedback.isCorrect ? "success" : "accent"} fontSize="1.2rem">
+                  {feedback.message}
+                </KidoText>
+              </FeedbackDisplayWrapper>
+            )}
+          </AnimatePresence>
+        </GameActivityArea>
+
+        <SettingsArea data-testid="settings-area">
+          <DifficultyPicker
+            name="complexity"
+            options={diffOptions}
+            currentValue={complexity}
+            onChange={(val) => setComplexity(val as "Easy" | "Medium" | "Hard")}
+          />
+        </SettingsArea>
+      </GameLayout>
+    </PageContainer>
+  );
+};
+
+export default SpellingChallenge;

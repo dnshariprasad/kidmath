@@ -33,7 +33,7 @@ export const Card = styled.div`
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 28px;
-  padding: 40px;
+  padding: 30px 40px;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
@@ -53,7 +53,7 @@ export const Card = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 24px 20px;
+    padding: 20px 20px;
     border-radius: 20px;
   }
 `;
@@ -86,10 +86,17 @@ export const StyledInput = styled.input<{ width?: string }>`
   }
 `;
 
-export const Tag = styled.span<{ $isActive?: boolean }>`
-  color: ${(props) => (props.$isActive ? "white" : props.theme.colors.onPrimaryContainer)};
+export const Tag = styled.span<{
+  $isActive?: boolean;
+  $bg?: string;
+  $color?: string;
+  $borderColor?: string;
+}>`
+  color: ${(props) =>
+    props.$color || (props.$isActive ? "white" : props.theme.colors.onPrimaryContainer)};
   background: ${(props) =>
-    props.$isActive ? props.theme.colors.primary : props.theme.colors.primaryContainer};
+    props.$bg ||
+    (props.$isActive ? props.theme.colors.primary : props.theme.colors.primaryContainer)};
   padding: 10px 18px;
   border-radius: 12px;
   font-size: 1rem;
@@ -102,12 +109,12 @@ export const Tag = styled.span<{ $isActive?: boolean }>`
   cursor: pointer;
   min-width: 44px;
   min-height: 44px;
-  border: 1px solid ${(props) => (props.$isActive ? "transparent" : "transparent")};
+  border: 1px solid ${(props) => props.$borderColor || "transparent"};
   ${(props) => (props.$isActive ? elevation2 : "none")}
 
   &:hover {
-    background: ${(props) => props.theme.colors.primary};
-    color: white;
+    background: ${(props) => props.$bg || props.theme.colors.primary};
+    color: ${(props) => (props.$bg ? props.$color : "white")};
     transform: translateY(-2px);
     ${elevation2}
   }
@@ -245,13 +252,14 @@ export const TitleArea = styled.div`
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
   padding: 20px;
-  margin-bottom: 25px;
+  margin-bottom: 0; /* Removed margin-bottom to rely on grid gap */
   box-sizing: border-box;
 
   @media (max-width: 992px) {
     height: auto;
     min-height: 120px;
     padding: 25px 15px;
+    margin-bottom: 0;
   }
 `;
 
@@ -267,7 +275,7 @@ export const GhostHeader = styled(TitleArea)`
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
-  margin-bottom: 25px;
+  margin-bottom: 0;
 
   &::before {
     content: "";
@@ -380,7 +388,7 @@ export const SettingsCard = styled(Card)`
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid ${(props) => props.theme.colors.primary}20;
   max-width: none;
-  padding: 20px 25px;
+  padding: 15px 25px;
 
   &:hover {
     transform: translateY(-4px);
@@ -391,50 +399,62 @@ export const ActivityArea = styled(Card)`
   /* This represents the primary educational content module */
 `;
 
+export const GameActivityArea = styled(ActivityArea)`
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 40px;
+  gap: 20px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    min-height: 350px;
+    padding: 15px 20px;
+    gap: 15px;
+  }
+`;
+
+export const StarSpan = styled(motion.span)`
+  font-size: 1.8rem;
+`;
+
+export const FeedbackWrapper = styled(motion.div)`
+  margin-top: 15px;
+`;
+
 export const SettingsArea = styled(SettingsCard)`
+  /* This represents the configuration/settings module */
+`;
+
+export const SettingsAreaStyled = styled(SettingsArea)`
   /* This represents the configuration/settings module */
 `;
 
 export const ControlBar = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 15px;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
   width: 100%;
   flex-wrap: wrap;
 
   @media (max-width: 480px) {
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 25px;
-
-    & > [data-testid="comp-kid-button"] {
-      width: 100% !important;
-      margin: 0 !important;
-    }
+    gap: 10px;
   }
 `;
 
-export const NavControlBar = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 40px;
-  width: 100%;
-
-  @media (max-width: 480px) {
-    gap: 15px;
-    margin-top: 25px;
-  }
+export const NavControlBar = styled(ControlBar)`
+  margin-top: 15px;
 `;
 
 export const GameLayout = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-template-rows: auto 1fr;
-  gap: 25px 30px;
+  gap: 20px 25px;
   width: 100%;
   align-items: start;
 
@@ -454,8 +474,8 @@ export const SidebarSide = styled.div`
 `;
 
 export const ConfigSection = styled.div`
-  margin-bottom: 25px;
-  padding-bottom: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
   border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
   width: 100%;
 
@@ -468,7 +488,7 @@ export const ConfigSubTitle = styled.h4`
   color: #636e72;
   font-family: ${(props) => props.theme.fonts.primary};
   font-size: 0.9rem;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -478,14 +498,14 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 15px;
+  padding: 8px 12px;
   background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: 5px;
   border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #2d3436;
 
   &:hover {
@@ -493,8 +513,8 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
   }
 
   input {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     accent-color: ${(props) => props.theme.colors.primary};
   }
 `;

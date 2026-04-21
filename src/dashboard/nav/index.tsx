@@ -10,16 +10,33 @@ import {
   IconButton,
   DropdownMenu,
   DropdownItem,
+  NavLeftSection,
+  LogoIconContainer,
+  AppNameText,
+  StatItem,
+  StatText,
 } from "./styles";
 import { RootState } from "../../store/store";
-import { toggleMobileMenu, toggleMute } from "../../store/slice/AlphabetSlice";
-import { Star, Flame, Menu, X, Balloon, Volume2, VolumeX, MoreVertical } from "lucide-react";
+import { toggleMobileMenu, toggleMute, toggleTheme } from "../../store/slice/AlphabetSlice";
+import {
+  Star,
+  Flame,
+  Menu,
+  X,
+  Balloon,
+  Volume2,
+  VolumeX,
+  MoreVertical,
+  Sun,
+  Moon,
+} from "lucide-react";
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const stats = useSelector((state: RootState) => state.alphabet.userStats);
   const isOpen = useSelector((state: RootState) => state.alphabet.isMobileMenuOpen);
   const isMuted = useSelector((state: RootState) => state.alphabet.isMuted);
+  const themeMode = useSelector((state: RootState) => state.alphabet.theme);
 
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -42,61 +59,28 @@ const Navbar: React.FC = () => {
 
   return (
     <NavbarContainer data-testid="layout-navbar">
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <NavLeftSection>
         <MenuToggleButton onClick={() => dispatch(toggleMobileMenu())}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </MenuToggleButton>
-        <AppName
-          as={Link}
-          to="/"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            textDecoration: "none",
-          }}
-        >
-          <div
-            style={{
-              background: "#6366F1",
-              padding: "8px",
-              borderRadius: "12px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 10px rgba(99, 102, 241, 0.3)",
-            }}
-          >
+        <AppName as={Link} to="/">
+          <LogoIconContainer>
             <Balloon size={24} color="white" strokeWidth={2.5} fill="rgba(255, 255, 255, 0.2)" />
-          </div>
-          <span style={{ fontSize: "1.8rem", letterSpacing: "-1px" }}>kiddoo</span>
+          </LogoIconContainer>
+          <AppNameText>kiddoo</AppNameText>
         </AppName>
-      </div>
+      </NavLeftSection>
 
       <UserSection>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "5px",
-            color: "#FBC531",
-          }}
-        >
+        <StatItem $color="#FBC531">
           <Star size={20} fill="#FBC531" strokeWidth={2} />
-          <span style={{ fontWeight: 800 }}>{stats.score}</span>
-        </div>
+          <StatText>{stats.score}</StatText>
+        </StatItem>
         {stats.streak > 0 && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              color: "#FF7675",
-            }}
-          >
+          <StatItem $color="#FF7675">
             <Flame size={20} fill="#FF7675" strokeWidth={2} />
-            <span style={{ fontWeight: 800 }}>{stats.streak}</span>
-          </div>
+            <StatText>{stats.streak}</StatText>
+          </StatItem>
         )}
 
         <MoreMenuWrapper ref={menuRef}>
@@ -114,6 +98,16 @@ const Navbar: React.FC = () => {
               >
                 {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
                 <span>{isMuted ? "Unmute Sound" : "Mute Sound"}</span>
+              </DropdownItem>
+
+              <DropdownItem
+                onClick={() => {
+                  dispatch(toggleTheme());
+                  setIsMoreMenuOpen(false);
+                }}
+              >
+                {themeMode === "light" ? <Moon size={20} /> : <Sun size={20} />}
+                <span>{themeMode === "light" ? "Dark Mode" : "Light Mode"}</span>
               </DropdownItem>
             </DropdownMenu>
           )}

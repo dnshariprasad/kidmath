@@ -31,14 +31,46 @@ export const AppName = styled.div`
   color: ${(props) => props.theme.colors.primary};
   display: flex;
   align-items: center;
-  gap: 8px;
-  letter-spacing: -0.5px;
+  gap: 10px;
+  letter-spacing: -1px;
   transition: all 0.3s ease;
 
   &:hover {
     transform: scale(1.02);
     color: ${(props) => props.theme.colors.secondary};
   }
+`;
+
+export const NavLeftSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const LogoIconContainer = styled.div`
+  background: #6366f1;
+  padding: 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+`;
+
+export const AppNameText = styled.span`
+  font-size: 1.8rem;
+  letter-spacing: -1px;
+`;
+
+export const StatItem = styled.div<{ $color: string }>`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: ${(props) => props.$color};
+`;
+
+export const StatText = styled.span`
+  font-weight: 800;
 `;
 
 export const UserSection = styled.div`

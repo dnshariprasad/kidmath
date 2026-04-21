@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { big, small } from "../data/Alphabet";
+import { big, small } from "../../constants/alphabet";
 
 interface KiddooState {
   selectedAlphabet: string;
@@ -14,6 +14,7 @@ interface KiddooState {
   };
   isMobileMenuOpen: boolean;
   isMuted: boolean;
+  theme: "light" | "dark";
 }
 
 const initialState: KiddooState = {
@@ -29,6 +30,7 @@ const initialState: KiddooState = {
   },
   isMobileMenuOpen: false,
   isMuted: false,
+  theme: "light",
 };
 
 const kiddooSlice = createSlice({
@@ -66,6 +68,9 @@ const kiddooSlice = createSlice({
     toggleMute: (state) => {
       state.isMuted = !state.isMuted;
     },
+    toggleTheme: (state) => {
+      state.theme = state.theme === "light" ? "dark" : "light";
+    },
   },
 });
 
@@ -79,6 +84,7 @@ export const {
   toggleMobileMenu,
   closeMobileMenu,
   toggleMute,
+  toggleTheme,
 } = kiddooSlice.actions;
 
 export default kiddooSlice.reducer;

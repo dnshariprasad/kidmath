@@ -1,7 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MAIN_MENU } from "../../store/data/Constants";
-import { MenuContainer, MenuHeading, MenuItem, MenuList, MenuSection } from "./styles";
+import { MAIN_MENU } from "../../constants/gameConstants";
+import {
+  MenuContainer,
+  MenuHeading,
+  MenuItem,
+  MenuList,
+  MenuSection,
+  MenuHeadingWrapper,
+  Arrow,
+} from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { closeMobileMenu } from "../../store/slice/AlphabetSlice";
@@ -50,18 +58,13 @@ const MainMenu: React.FC = () => {
               $isActive={hasActiveSub}
               $color={menu.color}
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <MenuHeadingWrapper>
                 <span className="icon-wrapper">
                   {renderIcon(menu.iconName, menu.color, hasActiveSub)}
                 </span>
                 <span className="title-wrapper">{menu.main}</span>
-              </div>
-              <span
-                className="arrow"
-                style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0)" }}
-              >
-                ▼
-              </span>
+              </MenuHeadingWrapper>
+              <Arrow $isExpanded={isExpanded}>▼</Arrow>
             </MenuHeading>
             <MenuList isVisible={isExpanded}>
               {menu.sub

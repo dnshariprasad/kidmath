@@ -29,6 +29,18 @@ export const MenuSection = styled.div`
   margin-bottom: 16px;
 `;
 
+export const MenuHeadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const Arrow = styled.span<{ $isExpanded: boolean }>`
+  transition: transform 0.3s ease;
+  font-size: 0.7rem;
+  opacity: 0.3;
+  transform: ${(props) => (props.$isExpanded ? "rotate(180deg)" : "rotate(0)")};
+`;
+
 export const MenuHeading = styled.div<{ $isActive?: boolean; $color?: string }>`
   color: ${(props) => (props.$isActive ? "#ffffff" : props.theme.colors.textPrimary)};
   font-family: ${(props) => props.theme.fonts.primary};
@@ -49,7 +61,10 @@ export const MenuHeading = styled.div<{ $isActive?: boolean; $color?: string }>`
     props.$isActive ? `0 4px 12px ${props.$color || props.theme.colors.primary}40` : "none"};
 
   &:hover {
-    background-color: #f8fafc;
+    background-color: ${(props) =>
+      props.$isActive ? props.$color || props.theme.colors.primary : "#f8fafc"};
+    filter: ${(props) => (props.$isActive ? "brightness(0.95)" : "none")};
+    transform: ${(props) => (props.$isActive ? "none" : "translateX(4px)")};
   }
 
   .icon-wrapper {
@@ -62,9 +77,7 @@ export const MenuHeading = styled.div<{ $isActive?: boolean; $color?: string }>`
     flex: 1;
   }
 
-  span.arrow {
-    transition: transform 0.3s ease;
-    font-size: 0.7rem;
+  ${Arrow} {
     opacity: ${(props) => (props.$isActive ? "0.9" : "0.3")};
     color: ${(props) => (props.$isActive ? "#ffffff" : "inherit")};
   }
@@ -108,7 +121,9 @@ export const MenuItem = styled.div<{ $active?: boolean; $color?: string }>`
   }
 
   &:hover {
-    background-color: #f8fafc;
+    background-color: ${(props) =>
+      props.$active ? (props.$color || "#6366F1") + "15" : "#f8fafc"};
     color: ${(props) => props.$color || props.theme.colors.primary};
+    transform: translateX(4px);
   }
 `;

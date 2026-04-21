@@ -1,5 +1,5 @@
-import { wordFamilies } from "./WordsData";
-import { sentences } from "../../store/data/WordsData";
+import { wordFamilies } from "../constants/wordsData";
+import { sentences } from "../constants/wordsData";
 
 export const getRandomWord = (stringList: string[]) => {
   if (!stringList || stringList.length === 0) return "";

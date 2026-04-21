@@ -6,13 +6,25 @@ interface ButtonProps {
   isActive?: boolean;
   onClick: () => void;
   variant?: "primary" | "secondary" | "accent" | "success";
-  style?: React.CSSProperties;
   children?: React.ReactNode;
+  size?: string;
+  width?: string;
+  minWidth?: string;
+  fontSize?: string;
 }
 
-const StyledButton = styled(motion.button)<{ $variant: string }>`
-  padding: 16px 32px;
-  font-size: 1.1rem;
+const StyledButton = styled(motion.button)<{
+  $variant: string;
+  $size?: string;
+  $width?: string;
+  $minWidth?: string;
+  $fontSize?: string;
+}>`
+  padding: ${(props) => (props.$size ? "0" : "16px 32px")};
+  width: ${(props) => props.$size || props.$width || "auto"};
+  min-width: ${(props) => props.$minWidth || "auto"};
+  height: ${(props) => props.$size || "auto"};
+  font-size: ${(props) => props.$fontSize || "1.1rem"};
   font-weight: 700;
   background: ${(props) => {
     switch (props.$variant) {
@@ -67,15 +79,21 @@ const KidButton: React.FC<ButtonProps> = ({
   onClick,
   isActive = true,
   variant = "primary",
-  style,
   children,
+  size,
+  width,
+  minWidth,
+  fontSize,
 }) => {
   return (
     <StyledButton
       data-testid="comp-kid-button"
       $variant={isActive ? variant : "sub"}
+      $size={size}
+      $width={width}
+      $minWidth={minWidth}
+      $fontSize={fontSize}
       onClick={onClick}
-      style={style}
       whileHover={{
         scale: 1.02,
         y: -1,

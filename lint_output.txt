@@ -1,0 +1,39 @@
+
+/Users/Hari/Code/ReactJS/kidmath/src/components/ChallengeHeader.tsx
+  2:10  error  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/Hari/Code/ReactJS/kidmath/src/main.tsx
+  23:7  warning  Fast refresh only works when a file has exports. Move your component(s) to a separate file  react-refresh/only-export-components
+
+/Users/Hari/Code/ReactJS/kidmath/src/pages/Welcome.tsx
+  2:10  error  'motion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/Hari/Code/ReactJS/kidmath/src/pages/english/MissingLettersChallenge.tsx
+  71:6  warning  React Hook useEffect has a missing dependency: 'generateChallenge'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/Hari/Code/ReactJS/kidmath/src/pages/english/SpellingChallenge.tsx
+  72:6  warning  React Hook useEffect has a missing dependency: 'generateChallenge'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/Hari/Code/ReactJS/kidmath/src/pages/english/SudokuGame.tsx
+   3:10  error    'AnimatePresence' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+  64:6   warning  React Hook useEffect has a missing dependency: 'generatePuzzle'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/Hari/Code/ReactJS/kidmath/src/pages/math/GreaterLessEqualGame.tsx
+  50:6  warning  React Hook useEffect has a missing dependency: 'resetGame'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/Hari/Code/ReactJS/kidmath/src/pages/math/MathChallenge.tsx
+   7:9  error    Replace `⏎··PageContainer,⏎··SettingsArea,⏎··GameLayout,⏎··GameActivityArea,⏎` with `·PageContainer,·SettingsArea,·GameLayout,·GameActivityArea·`  prettier/prettier
+  72:6  warning  React Hook useEffect has a missing dependency: 'generateQuestion'. Either include it or remove the dependency array                                react-hooks/exhaustive-deps
+
+/Users/Hari/Code/ReactJS/kidmath/src/pages/math/NumberSorter.tsx
+   8:9  error    Replace `·PageContainer,·SettingsArea,·ControlBar,·GameLayout,·GameActivityArea·` with `⏎··PageContainer,⏎··SettingsArea,⏎··ControlBar,⏎··GameLayout,⏎··GameActivityArea,⏎`  prettier/prettier
+  48:6  warning  React Hook useEffect has a missing dependency: 'resetGame'. Either include it or remove the dependency array                                                                 react-hooks/exhaustive-deps
+
+/Users/Hari/Code/ReactJS/kidmath/src/theme/KidStyles.tsx
+   5:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  11:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  17:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+✖ 15 problems (5 errors, 10 warnings)
+  2 errors and 0 warnings potentially fixable with the `--fix` option.
+

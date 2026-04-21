@@ -3,27 +3,34 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./dashboard/dashboard/index.tsx";
-import AlphabetPage from "./pages/english/AlphabetPage.tsx";
-import SightWordsChallenge from "./pages/english/SightWordsChallenge.tsx";
-import Welcome from "./pages/Welcome.tsx";
+import AlphabetPage from "./pages/english/AlphabetPage/index.tsx";
+import SightWordsChallenge from "./pages/english/SightWordsChallenge/index.tsx";
+import Welcome from "./pages/Welcome/index.tsx";
 import Navbar from "./dashboard/nav/index.tsx";
 import { ThemeProvider } from "styled-components";
-import { theme } from "./theme/theme.ts";
-import SpellingChallenge from "./pages/english/SpellingChallenge.tsx";
-import CrosswordSudoku from "./pages/english/SudokuGame.tsx";
-import AlphabetHindiChallenge from "./pages/hindi/AlphabetHindiChallenge.tsx";
-import { Provider } from "react-redux";
-import { store } from "./store/store.ts";
-import MissingLettersChallenge from "./pages/english/MissingLettersChallenge.tsx";
-import GreaterLessEqualGame from "./pages/math/GreaterLessEqualGame.tsx";
-import MathChallenge from "./pages/math/MathChallenge.tsx";
-import NumberSorter from "./pages/math/NumberSorter.tsx";
+import { lightTheme, darkTheme } from "./theme/theme.ts";
+import SpellingChallenge from "./pages/english/SpellingChallenge/index.tsx";
+import CrosswordSudoku from "./pages/english/SudokuGame/index.tsx";
+import AlphabetHindiChallenge from "./pages/hindi/AlphabetHindiChallenge/index.tsx";
+import { Provider, useSelector } from "react-redux";
+import { store, RootState } from "./store/store.ts";
+import MissingLettersChallenge from "./pages/english/MissingLettersChallenge/index.tsx";
+import GreaterLessEqualGame from "./pages/math/GreaterLessEqualGame/index.tsx";
+import MathChallenge from "./pages/math/MathChallenge/index.tsx";
+import NumberSorter from "./pages/math/NumberSorter/index.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
+
+const ConnectedThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const themeMode = useSelector((state: RootState) => state.alphabet.theme);
+  const currentTheme = themeMode === "dark" ? darkTheme : lightTheme;
+
+  return <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>;
+};
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
+      <ConnectedThemeProvider>
         <ErrorBoundary>
           <HashRouter>
             <Navbar />
@@ -45,7 +52,7 @@ createRoot(document.getElementById("root")!).render(
             </Routes>
           </HashRouter>
         </ErrorBoundary>
-      </ThemeProvider>
+      </ConnectedThemeProvider>
     </Provider>
   </StrictMode>,
 );
