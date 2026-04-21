@@ -3,23 +3,26 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import {
-  Card,
+  ActivityArea,
   PageContainer,
   Tag,
   TagList,
   SidebarTitle,
-  SettingsCard,
-  ControlBar,
+  SettingsArea,
   PageHeader,
   PageTitle,
   PageSubtitle,
   SessionStats,
-  GhostHeader,
+  TitleArea,
+  GameLayout,
+  ConfigSection,
+  ConfigSubTitle,
+  OptionLabel,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
-import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { SpellCheck, Star, HelpCircle, CheckCircle2, XCircle } from "lucide-react";
+import { SurpriseCard } from "../../components/SurpriseCard";
 import { readText } from "../../util/util";
 import { getAllWords, getRandomWord } from "../../store/data/WordUtil";
 import confetti from "canvas-confetti";
@@ -85,67 +88,6 @@ const HiddenInput = styled.input`
   pointer-events: none;
 `;
 
-const OptionLabel = styled.label<{ $isActive: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 5px;
-  border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
-  font-size: 0.95rem;
-
-  &:hover {
-    background: ${(props) => props.theme.colors.primary}08;
-  }
-
-  input {
-    width: 18px;
-    height: 18px;
-    accent-color: ${(props) => props.theme.colors.primary};
-  }
-`;
-
-const GameLayout = styled.div`
-  display: flex;
-  gap: 30px;
-  width: 100%;
-  align-items: flex-start;
-
-  @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-`;
-
-const MainSide = styled.div`
-  flex: 3;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 992px) {
-    order: 1;
-  }
-`;
-
-const SidebarSide = styled.div`
-  flex: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-
-  @media (max-width: 992px) {
-    order: 2;
-    margin-top: 0;
-  }
-`;
-
 const SpellingChallenge = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [currentWord, setCurrentWord] = useState<string>("");
@@ -174,6 +116,13 @@ const SpellingChallenge = () => {
     setShowHint(false);
   };
 
+  const handleFeelingLucky = () => {
+    const complexites: ("Easy" | "Medium" | "Hard")[] = ["Easy", "Medium", "Hard"];
+    const randomComp = complexites[Math.floor(Math.random() * complexites.length)];
+    setComplexity(randomComp);
+    readText("Spelling Surprise!");
+  };
+
   useEffect(() => {
     generateChallenge();
   }, [complexity]);
@@ -187,19 +136,16 @@ const SpellingChallenge = () => {
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value.toUpperCase().replace(/[^A-Z]/g, "");
+    const val = e.target.value.toUpperCase();
     if (val.length <= currentWord.length) {
       setInputValue(val);
-      if (feedback) setFeedback(null);
     }
   };
 
   const handleSubmit = () => {
-    if (inputValue.length === 0) return;
-
-    if (currentWord === inputValue) {
-      setFeedback({ message: "Brilliant! You nailed it! 🌟", isCorrect: true });
-      readText("Brilliant");
+    if (inputValue === currentWord) {
+      setFeedback({ message: "Excellent! You spelled it right! 🌟", isCorrect: true });
+      readText("Excellent");
       setHistory((prev) => [currentWord, ...prev].slice(0, 8));
       confetti({
         particleCount: 150,
@@ -207,9 +153,9 @@ const SpellingChallenge = () => {
         origin: { y: 0.6 },
         colors: ["#6366F1", "#4F46E5", "#FF7675"],
       });
-      setTimeout(generateChallenge, 2500);
+      setTimeout(generateChallenge, 2000);
     } else {
-      setFeedback({ message: "Almost there! Try again! 💪", isCorrect: false });
+      setFeedback({ message: "Almost! Try one more time! 💪", isCorrect: false });
       readText("Try again");
       setInputValue("");
     }
@@ -220,7 +166,7 @@ const SpellingChallenge = () => {
   };
 
   return (
-    <PageContainer data-testid="page-spelling-bee">
+    <PageContainer data-testid="page-spelling-challenge">
       <HiddenInput
         id="spelling-input"
         type="text"
@@ -231,7 +177,7 @@ const SpellingChallenge = () => {
       />
       
       <GameLayout>
-        <MainSide>
+        <TitleArea data-testid="title-area">
           <PageHeader>
             <PageTitle>
               <SpellCheck size={40} color="#6366F1" strokeWidth={2.5} />
@@ -252,145 +198,114 @@ const SpellingChallenge = () => {
               ))}
             </SessionStats>
           </PageHeader>
+        </TitleArea>
 
-          <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none", position: "relative" }}>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setShowHint(true)}
-              style={{
-                position: "absolute",
-                top: "20px",
-                left: "20px",
-                cursor: "pointer",
-                color: showHint ? "#6366F1" : "#dfe6e9",
-                transition: "color 0.2s ease"
-              }}
-              title="Need a hint?"
-            >
-              <HelpCircle size={28} />
+        <SurpriseCard 
+          title="Spelling surprise?"
+          onShuffle={handleFeelingLucky}
+        />
+
+        <ActivityArea style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative" }}>
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setShowHint(true)}
+            style={{
+              position: "absolute",
+              top: "20px",
+              left: "20px",
+              cursor: "pointer",
+              color: showHint ? "#6366F1" : "#dfe6e9",
+              transition: "color 0.2s ease"
+            }}
+            title="Need a hint?"
+          >
+            <HelpCircle size={28} />
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={generateChallenge}
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+              cursor: "pointer",
+              color: "#dfe6e9",
+              transition: "color 0.2s ease"
+            }}
+            title="Skip to next"
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#6366F1")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#dfe6e9")}
+          >
+            <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m6 17 5-5-5-5M13 17l5-5-5-5"/>
+              </svg>
             </motion.div>
+          </motion.div>
 
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={generateChallenge}
-              style={{
-                position: "absolute",
-                top: "20px",
-                right: "20px",
-                cursor: "pointer",
-                color: "#dfe6e9",
-                transition: "color 0.2s ease"
-              }}
-              title="Skip to next"
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#6366F1")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#dfe6e9")}
-            >
-              <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m6 17 5-5-5-5M13 17l5-5-5-5"/>
-                </svg>
+          <BigSpeakWrapper 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => readText(currentWord)}
+          >
+            <SpeakIcon text={currentWord} />
+            <KidoText fontSize="1rem" color="textSecondary" fontWeight="bold">Click to listen</KidoText>
+          </BigSpeakWrapper>
+
+          <LetterSlots>
+            {currentWord.split("").map((letter, i) => (
+              <LetterSlot
+                key={i}
+                $isActive={inputValue.length === i}
+                $isError={feedback?.isCorrect === false && inputValue.length === currentWord.length}
+                $isSuccess={feedback?.isCorrect === true}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                {inputValue[i] || (showHint && (i === 0 || i === currentWord.length - 1) ? letter : "")}
+              </LetterSlot>
+            ))}
+          </LetterSlots>
+
+          <AnimatePresence>
+            {feedback && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}
+              >
+                {feedback.isCorrect ? <CheckCircle2 color="#4CAF50" /> : <XCircle color="#FF7675" />}
+                <KidoText color={feedback.isCorrect ? "success" : "accent"} fontSize="1.2rem">
+                  {feedback.message}
+                </KidoText>
               </motion.div>
-            </motion.div>
-
-            <BigSpeakWrapper 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => readText(currentWord)}
-            >
-              <SpeakIcon text={currentWord} />
-              <KidoText fontSize="0.9rem" color="textSecondary">Tap to listen</KidoText>
-            </BigSpeakWrapper>
-
-            <LetterSlots>
-              {currentWord.split("").map((char, i) => (
-                <LetterSlot
-                  key={i}
-                  $isActive={inputValue.length === i}
-                  $isError={feedback?.isCorrect === false}
-                  $isSuccess={feedback?.isCorrect === true}
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  {inputValue[i] || (showHint ? char : "")}
-                </LetterSlot>
-              ))}
-            </LetterSlots>
-
-            <AnimatePresence>
-              {feedback && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  style={{ 
-                    display: "flex", 
-                    alignItems: "center", 
-                    gap: "10px",
-                    color: feedback.isCorrect ? "#00B894" : "#FF7675",
-                    marginBottom: "30px"
-                  }}
-                >
-                  {feedback.isCorrect ? <CheckCircle2 size={32} /> : <XCircle size={32} />}
-                  <h2 style={{ fontSize: "1.8rem", margin: 0 }}>{feedback.message}</h2>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {!feedback && (
-              <ControlBar>
-                <KidButton 
-                  title="Check Spelling" 
-                  variant="success" 
-                  onClick={handleSubmit}
-                  style={{ minWidth: "220px" }}
+            )}
+          </AnimatePresence>
+        </ActivityArea>
+ 
+        <SettingsArea data-testid="settings-area">
+          <ConfigSection>
+            <ConfigSubTitle>Difficulty</ConfigSubTitle>
+            {(["Easy", "Medium", "Hard"] as const).map((level) => (
+              <OptionLabel key={level} $isActive={complexity === level}>
+                <input
+                  type="radio"
+                  name="complexity"
+                  checked={complexity === level}
+                  onChange={() => setComplexity(level)}
                 />
-              </ControlBar>
-            )}
-            
-            {showHint && !feedback && (
-              <KidoText color="accent" fontSize="1rem" style={{ marginTop: "20px" }}>
-                Hint: Focus on the letters in the boxes! 🔍
-              </KidoText>
-            )}
-          </Card>
-        </MainSide>
-
-        <SidebarSide>
-          <GhostHeader>
-            <PageHeader>
-              <PageTitle>
-                <SpellCheck size={40} />
-                Ghost
-              </PageTitle>
-              <PageSubtitle>Ghost</PageSubtitle>
-              <SessionStats>
-                <span style={{ fontSize: "1.8rem" }}>⭐</span>
-              </SessionStats>
-            </PageHeader>
-          </GhostHeader>
-          <SettingsCard>
-            <SidebarTitle style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <SpellCheck size={20} color="#6366F1" />
-              Game Difficulty
-            </SidebarTitle>
-            <div style={{ marginBottom: "20px" }}>
-              {(["Easy", "Medium", "Hard"] as const).map((level) => (
-                <OptionLabel key={level} $isActive={complexity === level}>
-                  <input
-                    type="radio"
-                    name="complexity"
-                    checked={complexity === level}
-                    onChange={() => setComplexity(level)}
-                  />
-                  {level} {level === "Easy" ? "🌱" : level === "Medium" ? "🚀" : "🏆"}
-                </OptionLabel>
-              ))}
-            </div>
-
-            <SidebarTitle style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "20px" }}>
+                {level === "Easy" ? "Short (3-4)" : level === "Medium" ? "Medium (5-7)" : "Long (8+)"}
+              </OptionLabel>
+            ))}
+          </ConfigSection>
+ 
+          <ConfigSection>
+            <SidebarTitle style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "10px" }}>
               <Star size={20} fill="#FFD700" color="#FFD700" />
               Words Mastered
             </SidebarTitle>
@@ -408,8 +323,8 @@ const SpellingChallenge = () => {
                 ))
               )}
             </TagList>
-          </SettingsCard>
-        </SidebarSide>
+          </ConfigSection>
+        </SettingsArea>
       </GameLayout>
     </PageContainer>
   );

@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import {
-  Card,
   PageContainer,
   StyledInput,
   Tag,
   TagList,
   SidebarTitle,
-  SettingsCard,
+  SettingsArea,
   ControlBar,
   PageHeader,
   PageTitle,
   PageSubtitle,
   SessionStats,
-  GhostHeader,
+  TitleArea,
+  ActivityArea,
+  GameLayout,
+  ConfigSection,
+  ConfigSubTitle,
+  OptionLabel,
 } from "../../theme/KidStyles";
-import SpeakIcon from "../../components/SpeakIcon";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
-import { Type } from "lucide-react";
+import { Type, HelpCircle, Settings2 } from "lucide-react";
+import { SurpriseCard } from "../../components/SurpriseCard";
 import { readText } from "../../util/util";
 import {
   getAllWords,
@@ -31,47 +34,6 @@ import {
 import confetti from "canvas-confetti";
 import { RootState } from "../../store/store";
 
-const GameLayout = styled.div`
-  display: flex;
-  gap: 30px;
-  width: 100%;
-  align-items: flex-start;
-
-  @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-`;
-
-const SidebarSide = styled.div`
-  flex: 1;
-  width: 100%;
-  position: sticky;
-  top: 20px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 0; 
-
-  @media (max-width: 992px) {
-    order: 2;
-    position: static;
-    margin-top: 0;
-  }
-`;
-
-const MainSide = styled.div`
-  flex: 3;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 992px) {
-    order: 1;
-  }
-`;
-
 const MissingLettersChallenge = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
   const [randomString, setRandomString] = useState<string>("");
@@ -79,20 +41,35 @@ const MissingLettersChallenge = () => {
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
   const [history, setHistory] = useState<string[]>([]);
+  const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
+  const [showHint, setShowHint] = useState(false);
 
   const generateChallenge = () => {
-    let rs = getRandomWord(getAllWords());
+    let words = getAllWords();
+    if (complexity === "Easy") words = words.filter(w => w.length <= 4);
+    else if (complexity === "Medium") words = words.filter(w => w.length > 4 && w.length <= 7);
+    else words = words.filter(w => w.length > 7);
+
+    let rs = getRandomWord(words);
     setRandomString(rs);
     setRandomStringWithMissingLetter(
       createMissingLetterWord(rs, randomNumber(rs.length))
     );
     setInputValue("");
     setFeedback(null);
+    setShowHint(false);
+  };
+
+  const handleFeelingLucky = () => {
+    const complexites: ("Easy" | "Medium" | "Hard")[] = ["Easy", "Medium", "Hard"];
+    const randomComp = complexites[Math.floor(Math.random() * complexites.length)];
+    setComplexity(randomComp);
+    readText("Word Surprise!");
   };
 
   useEffect(() => {
     generateChallenge();
-  }, []);
+  }, [complexity]);
 
   const handleSubmit = () => {
     if (randomString.toLowerCase() === inputValue.toLowerCase()) {
@@ -115,7 +92,7 @@ const MissingLettersChallenge = () => {
   return (
     <PageContainer data-testid="page-missing-letters">
       <GameLayout>
-        <MainSide data-testid="layout-main-content">
+        <TitleArea data-testid="title-area">
           <PageHeader>
             <PageTitle>
               <Type size={40} color="#6366F1" strokeWidth={2.5} />
@@ -136,104 +113,120 @@ const MissingLettersChallenge = () => {
               ))}
             </SessionStats>
           </PageHeader>
-          <Card style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none", position: "relative" }}>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={generateChallenge}
-              style={{
-                position: "absolute",
-                top: "20px",
-                right: "20px",
-                cursor: "pointer",
-                color: "#dfe6e9",
-                transition: "color 0.2s ease"
-              }}
-              title="Skip to next"
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#6366F1")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#dfe6e9")}
-            >
-              <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m6 17 5-5-5-5M13 17l5-5-5-5"/>
-                </svg>
-              </motion.div>
-            </motion.div>
+        </TitleArea>
 
-            <div style={{ marginBottom: "30px" }}>
-              <SpeakIcon text={randomString} />
-            </div>
+        <SurpriseCard 
+          title="Word surprise?"
+          onShuffle={handleFeelingLucky}
+        />
 
-            <div style={{ width: "100%", textAlign: "center", marginBottom: "20px" }}>
-              <KidoText fontSize="clamp(3rem, 15vw, 6rem)" color="primary" fontWeight={900} style={{ letterSpacing: "8px", whiteSpace: "nowrap" }}>
-                {randomStringWithMissingLetter}
-              </KidoText>
-            </div>
-            
-            <StyledInput
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="?"
-              width="180px"
-              onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
-              autoFocus
-              style={{ marginBottom: "10px" }}
-            />
-
-            <ControlBar>
-              <KidButton 
-                title="Check Answer" 
-                onClick={handleSubmit} 
-                variant="success" 
-                style={{ minWidth: "220px" }}
-              />
-            </ControlBar>
-
-            <AnimatePresence>
-              {feedback && (
-                <motion.h2
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  style={{
-                    color: feedback.isCorrect ? "#55EFC4" : "#FF7675",
-                    marginTop: "25px",
-                    fontSize: "2.2rem"
-                  }}
+        <ActivityArea data-testid="activity-area" style={{ textAlign: "center", minHeight: "550px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative" }}>
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => {
+              setShowHint(true);
+              setTimeout(() => setShowHint(false), 2000);
+            }}
+            style={{
+              position: "absolute",
+              top: "20px",
+              left: "20px",
+              cursor: "pointer",
+              color: showHint ? "#6366F1" : "#dfe6e9",
+              transition: "color 0.2s ease"
+            }}
+            title="Need a hint?"
+          >
+            <HelpCircle size={28} />
+          </motion.div>
+          
+          <div style={{ marginBottom: "30px" }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={randomString}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -20, opacity: 0 }}
+              >
+                <KidoText 
+                  fontSize="clamp(3rem, 15vw, 6rem)" 
+                  color="primary" 
+                  fontWeight={900} 
+                  style={{ letterSpacing: "8px", whiteSpace: "nowrap" }}
                 >
-                  {feedback.message}
-                </motion.h2>
-              )}
+                  {showHint ? randomString : randomStringWithMissingLetter}
+                </KidoText>
+              </motion.div>
             </AnimatePresence>
-          </Card>
-        </MainSide>
+          </div>
+          
+          <StyledInput
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="?"
+            width="180px"
+            onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
+            autoFocus
+            style={{ marginBottom: "10px" }}
+          />
 
-        <SidebarSide data-testid="layout-settings-panel">
-          <GhostHeader>
-            <PageHeader>
-              <PageTitle>
-                <Type size={40} />
-                Ghost
-              </PageTitle>
-              <PageSubtitle>Ghost</PageSubtitle>
-              <SessionStats>
-                <span style={{ fontSize: "1.8rem" }}>⭐</span>
-              </SessionStats>
-            </PageHeader>
-          </GhostHeader>
-          <SettingsCard>
-            <SidebarTitle>✅ Solved Recently:</SidebarTitle>
+          <ControlBar>
+            <KidButton 
+              title="Check Answer" 
+              onClick={handleSubmit} 
+              variant="success" 
+              style={{ minWidth: "220px" }}
+            />
+          </ControlBar>
+
+          <AnimatePresence>
+            {feedback && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                style={{ marginTop: "20px" }}
+              >
+                <KidoText color={feedback.isCorrect ? "success" : "accent"} fontSize="1.2rem">
+                  {feedback.message}
+                </KidoText>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </ActivityArea>
+
+        <SettingsArea data-testid="settings-area">
+          <ConfigSection>
+            <ConfigSubTitle>Difficulty</ConfigSubTitle>
+            {(["Easy", "Medium", "Hard"] as const).map((level) => (
+              <OptionLabel key={level} $isActive={complexity === level}>
+                <input
+                  type="radio"
+                  name="complexity"
+                  checked={complexity === level}
+                  onChange={() => setComplexity(level)}
+                />
+                {level} Words
+              </OptionLabel>
+            ))}
+          </ConfigSection>
+
+          <ConfigSection>
+            <SidebarTitle style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <Settings2 size={20} />
+              Recent Success
+            </SidebarTitle>
             <TagList>
-              {history.length === 0 ? (
-                <KidoText color="#636E72" fontSize="0.9rem">Start solving to see your list! ✍️</KidoText>
-              ) : (
-                history.map((word, index) => (
-                  <Tag key={index}>{word}</Tag>
-                ))
-              )}
+              {history.map((word, i) => (
+                <Tag key={i} style={{ background: "#F0FFF4", color: "#2F855A", borderColor: "#C6F6D5" }}>
+                  {word}
+                </Tag>
+              ))}
             </TagList>
-          </SettingsCard>
-        </SidebarSide>
+          </ConfigSection>
+        </SettingsArea>
       </GameLayout>
     </PageContainer>
   );

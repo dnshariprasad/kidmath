@@ -8,11 +8,11 @@ import { Calculator, Type, Languages, Trophy } from "lucide-react";
 
 const DashboardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
   width: 100%;
-  max-width: 1000px;
-  margin-top: 30px;
+  max-width: 1200px;
+  margin-top: 15px;
 `;
 
 const CategoryCard = styled(motion.div)<{ $color: string }>`
@@ -112,7 +112,7 @@ const Welcome: React.FC = () => {
         color: "white", 
         padding: "40px 20px",
         width: "100%",
-        maxWidth: "800px",
+        maxWidth: "1000px",
         boxSizing: "border-box"
       }}>
         <div style={{ 

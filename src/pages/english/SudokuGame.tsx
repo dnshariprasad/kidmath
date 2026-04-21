@@ -1,187 +1,143 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 import styled from "styled-components";
+import KidButton from "../../components/KidButton";
+import { KidoText } from "../../components/KidoText";
+import { Grid3X3, Trash2 } from "lucide-react";
+import { SurpriseCard } from "../../components/SurpriseCard";
 import {
-  Card,
+  ActivityArea,
   PageContainer,
-  SettingsCard,
-  SidebarTitle,
-  ControlBar,
+  SettingsArea,
   PageHeader,
   PageTitle,
   PageSubtitle,
   SessionStats,
-  GhostHeader,
+  TitleArea,
+  GameLayout,
+  ConfigSection,
+  ConfigSubTitle,
+  OptionLabel,
 } from "../../theme/KidStyles";
-import KidButton from "../../components/KidButton";
-import { Grid as GridIcon } from "lucide-react";
-import { useSelector } from "react-redux";
+import { readText } from "../../util/util";
 import { RootState } from "../../store/store";
-import { motion } from "framer-motion";
-
-type Cell = {
-  value: string;
-  isEditable: boolean;
-};
-
-type Grid = Cell[][];
-
-const initialGrid: Grid = [
-  [
-    { value: "C", isEditable: false },
-    { value: "", isEditable: true },
-    { value: "", isEditable: true },
-    { value: "A", isEditable: false },
-    { value: "", isEditable: true },
-    { value: "", isEditable: true },
-    { value: "T", isEditable: false },
-    { value: "", isEditable: true },
-    { value: "", isEditable: true },
-  ],
-  [
-    { value: "", isEditable: true },
-    { value: "", isEditable: true },
-    { value: "", isEditable: true },
-    { value: "", isEditable: true },
-    { value: "P", isEditable: false },
-    { value: "", isEditable: true },
-    { value: "", isEditable: true },
-    { value: "O", isEditable: false },
-    { value: "", isEditable: true },
-  ],
-  // Add more rows to form a 9x9 grid...
-];
-
-const GameLayout = styled.div`
-  display: flex;
-  gap: 30px;
-  width: 100%;
-  align-items: flex-start;
-
-  @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-`;
-
-const MainSide = styled.div`
-  flex: 3;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 992px) {
-    order: 1;
-  }
-`;
-
-const SidebarSide = styled.div`
-  flex: 1;
-  width: 100%;
-  position: sticky;
-  top: 20px;
-  display: flex;
-  flex-direction: column;
-
-  @media (max-width: 992px) {
-    order: 2;
-    position: static;
-    margin-top: 0;
-  }
-`;
 
 const SudokuGrid = styled.div`
   display: grid;
-  grid-template-rows: repeat(9, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 450px;
+  margin: 30px 0;
+
+  @media (max-width: 576px) {
+    gap: 8px;
+    max-width: 320px;
+  }
+`;
+
+const SudokuCell = styled(motion.div)<{ $isActive: boolean; $isFixed: boolean; $isError: boolean }>`
+  aspect-ratio: 1;
+  background: ${(props) => (props.$isFixed ? "#F8F9FA" : "white")};
+  border: 3px solid ${(props) => {
+    if (props.$isError) return props.theme.colors.accent;
+    if (props.$isActive) return props.theme.colors.primary;
+    return "#F0F0F0";
+  }};
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  background: ${(props) => props.theme.colors.primary}08;
-  padding: 20px;
-  border-radius: 20px;
-  border: 2px solid ${(props) => props.theme.colors.primary}15;
-`;
-
-const SudokuRow = styled.div`
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  gap: 8px;
-`;
-
-const CellInput = styled.input<{ $isEditable: boolean }>`
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  font-size: 1.5rem;
+  font-size: 2.2rem;
   font-weight: 800;
-  border-radius: 12px;
-  border: 2px solid ${(props) => (props.$isEditable ? props.theme.colors.primary + "30" : "transparent")};
-  background-color: ${(props) => (props.$isEditable ? "white" : props.theme.colors.primary + "15")};
-  color: ${(props) => props.theme.colors.primary};
-  font-family: ${(props) => props.theme.fonts.primary};
+  color: ${(props) => (props.$isFixed ? "#636E72" : props.theme.colors.primary)};
+  cursor: ${(props) => (props.$isFixed ? "default" : "pointer")};
+  box-shadow: ${(props) => props.$isActive ? "0 8px 16px rgba(99, 102, 241, 0.15)" : "none"};
   transition: all 0.2s ease;
-  outline: none;
 
-  &:focus {
-    border-color: ${(props) => props.theme.colors.primary};
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px ${(props) => props.theme.colors.primary}15;
-  }
-
-  &:disabled {
-    cursor: default;
-  }
-
-  @media (max-width: 768px) {
-    width: 35px;
-    height: 35px;
-    font-size: 1rem;
+  &:hover {
+    border-color: ${(props) => !props.$isFixed && props.theme.colors.primary}80;
   }
 `;
 
-const CrosswordSudoku: React.FC = () => {
+const NumberPad = styled.div`
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+`;
+
+const SudokuGame: React.FC = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
-  const [grid, setGrid] = useState<Grid>(initialGrid);
+  const [grid, setGrid] = useState<(number | null)[]>(Array(16).fill(null));
+  const [fixed, setFixed] = useState<boolean[]>(Array(16).fill(false));
+  const [selectedCell, setSelectedCell] = useState<number | null>(null);
+  const [difficulty, setDifficulty] = useState<"Easy" | "Hard">("Easy");
+  const [feedback, setFeedback] = useState<string | null>(null);
 
-  const handleChange = (rowIndex: number, colIndex: number, value: string) => {
-    const newGrid = [...grid];
-    newGrid[rowIndex][colIndex].value = value.toUpperCase().slice(-1);
+  const generatePuzzle = () => {
+    const newGrid: (number | null)[] = Array(16).fill(null);
+    const newFixed: boolean[] = Array(16).fill(false);
+    
+    const base = [
+      [1, 2, 3, 4],
+      [3, 4, 1, 2],
+      [2, 1, 4, 3],
+      [4, 3, 2, 1]
+    ].flat();
+
+    const fillCount = difficulty === "Easy" ? 8 : 4;
+    const indices = Array.from({ length: 16 }, (_, i) => i).sort(() => Math.random() - 0.5);
+    
+    for (let i = 0; i < fillCount; i++) {
+      const idx = indices[i];
+      newGrid[idx] = base[idx];
+      newFixed[idx] = true;
+    }
+
     setGrid(newGrid);
+    setFixed(newFixed);
+    setSelectedCell(null);
+    setFeedback(null);
   };
 
-  const validateSolution = () => {
-    const isCorrect = grid.every((row) =>
-      row.every((cell) => (cell.isEditable ? /^[A-Z]$/.test(cell.value) : true))
-    );
-    alert(isCorrect ? "Puzzle solved correctly! 🌟" : "Some answers are wrong! 😅");
+  const handleFeelingLucky = () => {
+    const difficulties: ("Easy" | "Hard")[] = ["Easy", "Hard"];
+    const randomDiff = difficulties[Math.floor(Math.random() * difficulties.length)];
+    setDifficulty(randomDiff);
+    readText("Sudoku Surprise!");
   };
 
-  const solvePuzzle = () => {
-    const solvedGrid = grid.map((row) =>
-      row.map((cell) =>
-        cell.isEditable ? { ...cell, value: "A" } : cell
-      )
-    );
-    setGrid(solvedGrid);
+  useEffect(() => {
+    generatePuzzle();
+  }, [difficulty]);
+
+  const handleCellClick = (index: number) => {
+    if (!fixed[index]) {
+      setSelectedCell(index);
+    }
   };
 
-  const resetPuzzle = () => {
-    const resetGrid = grid.map((row) =>
-      row.map((cell) => (cell.isEditable ? { ...cell, value: "" } : cell))
-    );
-    setGrid(resetGrid);
+  const handleNumberInput = (num: number | null) => {
+    if (selectedCell !== null && !fixed[selectedCell]) {
+      const newGrid = [...grid];
+      newGrid[selectedCell] = num;
+      setGrid(newGrid);
+    }
   };
 
   return (
     <PageContainer data-testid="page-sudoku">
       <GameLayout>
-        <MainSide data-testid="layout-main-content">
+        <TitleArea data-testid="title-area">
           <PageHeader>
             <PageTitle>
-              <GridIcon size={32} strokeWidth={2.5} />
-              Crossword Sudoku
+              <Grid3X3 size={40} color="#6366F1" strokeWidth={2.5} />
+              Kid Sudoku
             </PageTitle>
-            <PageSubtitle>Solve the word puzzle by filling the grid!</PageSubtitle>
+            <PageSubtitle>Fill the grid so every row and block has numbers 1-4!</PageSubtitle>
             <SessionStats>
               {Array.from({ length: Math.min(12, streak) }).map((_, i) => (
                 <motion.span
@@ -196,52 +152,90 @@ const CrosswordSudoku: React.FC = () => {
               ))}
             </SessionStats>
           </PageHeader>
-          <Card style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
-            <SudokuGrid>
-              {grid.map((row, rowIndex) => (
-                <SudokuRow key={rowIndex}>
-                  {row.map((cell, colIndex) => (
-                    <CellInput
-                      key={colIndex}
-                      value={cell.value}
-                      disabled={!cell.isEditable}
-                      onChange={(e) =>
-                        handleChange(rowIndex, colIndex, e.target.value)
-                      }
-                      $isEditable={cell.isEditable}
-                    />
-                  ))}
-                </SudokuRow>
-              ))}
-            </SudokuGrid>
-          </Card>
-        </MainSide>
+        </TitleArea>
 
-        <SidebarSide data-testid="layout-settings-panel">
-          <GhostHeader>
-            <PageHeader>
-              <PageTitle>
-                <GridIcon size={32} />
-                Ghost
-              </PageTitle>
-              <PageSubtitle>Ghost</PageSubtitle>
-              <SessionStats>
-                <span style={{ fontSize: "1.8rem" }}>⭐</span>
-              </SessionStats>
-            </PageHeader>
-          </GhostHeader>
-          <SettingsCard>
-            <SidebarTitle>⚙️ Game Controls</SidebarTitle>
-            <ControlBar style={{ flexDirection: "column", gap: "15px", marginTop: "10px" }}>
-              <KidButton onClick={validateSolution} title="Check Answers" variant="success" />
-              <KidButton onClick={solvePuzzle} title="Show Solution" variant="primary" />
-              <KidButton onClick={resetPuzzle} title="Reset Puzzle" variant="secondary" />
-            </ControlBar>
-          </SettingsCard>
-        </SidebarSide>
+        <SurpriseCard 
+          title="Sudoku surprise?"
+          onShuffle={handleFeelingLucky}
+        />
+
+        <ActivityArea style={{ textAlign: "center", minHeight: "600px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+          <SudokuGrid>
+            {grid.map((val, i) => (
+              <SudokuCell
+                key={i}
+                $isActive={selectedCell === i}
+                $isFixed={fixed[i]}
+                $isError={false}
+                onClick={() => handleCellClick(i)}
+                whileHover={!fixed[i] ? { scale: 1.05 } : {}}
+                whileTap={!fixed[i] ? { scale: 0.95 } : {}}
+              >
+                {val}
+              </SudokuCell>
+            ))}
+          </SudokuGrid>
+
+          <NumberPad>
+            {[1, 2, 3, 4].map((num) => (
+              <KidButton
+                key={num}
+                title={num.toString()}
+                onClick={() => handleNumberInput(num)}
+                variant="secondary"
+                style={{ width: "60px", height: "60px", fontSize: "1.5rem" }}
+              />
+            ))}
+            <KidButton
+              title=""
+              onClick={() => handleNumberInput(null)}
+              variant="accent"
+              style={{ width: "60px", height: "60px" }}
+            >
+              <Trash2 size={24} />
+            </KidButton>
+          </NumberPad>
+          
+          {feedback && <KidoText color="primary" fontSize="1.2rem" style={{ marginTop: "20px" }}>{feedback}</KidoText>}
+        </ActivityArea>
+
+        <SettingsArea data-testid="settings-area">
+          <ConfigSection>
+            <ConfigSubTitle>Puzzle Level</ConfigSubTitle>
+            <OptionLabel $isActive={difficulty === "Easy"}>
+              <input
+                type="radio"
+                name="diff"
+                checked={difficulty === "Easy"}
+                onChange={() => setDifficulty("Easy")}
+              />
+              Easy (8 Hints)
+            </OptionLabel>
+            <OptionLabel $isActive={difficulty === "Hard"}>
+              <input
+                type="radio"
+                name="diff"
+                checked={difficulty === "Hard"}
+                onChange={() => setDifficulty("Hard")}
+              />
+              Hard (4 Hints)
+            </OptionLabel>
+          </ConfigSection>
+
+          <ConfigSection>
+            <ConfigSubTitle>How to Play</ConfigSubTitle>
+            <div style={{ padding: "15px", background: "rgba(99, 102, 241, 0.05)", borderRadius: "15px" }}>
+              <KidoText fontSize="0.9rem" color="textSecondary">
+                • Pick a white box<br/>
+                • Tap a number to fill it<br/>
+                • Every 2x2 box must have 1, 2, 3, and 4!
+              </KidoText>
+            </div>
+          </ConfigSection>
+        </SettingsArea>
       </GameLayout>
     </PageContainer>
   );
 };
 
-export default CrosswordSudoku;
+export default SudokuGame;

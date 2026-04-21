@@ -1,137 +1,89 @@
-import { useState, useRef, useEffect } from "react";
-import styled, { useTheme } from "styled-components";
+import { useState, useEffect, useRef, useMemo } from "react";
+import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Card,
+  ActivityArea,
+  SettingsArea,
   PageContainer,
   Tag,
   TagList,
-  SidebarTitle,
-  SettingsCard,
   NavControlBar,
   PageHeader,
   PageTitle,
   PageSubtitle,
   SessionStats,
-  GhostHeader,
+  TitleArea,
+  GameLayout,
+  ConfigSection,
+  ConfigSubTitle,
+  OptionLabel,
 } from "../theme/KidStyles";
 import SpeakIcon from "../components/SpeakIcon";
 import NextIcon from "../components/NextIcon";
 import PreviousIcon from "../components/PreviousIcon";
+import { BookOpen, Wand2 } from "lucide-react";
+import KidButton from "../components/KidButton";
+import { SurpriseCard } from "../components/SurpriseCard";
 import { KidoText } from "../components/KidoText";
-import { BookOpen } from "lucide-react";
-import SentenceReader from "./SentenceReader";
-import { getSentencesOfWord } from "../store/data/WordUtil";
+import { readText } from "../util/util";
+import { getAllWords } from "../store/data/WordUtil";
 import { RootState } from "../store/store";
 
-const GameLayout = styled.div`
-  display: flex;
-  gap: 30px;
-  width: 100%;
-  align-items: flex-start;
-
-  @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-`;
-
-const SidebarSide = styled.div`
-  flex: 1;
-  width: 100%;
-  position: sticky;
-  top: 20px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 0; 
-
-  @media (max-width: 992px) {
-    order: 2;
-    position: static;
-    margin-top: 0;
-  }
-`;
-
-const MainSide = styled.div`
-  flex: 3;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 992px) {
-    order: 1;
-  }
-`;
-
 const WordDisplay = styled(motion.div)`
-  font-size: clamp(3rem, 15vw, 6rem);
-  font-weight: 800;
-  color: ${(props) => props.theme.colors.primary};
+  font-size: clamp(6rem, 15vw, 12rem);
+  font-weight: 900;
+  color: #6366f1;
+  text-align: center;
+  margin: 40px 0;
   font-family: ${(props) => props.theme.fonts.primary};
-  text-shadow: 0 8px 16px ${(props) => props.theme.colors.shadow};
-  margin-bottom: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    font-size: clamp(2.5rem, 20vw, 4.5rem);
-  }
+  text-transform: capitalize;
+  text-shadow: 
+    0 10px 0 #4f46e5,
+    0 20px 30px rgba(99, 102, 241, 0.2);
 `;
 
-interface IWord {
-  mame?: string;
-  words?: string[];
-  enabled?: boolean;
-}
-
-const WordReader = (props: IWord) => {
+const WordReader = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
-  const theme = useTheme();
-  const words = props.words || [];
-  const [count, setCount] = useState<number>(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [level, setLevel] = useState(1);
+  const [count, setCount] = useState(0);
+  
+  const allWords = getAllWords();
+  const filteredWords = useMemo(() => {
+    return allWords.filter((w) => {
+      if (level === 1) return w.length <= 4;
+      if (level === 2) return w.length > 4 && w.length <= 6;
+      return w.length > 6;
+    });
+  }, [allWords, level]);
+
+  const activeTabRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      const activeTab = scrollRef.current.children[count] as HTMLElement;
-      if (activeTab) {
-        activeTab.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-      }
+    setCount(0);
+  }, [level]);
+
+  useEffect(() => {
+    if (activeTabRef.current) {
+      activeTabRef.current.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     }
   }, [count]);
 
-  if (words.length === 0) {
-    return (
-      <PageContainer>
-        <KidoText fontSize="24px" color="textSecondary">
-          No words found. Let's try another section! 🎈
-        </KidoText>
-      </PageContainer>
-    );
-  }
+  const handleNext = () => setCount((prev) => (prev + 1) % filteredWords.length);
+  const handlePrevious = () => setCount((prev) => (prev - 1 + filteredWords.length) % filteredWords.length);
 
-  const handleNext = () => {
-    setCount((prev) => (prev + 1) % words.length);
+  const handleFeelingLucky = () => {
+    const randomLvl = Math.floor(Math.random() * 3) + 1;
+    setLevel(randomLvl);
+    readText("Sight Word Surprise!");
   };
 
-  const handlePrevious = () => {
-    setCount((prev) => (prev - 1 + words.length) % words.length);
-  };
-
-  const currentWord = words[count];
+  const currentWord = filteredWords[count];
 
   return (
     <PageContainer data-testid="page-sight-words">
       <GameLayout>
-        <MainSide data-testid="layout-main-content">
+        <TitleArea data-testid="title-area">
           <PageHeader>
             <PageTitle>
               <BookOpen size={40} color="#6366F1" strokeWidth={2.5} />
@@ -152,65 +104,86 @@ const WordReader = (props: IWord) => {
               ))}
             </SessionStats>
           </PageHeader>
-          <Card style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
-            <AnimatePresence mode="wait">
-              <WordDisplay
-                key={currentWord}
-                initial={{ scale: 0.8, opacity: 0, y: 10 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 1.1, opacity: 0, y: -10 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              >
-                {currentWord}
-              </WordDisplay>
-            </AnimatePresence>
+        </TitleArea>
 
-            <NavControlBar>
-              <PreviousIcon onClick={handlePrevious} />
-              <SpeakIcon text={currentWord} />
-              <NextIcon onClick={handleNext} />
-            </NavControlBar>
+        <SurpriseCard 
+          title="Reading surprise?"
+          onShuffle={handleFeelingLucky}
+        />
 
-            <div style={{ marginTop: "40px", borderTop: "2px dashed #f0f0f0", paddingTop: "20px", width: "100%" }}>
-              <SentenceReader sentence={getSentencesOfWord(currentWord)} />
-            </div>
-          </Card>
-        </MainSide>
-
-        <SidebarSide data-testid="layout-settings-panel">
-          <GhostHeader>
-            <PageHeader>
-              <PageTitle>
-                <BookOpen size={40} />
-                Ghost
-              </PageTitle>
-              <PageSubtitle>Ghost</PageSubtitle>
-              <SessionStats>
-                {Array.from({ length: Math.min(1, streak) }).map((_, i) => (
-                  <span key={i} style={{ fontSize: "1.8rem" }}>⭐</span>
-                ))}
-              </SessionStats>
-            </PageHeader>
-          </GhostHeader>
-          <SettingsCard>
-            <SidebarTitle>Pick a word:</SidebarTitle>
-            <TagList style={{ gap: "10px" }}>
-              {words.map((tag, index) => (
-                <Tag
-                  key={index}
-                  onClick={() => setCount(index)}
-                  style={{
-                    background: count === index ? theme.colors.primary : "",
-                    borderColor: count === index ? theme.colors.primary : "transparent",
-                    color: count === index ? "white" : "",
-                  }}
+        <ActivityArea style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+          {filteredWords.length > 0 ? (
+            <>
+              <AnimatePresence mode="wait">
+                <WordDisplay
+                  key={currentWord}
+                  initial={{ x: 50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -50, opacity: 0 }}
+                  transition={{ type: "spring", damping: 15 }}
                 >
-                  {tag}
+                  {currentWord}
+                </WordDisplay>
+              </AnimatePresence>
+
+              <NavControlBar>
+                <PreviousIcon onClick={handlePrevious} />
+                <SpeakIcon text={currentWord} />
+                <NextIcon onClick={handleNext} />
+              </NavControlBar>
+            </>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "30px", padding: "40px" }}>
+              <KidoText fontSize="1.8rem" color="textSecondary" fontWeight="bold" style={{ textAlign: "center", lineHeight: 1.4 }}>
+                No words found for this level.<br/>
+                Let's try another! 🎈
+              </KidoText>
+              <KidButton 
+                variant="primary"
+                onClick={handleFeelingLucky}
+                style={{ padding: "15px 40px" }}
+              >
+                <Wand2 size={20} style={{ marginRight: "10px" }} />
+                Magic Shuffle
+              </KidButton>
+            </div>
+          )}
+        </ActivityArea>
+
+        <SettingsArea>
+          <ConfigSection>
+            <ConfigSubTitle>Reading Level</ConfigSubTitle>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              {[1, 2, 3].map((lvl) => (
+                <OptionLabel key={lvl} $isActive={level === lvl}>
+                  <input
+                    type="radio"
+                    name="level"
+                    checked={level === lvl}
+                    onChange={() => setLevel(lvl)}
+                  />
+                  Level {lvl}
+                </OptionLabel>
+              ))}
+            </div>
+          </ConfigSection>
+
+          <ConfigSection>
+            <ConfigSubTitle>Word List</ConfigSubTitle>
+            <TagList>
+              {filteredWords.map((word, i) => (
+                <Tag
+                  key={word}
+                  $isActive={count === i}
+                  onClick={() => setCount(i)}
+                  ref={count === i ? activeTabRef : null}
+                >
+                  {word}
                 </Tag>
               ))}
             </TagList>
-          </SettingsCard>
-        </SidebarSide>
+          </ConfigSection>
+        </SettingsArea>
       </GameLayout>
     </PageContainer>
   );

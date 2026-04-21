@@ -5,65 +5,27 @@ import styled from "styled-components";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { Scale } from "lucide-react";
-import { Card, PageContainer, SidebarTitle, SettingsCard, ControlBar, PageHeader, PageTitle, PageSubtitle, SessionStats, GhostHeader } from "../../theme/KidStyles";
+import { SurpriseCard } from "../../components/SurpriseCard";
+import {
+  ActivityArea,
+  PageContainer,
+  SettingsArea,
+  ControlBar,
+  PageHeader,
+  PageTitle,
+  PageSubtitle,
+  SessionStats,
+  TitleArea,
+  GameLayout,
+  ConfigSection,
+  ConfigSubTitle,
+  OptionLabel,
+} from "../../theme/KidStyles";
 import { readText } from "../../util/util";
 import { incrementScore, resetStreak } from "../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
 import { getRandomNumber, getMaxNumber } from "../../util/MathUtil";
 import { RootState } from "../../store/store";
-
-const GameLayout = styled.div`
-  display: flex;
-  gap: 30px;
-  width: 100%;
-  align-items: flex-start;
-
-  @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-`;
-
-const SettingsSide = styled.div`
-  flex: 1;
-  width: 100%;
-  position: sticky;
-  top: 20px;
-  display: flex;
-  flex-direction: column;
-  /* Precisely calculated: Title(48) + SessionStats(35) + Margins(35) = 118px */
-  margin-top: 0; 
-
-  @media (max-width: 992px) {
-    order: 2;
-    position: static;
-    margin-top: 0;
-  }
-`;
-
-const GameSide = styled.div`
-  flex: 3;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 992px) {
-    order: 1;
-  }
-`;
-
-const GameCard = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  background: white;
-  border: 4px solid ${(props) => props.theme.colors.primary}20;
-  min-height: 450px;
-`;
 
 const NumberDisplay = styled(motion.div)`
   font-size: clamp(3rem, 12vw, 6rem);
@@ -84,57 +46,6 @@ const NumberDisplay = styled(motion.div)`
   }
 `;
 
-const FeedbackMessage = styled(motion.h2)<{ $isCorrect: boolean }>`
-  color: ${(props) => (props.$isCorrect ? props.theme.colors.success : props.theme.colors.accent)};
-  margin-top: 25px;
-  font-size: 2.2rem;
-  text-align: center;
-`;
-
-const ConfigSection = styled.div`
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const ConfigSubTitle = styled.h4`
-  color: #636E72;
-  font-family: ${(props) => props.theme.fonts.primary};
-  font-size: 0.9rem;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const OptionLabel = styled.label<{ $isActive: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 5px;
-  border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
-  font-size: 0.95rem;
-
-  &:hover {
-    background: ${(props) => props.theme.colors.primary}08;
-  }
-
-  input {
-    width: 18px;
-    height: 18px;
-    accent-color: ${(props) => props.theme.colors.primary};
-  }
-`;
-
 export const GreaterLessEqualGame: React.FC = () => {
   const dispatch = useDispatch();
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
@@ -148,6 +59,12 @@ export const GreaterLessEqualGame: React.FC = () => {
     setNum1(getRandomNumber(maxVal));
     setNum2(getRandomNumber(maxVal));
     setFeedback(null);
+  };
+
+  const handleFeelingLucky = () => {
+    const randomDigits = Math.floor(Math.random() * 3) + 1;
+    setMaxDigits(randomDigits);
+    readText("Greater Less Surprise!");
   };
 
   useEffect(() => {
@@ -182,7 +99,7 @@ export const GreaterLessEqualGame: React.FC = () => {
   return (
     <PageContainer data-testid="page-greater-less-equal">
       <GameLayout>
-        <GameSide data-testid="layout-main-content">
+        <TitleArea data-testid="title-area">
           <PageHeader>
             <PageTitle>
               <Scale size={40} color="#6366F1" strokeWidth={2.5} />
@@ -203,121 +120,91 @@ export const GreaterLessEqualGame: React.FC = () => {
               ))}
             </SessionStats>
           </PageHeader>
-          <GameCard style={{ maxWidth: "none", position: "relative" }}>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={resetGame}
-              style={{
-                position: "absolute",
-                top: "20px",
-                right: "20px",
-                cursor: "pointer",
-                color: "#dfe6e9",
-                transition: "color 0.2s ease"
-              }}
-              title="New numbers"
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#6366F1")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#dfe6e9")}
+        </TitleArea>
+
+        <SurpriseCard 
+          title="Size surprise?"
+          onShuffle={handleFeelingLucky}
+        />
+
+        <ActivityArea style={{ textAlign: "center", minHeight: "450px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+          <AnimatePresence mode="wait">
+            <NumberDisplay
+              key={`${num1}-${num2}`}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 1.2, opacity: 0 }}
             >
-              <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m6 17 5-5-5-5M13 17l5-5-5-5"/>
-                </svg>
-              </motion.div>
-            </motion.div>
+              <span>{num1}</span>
+              <span style={{ color: "#dfe6e9", width: "80px", textAlign: "center" }}>?</span>
+              <span>{num2}</span>
+            </NumberDisplay>
+          </AnimatePresence>
 
-            <KidoText fontSize="22px" color="textSecondary" margin="0 0 10px">
-              Compare the numbers:
-            </KidoText>
-            
-            <AnimatePresence mode="wait">
-              <NumberDisplay
-                key={`${num1}-${num2}`}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 1.2, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          <ControlBar>
+            <KidButton 
+              title="<" 
+              onClick={() => handleChoice("less")} 
+              variant="secondary" 
+              style={{ fontSize: "2.5rem", width: "80px", height: "80px" }}
+            />
+            <KidButton 
+              title="=" 
+              onClick={() => handleChoice("equal")} 
+              variant="secondary" 
+              style={{ fontSize: "2.5rem", width: "80px", height: "80px" }}
+            />
+            <KidButton 
+              title=">" 
+              onClick={() => handleChoice("greater")} 
+              variant="secondary" 
+              style={{ fontSize: "2.5rem", width: "80px", height: "80px" }}
+            />
+          </ControlBar>
+
+          <AnimatePresence>
+            {feedback && (
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -20, opacity: 0 }}
+                style={{ marginTop: "20px" }}
               >
-                <span>{num1}</span>
-                <span style={{ color: "#a29bfe", fontSize: "4rem" }}>?</span>
-                <span>{num2}</span>
-              </NumberDisplay>
-            </AnimatePresence>
-
-            <ControlBar>
-              <KidButton
-                title=">"
-                onClick={() => handleChoice("greater")}
-                variant="primary"
-                style={{ fontSize: "2rem", width: "80px", height: "80px" }}
-              />
-              <KidButton
-                title="="
-                onClick={() => handleChoice("equal")}
-                variant="secondary"
-                style={{ fontSize: "2rem", width: "80px", height: "80px" }}
-              />
-              <KidButton
-                title="<"
-                onClick={() => handleChoice("less")}
-                variant="accent"
-                style={{ fontSize: "2rem", width: "80px", height: "80px" }}
-              />
-            </ControlBar>
-
-            <AnimatePresence>
-              {feedback && (
-                <FeedbackMessage
-                  $isCorrect={feedback.isCorrect}
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -10, opacity: 0 }}
-                >
+                <KidoText color={feedback.isCorrect ? "success" : "accent"} fontSize="1.5rem" fontWeight="bold">
                   {feedback.message}
-                </FeedbackMessage>
-              )}
-            </AnimatePresence>
-          </GameCard>
-        </GameSide>
+                </KidoText>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </ActivityArea>
 
-        <SettingsSide data-testid="layout-settings-panel">
-          <GhostHeader>
-            <PageHeader>
-              <PageTitle>
-                <Scale size={40} />
-                Ghost
-              </PageTitle>
-              <PageSubtitle>Ghost</PageSubtitle>
-              <SessionStats>
-                <span style={{ fontSize: "1.8rem" }}>⭐</span>
-              </SessionStats>
-            </PageHeader>
-          </GhostHeader>
-          <SettingsCard>
-            <SidebarTitle>⚙️ Game Rules</SidebarTitle>
-            
-            <ConfigSection>
-              <ConfigSubTitle>Difficulty</ConfigSubTitle>
-              {[
-                { id: 1, label: "Single Digits (1-9)" },
-                { id: 2, label: "Double Digits (10-99)" },
-                { id: 3, label: "Triple Digits (100+)" },
-              ].map((lvl) => (
-                <OptionLabel key={lvl.id} $isActive={maxDigits === lvl.id}>
-                  <input
-                    type="radio"
-                    name="difficulty"
-                    checked={maxDigits === lvl.id}
-                    onChange={() => setMaxDigits(lvl.id)}
-                  />
-                  {lvl.label}
-                </OptionLabel>
-              ))}
-            </ConfigSection>
+        <SettingsArea data-testid="settings-area">
+          <ConfigSection>
+            <ConfigSubTitle>Difficulty</ConfigSubTitle>
+            {[1, 2, 3].map((digits) => (
+              <OptionLabel key={digits} $isActive={maxDigits === digits}>
+                <input
+                  type="radio"
+                  name="digits"
+                  checked={maxDigits === digits}
+                  onChange={() => setMaxDigits(digits)}
+                />
+                {digits === 1 ? "Numbers to 9" : digits === 2 ? "Numbers to 99" : "Numbers to 999"}
+              </OptionLabel>
+            ))}
+          </ConfigSection>
 
-          </SettingsCard>
-        </SettingsSide>
+          <ConfigSection>
+            <ConfigSubTitle>Quick Tips</ConfigSubTitle>
+            <div style={{ padding: "15px", background: "rgba(99, 102, 241, 0.05)", borderRadius: "15px" }}>
+              <KidoText fontSize="0.9rem" color="textSecondary">
+                • <b>{">"}</b> means GREATER than<br/>
+                • <b>{"<"}</b> means LESS than<br/>
+                • <b>{"="}</b> means EQUAL to
+              </KidoText>
+            </div>
+          </ConfigSection>
+        </SettingsArea>
       </GameLayout>
     </PageContainer>
   );

@@ -4,9 +4,9 @@ export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
   flex: 0 0 300px; /* Fixed width on desktop */
   width: 300px;
   background-color: #ffffff;
-  padding: 40px 16px;
+  padding: 0 16px 40px; /* Top padding handled by layout container */
   box-sizing: border-box;
-  height: calc(100vh - 70px);
+  height: 100%;
   position: relative; /* Part of flex flow on desktop */
   overflow-y: auto;
   transition: all 0.3s ease;

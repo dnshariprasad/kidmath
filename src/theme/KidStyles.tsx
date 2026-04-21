@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { motion } from "framer-motion";
 
 // Material 3 Elevation Levels
 export const elevation1 = css`
@@ -18,33 +19,31 @@ export const SessionStats = styled.div`
   gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
-  min-height: 40px; /* Synchronized height for stars */
   width: 100%;
 `;
 
 export const Card = styled.div`
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 28px;
   padding: 40px;
   box-shadow: 
-    0 10px 20px rgba(99, 102, 241, 0.04),
-    0 20px 40px rgba(99, 102, 241, 0.06),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    0 8px 24px rgba(0, 0, 0, 0.04);
   width: 100%;
-  max-width: 800px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid rgba(99, 102, 241, 0.15);
+  max-width: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(99, 102, 241, 0.1);
   position: relative;
   overflow: hidden;
 
   &:hover {
-    transform: translateY(-8px) scale(1.01);
+    transform: translateY(-4px);
     box-shadow: 
-      0 15px 30px rgba(99, 102, 241, 0.08),
-      0 30px 60px rgba(99, 102, 241, 0.12);
-    border-color: rgba(99, 102, 241, 0.3);
+      0 6px 15px rgba(0, 0, 0, 0.05),
+      0 12px 30px rgba(0, 0, 0, 0.08);
+    border-color: rgba(99, 102, 241, 0.2);
   }
 
   @media (max-width: 768px) {
@@ -81,9 +80,9 @@ export const StyledInput = styled.input<{ width?: string }>`
   }
 `;
 
-export const Tag = styled.span`
-  color: ${(props) => props.theme.colors.onPrimaryContainer};
-  background: ${(props) => props.theme.colors.primaryContainer};
+export const Tag = styled.span<{ $isActive?: boolean }>`
+  color: ${(props) => (props.$isActive ? "white" : props.theme.colors.onPrimaryContainer)};
+  background: ${(props) => (props.$isActive ? props.theme.colors.primary : props.theme.colors.primaryContainer)};
   padding: 10px 18px;
   border-radius: 12px;
   font-size: 1rem;
@@ -96,7 +95,8 @@ export const Tag = styled.span`
   cursor: pointer;
   min-width: 44px;
   min-height: 44px;
-  border: 1px solid transparent;
+  border: 1px solid ${(props) => (props.$isActive ? "transparent" : "transparent")};
+  ${(props) => (props.$isActive ? elevation2 : "none")}
 
   &:hover {
     background: ${(props) => props.theme.colors.primary};
@@ -111,16 +111,17 @@ export const Tag = styled.span`
 `;
 
 export const SidebarTitle = styled.h4`
-  color: ${(props) => props.theme.colors.textPrimary};
+  color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 25px;
-  padding: 0 16px;
-  letter-spacing: 0.1px;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  opacity: 0.6;
+  margin: 0;
+  letter-spacing: -0.2px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px; /* Matches the visual height of the PageTitle line */
+  padding-top: 5px;
 `;
 
 export const TagList = styled.div`
@@ -132,7 +133,7 @@ export const TagList = styled.div`
 `;
 
 export const PageContainer = styled.div`
-  padding: 24px 30px;
+  padding: 0 30px 24px; /* Standardized side/bottom padding */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -222,32 +223,111 @@ export const CenteredContainerHorizontally = styled.div`
   justify-content: center;
 `;
 
-export const HeaderArea = styled.div`
+export const TitleArea = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Precisely calculated to accommodate title and 1-2 rows of stats/stars */
-  min-height: 110px;
-  justify-content: flex-start;
-`;
-
-export const GhostHeader = styled.div`
-  visibility: hidden;
-  pointer-events: none;
-  user-select: none;
+  justify-content: center;
+  min-height: 160px;
+  height: 160px;
+  background: white;
+  border-radius: 24px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    0 8px 24px rgba(0, 0, 0, 0.04);
+  padding: 20px;
+  margin-bottom: 25px;
+  box-sizing: border-box;
 
   @media (max-width: 992px) {
-    display: none;
+    height: auto;
+    min-height: 120px;
+    padding: 25px 15px;
   }
 `;
+
+export const GhostHeader = styled(TitleArea)`
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    0 8px 24px rgba(0, 0, 0, 0.04);
+  margin-bottom: 25px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+    animation: rotate 10s linear infinite;
+  }
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 992px) {
+    order: 10;
+    min-height: 120px;
+    height: auto;
+    margin-top: 20px;
+  }
+`;
+
+export const MagicButton = styled(motion.button)`
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  svg {
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  }
+`;
+
+
+
+
 
 export const PageHeader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-bottom: 4px;
+  padding-bottom: 0;
   gap: 8px;
 `;
 
@@ -290,14 +370,22 @@ export const PageSubtitle = styled.p`
 `;
 
 export const SettingsCard = styled(Card)`
-  background: rgba(255, 255, 255, 0.85);
-  border: 3px solid ${(props) => props.theme.colors.primary}25;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid ${(props) => props.theme.colors.primary}20;
   max-width: none;
-  padding: 32px 20px;
+  padding: 20px 25px;
   
   &:hover {
-    transform: translateY(-5px) scale(1.005);
+    transform: translateY(-4px);
   }
+`;
+
+export const ActivityArea = styled(Card)`
+  /* This represents the primary educational content module */
+`;
+
+export const SettingsArea = styled(SettingsCard)`
+  /* This represents the configuration/settings module */
 `;
 
 export const ControlBar = styled.div`
@@ -332,5 +420,74 @@ export const NavControlBar = styled.div`
   @media (max-width: 480px) {
     gap: 15px;
     margin-top: 25px;
+  }
+`;
+
+export const GameLayout = styled.div`
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 25px 30px;
+  width: 100%;
+  align-items: start;
+
+  @media (max-width: 992px) {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+`;
+
+export const MainSide = styled.div`
+  display: contents;
+`;
+
+export const SidebarSide = styled.div`
+  display: contents;
+`;
+
+export const ConfigSection = styled.div`
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
+  width: 100%;
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export const ConfigSubTitle = styled.h4`
+  color: #636E72;
+  font-family: ${(props) => props.theme.fonts.primary};
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const OptionLabel = styled.label<{ $isActive: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 5px;
+  border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
+  font-size: 0.95rem;
+  color: #2d3436;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.primary}08;
+  }
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: ${(props) => props.theme.colors.primary};
   }
 `;

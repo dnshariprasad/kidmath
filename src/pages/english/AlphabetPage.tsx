@@ -1,155 +1,65 @@
 import { useState } from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Card,
+  ActivityArea,
+  SettingsArea,
   PageContainer,
   Tag,
   TagList,
-  SidebarTitle,
-  SettingsCard,
   NavControlBar,
   PageHeader,
   PageTitle,
   PageSubtitle,
   SessionStats,
-  GhostHeader,
+  TitleArea,
+  GameLayout,
+  ConfigSection,
+  ConfigSubTitle,
+  OptionLabel,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
 import PreviousIcon from "../../components/PreviousIcon";
-import { Type, ArrowLeftRight } from "lucide-react";
-import { big, small } from "../../store/data/Alphabet";
+import { Type } from "lucide-react";
+import { SurpriseCard } from "../../components/SurpriseCard";
+import { readText } from "../../util/util";
 import { RootState } from "../../store/store";
 
-const ConfigSection = styled.div`
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const ConfigSubTitle = styled.h4`
-  color: #636E72;
-  font-family: ${(props) => props.theme.fonts.primary};
-  font-size: 0.9rem;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const OptionLabel = styled.label<{ $isActive: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  background: ${(props) => (props.$isActive ? props.theme.colors.primary + "15" : "transparent")};
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 5px;
-  border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
-
-  &:hover {
-    background: ${(props) => props.theme.colors.primary}08;
-  }
-
-  input {
-    width: 18px;
-    height: 18px;
-    accent-color: ${(props) => props.theme.colors.primary};
-  }
-`;
-
-const GameLayout = styled.div`
-  display: flex;
-  gap: 30px;
-  width: 100%;
-  align-items: flex-start;
-
-  @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-`;
-
-const SidebarSide = styled.div`
-  flex: 1;
-  width: 100%;
-  position: sticky;
-  top: 20px;
-  display: flex;
-  flex-direction: column;
-  /* Precisely calculated: 32px * 1.5 (line-height) + 20px (margin) = 68px */
-  margin-top: 0; 
-
-  @media (max-width: 992px) {
-    order: 2;
-    position: static;
-    margin-top: 0;
-  }
-`;
-
-const MainSide = styled.div`
-  flex: 3;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 992px) {
-    order: 1;
-  }
-`;
-
 const BigLetter = styled(motion.div)`
-  font-size: clamp(5rem, 15vw, 12rem);
+  font-size: clamp(12rem, 30vw, 24rem);
   font-weight: 900;
-  color: ${(props) => props.theme.colors.primary};
-  font-family: ${(props) => props.theme.fonts.primary};
-  text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
+  color: #6366f1;
+  text-shadow: 
+    0 10px 0 #4f46e5,
+    0 20px 30px rgba(99, 102, 241, 0.3);
   margin-bottom: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    font-size: clamp(4rem, 20vw, 8rem);
-  }
+  font-family: ${(props) => props.theme.fonts.primary};
 `;
 
 const AlphabetPage = () => {
+  const big = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
-  const theme = useTheme();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isUppercase, setIsUppercase] = useState(true);
+  const [index, setIndex] = useState(0);
+  const [letterCase, setLetterCase] = useState<"big" | "small">("big");
+  
+  const currentLetterData = big[index];
+  const currentLetter = letterCase === "big" ? currentLetterData : currentLetterData.toLowerCase();
 
-  const alphabetData = isUppercase ? big : small;
-
-  const nextLetter = () => {
-    setCurrentIndex((prev) => (prev + 1) % alphabetData.length);
+  const handleNext = () => setIndex((prev) => (prev + 1) % big.length);
+  const handlePrevious = () => setIndex((prev) => (prev - 1 + big.length) % big.length);
+  
+  const handleFeelingLucky = () => {
+    const randomIndex = Math.floor(Math.random() * big.length);
+    setIndex(randomIndex);
+    readText("Alphabet Surprise!");
   };
-
-  const prevLetter = () => {
-    setCurrentIndex((prev) => (prev - 1 + alphabetData.length) % alphabetData.length);
-  };
-
-  const currentLetter = alphabetData[currentIndex];
 
   return (
     <PageContainer data-testid="page-alphabet">
       <GameLayout>
-        <MainSide data-testid="layout-main-content">
+        <TitleArea data-testid="title-area">
           <PageHeader>
             <PageTitle>
               <Type size={40} color="#6366F1" strokeWidth={2.5} />
@@ -170,84 +80,71 @@ const AlphabetPage = () => {
               ))}
             </SessionStats>
           </PageHeader>
-          <Card style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
-            <AnimatePresence mode="wait">
-              <BigLetter
-                key={currentLetter}
-                initial={{ scale: 0.5, opacity: 0, rotate: -5 }}
-                animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                exit={{ scale: 1.5, opacity: 0, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 260, damping: 20 }}
-              >
-                {currentLetter}
-              </BigLetter>
-            </AnimatePresence>
+        </TitleArea>
 
-            <NavControlBar>
-              <PreviousIcon onClick={prevLetter} />
-              <SpeakIcon text={currentLetter} />
-              <NextIcon onClick={nextLetter} />
-            </NavControlBar>
-          </Card>
-        </MainSide>
+        <SurpriseCard 
+          title="Ready for a surprise?"
+          onShuffle={handleFeelingLucky}
+        />
 
-        <SidebarSide data-testid="layout-settings-panel">
-          <GhostHeader>
-            <PageHeader>
-              <PageTitle>
-                <Type size={40} />
-                Ghost
-              </PageTitle>
-              <PageSubtitle>Ghost</PageSubtitle>
-              <SessionStats>
-                <span style={{ fontSize: "1.8rem" }}>⭐</span>
-              </SessionStats>
-            </PageHeader>
-          </GhostHeader>
-          <SettingsCard>
-            <ConfigSection>
-              <ConfigSubTitle>
-                <ArrowLeftRight size={16} />
-                Letter Case
-              </ConfigSubTitle>
-              <OptionLabel $isActive={isUppercase}>
-                <input
-                  type="radio"
-                  name="case"
-                  checked={isUppercase}
-                  onChange={() => setIsUppercase(true)}
-                />
-                BIG LETTERS (A)
-              </OptionLabel>
-              <OptionLabel $isActive={!isUppercase}>
-                <input
-                  type="radio"
-                  name="case"
-                  checked={!isUppercase}
-                  onChange={() => setIsUppercase(false)}
-                />
-                small letters (a)
-              </OptionLabel>
-            </ConfigSection>
+        <ActivityArea data-testid="activity-area" style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+          <AnimatePresence mode="wait">
+            <BigLetter
+              key={currentLetter}
+              initial={{ scale: 0.5, opacity: 0, rotate: -5 }}
+              animate={{ scale: 1, opacity: 1, rotate: 0 }}
+              exit={{ scale: 1.5, opacity: 0, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            >
+              {currentLetter}
+            </BigLetter>
+          </AnimatePresence>
 
-            <SidebarTitle>Pick a Letter:</SidebarTitle>
-            <TagList style={{ gap: "10px" }}>
-              {alphabetData.map((letter: string, index: number) => (
+          <NavControlBar>
+            <PreviousIcon onClick={handlePrevious} />
+            <SpeakIcon text={currentLetter} />
+            <NextIcon onClick={handleNext} />
+          </NavControlBar>
+        </ActivityArea>
+
+        <SettingsArea data-testid="settings-area">
+          <ConfigSection>
+            <ConfigSubTitle>Letter Case</ConfigSubTitle>
+            <OptionLabel $isActive={letterCase === "big"}>
+              <input
+                type="radio"
+                name="case"
+                checked={letterCase === "big"}
+                onChange={() => setLetterCase("big")}
+              />
+              BIG LETTERS (A)
+            </OptionLabel>
+            <OptionLabel $isActive={letterCase === "small"}>
+              <input
+                type="radio"
+                name="case"
+                checked={letterCase === "small"}
+                onChange={() => setLetterCase("small")}
+              />
+              small letters (a)
+            </OptionLabel>
+          </ConfigSection>
+
+          <ConfigSection>
+            <ConfigSubTitle>Pick a Letter</ConfigSubTitle>
+            <TagList>
+              {big.map((letter, i) => (
                 <Tag
                   key={letter}
-                  onClick={() => setCurrentIndex(index)}
-                  style={{
-                    background: currentIndex === index ? theme.colors.primary : "",
-                    borderColor: currentIndex === index ? theme.colors.primary : "transparent",
-                    color: currentIndex === index ? "white" : "",
-                  }}
+                  $isActive={index === i}
+                  onClick={() => setIndex(i)}
                 >
                   {letter}
                 </Tag>
               ))}
             </TagList>
-          </SettingsCard>
-        </SidebarSide>
+          </ConfigSection>
+        </SettingsArea>
       </GameLayout>
     </PageContainer>
   );

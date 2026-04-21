@@ -1,25 +1,30 @@
-import { useState } from "react";
-import styled, { useTheme } from "styled-components";
+import { useState, useMemo } from "react";
+import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Card,
+  ActivityArea,
   PageContainer,
   Tag,
   TagList,
-  SidebarTitle,
-  SettingsCard,
+  SettingsArea,
   NavControlBar,
   PageHeader,
   PageTitle,
   PageSubtitle,
   SessionStats,
-  GhostHeader,
+  TitleArea,
+  GameLayout,
+  ConfigSection,
+  ConfigSubTitle,
+  OptionLabel,
 } from "../../theme/KidStyles";
 import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
 import PreviousIcon from "../../components/PreviousIcon";
 import { Languages } from "lucide-react";
+import { SurpriseCard } from "../../components/SurpriseCard";
+import { readText } from "../../util/util";
 import {
   cha,
   hindiCombinedCharacters,
@@ -33,97 +38,56 @@ import {
 } from "../../store/data/HindiAlphabet";
 import { RootState } from "../../store/store";
 
-const GameLayout = styled.div`
-  display: flex;
-  gap: 30px;
-  width: 100%;
-  align-items: flex-start;
-
-  @media (max-width: 992px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-`;
-
-const SidebarSide = styled.div`
-  flex: 1;
-  width: 100%;
-  position: sticky;
-  top: 20px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 0; 
-
-  @media (max-width: 992px) {
-    order: 2;
-    position: static;
-    margin-top: 0;
-  }
-`;
-
-const MainSide = styled.div`
-  flex: 3;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 992px) {
-    order: 1;
-  }
-`;
-
 const HindiDisplay = styled(motion.div)`
-  font-size: clamp(4rem, 20vw, 8rem);
+  font-size: clamp(4rem, 20vw, 10rem);
   font-weight: 900;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
   text-shadow: 0 10px 20px ${(props) => props.theme.colors.shadow};
   margin-bottom: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  line-height: 1.2;
 
   @media (max-width: 768px) {
-    font-size: clamp(3rem, 25vw, 5rem);
+    font-size: clamp(3rem, 25vw, 6rem);
   }
 `;
 
-const alphabet = [
-  ...hindiVowels,
-  ...kha,
-  ...cha,
-  ...pa,
-  ...se,
-  ...ta,
-  ...tha,
-  ...ya,
-  ...hindiCombinedCharacters,
-];
-
 const AlphabetHindiChallenge = () => {
   const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
-  const theme = useTheme();
   const [index, setIndex] = useState(0);
-  const randomString = alphabet[index];
+  const [filter, setFilter] = useState<"all" | "vowels" | "consonants">("all");
 
-  const handleNext = () => {
-    setIndex((prev) => (prev + 1) % alphabet.length);
-  };
+  const filteredAlphabet = useMemo(() => {
+    if (filter === "vowels") return hindiVowels;
+    if (filter === "consonants") return [...kha, ...cha, ...pa, ...se, ...ta, ...tha, ...ya];
+    return [
+      ...hindiVowels,
+      ...kha,
+      ...cha,
+      ...pa,
+      ...se,
+      ...ta,
+      ...tha,
+      ...ya,
+      ...hindiCombinedCharacters,
+    ];
+  }, [filter]);
 
-  const handlePrev = () => {
-    setIndex((prev) => (prev - 1 + alphabet.length) % alphabet.length);
+  const currentLetter = filteredAlphabet[index % filteredAlphabet.length];
+
+  const handleNext = () => setIndex((prev) => (prev + 1) % filteredAlphabet.length);
+  const handlePrev = () => setIndex((prev) => (prev - 1 + filteredAlphabet.length) % filteredAlphabet.length);
+  
+  const handleFeelingLucky = () => {
+    const randomIndex = Math.floor(Math.random() * filteredAlphabet.length);
+    setIndex(randomIndex);
+    readText("Hindi Surprise!");
   };
 
   return (
     <PageContainer data-testid="page-hindi-alphabet">
       <GameLayout>
-        <MainSide data-testid="layout-main-content">
+        <TitleArea data-testid="title-area">
           <PageHeader>
             <PageTitle>
               <Languages size={40} color="#6366F1" strokeWidth={2.5} />
@@ -144,59 +108,64 @@ const AlphabetHindiChallenge = () => {
               ))}
             </SessionStats>
           </PageHeader>
-          <Card style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "none" }}>
-            <AnimatePresence mode="wait">
-              <HindiDisplay
-                key={randomString}
-                initial={{ y: 20, opacity: 0, scale: 0.8 }}
-                animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ y: -20, opacity: 0, scale: 1.2 }}
-                transition={{ type: "spring", damping: 12 }}
-              >
-                {randomString}
-              </HindiDisplay>
-            </AnimatePresence>
+        </TitleArea>
 
-            <NavControlBar>
-              <PreviousIcon onClick={handlePrev} />
-              <SpeakIcon text={randomString} lang="hi-IN" />
-              <NextIcon onClick={handleNext} />
-            </NavControlBar>
-          </Card>
-        </MainSide>
+        <SurpriseCard 
+          title="Hindi surprise?"
+          onShuffle={handleFeelingLucky}
+        />
 
-        <SidebarSide data-testid="layout-settings-panel">
-          <GhostHeader>
-            <PageHeader>
-              <PageTitle>
-                <Languages size={40} />
-                Ghost
-              </PageTitle>
-              <PageSubtitle>Ghost</PageSubtitle>
-              <SessionStats>
-                <span style={{ fontSize: "1.8rem" }}>⭐</span>
-              </SessionStats>
-            </PageHeader>
-          </GhostHeader>
-          <SettingsCard>
-            <SidebarTitle>Pick a character:</SidebarTitle>
-            <TagList style={{ gap: "10px" }}>
-              {alphabet.map((tag, i) => (
+        <ActivityArea style={{ textAlign: "center", minHeight: "500px", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+          <AnimatePresence mode="wait">
+            <HindiDisplay
+              key={currentLetter}
+              initial={{ y: 20, opacity: 0, scale: 0.8 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: -20, opacity: 0, scale: 1.2 }}
+              transition={{ type: "spring", damping: 12 }}
+            >
+              {currentLetter}
+            </HindiDisplay>
+          </AnimatePresence>
+
+          <NavControlBar>
+            <PreviousIcon onClick={handlePrev} />
+            <SpeakIcon text={currentLetter} lang="hi-IN" />
+            <NextIcon onClick={handleNext} />
+          </NavControlBar>
+        </ActivityArea>
+
+        <SettingsArea data-testid="settings-area">
+          <ConfigSection>
+            <ConfigSubTitle>Filter</ConfigSubTitle>
+            {(["all", "vowels", "consonants"] as const).map((f) => (
+              <OptionLabel key={f} $isActive={filter === f}>
+                <input
+                  type="radio"
+                  name="filter"
+                  checked={filter === f}
+                  onChange={() => setFilter(f)}
+                />
+                {f.charAt(0).toUpperCase() + f.slice(1)}
+              </OptionLabel>
+            ))}
+          </ConfigSection>
+
+          <ConfigSection>
+            <ConfigSubTitle>Pick a Character</ConfigSubTitle>
+            <TagList>
+              {filteredAlphabet.map((char, i) => (
                 <Tag
-                  key={i}
+                  key={`${char}-${i}`}
+                  $isActive={index === i}
                   onClick={() => setIndex(i)}
-                  style={{
-                    background: index === i ? theme.colors.primary : "",
-                    borderColor: index === i ? theme.colors.primary : "transparent",
-                    color: index === i ? "white" : "",
-                  }}
                 >
-                  {tag}
+                  {char}
                 </Tag>
               ))}
             </TagList>
-          </SettingsCard>
-        </SidebarSide>
+          </ConfigSection>
+        </SettingsArea>
       </GameLayout>
     </PageContainer>
   );

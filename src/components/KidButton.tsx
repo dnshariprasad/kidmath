@@ -14,25 +14,24 @@ const StyledButton = styled(motion.button)<{ $variant: string }>`
   padding: 16px 32px;
   font-size: 1.1rem;
   font-weight: 700;
-  color: ${(props) => {
-    switch (props.$variant) {
-      case "success": return "white";
-      case "primary": return "white";
-      case "accent": return "white";
-      case "secondary": return "white";
-      default: return "white";
-    }
-  }};
   background: ${(props) => {
     switch (props.$variant) {
-      case "success": return props.theme.colors.primary;
-      case "primary": return props.theme.colors.primary;
-      case "accent": return props.theme.colors.primary;
-      case "secondary": return props.theme.colors.primary;
+      case "success": return props.theme.colors.success;
+      case "accent": return props.theme.colors.accent;
+      case "secondary": return props.theme.colors.primaryContainer;
+      case "sub": return "#F0F0F0";
+      case "primary":
       default: return props.theme.colors.primary;
     }
   }};
-  border: none;
+  color: ${(props) => {
+    switch (props.$variant) {
+      case "secondary": return props.theme.colors.primary;
+      case "sub": return "#999";
+      default: return "white";
+    }
+  }};
+  border: ${(props) => props.$variant === "secondary" ? `2px solid ${props.theme.colors.primary}30` : "none"};
   border-radius: 20px;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
