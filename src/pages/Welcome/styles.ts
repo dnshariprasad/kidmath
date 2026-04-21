@@ -12,12 +12,10 @@ export const DashboardGrid = styled.div`
 `;
 
 export const CategoryCard = styled(motion.div)<{ $color: string }>`
-  background: white;
+  background: ${(props) => props.theme.colors.surface};
   padding: 24px;
   border-radius: 24px;
-  box-shadow:
-    0 4px 12px rgba(99, 102, 241, 0.04),
-    0 8px 24px rgba(99, 102, 241, 0.04);
+  box-shadow: ${(props) => props.theme.colors.shadow};
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -25,7 +23,7 @@ export const CategoryCard = styled(motion.div)<{ $color: string }>`
   align-items: center;
   text-align: center;
   cursor: pointer;
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  border: 1px solid ${(props) => props.theme.colors.primary}10;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
@@ -36,7 +34,7 @@ export const CategoryCard = styled(motion.div)<{ $color: string }>`
 `;
 
 export const IconWrapper = styled.div<{ $color: string }>`
-  background: ${(props) => props.$color}10;
+  background: ${(props) => props.$color}15;
   color: ${(props) => props.$color};
   padding: 16px;
   border-radius: 20px;
@@ -50,11 +48,11 @@ export const WavingEmoji = styled(motion.span)`
 export const CategoryTitle = styled.h3`
   font-size: 1.5rem;
   margin-bottom: 8px;
-  color: #2d3436;
+  color: ${(props) => props.theme.colors.textPrimary};
 `;
 
 export const CategoryDesc = styled.p`
-  color: #636e72;
+  color: ${(props) => props.theme.colors.textSecondary};
   margin-bottom: 20px;
   font-size: 0.95rem;
 `;
@@ -62,16 +60,21 @@ export const CategoryDesc = styled.p`
 export const PromoCard = styled(Card)`
   margin-top: 40px;
   text-align: center;
-  background: linear-gradient(135deg, #6366f1 0%, #a29bfe 100%);
+  background: linear-gradient(
+    135deg,
+    ${(props) => props.theme.colors.primary} 0%,
+    ${(props) => props.theme.colors.primary}CC 100%
+  );
   color: white;
   padding: 30px 20px;
   width: 100%;
   max-width: 1000px;
   box-sizing: border-box;
+  border: none;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 15px 35px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 15px 35px ${(props) => props.theme.colors.primary}40;
   }
 `;
 
@@ -104,8 +107,9 @@ export const PromoActionArea = styled.div`
 
 export const WhiteKidButtonWrapper = styled.div`
   & > [data-testid="comp-kid-button"] {
-    background: white !important;
-    color: #6366f1 !important;
+    background: ${(props) => props.theme.colors.onPrimary} !important;
+    color: ${(props) => props.theme.colors.primary} !important;
     border: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
   }
 `;

@@ -29,7 +29,7 @@ export const SessionStats = styled.div`
 `;
 
 export const Card = styled.div`
-  background: rgba(255, 255, 255, 0.9);
+  background: ${(props) => props.theme.colors.surface};
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 28px;
@@ -40,7 +40,7 @@ export const Card = styled.div`
   width: 100%;
   max-width: none;
   transition: all 0.3s ease;
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  border: 1px solid ${(props) => props.theme.colors.primary}15;
   position: relative;
   overflow: hidden;
 
@@ -49,7 +49,7 @@ export const Card = styled.div`
     box-shadow:
       0 6px 15px rgba(0, 0, 0, 0.05),
       0 12px 30px rgba(0, 0, 0, 0.08);
-    border-color: rgba(99, 102, 241, 0.2);
+    border-color: ${(props) => props.theme.colors.primary}30;
   }
 
   @media (max-width: 768px) {
@@ -59,30 +59,37 @@ export const Card = styled.div`
 `;
 
 export const StyledInput = styled.input<{ width?: string }>`
-  padding: 24px 30px;
+  padding: 10px 20px;
   margin: 15px 0;
-  background: ${(props) => props.theme.colors.surfaceVariant};
-  border: none;
-  border-bottom: 2px solid ${(props) => props.theme.colors.textSecondary};
-  border-radius: 12px 12px 0 0;
-  font-size: 2.2rem;
-  font-weight: 700;
+  background: ${(props) => props.theme.colors.surface};
+  border: 3px solid ${(props) => props.theme.colors.primary}20;
+  border-radius: 16px;
+  font-size: 2.5rem;
+  font-weight: 800;
   font-family: ${(props) => props.theme.fonts.primary};
-  width: ${(props) => props.width || "200px"};
-  color: ${(props) => props.theme.colors.textPrimary};
+  width: ${(props) => props.width || "120px"};
+  height: 80px;
+  color: ${(props) => props.theme.colors.primary};
   text-align: center;
   outline: none;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 
   &::placeholder {
-    color: ${(props) => props.theme.colors.textSecondary}80;
+    color: ${(props) => props.theme.colors.textSecondary}40;
   }
 
   &:focus {
-    background: ${(props) => props.theme.colors.primaryContainer};
-    border-bottom: 3px solid ${(props) => props.theme.colors.primary};
-    border-radius: 12px;
-    transform: scale(1.02);
+    background: ${(props) => props.theme.colors.surface};
+    border-color: ${(props) => props.theme.colors.primary};
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px ${(props) => props.theme.colors.primary}15;
+  }
+
+  @media (max-width: 768px) {
+    height: 64px;
+    font-size: 1.8rem;
+    width: ${(props) => props.width || "100px"};
   }
 `;
 
@@ -93,10 +100,10 @@ export const Tag = styled.span<{
   $borderColor?: string;
 }>`
   color: ${(props) =>
-    props.$color || (props.$isActive ? "white" : props.theme.colors.onPrimaryContainer)};
+    props.$color || (props.$isActive ? "white" : props.theme.colors.textSecondary)};
   background: ${(props) =>
     props.$bg ||
-    (props.$isActive ? props.theme.colors.primary : props.theme.colors.primaryContainer)};
+    (props.$isActive ? props.theme.colors.primary : props.theme.colors.surfaceVariant)};
   padding: 10px 18px;
   border-radius: 12px;
   font-size: 1rem;
@@ -109,12 +116,14 @@ export const Tag = styled.span<{
   cursor: pointer;
   min-width: 44px;
   min-height: 44px;
-  border: 1px solid ${(props) => props.$borderColor || "transparent"};
+  border: 1px solid
+    ${(props) => (props.$isActive ? props.theme.colors.primary : props.theme.colors.primary + "10")};
   ${(props) => (props.$isActive ? elevation2 : "none")}
 
   &:hover {
-    background: ${(props) => props.$bg || props.theme.colors.primary};
-    color: ${(props) => (props.$bg ? props.$color : "white")};
+    background: ${(props) =>
+      props.$isActive ? props.theme.colors.primary : props.theme.colors.primary + "15"};
+    color: ${(props) => (props.$isActive ? "white" : props.theme.colors.primary)};
     transform: translateY(-2px);
     ${elevation2}
   }
@@ -191,10 +200,10 @@ export const ListContainer = styled.ul`
 export const ListItem = styled.li`
   padding: 16px 24px;
   margin-bottom: 12px;
-  background: rgba(255, 255, 255, 0.7);
+  background: ${(props) => props.theme.colors.surfaceVariant}CC;
   backdrop-filter: blur(8px);
   border-radius: 16px;
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  border: 1px solid ${(props) => props.theme.colors.primary}15;
   color: ${(props) => props.theme.colors.textPrimary};
   font-family: ${(props) => props.theme.fonts.secondary};
   font-weight: 500;
@@ -203,7 +212,7 @@ export const ListItem = styled.li`
 
   &:hover {
     transform: translateX(5px);
-    background: rgba(255, 255, 255, 0.9);
+    background: ${(props) => props.theme.colors.surface};
     box-shadow: 0 6px 16px rgba(99, 102, 241, 0.06);
   }
 `;
@@ -219,14 +228,14 @@ export const ContainerV = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  background: rgba(255, 255, 255, 0.8);
+  background: ${(props) => props.theme.colors.surface};
   backdrop-filter: blur(10px);
   border-radius: 28px;
   padding: 30px;
   box-shadow:
     0 8px 16px rgba(99, 102, 241, 0.04),
     0 16px 32px rgba(99, 102, 241, 0.06);
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  border: 1px solid ${(props) => props.theme.colors.primary}15;
 `;
 
 export const CenteredContainerHorizontally = styled.div`
@@ -245,14 +254,14 @@ export const TitleArea = styled.div`
   justify-content: center;
   min-height: 160px;
   height: 160px;
-  background: white;
+  background: ${(props) => props.theme.colors.surface};
   border-radius: 24px;
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  border: 1px solid ${(props) => props.theme.colors.primary}15;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
   padding: 20px;
-  margin-bottom: 0; /* Removed margin-bottom to rely on grid gap */
+  margin-bottom: 0;
   box-sizing: border-box;
 
   @media (max-width: 992px) {
@@ -385,7 +394,7 @@ export const PageSubtitle = styled.p`
 `;
 
 export const SettingsCard = styled(Card)`
-  background: rgba(255, 255, 255, 0.95);
+  background: ${(props) => props.theme.colors.surface};
   border: 1px solid ${(props) => props.theme.colors.primary}20;
   max-width: none;
   padding: 15px 25px;
@@ -485,7 +494,7 @@ export const ConfigSection = styled.div`
 `;
 
 export const ConfigSubTitle = styled.h4`
-  color: #636e72;
+  color: ${(props) => props.theme.colors.textSecondary};
   font-family: ${(props) => props.theme.fonts.primary};
   font-size: 0.9rem;
   margin-bottom: 10px;
@@ -506,15 +515,45 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
   margin-bottom: 5px;
   border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
   font-size: 0.9rem;
-  color: #2d3436;
+  color: ${(props) => props.theme.colors.textPrimary};
 
   &:hover {
     background: ${(props) => props.theme.colors.primary}08;
   }
 
   input {
-    width: 16px;
-    height: 16px;
-    accent-color: ${(props) => props.theme.colors.primary};
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid ${(props) => props.theme.colors.primary}40;
+    border-radius: 50%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    background: ${(props) => props.theme.colors.surface};
+    position: relative;
+
+    &::after {
+      content: "";
+      width: 100%;
+      height: 100%;
+      background: ${(props) => props.theme.colors.primary};
+      border-radius: 50%;
+      transform: scale(0);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 4px solid ${(props) => props.theme.colors.surface};
+      box-sizing: border-box;
+    }
+
+    &:checked {
+      border-color: ${(props) => props.theme.colors.primary};
+    }
+
+    &:checked::after {
+      transform: scale(1);
+    }
   }
 `;

@@ -48,13 +48,13 @@ export const NavLeftSection = styled.div`
 `;
 
 export const LogoIconContainer = styled.div`
-  background: #6366f1;
+  background: ${(props) => props.theme.colors.primary};
   padding: 8px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 10px ${(props) => props.theme.colors.primary}40;
 `;
 
 export const AppNameText = styled.span`
@@ -113,13 +113,13 @@ export const IconButton = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  background: #6366f120;
+  background: ${(props) => props.theme.colors.primary}20;
   border-radius: 12px;
-  color: #6366f1;
+  color: ${(props) => props.theme.colors.primary};
   transition: all 0.2s ease;
 
   &:hover {
-    background: #6366f130;
+    background: ${(props) => props.theme.colors.primary}30;
     transform: translateY(-1px);
   }
 
@@ -133,13 +133,13 @@ export const DropdownMenu = styled.div`
   top: 100%;
   right: 0;
   margin-top: 10px;
-  background: white;
+  background: ${(props) => props.theme.colors.surface};
   border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px ${(props) => props.theme.colors.shadow};
   padding: 8px;
   min-width: 160px;
   z-index: 1100;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid ${(props) => props.theme.colors.primary}10;
   animation: fadeIn 0.2s ease-out;
 
   @keyframes fadeIn {
@@ -163,15 +163,15 @@ export const DropdownItem = styled.div`
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #2d3436;
+  color: ${(props) => props.theme.colors.textPrimary};
   transition: all 0.2s ease;
 
   &:hover {
-    background: #f8f9fa;
-    color: #6366f1;
+    background: ${(props) => props.theme.colors.surfaceVariant};
+    color: ${(props) => props.theme.colors.primary};
   }
 
   svg {
-    color: #6366f1;
+    color: ${(props) => props.theme.colors.primary};
   }
 `;

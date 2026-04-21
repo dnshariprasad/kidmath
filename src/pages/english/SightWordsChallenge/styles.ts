@@ -9,8 +9,6 @@ export const WordDisplay = styled(motion.div)`
   margin: 40px 0;
   font-family: ${(props) => props.theme.fonts.primary};
   text-transform: capitalize;
-    0 10px 0 ${(props) => props.theme.colors.primary}40,
-    0 20px 30px ${(props) => props.theme.colors.shadow};
 `;
 
 export const EmptyStateWrapper = styled.div`

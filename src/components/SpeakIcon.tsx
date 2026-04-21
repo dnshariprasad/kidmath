@@ -8,7 +8,7 @@ const SpeakButton = styled(motion.div)`
   height: 56px;
   flex-shrink: 0; /* Prevents squashing in flex containers */
   border-radius: 50%;
-  background: white;
+  background: ${(props) => props.theme.colors.surface};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,7 +19,7 @@ const SpeakButton = styled(motion.div)`
 
   &:hover {
     background: ${(props) => props.theme.colors.primary};
-    color: white;
+    color: ${(props) => props.theme.colors.onPrimary};
   }
 `;
 

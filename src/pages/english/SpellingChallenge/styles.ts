@@ -17,13 +17,13 @@ export const LetterSlot = styled(motion.div)<{
   width: 60px;
   height: 70px;
   border-radius: 16px;
-  background: white;
+  background: ${(props) => props.theme.colors.surface};
   border: 3px solid
     ${(props) => {
       if (props.$isSuccess) return props.theme.colors.success;
       if (props.$isError) return props.theme.colors.accent;
       if (props.$isActive) return props.theme.colors.primary;
-      return "#F0F0F0";
+      return props.theme.colors.primary + "15";
     }};
   display: flex;
   align-items: center;
@@ -32,7 +32,8 @@ export const LetterSlot = styled(motion.div)<{
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
-  box-shadow: ${(props) => (props.$isActive ? "0 10px 20px rgba(99, 102, 241, 0.2)" : "none")};
+  box-shadow: ${(props) =>
+    props.$isActive ? `0 10px 20px ${props.theme.colors.primary}20` : "none"};
   transition: all 0.2s ease;
 
   @media (max-width: 768px) {
@@ -44,16 +45,16 @@ export const LetterSlot = styled(motion.div)<{
 `;
 
 export const BigSpeakWrapper = styled(motion.div)`
-  background: white;
+  background: ${(props) => props.theme.colors.surface};
   padding: 30px;
   border-radius: 40px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 15px 35px ${(props) => props.theme.colors.shadow};
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  border: 3px solid #f0f0f0;
+  border: 3px solid ${(props) => props.theme.colors.primary}10;
 
   &:hover {
     border-color: ${(props) => props.theme.colors.primary}40;
@@ -72,7 +73,8 @@ export const HintIconWrapper = styled(motion.div)<{ $showHint: boolean }>`
   top: 20px;
   left: 20px;
   cursor: pointer;
-  color: ${(props) => (props.$showHint ? "#6366F1" : "#dfe6e9")};
+  color: ${(props) =>
+    props.$showHint ? props.theme.colors.primary : props.theme.colors.textSecondary + "40"};
   transition: color 0.2s ease;
 `;
 
@@ -81,11 +83,11 @@ export const SkipIconWrapper = styled(motion.div)`
   top: 20px;
   right: 20px;
   cursor: pointer;
-  color: #dfe6e9;
+  color: ${(props) => props.theme.colors.textSecondary + "40"};
   transition: color 0.2s ease;
 
   &:hover {
-    color: #6366f1;
+    color: ${(props) => props.theme.colors.primary};
   }
 `;
 

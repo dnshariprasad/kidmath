@@ -3,14 +3,14 @@ import styled from "styled-components";
 export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
   flex: 0 0 300px; /* Fixed width on desktop */
   width: 300px;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.colors.background};
   padding: 0 16px 40px; /* Top padding handled by layout container */
   box-sizing: border-box;
   height: 100%;
   position: relative; /* Part of flex flow on desktop */
   overflow-y: auto;
   transition: all 0.3s ease;
-  border-right: 1px solid #f1f5f9;
+  border-right: 1px solid ${(props) => props.theme.colors.primary}10;
   z-index: 10;
 
   @media (max-width: 768px) {
@@ -20,7 +20,7 @@ export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
     width: 300px;
     height: calc(100vh - 70px);
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
-    background-color: #ffffff;
+    background-color: ${(props) => props.theme.colors.background};
     z-index: 1000;
   }
 `;
@@ -62,7 +62,9 @@ export const MenuHeading = styled.div<{ $isActive?: boolean; $color?: string }>`
 
   &:hover {
     background-color: ${(props) =>
-      props.$isActive ? props.$color || props.theme.colors.primary : "#f8fafc"};
+      props.$isActive
+        ? props.$color || props.theme.colors.primary
+        : props.theme.colors.surfaceVariant};
     filter: ${(props) => (props.$isActive ? "brightness(0.95)" : "none")};
     transform: ${(props) => (props.$isActive ? "none" : "translateX(4px)")};
   }
@@ -97,7 +99,7 @@ export const MenuList = styled.div<{ isVisible: boolean }>`
 export const MenuItem = styled.div<{ $active?: boolean; $color?: string }>`
   padding: 10px 16px;
   background-color: ${(props) =>
-    props.$active ? (props.$color || "#6366F1") + "10" : "transparent"};
+    props.$active ? (props.$color || props.theme.colors.primary) + "15" : "transparent"};
   border-radius: 8px;
   cursor: pointer;
   font-family: ${(props) => props.theme.fonts.primary};
@@ -122,7 +124,9 @@ export const MenuItem = styled.div<{ $active?: boolean; $color?: string }>`
 
   &:hover {
     background-color: ${(props) =>
-      props.$active ? (props.$color || "#6366F1") + "15" : "#f8fafc"};
+      props.$active
+        ? (props.$color || props.theme.colors.primary) + "20"
+        : props.theme.colors.surfaceVariant};
     color: ${(props) => props.$color || props.theme.colors.primary};
     transform: translateX(4px);
   }

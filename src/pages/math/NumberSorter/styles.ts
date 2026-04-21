@@ -13,7 +13,7 @@ export const SortContainer = styled(Reorder.Group)`
 `;
 
 export const SortItem = styled(Reorder.Item)`
-  background: white;
+  background: ${(props) => props.theme.colors.surface};
   padding: 20px;
   border-radius: 20px;
   border: 3px solid ${(props) => props.theme.colors.primary}20;
@@ -25,7 +25,7 @@ export const SortItem = styled(Reorder.Item)`
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
   cursor: grab;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 10px ${(props) => props.theme.colors.shadow};
 
   &:active {
     cursor: grabbing;

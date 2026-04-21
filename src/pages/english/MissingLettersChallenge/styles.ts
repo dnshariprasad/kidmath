@@ -6,7 +6,8 @@ export const HintIconWrapper = styled(motion.div)<{ $showHint: boolean }>`
   top: 20px;
   left: 20px;
   cursor: pointer;
-  color: ${(props) => (props.$showHint ? "#6366F1" : "#dfe6e9")};
+  color: ${(props) =>
+    props.$showHint ? props.theme.colors.primary : props.theme.colors.textSecondary + "40"};
   transition: color 0.2s ease;
 `;
 

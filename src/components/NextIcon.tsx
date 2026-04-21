@@ -7,18 +7,18 @@ const IconButton = styled(motion.div)`
   height: 56px;
   flex-shrink: 0; /* Prevents squashing in flex containers */
   border-radius: 50%;
-  background: white;
+  background: ${(props) => props.theme.colors.surface};
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6366f1;
+  color: ${(props) => props.theme.colors.primary};
   cursor: pointer;
-  border: 2px solid #6366f1;
+  border: 2px solid ${(props) => props.theme.colors.primary};
   transition: all 0.2s ease;
 
   &:hover {
-    background: #6366f1;
-    color: white;
+    background: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.onPrimary};
   }
 `;
 
