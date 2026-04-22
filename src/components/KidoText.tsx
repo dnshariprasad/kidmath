@@ -4,7 +4,7 @@ import React from "react";
 interface KidoProps {
   fontSize?: string;
   mobileFontSize?: string;
-  fontWeight?: "normal" | "bold" | "lighter" | number;
+  fontWeight?: string | number;
   color?: string;
   textAlign?: "left" | "center" | "right" | "justify";
   margin?: string;

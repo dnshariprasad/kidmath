@@ -2,63 +2,63 @@ import React from "react";
 import styled from "styled-components";
 import { GhostHeader } from "../theme/globalStyles";
 import { KidoText } from "./KidoText";
-import { Trophy } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface SurpriseCardProps {
   title?: string;
   subtitle?: string;
-  streak?: number;
+  onClick?: () => void;
 }
+
+const ClickableHeader = styled(motion.div)<{ $isClickable: boolean }>`
+  cursor: ${(props) => (props.$isClickable ? "pointer" : "default")};
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  box-sizing: border-box;
+  text-align: center;
+`;
 
 const StyledSurpriseText = styled(KidoText)`
   margin-bottom: 4px;
-  opacity: 0.9;
-  z-index: 1;
+  opacity: 0.95;
 `;
 
 const SubtitleText = styled(KidoText)`
-  opacity: 0.8;
-  z-index: 1;
-  font-style: italic;
+  opacity: 0.85;
+  line-height: 1.2;
 `;
 
-const TrophyWrapper = styled.div`
-  background: rgba(255, 255, 255, 0.2);
-  padding: 10px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-`;
-
-const TextContainer = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+const GhostWrapper = styled(GhostHeader)`
+  padding: 0;
 `;
 
 export const SurpriseCard: React.FC<SurpriseCardProps> = ({
-  title = "Achievement Progress",
+  title = "Achievement",
   subtitle,
+  onClick,
 }) => {
   return (
-    <GhostHeader data-testid="ghost-area">
-      <TrophyWrapper>
-        <Trophy size={24} color="white" />
-      </TrophyWrapper>
-
-      <TextContainer>
-        <StyledSurpriseText fontSize="sm" color="white" fontWeight="bold">
+    <GhostWrapper data-testid="ghost-area">
+      <ClickableHeader
+        $isClickable={!!onClick}
+        onClick={onClick}
+        whileHover={onClick ? { backgroundColor: "rgba(255,255,255,0.08)" } : {}}
+        whileTap={onClick ? { scale: 0.98 } : {}}
+      >
+        <StyledSurpriseText fontSize="md" color="white" fontWeight="800">
           {title}
         </StyledSurpriseText>
         {subtitle && (
-          <SubtitleText fontSize="xs" color="white">
+          <SubtitleText fontSize="xs" color="white" fontWeight="500">
             {subtitle}
           </SubtitleText>
         )}
-      </TextContainer>
-    </GhostHeader>
+      </ClickableHeader>
+    </GhostWrapper>
   );
 };

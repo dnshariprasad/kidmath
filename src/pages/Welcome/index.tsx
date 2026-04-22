@@ -2,105 +2,227 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import KidButton from "../../components/KidButton";
 import { PageContainer, PageHeader, PageTitle, PageSubtitle } from "../../theme/globalStyles";
-import { Calculator, Type, Languages, Trophy } from "lucide-react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
 import {
-  DashboardGrid,
-  CategoryCard,
-  IconWrapper,
-  WavingEmoji,
-  CategoryTitle,
-  CategoryDesc,
-  PromoCard,
-  PromoHeader,
-  PromoTitle,
-  PromoDesc,
-  PromoActionArea,
-  WhiteKidButtonWrapper,
+  Calculator,
+  Type,
+  Languages,
+  Trophy,
+  BookOpen,
+  Gamepad2,
+  CheckCircle2,
+  Search,
+  Grid3X3,
+  ArrowUpDown,
+  LayoutGrid,
+} from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { setMode } from "../../store/slice/AlphabetSlice";
+import { GAME_CATEGORIES } from "../../constants/gameData";
+import {
+  ColumnsContainer,
+  RevampColumn,
+  ColumnHeader,
+  GameList,
+  GameItem,
+  GameIcon,
+  GameInfo as GameInfoContainer,
+  GameTitle,
+  GameDesc,
+  RevampFooter,
+  FooterContent,
 } from "./styles";
+import { KidoText } from "../../components/KidoText";
 
 const Welcome: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userName = useSelector((state: RootState) => state.alphabet.userName);
+  const handleGameClick = (path: string, mode: "learn" | "practice" | "test") => {
+    dispatch(setMode(mode));
+    navigate(path);
+  };
 
-  const categories = [
-    {
-      title: "Counting Fun",
-      desc: "Numbers, counting & more!",
-      icon: <Calculator size={40} />,
-      color: "#6366F1",
-      path: "/counting",
-    },
-    {
-      title: "English Fun",
-      desc: "ABC, spelling & words!",
-      icon: <Type size={40} />,
-      color: "#6366F1",
-      path: "/alphabet",
-    },
-    {
-      title: "Hindi Letters",
-      desc: "Learn Varnamala with joy!",
-      icon: <Languages size={40} />,
-      color: "#6366F1",
-      path: "/alphabet_hindi",
-    },
-  ];
+  const handleExploreClick = (mode: "learn" | "practice" | "test") => {
+    const firstGame = GAME_CATEGORIES[mode][0];
+    if (firstGame) {
+      dispatch(setMode(mode));
+      navigate(firstGame.path);
+    }
+  };
+
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case "Type":
+        return <Type size={20} />;
+      case "Languages":
+        return <Languages size={20} />;
+      case "BookOpen":
+        return <BookOpen size={20} />;
+      case "Search":
+        return <Search size={20} />;
+      case "Gamepad2":
+        return <Gamepad2 size={20} />;
+      case "Calculator":
+        return <Calculator size={20} />;
+      case "Grid3X3":
+        return <Grid3X3 size={20} />;
+      case "ArrowUpDown":
+        return <ArrowUpDown size={20} />;
+      case "LayoutGrid":
+        return <LayoutGrid size={20} />;
+      case "Trophy":
+        return <Trophy size={20} />;
+      default:
+        return <Calculator size={20} />;
+    }
+  };
 
   return (
     <PageContainer data-testid="view-welcome">
-      <PageHeader data-testid="welcome-header">
-        <PageTitle>
-          Hi, {userName || "there"}!{" "}
-          <WavingEmoji
-            animate={{ rotate: [0, 20, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            👋
-          </WavingEmoji>
-        </PageTitle>
-        <PageSubtitle>
-          What would you like to learn today? Pick a subject and let's start the adventure! 🚀
-        </PageSubtitle>
+      <PageHeader>
+        <PageTitle>Welcome, {userName || "Explorer"}! 👋</PageTitle>
+        <PageSubtitle>The ultimate learning playground for curious kids! 🌟</PageSubtitle>
       </PageHeader>
 
-      <DashboardGrid data-testid="category-grid">
-        {categories.map((cat, i) => (
-          <CategoryCard
-            key={cat.title}
-            $color={cat.color}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.1 }}
-            onClick={() => navigate(cat.path)}
-          >
-            <IconWrapper $color={cat.color}>{cat.icon}</IconWrapper>
-            <CategoryTitle>{cat.title}</CategoryTitle>
-            <CategoryDesc>{cat.desc}</CategoryDesc>
-            <KidButton title="Let's Play!" variant="primary" onClick={() => navigate(cat.path)} />
-          </CategoryCard>
-        ))}
-      </DashboardGrid>
-
-      <PromoCard data-testid="promo-section">
-        <PromoHeader>
-          <Trophy size={48} color="#FFEAA7" />
-          <PromoTitle>Earn Your Awards!</PromoTitle>
-        </PromoHeader>
-        <PromoDesc>
-          Reach a 10-streak in any challenge to win a personalized Achievement Certificate! 🏆✨
-        </PromoDesc>
-        <PromoActionArea>
-          <WhiteKidButtonWrapper>
+      <ColumnsContainer>
+        {/* LEARN COLUMN */}
+        <RevampColumn
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <ColumnHeader>
+            <BookOpen size={28} />
+            <KidoText fontSize="xl" color="primary" fontWeight={900}>
+              Learn
+            </KidoText>
+          </ColumnHeader>
+          <GameList>
+            {GAME_CATEGORIES.learn.slice(0, 3).map((game) => (
+              <GameItem
+                key={game.path}
+                onClick={() => handleGameClick(game.path, "learn")}
+                whileTap={{ scale: 0.98 }}
+              >
+                <GameInfoContainer>
+                  <GameTitle>
+                    <GameIcon>{getIcon(game.iconName)}</GameIcon>
+                    {game.title}
+                  </GameTitle>
+                  <GameDesc>{game.desc}</GameDesc>
+                </GameInfoContainer>
+              </GameItem>
+            ))}
+          </GameList>
+          <div style={{ marginTop: "16px", textAlign: "center" }}>
             <KidButton
-              title="Choose a Challenge"
+              title="EXPLORE ALL"
               variant="secondary"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              onClick={() => handleExploreClick("learn")}
+              width="100%"
             />
-          </WhiteKidButtonWrapper>
-        </PromoActionArea>
-      </PromoCard>
+          </div>
+        </RevampColumn>
+
+        {/* PRACTICE COLUMN */}
+        <RevampColumn
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <ColumnHeader>
+            <Gamepad2 size={28} />
+            <KidoText fontSize="xl" color="primary" fontWeight={900}>
+              Practice
+            </KidoText>
+          </ColumnHeader>
+          <GameList>
+            {GAME_CATEGORIES.practice.slice(0, 3).map((game) => (
+              <GameItem
+                key={game.path}
+                onClick={() => handleGameClick(game.path, "practice")}
+                whileTap={{ scale: 0.98 }}
+              >
+                <GameInfoContainer>
+                  <GameTitle>
+                    <GameIcon>{getIcon(game.iconName)}</GameIcon>
+                    {game.title}
+                  </GameTitle>
+                  <GameDesc>{game.desc}</GameDesc>
+                </GameInfoContainer>
+              </GameItem>
+            ))}
+          </GameList>
+          <div style={{ marginTop: "16px", textAlign: "center" }}>
+            <KidButton
+              title="EXPLORE ALL"
+              variant="secondary"
+              onClick={() => handleExploreClick("practice")}
+              width="100%"
+            />
+          </div>
+        </RevampColumn>
+
+        {/* TEST COLUMN */}
+        <RevampColumn
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <ColumnHeader>
+            <CheckCircle2 size={28} />
+            <KidoText fontSize="xl" color="primary" fontWeight={900}>
+              Test
+            </KidoText>
+          </ColumnHeader>
+          <GameList>
+            {GAME_CATEGORIES.test.slice(0, 3).map((game) => (
+              <GameItem
+                key={game.path}
+                onClick={() => handleGameClick(game.path, "test")}
+                whileTap={{ scale: 0.98 }}
+              >
+                <GameInfoContainer>
+                  <GameTitle>
+                    <GameIcon>{getIcon(game.iconName)}</GameIcon>
+                    {game.title}
+                  </GameTitle>
+                  <GameDesc>{game.desc}</GameDesc>
+                </GameInfoContainer>
+              </GameItem>
+            ))}
+          </GameList>
+          <div style={{ marginTop: "16px", textAlign: "center" }}>
+            <KidButton
+              title="EXPLORE ALL"
+              variant="secondary"
+              onClick={() => handleExploreClick("test")}
+              width="100%"
+            />
+          </div>
+        </RevampColumn>
+      </ColumnsContainer>
+
+      <RevampFooter>
+        <Trophy size={60} color="#FFEAA7" />
+        <FooterContent>
+          <KidoText fontSize="2rem" color="onPrimary" fontWeight={900}>
+            Achievement Program 🏆
+          </KidoText>
+          <KidoText fontSize="lg" color="onPrimary">
+            Master any subject by reaching a 10-streak to earn your exclusive printable certificate!
+            Track your progress with the stars on each activity.
+          </KidoText>
+        </FooterContent>
+        <KidButton
+          title="Start Learning! 🚀"
+          variant="accent"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          minWidth="220px"
+          size="lg"
+        />
+      </RevampFooter>
     </PageContainer>
   );
 };

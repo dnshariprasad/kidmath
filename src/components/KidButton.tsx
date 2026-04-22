@@ -12,6 +12,7 @@ interface ButtonProps {
   width?: string;
   minWidth?: string;
   fontSize?: string;
+  disabled?: boolean;
 }
 
 const StyledButton = styled(motion.button)<{
@@ -21,26 +22,44 @@ const StyledButton = styled(motion.button)<{
   $minWidth?: string;
   $fontSize?: string;
 }>`
-  padding: ${(props) => (props.$size ? "0" : "16px 32px")};
-  width: ${(props) => props.$size || props.$width || "auto"};
+  padding: ${(props) => {
+    switch (props.$size) {
+      case "sm":
+        return "10px 20px";
+      case "lg":
+        return "20px 40px";
+      case "xl":
+        return "24px 48px";
+      default:
+        return "16px 32px";
+    }
+  }};
+  width: ${(props) => props.$width || "auto"};
   min-width: ${(props) => props.$minWidth || "auto"};
-  height: ${(props) => props.$size || "auto"};
   font-size: ${(props) => {
+    if (props.$size === "sm") return "0.85rem";
+    if (props.$size === "lg") return "1.1rem";
+    if (props.$size === "xl") return "1.25rem";
     const size = props.$fontSize as keyof typeof props.theme.fontSize;
     return props.theme.fontSize[size] || props.$fontSize || props.theme.fontSize.md;
   }};
-  font-weight: 700;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   background: ${(props) => {
     switch (props.$variant) {
       case "success":
+        return "#10B981";
       case "accent":
+        return "#F59E0B";
       case "primary":
-      default:
         return props.theme.colors.primary;
       case "secondary":
-        return props.theme.colors.primaryContainer;
+        return props.theme.colors.primary + "10";
       case "sub":
         return "#F0F0F0";
+      default:
+        return props.theme.colors.primary;
     }
   }};
   color: ${(props) => {
@@ -54,25 +73,30 @@ const StyledButton = styled(motion.button)<{
     }
   }};
   border: ${(props) =>
-    props.$variant === "secondary" ? `2px solid ${props.theme.colors.primary}30` : "none"};
-  border-radius: 20px;
+    props.$variant === "secondary" ? `2px solid ${props.theme.colors.primary}40` : "none"};
+  border-radius: 24px;
   cursor: pointer;
   font-family: ${(props) => props.theme.fonts.primary};
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   outline: none;
   position: relative;
-  letter-spacing: 0.1px;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${(props) => (props.$variant === "primary" ? props.theme.shadows.md : "none")};
 
   &:hover {
     background: ${(props) => {
-      if (props.$variant === "secondary") return props.theme.colors.primaryContainer;
+      if (props.$variant === "secondary") return props.theme.colors.primary + "15";
       return props.theme.colors.primary;
     }};
-    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: ${(props) => props.theme.shadows.lg};
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;
 

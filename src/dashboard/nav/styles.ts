@@ -76,7 +76,7 @@ export const UserSection = styled.div`
   }
 `;
 
-export const MenuToggleButton = styled.button`
+export const MenuToggleButton = styled.button<{ $isVisible?: boolean }>`
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -86,7 +86,7 @@ export const MenuToggleButton = styled.button`
   display: none;
 
   @media (max-width: 768px) {
-    display: block;
+    display: ${(props) => (props.$isVisible ? "block" : "none")};
   }
 `;
 

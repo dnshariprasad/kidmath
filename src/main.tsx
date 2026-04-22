@@ -1,5 +1,4 @@
 import { StrictMode, lazy, Suspense, useState } from "react";
-import styled from "styled-components";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
@@ -10,7 +9,6 @@ import { store, RootState } from "./store/store.ts";
 import Navbar from "./dashboard/nav/index.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import SharedCertificate from "./components/SharedCertificate/index.tsx";
-import { KidoText } from "./components/KidoText";
 import NamePrompt from "./components/NamePrompt/index.tsx";
 
 // Lazy load pages
@@ -27,6 +25,7 @@ const MissingLettersChallenge = lazy(
 const GreaterLessEqualGame = lazy(() => import("./pages/math/GreaterLessEqualGame/index.tsx"));
 const MathChallenge = lazy(() => import("./pages/math/MathChallenge/index.tsx"));
 const NumberSorter = lazy(() => import("./pages/math/NumberSorter/index.tsx"));
+const MasterTest = lazy(() => import("./pages/MasterTest/index.tsx"));
 
 const ConnectedThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const themeMode = useSelector((state: RootState) => state.alphabet.theme);
@@ -52,20 +51,9 @@ const NameRequiredRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-const LoadingWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-`;
+import LoadingScreen from "./components/LoadingScreen";
 
-const LoadingState = () => (
-  <LoadingWrapper>
-    <KidoText fontSize="xl" color="primary">
-      Loading Magic...
-    </KidoText>
-  </LoadingWrapper>
-);
+const LoadingState = () => <LoadingScreen />;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -156,6 +144,22 @@ createRoot(document.getElementById("root")!).render(
                     element={
                       <NameRequiredRoute>
                         <AlphabetHindiChallenge />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="test/:testId"
+                    element={
+                      <NameRequiredRoute>
+                        <MasterTest />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="master_test"
+                    element={
+                      <NameRequiredRoute>
+                        <MasterTest />
                       </NameRequiredRoute>
                     }
                   />

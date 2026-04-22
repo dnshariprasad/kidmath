@@ -11,11 +11,6 @@ import {
   ConfigSubTitle,
   GameActivityArea,
   SettingsArea,
-  SessionStats,
-  NumberedStar,
-  StarEmoji,
-  StarNumber,
-  PlusSign,
 } from "../../../theme/globalStyles";
 import SpeakIcon from "../../../components/SpeakIcon";
 import NextIcon from "../../../components/NextIcon";
@@ -25,9 +20,15 @@ import KidButton from "../../../components/KidButton";
 import { SurpriseCard } from "../../../components/SurpriseCard";
 import { KidoText } from "../../../components/KidoText";
 import { readText } from "../../../utils/index";
-import { getAllWords } from "../../../utils/wordUtils";
+import { getAllWords, getSentencesOfWord } from "../../../utils/wordUtils";
 import { RootState } from "../../../store/store";
-import { WordDisplay, EmptyStateWrapper, IconMargin } from "./styles";
+import {
+  WordDisplay,
+  EmptyStateWrapper,
+  IconMargin,
+  SentenceContainer,
+  ExampleSentence,
+} from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 
@@ -92,42 +93,32 @@ const SightWordsChallenge = () => {
         />
 
         <SurpriseCard
-          title="Certificate Progress"
-          subtitle={
-            streak < 10
-              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
-              : "Milestone reached! 🎉"
-          }
+          title="Challenge Time? 📖"
+          subtitle="Head over to Practice mode to see how many of these words you can spell!"
         />
 
         <GameActivityArea data-testid="activity-area">
           {filteredWords.length > 0 ? (
             <>
-              <SessionStats>
-                {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
-                  <NumberedStar
-                    key={i}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
-                  >
-                    <StarEmoji>⭐</StarEmoji>
-                    <StarNumber>{i + 1}</StarNumber>
-                  </NumberedStar>
-                ))}
-                {streak >= 10 && <PlusSign>+</PlusSign>}
-              </SessionStats>
-
               <AnimatePresence mode="wait">
-                <WordDisplay
-                  key={currentWord}
-                  initial={{ x: 50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: -50, opacity: 0 }}
-                  transition={{ type: "spring", damping: 15 }}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
                 >
-                  {currentWord}
-                </WordDisplay>
+                  <WordDisplay
+                    key={currentWord}
+                    initial={{ x: 50, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -50, opacity: 0 }}
+                    transition={{ type: "spring", damping: 15 }}
+                  >
+                    {currentWord}
+                  </WordDisplay>
+                </div>
               </AnimatePresence>
 
               <NavControlBar>
@@ -135,6 +126,35 @@ const SightWordsChallenge = () => {
                 <SpeakIcon text={currentWord} />
                 <NextIcon onClick={handleNext} />
               </NavControlBar>
+
+              {getSentencesOfWord(currentWord).length > 0 && (
+                <div
+                  style={{
+                    width: "100%",
+                    marginTop: "20px",
+                    borderTop: "1px dashed rgba(99, 102, 241, 0.1)",
+                    paddingTop: "20px",
+                  }}
+                >
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }}
+                  >
+                    {getSentencesOfWord(currentWord)
+                      .slice(0, 3)
+                      .map((sentence, idx) => (
+                        <SentenceContainer
+                          key={`${currentWord}-s-${idx}`}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                        >
+                          <ExampleSentence>{sentence}</ExampleSentence>
+                          <SpeakIcon text={sentence} size="small" />
+                        </SentenceContainer>
+                      ))}
+                  </div>
+                </div>
+              )}
             </>
           ) : (
             <EmptyStateWrapper>

@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { AnimatePresence } from "framer-motion";
 import {
@@ -11,11 +12,6 @@ import {
   ConfigSection,
   ConfigSubTitle,
   GameActivityArea,
-  SessionStats,
-  NumberedStar,
-  StarEmoji,
-  StarNumber,
-  PlusSign,
 } from "../../../theme/globalStyles";
 import SpeakIcon from "../../../components/SpeakIcon";
 import NextIcon from "../../../components/NextIcon";
@@ -39,6 +35,7 @@ import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 
 const AlphabetHindiChallenge = () => {
+  const navigate = useNavigate();
   const streak = useSelector(
     (state: RootState) => state.alphabet.gameStats?.alphabet_hindi?.streak ?? 0,
   );
@@ -84,30 +81,12 @@ const AlphabetHindiChallenge = () => {
         />
 
         <SurpriseCard
-          title="Certificate Progress"
-          subtitle={
-            streak < 10
-              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
-              : "Milestone reached! 🎉"
-          }
+          title="Take the Test? ✍️"
+          subtitle="Try the Hindi Legend exam!"
+          onClick={() => navigate("/test/hindi_legend")}
         />
 
         <GameActivityArea data-testid="activity-area">
-          <SessionStats>
-            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
-              <NumberedStar
-                key={i}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
-              >
-                <StarEmoji>⭐</StarEmoji>
-                <StarNumber>{i + 1}</StarNumber>
-              </NumberedStar>
-            ))}
-            {streak >= 10 && <PlusSign>+</PlusSign>}
-          </SessionStats>
-
           <AnimatePresence mode="wait">
             <HindiDisplay
               key={currentLetter}

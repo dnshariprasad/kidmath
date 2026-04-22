@@ -29,14 +29,13 @@ export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
 
   @media (max-width: 768px) {
     position: fixed;
-    left: ${(props) => (props.$isOpen ? "16px" : "-100%")};
-    top: 86px;
-    width: calc(100% - 32px);
-    max-width: 300px;
-    height: calc(100vh - 110px);
+    left: ${(props) => (props.$isOpen ? "0" : "-100%")};
+    top: 70px;
+    width: 280px;
+    height: calc(100vh - 70px);
     margin: 0;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    border-radius: 24px;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
     z-index: 1000;
   }
 `;

@@ -64,10 +64,12 @@ const Navbar: React.FC = () => {
     };
   }, [isMoreMenuOpen]);
 
+  const isWelcomePage = location.pathname === "/" || !location.pathname;
+
   return (
     <NavbarContainer data-testid="layout-navbar">
       <NavLeftSection>
-        <MenuToggleButton onClick={() => dispatch(toggleMobileMenu())}>
+        <MenuToggleButton $isVisible={!isWelcomePage} onClick={() => dispatch(toggleMobileMenu())}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </MenuToggleButton>
         <AppName as={Link} to="/">

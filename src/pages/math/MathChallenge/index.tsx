@@ -114,12 +114,8 @@ export const MathChallenge: React.FC = () => {
         />
 
         <SurpriseCard
-          title="Certificate Progress"
-          subtitle={
-            streak < 10
-              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
-              : "Milestone reached! 🎉"
-          }
+          title="Ready for the Big Test? 🏆"
+          subtitle="Once you master these sums, try the 'Math Master' test to win a trophy!"
         />
 
         <GameActivityArea data-testid="activity-area">

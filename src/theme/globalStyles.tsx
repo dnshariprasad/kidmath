@@ -1,5 +1,23 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { motion } from "framer-motion";
+
+export const shimmerAnimation = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+`;
+
+export const SkeletonBase = styled.div`
+  background: ${(props) => props.theme.colors.surfaceVariant}40;
+  background-image: linear-gradient(
+    90deg,
+    ${(props) => props.theme.colors.surfaceVariant}40 0%,
+    ${(props) => props.theme.colors.surfaceVariant}80 50%,
+    ${(props) => props.theme.colors.surfaceVariant}40 100%
+  );
+  background-size: 200% 100%;
+  animation: ${shimmerAnimation} 1.5s infinite;
+  border-radius: 12px;
+`;
 
 // Material 3 Elevation Levels
 export const elevation1 = css`
@@ -245,8 +263,8 @@ export const TitleArea = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 160px;
-  height: 160px;
+  min-height: 120px;
+  height: 120px;
   background: ${(props) => props.theme.colors.surface};
   border-radius: 24px;
   border: 1px solid ${(props) => props.theme.colors.primary}15;

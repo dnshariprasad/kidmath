@@ -24,6 +24,7 @@ interface KiddooState {
   isMuted: boolean;
   theme: "light" | "dark";
   fontSizeLevel: FontSizeLevel;
+  currentMode: "learn" | "practice" | "test" | null;
   userName: string;
 }
 
@@ -76,6 +77,7 @@ const initialState: KiddooState = {
   },
   isMobileMenuOpen: false,
   isMuted: persistedState?.isMuted ?? false,
+  currentMode: persistedState?.currentMode ?? null,
   theme: persistedState?.theme || "light",
   fontSizeLevel: persistedState?.fontSizeLevel || "large",
   userName: persistedState?.userName || "",
@@ -141,6 +143,10 @@ const kiddooSlice = createSlice({
       state.fontSizeLevel = action.payload;
       saveState(state);
     },
+    setMode: (state, action: PayloadAction<"learn" | "practice" | "test" | null>) => {
+      state.currentMode = action.payload;
+      saveState(state);
+    },
     setUserName: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
       saveState(state);
@@ -175,6 +181,7 @@ export const {
   toggleMute,
   toggleTheme,
   setFontSizeLevel,
+  setMode,
   setUserName,
   resetAll,
 } = kiddooSlice.actions;

@@ -2,110 +2,107 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Card } from "../../theme/globalStyles";
 
-export const DashboardGrid = styled.div`
+export const ColumnsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 25px;
   width: 100%;
   max-width: 1200px;
-  margin-top: 15px;
-`;
+  margin-top: 60px;
+  margin-bottom: 60px;
 
-export const CategoryCard = styled(motion.div)<{ $color: string }>`
-  background: ${(props) => props.theme.colors.surface};
-  padding: 24px;
-  border-radius: 24px;
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid ${(props) => props.theme.colors.primary}10;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    border-color: ${(props) => props.$color}40;
-    transform: translateY(-5px);
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+    margin-top: 40px;
   }
 `;
 
-export const IconWrapper = styled.div<{ $color: string }>`
-  background: ${(props) => props.$color}15;
-  color: ${(props) => props.$color};
-  padding: 16px;
-  border-radius: 20px;
-  margin-bottom: 16px;
+export const RevampColumn = styled(motion(Card))`
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  box-sizing: border-box;
+  background: ${(props) => props.theme.colors.surfaceVariant}40;
 `;
 
-export const WavingEmoji = styled(motion.span)`
-  display: inline-block;
-`;
-
-export const CategoryTitle = styled.h3`
-  font-size: ${(props) => props.theme.fontSize.lg};
+export const ColumnHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 8px;
+  color: ${(props) => props.theme.colors.primary};
+`;
+
+export const GameList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const GameItem = styled(motion.div)`
+  background: ${(props) => props.theme.colors.surface};
+  padding: 14px 18px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  border: 1px solid ${(props) => props.theme.colors.primary}08;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateX(6px);
+    border-color: ${(props) => props.theme.colors.primary}30;
+    background: ${(props) => props.theme.colors.primary}05;
+  }
+`;
+
+export const GameIcon = styled.span`
+  color: ${(props) => props.theme.colors.primary};
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+`;
+
+export const GameInfo = styled.div`
+  flex: 1;
+`;
+
+export const GameTitle = styled.div`
+  font-weight: 700;
+  font-size: ${(props) => props.theme.fontSize.md};
   color: ${(props) => props.theme.colors.textPrimary};
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
-export const CategoryDesc = styled.p`
+export const GameDesc = styled.div`
+  font-size: ${(props) => props.theme.fontSize.xs};
   color: ${(props) => props.theme.colors.textSecondary};
-  margin-bottom: 20px;
-  font-size: ${(props) => props.theme.fontSize.sm};
+  opacity: 0.7;
+  padding-left: 28px;
 `;
 
-export const PromoCard = styled(Card)`
-  margin-top: 40px;
-  text-align: center;
+export const RevampFooter = styled(motion(Card))`
   background: linear-gradient(
     135deg,
     ${(props) => props.theme.colors.primary} 0%,
     ${(props) => props.theme.colors.primary}CC 100%
   );
   color: white;
-  padding: 30px 20px;
-  width: 100%;
-  max-width: 1000px;
-  box-sizing: border-box;
-  border: none;
-
-  &:hover {
-    transform: translateY(-4px);
-  }
-`;
-
-export const PromoHeader = styled.div`
+  padding: 40px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+  gap: 20px;
+  text-align: center;
+  max-width: 1200px;
+  border: none;
 `;
 
-export const PromoTitle = styled.h2`
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  margin: 0;
-`;
-
-export const PromoDesc = styled.p`
-  font-size: ${(props) => props.theme.fontSize.base};
-  margin: 0 auto 25px;
-  opacity: 0.9;
-  max-width: 500px;
-  font-weight: 500;
-`;
-
-export const PromoActionArea = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-export const WhiteKidButtonWrapper = styled.div`
-  & > [data-testid="comp-kid-button"] {
-    background: ${(props) => props.theme.colors.onPrimary} !important;
-    color: ${(props) => props.theme.colors.primary} !important;
-    border: none !important;
-  }
+export const FooterContent = styled.div`
+  max-width: 600px;
 `;

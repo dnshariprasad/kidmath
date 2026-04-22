@@ -12,15 +12,11 @@ import {
   ConfigSection,
   ConfigSubTitle,
   GameActivityArea,
-  SessionStats,
-  NumberedStar,
-  StarEmoji,
-  StarNumber,
-  PlusSign,
 } from "../../../theme/globalStyles";
 import SpeakIcon from "../../../components/SpeakIcon";
 import NextIcon from "../../../components/NextIcon";
 import PreviousIcon from "../../../components/PreviousIcon";
+import { useNavigate } from "react-router-dom";
 import { Type } from "lucide-react";
 import { SurpriseCard } from "../../../components/SurpriseCard";
 import { BigLetter } from "./styles";
@@ -28,6 +24,7 @@ import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 
 const AlphabetPage = () => {
+  const navigate = useNavigate();
   const big = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   const streak = useSelector((state: RootState) => state.alphabet.gameStats?.alphabet?.streak ?? 0);
   const [index, setIndex] = useState(0);
@@ -55,30 +52,12 @@ const AlphabetPage = () => {
         />
 
         <SurpriseCard
-          title="Certificate Progress"
-          subtitle={
-            streak < 10
-              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
-              : "Milestone reached! 🎉"
-          }
+          title="Time to Practice? 🎯"
+          subtitle="Try the practice games for this subject!"
+          onClick={() => navigate("/missing_letters")}
         />
 
         <GameActivityArea data-testid="activity-area">
-          <SessionStats>
-            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
-              <NumberedStar
-                key={i}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
-              >
-                <StarEmoji>⭐</StarEmoji>
-                <StarNumber>{i + 1}</StarNumber>
-              </NumberedStar>
-            ))}
-            {streak >= 10 && <PlusSign>+</PlusSign>}
-          </SessionStats>
-
           <AnimatePresence mode="wait">
             <BigLetter
               key={currentLetter}

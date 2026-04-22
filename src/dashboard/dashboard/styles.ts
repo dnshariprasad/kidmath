@@ -19,9 +19,9 @@ export const LayoutContainer = styled.div`
   }
 `;
 
-export const ContentContainer = styled.div`
-  flex: 1;
-  padding: 0; /* Standardized to 0, let PageContainer handle padding */
+export const ContentContainer = styled.div<{ $isFullWidth?: boolean }>`
+  flex: ${(props) => (props.$isFullWidth ? "0 0 100%" : "1")};
+  padding: 0;
   width: 100%;
   box-sizing: border-box;
   overflow-y: auto;

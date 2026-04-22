@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -35,6 +36,7 @@ import { incrementScore, resetStreak, resetAll } from "../../../store/slice/Alph
 import { HintIconWrapper, ChallengeTextContainer, WordDisplay } from "./styles";
 
 const MissingLettersChallenge = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const streak = useSelector(
     (state: RootState) => state.alphabet.gameStats?.missing_letters?.streak ?? 0,
@@ -107,12 +109,9 @@ const MissingLettersChallenge = () => {
         />
 
         <SurpriseCard
-          title="Certificate Progress"
-          subtitle={
-            streak < 10
-              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
-              : "Milestone reached! 🎉"
-          }
+          title="Ready for the Test? 🏆"
+          subtitle="Try the Spelling Hero exam!"
+          onClick={() => navigate("/test/spelling_hero")}
         />
 
         <GameActivityArea data-testid="activity-area">
