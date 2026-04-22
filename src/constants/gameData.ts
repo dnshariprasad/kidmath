@@ -98,7 +98,7 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
   test: [
     {
       id: "math_addition",
-      title: "Addition Master",
+      title: "Addition",
       desc: "Practice plus (+) sums",
       iconName: "Calculator",
       path: "/test/math_addition",
@@ -106,7 +106,7 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
     },
     {
       id: "math_subtraction",
-      title: "Subtraction Master",
+      title: "Subtraction",
       desc: "Practice minus (-) sums",
       iconName: "Calculator",
       path: "/test/math_subtraction",
@@ -114,7 +114,7 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
     },
     {
       id: "math_multiplication",
-      title: "Multiplication Master",
+      title: "Multiplication",
       desc: "Practice times (x) sums",
       iconName: "Calculator",
       path: "/test/math_multiplication",
@@ -122,16 +122,32 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
     },
     {
       id: "math_test",
-      title: "Math Master",
+      title: "Math Hero",
       desc: "Mix of + , - , x",
       iconName: "Trophy",
       path: "/test/math_test",
       subject: "Math",
     },
     {
+      id: "english_missing_letters",
+      title: "Missing Letters",
+      desc: "Find the hidden letter",
+      iconName: "Search",
+      path: "/test/english_missing_letters",
+      subject: "English",
+    },
+    {
+      id: "english_spelling",
+      title: "Listen and Find",
+      desc: "Tap the word you hear",
+      iconName: "Gamepad2",
+      path: "/test/english_spelling",
+      subject: "English",
+    },
+    {
       id: "spelling_test",
       title: "Spelling Hero",
-      desc: "Spelling & Missing letters",
+      desc: "Mix of Spellings",
       iconName: "SpellCheck",
       path: "/test/spelling_test",
       subject: "English",
@@ -143,6 +159,14 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
       iconName: "Languages",
       path: "/test/hindi_test",
       subject: "Hindi",
+    },
+    {
+      id: "logic_test",
+      title: "Grand Logic",
+      desc: "Patterns & Puzzles",
+      iconName: "Brain",
+      path: "/test/logic_test",
+      subject: "Logic",
     },
     {
       id: "master_test",

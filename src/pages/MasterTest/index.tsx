@@ -6,7 +6,16 @@ import { incrementScore } from "../../store/slice/AlphabetSlice";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { PageContainer, NavControlBar } from "../../theme/globalStyles";
-import { Trophy, SpellCheck, Search, Scale, CheckCircle2, Languages, XCircle } from "lucide-react";
+import {
+  Trophy,
+  SpellCheck,
+  Search,
+  Scale,
+  CheckCircle2,
+  Languages,
+  XCircle,
+  Brain,
+} from "lucide-react";
 import confetti from "canvas-confetti";
 import Certificate from "../../components/Certificate";
 import SpeakIcon from "../../components/SpeakIcon";
@@ -42,11 +51,12 @@ import {
   CertificateWrapper,
   CardProgressBar,
   CardProgressFill,
+  LogicDisplay,
 } from "./styles";
 import ChallengeHeader from "../../components/ChallengeHeader";
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
 
-type QuestionType = "math" | "spelling" | "missing_letter" | "comparison" | "hindi";
+type QuestionType = "math" | "spelling" | "missing_letter" | "comparison" | "hindi" | "logic";
 
 interface Question {
   id: number;
@@ -81,17 +91,23 @@ const MasterTest: React.FC = () => {
     if (isMasterTest) return "Grand Master";
     switch (testId) {
       case "math_addition":
-        return "Addition Master";
+        return "Addition";
       case "math_subtraction":
-        return "Subtraction Master";
+        return "Subtraction";
       case "math_multiplication":
-        return "Multiplication Master";
+        return "Multiplication";
       case "math_test":
-        return "Math Master";
+        return "Math Hero";
+      case "english_missing_letters":
+        return "Missing Letters";
+      case "english_spelling":
+        return "Listen and Find";
       case "spelling_test":
         return "Spelling Hero";
       case "hindi_test":
         return "Hindi Legend";
+      case "logic_test":
+        return "Grand Logic";
       default:
         return "Test Challenge";
     }
@@ -105,6 +121,7 @@ const MasterTest: React.FC = () => {
       "missing_letter",
       "comparison",
       "hindi",
+      "logic",
     ];
     if (
       testId === "math_addition" ||
@@ -114,8 +131,11 @@ const MasterTest: React.FC = () => {
       allowedTypes = ["math"];
     }
     if (testId === "math_test") allowedTypes = ["math", "comparison"];
+    if (testId === "english_missing_letters") allowedTypes = ["missing_letter"];
+    if (testId === "english_spelling") allowedTypes = ["spelling"];
     if (testId === "spelling_test") allowedTypes = ["spelling", "missing_letter"];
     if (testId === "hindi_test") allowedTypes = ["hindi"];
+    if (testId === "logic_test") allowedTypes = ["logic", "comparison"];
 
     const words = getAllWords();
     const hindiLetters = ["अ", "आ", "इ", "ई", "उ", "ऊ", "ए", "ऐ", "ओ", "औ", "क", "ख", "ग", "घ"];
@@ -202,6 +222,28 @@ const MasterTest: React.FC = () => {
           ? Math.min(...nums).toString()
           : Math.max(...nums).toString();
         q.data = { optionsStrings: nums.map(String) };
+      } else if (type === "logic") {
+        const patterns = [
+          { sequence: ["🍎", "🍌", "🍎"], next: "🍌" },
+          { sequence: ["🐶", "🐱", "🐶"], next: "🐱" },
+          { sequence: ["1", "2", "1"], next: "2" },
+          { sequence: ["⭐", "🌙", "⭐"], next: "🌙" },
+          { sequence: ["🔴", "🔵", "🔴"], next: "🔵" },
+          { sequence: ["🚗", "🚕", "🚗"], next: "🚕" },
+          { sequence: ["🍦", "🍩", "🍦"], next: "🍩" },
+        ];
+        const p = patterns[Math.floor(Math.random() * patterns.length)];
+        q.prompt = "What comes next?";
+        q.correctAnswer = p.next;
+        const opts = new Set<string>([p.next]);
+        while (opts.size < 4) {
+          const randomNext = patterns[Math.floor(Math.random() * patterns.length)].next;
+          opts.add(randomNext);
+        }
+        q.data = {
+          displayWord: p.sequence.join(" ") + " ?",
+          optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
+        };
       } else if (type === "hindi") {
         const letter = hindiLetters[Math.floor(Math.random() * hindiLetters.length)];
         q.prompt = "Tap the letter you hear!";
@@ -292,6 +334,7 @@ const MasterTest: React.FC = () => {
               {q.type === "missing_letter" && <Search size={40} />}
               {q.type === "comparison" && <Scale size={40} />}
               {q.type === "hindi" && <Languages size={40} />}
+              {q.type === "logic" && <Brain size={40} />}
             </IconWrapper>
             <PromptText fontSize="clamp(1.2rem, 4vw, 1.75rem)" fontWeight={900} color="textPrimary">
               {q.prompt}
@@ -315,6 +358,8 @@ const MasterTest: React.FC = () => {
           )}
 
           {q.type === "missing_letter" && q.data && <BigDisplay>{q.data.displayWord}</BigDisplay>}
+
+          {q.type === "logic" && q.data && <LogicDisplay>{q.data.displayWord}</LogicDisplay>}
 
           {q.data.optionsStrings && (
             <ComparisonGrid>

@@ -180,6 +180,11 @@ export const BigDisplay = styled.div`
   }
 `;
 
+export const LogicDisplay = styled(BigDisplay)`
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  letter-spacing: 12px;
+`;
+
 export const ComparisonGrid = styled.div`
   display: flex;
   align-items: center;
