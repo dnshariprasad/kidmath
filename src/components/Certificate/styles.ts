@@ -40,9 +40,9 @@ export const CertificateContainer = styled(motion.div)`
 
 export const CertificateBorder = styled.div`
   width: 100%;
-  border: 12px double ${(props) => props.theme.colors.primary};
+  border: 10px solid ${(props) => props.theme.colors.primary};
   border-radius: 24px;
-  padding: 20px 15px 40px; /* Reduced vertical padding */
+  padding: 30px 20px 45px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -64,12 +64,12 @@ export const Sunburst = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 200%;
-  height: 200%;
-  background: repeating-conic-gradient(
-    from 0deg,
-    transparent 0deg 20deg,
-    ${(props) => props.theme.colors.primary}08 20deg 40deg
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(
+    circle,
+    ${(props) => props.theme.colors.primary}0D 0%,
+    transparent 70%
   );
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -78,9 +78,9 @@ export const Sunburst = styled.div`
 
 export const CertificateHeader = styled.h1`
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: ${(props) => props.theme.fontSize.lg}; /* Smaller */
+  font-size: ${(props) => props.theme.fontSize.xl};
   color: ${(props) => props.theme.colors.primary};
-  margin-bottom: 2px;
+  margin-bottom: 5px;
   text-transform: uppercase;
   letter-spacing: 2px;
   z-index: 1;
@@ -89,9 +89,9 @@ export const CertificateHeader = styled.h1`
 
 export const CertificateSubHeader = styled.h2`
   font-family: ${(props) => props.theme.fonts.secondary};
-  font-size: ${(props) => props.theme.fontSize.sm}; /* Smaller */
+  font-size: ${(props) => props.theme.fontSize.md};
   color: ${(props) => props.theme.colors.textPrimary};
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-weight: 800;
   z-index: 1;
 `;
@@ -106,23 +106,22 @@ export const CertificateTitle = styled.div`
 
 export const WinnerName = styled.div`
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: ${(props) => props.theme.fontSize.xl}; /* Smaller */
+  font-size: ${(props) => props.theme.fontSize.xxl};
   color: ${(props) => props.theme.colors.secondary};
-  font-weight: 900;
-  border-bottom: 3px dotted ${(props) => props.theme.colors.primary}80;
-  padding: 0 20px 2px;
-  margin-bottom: 10px;
+  font-weight: 800;
+  border-bottom: 3px solid ${(props) => props.theme.colors.primary}40;
+  padding: 0 30px 5px;
+  margin-bottom: 15px;
   z-index: 1;
-  transform: rotate(-0.5deg);
 `;
 
 export const CertificateText = styled.p`
   font-family: ${(props) => props.theme.fonts.secondary};
-  font-size: ${(props) => props.theme.fontSize.base}; /* Smaller */
+  font-size: ${(props) => props.theme.fontSize.lg};
   color: ${(props) => props.theme.colors.textPrimary};
-  max-width: 400px;
-  line-height: 1.3;
-  margin-bottom: 10px;
+  max-width: 500px;
+  line-height: 1.4;
+  margin-bottom: 15px;
   z-index: 1;
   font-weight: 600;
 
@@ -142,8 +141,8 @@ export const BadgeContainer = styled.div`
 `;
 
 export const Badge = styled.div`
-  width: 60px; /* Smaller */
-  height: 60px; /* Smaller */
+  width: 100px;
+  height: 100px;
   background: ${(props) => props.theme.colors.primary};
   border-radius: 50%;
   display: flex;
@@ -151,21 +150,22 @@ export const Badge = styled.div`
   justify-content: center;
   color: white;
   position: relative;
+  box-shadow: 0 4px 15px ${(props) => props.theme.colors.primary}40;
 
   &::before {
     content: "";
     position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
-    border: 2px dashed ${(props) => props.theme.colors.primary};
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 3px solid ${(props) => props.theme.colors.primary}40;
     border-radius: 50%;
   }
 
   svg {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
   }
 `;
 
@@ -189,9 +189,10 @@ export const FooterItem = styled.div<{ fullWidth?: boolean }>`
 `;
 
 export const VerifiedLabel = styled.span`
-  font-size: 0.4rem;
-  font-weight: 900;
+  font-size: 0.65rem;
+  font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
+  margin-top: 2px;
 `;
 
 export const QRCodePlaceholder = styled.div`
