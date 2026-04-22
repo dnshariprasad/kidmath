@@ -33,6 +33,7 @@ import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import Certificate from "../../../components/Certificate";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
+import { getEncouragement } from "../../../utils/index";
 
 const SpellingChallenge = () => {
   const dispatch = useDispatch();
@@ -89,8 +90,9 @@ const SpellingChallenge = () => {
 
   const handleSubmit = () => {
     if (inputValue === currentWord) {
-      setFeedback({ message: "Excellent! You spelled it right! 🌟", isCorrect: true });
-      readText("Excellent");
+      const msg = getEncouragement(streak);
+      setFeedback({ message: msg, isCorrect: true });
+      readText(msg);
       dispatch(incrementScore("spelling"));
       confetti({
         particleCount: 150,

@@ -16,7 +16,7 @@ import {
   PlusSign,
 } from "../../../theme/globalStyles";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
-import { readText } from "../../../utils/index";
+import { readText, getEncouragement } from "../../../utils/index";
 import confetti from "canvas-confetti";
 import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
 import { RootState } from "../../../store/store";
@@ -73,8 +73,9 @@ export const MathChallenge: React.FC = () => {
     const correctAnswer =
       operator === "+" ? num1 + num2 : operator === "-" ? num1 - num2 : num1 * num2;
     if (choice === correctAnswer) {
-      setFeedback({ message: "Brilliant! 🌟", isCorrect: true });
-      readText("Brilliant");
+      const msg = getEncouragement(streak);
+      setFeedback({ message: msg, isCorrect: true });
+      readText(msg);
       dispatch(incrementScore("math"));
       confetti({
         particleCount: 150,

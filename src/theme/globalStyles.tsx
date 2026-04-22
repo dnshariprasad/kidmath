@@ -1,11 +1,6 @@
-import styled, { css, keyframes } from "styled-components";
+import styled from "styled-components";
 import { motion } from "framer-motion";
-
-export const shimmerAnimation = keyframes`
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-`;
-
+import { shimmerAnimation } from "./styleConstants";
 export const SkeletonBase = styled.div`
   background: ${(props) => props.theme.colors.surfaceVariant}40;
   background-image: linear-gradient(
@@ -17,25 +12,6 @@ export const SkeletonBase = styled.div`
   background-size: 200% 100%;
   animation: ${shimmerAnimation} 1.5s infinite;
   border-radius: 12px;
-`;
-
-// Material 3 Elevation Levels
-export const elevation1 = css`
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.24);
-`;
-
-export const elevation2 = css`
-  box-shadow:
-    0 3px 6px rgba(0, 0, 0, 0.16),
-    0 3px 6px rgba(0, 0, 0, 0.23);
-`;
-
-export const elevation3 = css`
-  box-shadow:
-    0 10px 20px rgba(0, 0, 0, 0.19),
-    0 6px 6px rgba(0, 0, 0, 0.23);
 `;
 
 export const SessionStats = styled.div`
@@ -601,5 +577,21 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
     &:checked::after {
       transform: scale(1);
     }
+  }
+`;
+
+export const EncouragementBadge = styled(motion.div)`
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #6366f1;
+  background: #6366f110;
+  padding: 6px 14px;
+  border-radius: 12px;
+  border: 1px solid #6366f120;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.05);
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 4px 10px;
   }
 `;

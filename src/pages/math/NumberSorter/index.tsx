@@ -17,7 +17,7 @@ import {
   StarNumber,
   PlusSign,
 } from "../../../theme/globalStyles";
-import { readText } from "../../../utils/index";
+import { readText, getEncouragement } from "../../../utils/index";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
 import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
@@ -63,8 +63,9 @@ export const NumberSorter: React.FC = () => {
     const isCorrect = numbers.every((num, i) => num === sorted[i]);
 
     if (isCorrect) {
-      setFeedback({ message: "Perfectly Sorted! 🌟", isCorrect: true });
-      readText("Perfectly Sorted");
+      const msg = getEncouragement(streak);
+      setFeedback({ message: msg, isCorrect: true });
+      readText(msg);
       dispatch(incrementScore("sorting"));
       confetti({
         particleCount: 150,

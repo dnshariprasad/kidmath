@@ -33,6 +33,7 @@ import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
 import Certificate from "../../../components/Certificate";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
+import { getEncouragement } from "../../../utils/index";
 import { HintIconWrapper, ChallengeTextContainer, WordDisplay } from "./styles";
 
 const MissingLettersChallenge = () => {
@@ -75,8 +76,9 @@ const MissingLettersChallenge = () => {
 
   const handleSubmit = () => {
     if (randomString.toLowerCase() === inputValue.toLowerCase()) {
-      setFeedback({ message: "You got it! 🌟", isCorrect: true });
-      readText("You got it");
+      const msg = getEncouragement(streak);
+      setFeedback({ message: msg, isCorrect: true });
+      readText(msg);
       dispatch(incrementScore("missing_letters"));
       confetti({
         particleCount: 150,

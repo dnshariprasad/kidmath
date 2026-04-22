@@ -21,14 +21,19 @@ export const CertificateContainer = styled(motion.div)`
   width: 95%;
   max-width: 700px;
   max-height: 95vh;
-  padding: 10px;
-  border-radius: 28px;
+  padding: 24px;
+  border-radius: 32px;
   position: relative;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   border: 1px solid ${(props) => props.theme.colors.primary}15;
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    border-radius: 24px;
+    width: 98%;
+  }
 
   /* Hide scrollbar */
   scrollbar-width: none;
@@ -40,9 +45,9 @@ export const CertificateContainer = styled(motion.div)`
 
 export const CertificateBorder = styled.div`
   width: 100%;
-  border: 12px solid #ffd700; /* Gold */
+  border: 14px solid #ffd700; /* Gold */
   border-radius: 32px;
-  padding: 40px 20px 50px;
+  padding: 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -59,8 +64,9 @@ export const CertificateBorder = styled.div`
     inset 0 0 100px #ffd70010;
 
   @media (max-width: 480px) {
-    padding: 25px 15px 40px;
-    border-width: 8px;
+    padding: 60px 20px 40px;
+    border-width: 10px;
+    border-radius: 20px;
   }
 `;
 
@@ -109,11 +115,9 @@ export const Sunburst = styled.div`
 
 export const CertificateHeader = styled.h1`
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   color: #f59e0b; /* Bright Orange/Gold */
-  margin-bottom: 5px;
   text-transform: uppercase;
-  letter-spacing: 3px;
   z-index: 1;
   font-weight: 900;
   text-shadow: 2px 4px 0px rgba(0, 0, 0, 0.05);
@@ -127,18 +131,17 @@ export const CertificateSubHeader = styled.h2`
   font-family: ${(props) => props.theme.fonts.secondary};
   font-size: 1.2rem;
   color: ${(props) => props.theme.colors.textSecondary};
-  margin-bottom: 30px;
-  font-weight: 800;
-  z-index: 1;
   text-transform: uppercase;
-  letter-spacing: 1px;
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 export const CertificateTitle = styled.div`
   font-family: ${(props) => props.theme.fonts.secondary};
   font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.colors.textSecondary};
-  margin-bottom: 5px;
   z-index: 1;
 `;
 
@@ -147,8 +150,6 @@ export const WinnerName = styled.div`
   font-size: 3.5rem;
   color: ${(props) => props.theme.colors.primary};
   font-weight: 900;
-  padding: 10px 40px;
-  margin-bottom: 20px;
   z-index: 1;
   background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
   -webkit-background-clip: text;
@@ -156,7 +157,7 @@ export const WinnerName = styled.div`
   letter-spacing: -1px;
 
   @media (max-width: 480px) {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
 `;
 
@@ -165,8 +166,7 @@ export const CertificateText = styled.p`
   font-size: ${(props) => props.theme.fontSize.lg};
   color: ${(props) => props.theme.colors.textPrimary};
   max-width: 500px;
-  line-height: 1.4;
-  margin-bottom: 15px;
+  line-height: 1.5;
   z-index: 1;
   font-weight: 600;
 
@@ -181,7 +181,8 @@ export const CertificateText = styled.p`
 `;
 
 export const BadgeContainer = styled.div`
-  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
   z-index: 1;
 `;
 
@@ -216,6 +217,21 @@ export const Badge = styled.div`
     height: 60px;
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
   }
+
+  @media (max-width: 480px) {
+    width: 90px;
+    height: 90px;
+
+    svg {
+      width: 45px;
+      height: 45px;
+    }
+
+    &::after {
+      bottom: -10px;
+      font-size: 1rem;
+    }
+  }
 `;
 
 export const CertificateFooter = styled.div`
@@ -223,8 +239,8 @@ export const CertificateFooter = styled.div`
   justify-content: space-between;
   align-items: center; /* Center align for better balance */
   width: 100%;
-  margin-top: 30px; /* More space from the badge above */
-  padding: 0 10px 10px;
+  margin-top: 20px;
+  padding: 0 10px 0;
   z-index: 1;
 `;
 
@@ -248,7 +264,7 @@ export const FooterText = styled.div`
 export const ActionButtons = styled.div`
   display: flex;
   gap: 12px;
-  margin-top: 10px;
+  margin-top: 20px;
   width: 100%;
   justify-content: center;
   padding: 15px;

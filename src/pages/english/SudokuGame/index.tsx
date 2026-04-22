@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import KidButton from "../../../components/KidButton";
 import { KidoText } from "../../../components/KidoText";
 import { Grid3X3, Trash2 } from "lucide-react";
@@ -17,18 +17,23 @@ import {
   StarNumber,
   PlusSign,
 } from "../../../theme/globalStyles";
+
 import { RootState } from "../../../store/store";
 import { SudokuGrid, SudokuCell, NumberPad, TipsBox } from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
+import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
+import { readText, getEncouragement } from "../../../utils/index";
+import confetti from "canvas-confetti";
 
 const SudokuGame: React.FC = () => {
+  const dispatch = useDispatch();
   const streak = useSelector((state: RootState) => state.alphabet.gameStats?.sudoku?.streak ?? 0);
   const [grid, setGrid] = useState<(number | null)[]>(Array(16).fill(null));
   const [fixed, setFixed] = useState<boolean[]>(Array(16).fill(false));
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
   const [difficulty, setDifficulty] = useState<"Easy" | "Hard">("Easy");
-  const [feedback] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   const generatePuzzle = useCallback(() => {
     const newGrid: (number | null)[] = Array(16).fill(null);
@@ -70,6 +75,56 @@ const SudokuGame: React.FC = () => {
       const newGrid = [...grid];
       newGrid[selectedCell] = num;
       setGrid(newGrid);
+
+      // Check if complete and correct
+      const isComplete = newGrid.every((cell) => cell !== null);
+      if (isComplete) {
+        // Validation logic for 4x4 Sudoku
+        const checkCorrect = () => {
+          // Row check
+          for (let r = 0; r < 4; r++) {
+            const row = newGrid.slice(r * 4, r * 4 + 4);
+            if (new Set(row).size !== 4) return false;
+          }
+          // Col check
+          for (let c = 0; c < 4; c++) {
+            const col = [newGrid[c], newGrid[c + 4], newGrid[c + 8], newGrid[c + 12]];
+            if (new Set(col).size !== 4) return false;
+          }
+          // Block check (2x2)
+          const blocks = [
+            [0, 1, 4, 5],
+            [2, 3, 6, 7],
+            [8, 9, 12, 13],
+            [10, 11, 14, 15],
+          ];
+          for (const b of blocks) {
+            const block = b.map((idx) => newGrid[idx]);
+            if (new Set(block).size !== 4) return false;
+          }
+          return true;
+        };
+
+        if (checkCorrect()) {
+          const msg = getEncouragement(streak);
+          setFeedback(msg);
+          readText(msg);
+          dispatch(incrementScore("sudoku"));
+          confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ["#6366F1", "#4F46E5", "#FF7675"],
+          });
+          setTimeout(generatePuzzle, 3000);
+        } else {
+          setFeedback("Almost! Some numbers are repeated. Check again! 💪");
+          readText("Try again");
+          dispatch(resetStreak("sudoku"));
+        }
+      } else {
+        setFeedback(null);
+      }
     }
   };
 

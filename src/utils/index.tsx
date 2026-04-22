@@ -14,3 +14,21 @@ export function readText(text: string, lang: string = "en-US") {
 
   window.speechSynthesis.speak(speech);
 }
+
+export const getEncouragement = (count: number) => {
+  const messages = [
+    "Let's go! You can do it! 🚀",
+    "Nice one! Next up... 🌟",
+    "Great start! Keep going! 🔥",
+    "You're a star! Super! ⭐",
+    "Halfway there! Amazing! ✨",
+    "Fantastic! You got this! 🙌",
+    "So smart! Keep it up! 🧠",
+    "Almost finished! Be careful! 💪",
+    "Nearly there! On fire! 🚒",
+    "Last one! Go for gold! 🏆",
+  ];
+
+  if (count < 0) return "You're doing great! 🌟";
+  return messages[count % messages.length];
+};

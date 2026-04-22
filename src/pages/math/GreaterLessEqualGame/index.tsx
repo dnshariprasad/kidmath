@@ -17,7 +17,7 @@ import {
   StarNumber,
   PlusSign,
 } from "../../../theme/globalStyles";
-import { readText } from "../../../utils/index";
+import { readText, getEncouragement } from "../../../utils/index";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
 import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
@@ -71,8 +71,9 @@ export const GreaterLessEqualGame: React.FC = () => {
     else if (choice === "equal" && num1 === num2) correct = true;
 
     if (correct) {
-      setFeedback({ message: "Correct! Awesome! 🌟", isCorrect: true });
-      readText("Correct");
+      const msg = getEncouragement(streak);
+      setFeedback({ message: msg, isCorrect: true });
+      readText(msg);
       dispatch(incrementScore("comparison"));
       confetti({
         particleCount: 150,

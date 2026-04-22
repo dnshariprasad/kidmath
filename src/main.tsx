@@ -1,15 +1,13 @@
-import { StrictMode, lazy, Suspense, useState } from "react";
+import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "styled-components";
-import { lightTheme, darkTheme } from "./theme/theme.ts";
-import { Provider, useSelector } from "react-redux";
-import { store, RootState } from "./store/store.ts";
+import { Provider } from "react-redux";
+import { store } from "./store/store.ts";
 import Navbar from "./dashboard/nav/index.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import SharedCertificate from "./components/SharedCertificate/index.tsx";
-import NamePrompt from "./components/NamePrompt/index.tsx";
+import { ConnectedThemeProvider, NameRequiredRoute, LoadingState } from "./AppComponents";
 
 // Lazy load pages
 const Dashboard = lazy(() => import("./dashboard/dashboard/index.tsx"));
@@ -27,34 +25,6 @@ const MathChallenge = lazy(() => import("./pages/math/MathChallenge/index.tsx"))
 const NumberSorter = lazy(() => import("./pages/math/NumberSorter/index.tsx"));
 const MasterTest = lazy(() => import("./pages/MasterTest/index.tsx"));
 const NumbersPage = lazy(() => import("./pages/math/NumbersPage/index.tsx"));
-
-const ConnectedThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const themeMode = useSelector((state: RootState) => state.alphabet.theme);
-  const fontSizeLevel = useSelector((state: RootState) => state.alphabet.fontSizeLevel);
-  const baseTheme = themeMode === "dark" ? darkTheme : lightTheme;
-
-  const currentTheme = {
-    ...baseTheme,
-    fontSize: baseTheme.fontSizes[fontSizeLevel],
-  };
-
-  return <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>;
-};
-
-const NameRequiredRoute = ({ children }: { children: React.ReactNode }) => {
-  const userName = useSelector((state: RootState) => state.alphabet.userName);
-  const [showPrompt, setShowPrompt] = useState(!userName);
-
-  if (!userName && showPrompt) {
-    return <NamePrompt onComplete={() => setShowPrompt(false)} />;
-  }
-
-  return <>{children}</>;
-};
-
-import LoadingScreen from "./components/LoadingScreen";
-
-const LoadingState = () => <LoadingScreen />;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
