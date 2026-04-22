@@ -41,8 +41,8 @@ export const TestContainer = styled.div`
 export const QuestionCard = styled(Card)<{ $type: string }>`
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 35px 30px;
+  gap: 20px;
+  padding: 60px 30px 35px;
   position: relative;
   background: ${(props) => props.theme.colors.surface};
   border-radius: 32px;
@@ -50,40 +50,32 @@ export const QuestionCard = styled(Card)<{ $type: string }>`
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
   margin-top: 20px;
 
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 8px;
-    background: ${(props) => {
-      switch (props.$type) {
-        case "math":
-          return props.theme.colors.math || props.theme.colors.primary;
-        case "spelling":
-        case "missing_letter":
-          return props.theme.colors.english || props.theme.colors.primary;
-        case "hindi":
-          return props.theme.colors.hindi || props.theme.colors.primary;
-        case "comparison":
-          return props.theme.colors.math || props.theme.colors.primary;
-        default:
-          return props.theme.colors.primary;
-      }
-    }};
-    border-radius: 32px 0 0 32px;
-  }
+  overflow: hidden;
+
   @media (max-width: 600px) {
-    padding: 60px 20px 30px;
+    padding: 70px 20px 30px;
     gap: 20px;
     border-radius: 24px;
   }
 `;
 
+export const CardProgressBar = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: ${(props) => props.theme.colors.primary}15;
+`;
+
+export const CardProgressFill = styled(motion.div)`
+  height: 100%;
+  background: ${(props) => props.theme.colors.primary};
+`;
+
 export const QuestionNumber = styled.div`
   position: absolute;
-  top: 20px;
+  top: 25px;
   left: 30px;
   font-weight: 900;
   font-size: 0.75rem;
@@ -93,7 +85,7 @@ export const QuestionNumber = styled.div`
   text-transform: uppercase;
 
   @media (max-width: 600px) {
-    top: 15px;
+    top: 20px;
     left: 20px;
     font-size: 0.65rem;
   }
@@ -101,7 +93,7 @@ export const QuestionNumber = styled.div`
 
 export const SubjectBadge = styled.div<{ $type: string }>`
   position: absolute;
-  top: 20px;
+  top: 25px;
   right: 30px;
   font-size: 0.75rem;
   font-weight: 900;
@@ -141,7 +133,7 @@ export const SubjectBadge = styled.div<{ $type: string }>`
   }};
 
   @media (max-width: 600px) {
-    top: 15px;
+    top: 20px;
     right: 20px;
     font-size: 0.65rem;
     padding: 4px 12px;
@@ -152,9 +144,9 @@ export const QuestionHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 5px;
+  margin-top: 40px;
 
-  @media (max-width: 600px) {
+  @media (max-width: 480px) {
     flex-direction: column;
     text-align: center;
     gap: 8px;
@@ -165,12 +157,12 @@ export const QuestionContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
-  padding: 20px 0;
+  gap: 50px;
+  padding: 15px 0;
 
   @media (max-width: 600px) {
-    gap: 20px;
-    padding: 10px 0;
+    gap: 30px;
+    padding: 15px 0;
   }
 `;
 
@@ -226,40 +218,6 @@ export const ChoiceCard = styled(motion.div)<{ $selected: boolean; $color?: stri
         ? props.$color || props.theme.colors.primary
         : props.theme.colors.surfaceVariant + "60"};
     transform: translateY(-4px);
-  }
-`;
-
-export const VSLabel = styled.div`
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: ${(props) => props.theme.colors.textSecondary};
-  opacity: 0.3;
-`;
-
-export const TestInput = styled.input`
-  width: 100%;
-  max-width: 350px;
-  padding: 15px 25px;
-  border-radius: 18px;
-  border: 3px solid ${(props) => props.theme.colors.primary}15;
-  background: ${(props) => props.theme.colors.surfaceVariant}20;
-  font-size: 1.25rem;
-  font-weight: 800;
-  text-align: center;
-  color: ${(props) => props.theme.colors.textPrimary};
-  transition: all 0.2s ease;
-  outline: none;
-
-  &:focus {
-    border-color: ${(props) => props.theme.colors.primary};
-    background: ${(props) => props.theme.colors.surface};
-    box-shadow: ${(props) => props.theme.shadows.md};
-  }
-
-  &::placeholder {
-    color: ${(props) => props.theme.colors.textSecondary}40;
-    font-size: 1rem;
-    font-weight: 600;
   }
 `;
 
@@ -340,19 +298,6 @@ export const SpeakContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 15px;
-`;
-
-export const NavButtons = styled(SubmitSection)`
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  gap: 20px;
-  margin-top: 20px;
-
-  @media (max-width: 600px) {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
 `;
 
 export const ProgressHeader = styled.div`

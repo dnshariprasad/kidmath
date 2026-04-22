@@ -5,19 +5,13 @@ import { useDispatch } from "react-redux";
 import { incrementScore } from "../../store/slice/AlphabetSlice";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
-import { PageContainer } from "../../theme/globalStyles";
-import {
-  Trophy,
-  Calculator,
-  SpellCheck,
-  Search,
-  Scale,
-  CheckCircle2,
-  Languages,
-  XCircle,
-} from "lucide-react";
+import { PageContainer, NavControlBar } from "../../theme/globalStyles";
+import { Trophy, SpellCheck, Search, Scale, CheckCircle2, Languages, XCircle } from "lucide-react";
+import confetti from "canvas-confetti";
 import Certificate from "../../components/Certificate";
-import ChallengeHeader from "../../components/ChallengeHeader";
+import SpeakIcon from "../../components/SpeakIcon";
+import NextIcon from "../../components/NextIcon";
+import PreviousIcon from "../../components/PreviousIcon";
 import {
   TestContainer,
   QuestionCard,
@@ -28,21 +22,13 @@ import {
   BigDisplay,
   ComparisonGrid,
   ChoiceCard,
-  VSLabel,
-  TestInput,
   ResultsOverlay,
-  ProgressBarContainer,
-  ProgressTrack,
-  ProgressFill,
   ReviewList,
   ReviewItem,
   CorrectionRow,
   IconWrapper,
   PromptText,
   SpeakContainer,
-  NavButtons,
-  ProgressHeader,
-  CenterBox,
   ResultBox,
   ReviewHeader,
   ScoreValue,
@@ -52,12 +38,11 @@ import {
   ReviewOverlayBox,
   ReviewSubHeader,
   ReviewRow,
-  InnerTrack,
   CarouselSlide,
   CertificateWrapper,
+  CardProgressBar,
+  CardProgressFill,
 } from "./styles";
-import confetti from "canvas-confetti";
-import SpeakIcon from "../../components/SpeakIcon";
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
 
 type QuestionType = "math" | "spelling" | "missing_letter" | "comparison" | "hindi";
@@ -74,6 +59,7 @@ interface Question {
     word?: string;
     displayWord?: string;
     letter?: string;
+    optionsStrings?: string[];
   };
 }
 
@@ -108,38 +94,54 @@ const MasterTest: React.FC = () => {
         const n2 = Math.floor(Math.random() * 10) + 1;
         const op = Math.random() > 0.5 ? "+" : "-";
         const ans = op === "+" ? n1 + n2 : Math.max(n1, n2) - Math.min(n1, n2);
-        q.prompt = `What is ${op === "+" ? n1 : Math.max(n1, n2)} ${op} ${op === "+" ? n2 : Math.min(n1, n2)}?`;
+        q.prompt = "Solve the math!";
         q.correctAnswer = ans.toString();
-        q.data = {
-          n1: op === "+" ? n1 : Math.max(n1, n2),
-          n2: op === "+" ? n2 : Math.min(n1, n2),
-          op,
-        };
+        const opts = new Set<string>([q.correctAnswer]);
+        while (opts.size < 4) {
+          const off = Math.floor(Math.random() * 5) + 1;
+          opts.add((Math.random() > 0.5 ? ans + off : Math.max(0, ans - off)).toString());
+        }
+        q.data = { n1, n2, op, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
       } else if (type === "spelling") {
         const word = getRandomWord(words).toUpperCase();
-        q.prompt = "Listen and type the word!";
+        q.prompt = "Tap the word you hear!";
         q.correctAnswer = word;
-        q.data = { word };
+        const opts = new Set<string>([word]);
+        while (opts.size < 4) opts.add(getRandomWord(words).toUpperCase());
+        q.data = { word, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
       } else if (type === "missing_letter") {
         const word = getRandomWord(words).toUpperCase();
         const missingIndex = Math.floor(Math.random() * word.length);
         const displayWord = word.split("");
         const actualLetter = displayWord[missingIndex];
         displayWord[missingIndex] = "_";
-        q.prompt = "What is the missing letter?";
+        q.prompt = "Choose the missing letter!";
         q.correctAnswer = actualLetter;
-        q.data = { displayWord: displayWord.join(""), word };
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const opts = new Set<string>([actualLetter]);
+        while (opts.size < 4) opts.add(alphabet[Math.floor(Math.random() * 26)]);
+        q.data = {
+          displayWord: displayWord.join(""),
+          word,
+          optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
+        };
       } else if (type === "comparison") {
-        const n1 = Math.floor(Math.random() * 50);
-        const n2 = Math.floor(Math.random() * 50);
-        q.prompt = "Tap the bigger number!";
-        q.correctAnswer = n1 > n2 ? n1.toString() : n2.toString();
-        q.data = { n1, n2 };
+        const nums: number[] = [];
+        while (nums.length < 4) {
+          const n = Math.floor(Math.random() * 100);
+          if (!nums.includes(n)) nums.push(n);
+        }
+        q.prompt = "Tap the biggest number!";
+        q.correctAnswer = Math.max(...nums).toString();
+        q.data = { optionsStrings: nums.map(String) };
       } else if (type === "hindi") {
         const letter = hindiLetters[Math.floor(Math.random() * hindiLetters.length)];
-        q.prompt = "Listen and identify the letter!";
+        q.prompt = "Tap the letter you hear!";
         q.correctAnswer = letter;
-        q.data = { letter };
+        const opts = new Set<string>([letter]);
+        while (opts.size < 4)
+          opts.add(hindiLetters[Math.floor(Math.random() * hindiLetters.length)]);
+        q.data = { letter, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
       }
 
       newQuestions.push(q as Question);
@@ -205,21 +207,29 @@ const MasterTest: React.FC = () => {
 
     return (
       <QuestionCard $type={q.type}>
+        <CardProgressBar>
+          <CardProgressFill
+            initial={{ width: 0 }}
+            animate={{ width: `${((currentIndex + 1) / 10) * 100}%` }}
+            transition={{ type: "spring", stiffness: 100 }}
+          />
+        </CardProgressBar>
         <QuestionNumber>QUESTION {q.id} OF 10</QuestionNumber>
         <SubjectBadge $type={q.type}>{q.type.replace("_", " ")}</SubjectBadge>
 
-        <QuestionHeader>
-          <IconWrapper>
-            {q.type === "math" && <Calculator size={40} />}
-            {q.type === "spelling" && <SpellCheck size={40} />}
-            {q.type === "missing_letter" && <Search size={40} />}
-            {q.type === "comparison" && <Scale size={40} />}
-            {q.type === "hindi" && <Languages size={40} />}
-          </IconWrapper>
-          <PromptText fontSize="xl" fontWeight={900} color="textPrimary">
-            {q.prompt}
-          </PromptText>
-        </QuestionHeader>
+        {q.type !== "math" && (
+          <QuestionHeader>
+            <IconWrapper>
+              {q.type === "spelling" && <SpellCheck size={40} />}
+              {q.type === "missing_letter" && <Search size={40} />}
+              {q.type === "comparison" && <Scale size={40} />}
+              {q.type === "hindi" && <Languages size={40} />}
+            </IconWrapper>
+            <PromptText fontSize="clamp(1.2rem, 4vw, 1.75rem)" fontWeight={900} color="textPrimary">
+              {q.prompt}
+            </PromptText>
+          </QuestionHeader>
+        )}
 
         <QuestionContent>
           {q.type === "math" && q.data && (
@@ -230,110 +240,59 @@ const MasterTest: React.FC = () => {
 
           {(q.type === "spelling" || q.type === "hindi") && q.data && (
             <SpeakContainer>
-              <SpeakIcon text={q.data.word || q.data.letter || ""} size="huge" />
               <KidoText color="textSecondary" fontSize="md" fontWeight={600}>
-                Tap the speaker to hear
+                Tap the speaker below to hear
               </KidoText>
             </SpeakContainer>
           )}
 
           {q.type === "missing_letter" && q.data && <BigDisplay>{q.data.displayWord}</BigDisplay>}
 
-          {q.type === "comparison" && q.data && (
+          {q.data.optionsStrings && (
             <ComparisonGrid>
-              <ChoiceCard
-                $selected={currentVal === (q.data.n1 ?? 0).toString()}
-                $color="#6366F1"
-                onClick={() => handleInputChange(q.id, (q.data.n1 ?? 0).toString())}
-                whileTap={{ scale: 0.95 }}
-              >
-                {q.data.n1}
-              </ChoiceCard>
-              <VSLabel>VS</VSLabel>
-              <ChoiceCard
-                $selected={currentVal === (q.data.n2 ?? 0).toString()}
-                $color="#6366F1"
-                onClick={() => handleInputChange(q.id, (q.data.n2 ?? 0).toString())}
-                whileTap={{ scale: 0.95 }}
-              >
-                {q.data.n2}
-              </ChoiceCard>
+              {q.data.optionsStrings.map((opt, i) => (
+                <ChoiceCard
+                  key={i}
+                  $selected={currentVal === opt}
+                  $color="#6366F1"
+                  onClick={() => handleInputChange(q.id, opt)}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {opt}
+                </ChoiceCard>
+              ))}
             </ComparisonGrid>
           )}
 
-          {q.type !== "comparison" && (
-            <CenterBox>
-              <TestInput
-                value={currentVal}
-                onChange={(e) => handleInputChange(q.id, e.target.value)}
-                placeholder="Type answer here..."
-                autoFocus
+          <NavControlBar>
+            <PreviousIcon onClick={handlePrev} />
+            <SpeakIcon
+              text={
+                q.type === "math"
+                  ? `What is ${q.data.n1} ${q.data.op === "+" ? "plus" : q.data.op === "-" ? "minus" : "times"} ${q.data.n2}?`
+                  : q.type === "missing_letter"
+                    ? `What is the missing letter in the word ${q.data.word}?`
+                    : q.data.word || q.data.letter || q.prompt
+              }
+            />
+            {currentIndex === questions.length - 1 ? (
+              <KidButton
+                title="FINISH TEST"
+                onClick={handleNext}
+                variant="primary"
+                minWidth="180px"
               />
-            </CenterBox>
-          )}
-
-          <NavButtons>
-            <KidButton
-              title="PREVIOUS"
-              onClick={handlePrev}
-              variant="secondary"
-              isActive={currentIndex !== 0}
-              minWidth="140px"
-            />
-            <KidButton
-              title={currentIndex === questions.length - 1 ? "FINISH TEST" : "NEXT QUESTION"}
-              onClick={handleNext}
-              variant="primary"
-              minWidth="180px"
-            />
-          </NavButtons>
+            ) : (
+              <NextIcon onClick={handleNext} />
+            )}
+          </NavControlBar>
         </QuestionContent>
       </QuestionCard>
     );
   };
 
-  const getTestIcon = () => {
-    switch (testId) {
-      case "math_test":
-        return Calculator;
-      case "spelling_test":
-        return SpellCheck;
-      case "hindi_test":
-        return Languages;
-      default:
-        return Trophy;
-    }
-  };
-
   return (
     <PageContainer>
-      <ChallengeHeader
-        icon={getTestIcon()}
-        title={testId?.replace("_", " ").toUpperCase() || "Master Test"}
-        subtitle="Focus on one question at a time. You've got this!"
-        streak={0}
-      />
-
-      <ProgressBarContainer>
-        <InnerTrack>
-          <ProgressHeader>
-            <KidoText fontSize="sm" fontWeight={700} color="textSecondary">
-              QUESTION {currentIndex + 1} PROGRESS
-            </KidoText>
-            <KidoText fontSize="sm" fontWeight={900} color="primary">
-              {currentIndex + 1} / 10
-            </KidoText>
-          </ProgressHeader>
-          <ProgressTrack>
-            <ProgressFill
-              initial={{ width: 0 }}
-              animate={{ width: `${((currentIndex + 1) / 10) * 100}%` }}
-              transition={{ type: "spring", stiffness: 100 }}
-            />
-          </ProgressTrack>
-        </InnerTrack>
-      </ProgressBarContainer>
-
       <TestContainer>
         <AnimatePresence mode="wait">
           {currentQuestion && (
