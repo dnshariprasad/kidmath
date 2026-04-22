@@ -40,9 +40,9 @@ export const CertificateContainer = styled(motion.div)`
 
 export const CertificateBorder = styled.div`
   width: 100%;
-  border: 10px solid ${(props) => props.theme.colors.primary};
-  border-radius: 24px;
-  padding: 30px 20px 45px;
+  border: 12px solid #ffd700; /* Gold */
+  border-radius: 32px;
+  padding: 40px 20px 50px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -50,12 +50,14 @@ export const CertificateBorder = styled.div`
   text-align: center;
   background: ${(props) =>
     props.theme.theme === "dark"
-      ? "radial-gradient(circle, #1e293b 0%, #0f172a 100%)"
-      : "radial-gradient(circle, #ffffff 0%, #fff9e6 100%)"};
+      ? "radial-gradient(circle, #2d3748 0%, #1a202c 100%)"
+      : "radial-gradient(circle, #ffffff 0%, #fffdf0 100%)"};
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 0 4px #ffd70040, inset 0 0 100px #ffd70010;
 
   @media (max-width: 480px) {
-    padding: 15px 10px 30px;
+    padding: 25px 15px 40px;
     border-width: 8px;
   }
 `;
@@ -64,36 +66,70 @@ export const Sunburst = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 150%;
-  height: 150%;
-  background: radial-gradient(
-    circle,
-    ${(props) => props.theme.colors.primary}0D 0%,
-    transparent 70%
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    #ffd70015 20deg,
+    transparent 40deg,
+    #ffd70015 60deg,
+    transparent 80deg,
+    #ffd70015 100deg,
+    transparent 120deg,
+    #ffd70015 140deg,
+    transparent 160deg,
+    #ffd70015 180deg,
+    transparent 200deg,
+    #ffd70015 220deg,
+    transparent 240deg,
+    #ffd70015 260deg,
+    transparent 280deg,
+    #ffd70015 300deg,
+    transparent 320deg,
+    #ffd70015 340deg,
+    transparent 360deg
   );
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 0;
+  animation: rotate 20s linear infinite;
+
+  @keyframes rotate {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
 `;
 
 export const CertificateHeader = styled.h1`
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: ${(props) => props.theme.fontSize.xl};
-  color: ${(props) => props.theme.colors.primary};
+  font-size: 2.2rem;
+  color: #f59e0b; /* Bright Orange/Gold */
   margin-bottom: 5px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   z-index: 1;
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05);
+  font-weight: 900;
+  text-shadow: 2px 4px 0px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
 
 export const CertificateSubHeader = styled.h2`
   font-family: ${(props) => props.theme.fonts.secondary};
-  font-size: ${(props) => props.theme.fontSize.md};
-  color: ${(props) => props.theme.colors.textPrimary};
-  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: ${(props) => props.theme.colors.textSecondary};
+  margin-bottom: 30px;
   font-weight: 800;
   z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 `;
 
 export const CertificateTitle = styled.div`
@@ -106,13 +142,20 @@ export const CertificateTitle = styled.div`
 
 export const WinnerName = styled.div`
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: ${(props) => props.theme.fontSize.xxl};
-  color: ${(props) => props.theme.colors.secondary};
-  font-weight: 800;
-  border-bottom: 3px solid ${(props) => props.theme.colors.primary}40;
-  padding: 0 30px 5px;
-  margin-bottom: 15px;
+  font-size: 3.5rem;
+  color: ${(props) => props.theme.colors.primary};
+  font-weight: 900;
+  padding: 10px 40px;
+  margin-bottom: 20px;
   z-index: 1;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+
+  @media (max-width: 480px) {
+    font-size: 2.2rem;
+  }
 `;
 
 export const CertificateText = styled.p`
@@ -141,31 +184,35 @@ export const BadgeContainer = styled.div`
 `;
 
 export const Badge = styled.div`
-  width: 100px;
-  height: 100px;
-  background: ${(props) => props.theme.colors.primary};
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #ffd700 0%, #f59e0b 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   position: relative;
-  box-shadow: 0 4px 15px ${(props) => props.theme.colors.primary}40;
+  box-shadow: 0 10px 25px #f59e0b40;
+  border: 4px solid white;
 
-  &::before {
-    content: "";
+  &::after {
+    content: "★";
     position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border: 3px solid ${(props) => props.theme.colors.primary}40;
-    border-radius: 50%;
+    bottom: -15px;
+    background: #ef4444;
+    color: white;
+    padding: 2px 12px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
   svg {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
   }
 `;
 

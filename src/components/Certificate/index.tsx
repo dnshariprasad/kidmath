@@ -150,21 +150,17 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
 
         <CertificateBorder id="certificate-content">
           <Sunburst />
-          <QRCodePlaceholder>
-            <QrCode size={25} />
-            <VerifiedLabel>VERIFIED</VerifiedLabel>
-          </QRCodePlaceholder>
 
-          <CertificateHeader>WOW! You're a PRO!</CertificateHeader>
+          <CertificateHeader>Hooray! You're a PRO!</CertificateHeader>
           <CertificateSubHeader>Super Duper Achievement Award</CertificateSubHeader>
 
           <CertificateTitle>This award belongs to our amazing...</CertificateTitle>
           <WinnerName>{userName || "Super Star"}</WinnerName>
 
           <CertificateText>
-            For being an absolute legend in the <b>{challengeName}</b> challenge
-            {level ? ` (${level} level)` : ""}! You've smashed a streak of <b>{score}</b> correct
-            answers! Keep being awesome! 🚀✨
+            For being an absolute legend in the <b>{challengeName}</b> challenge!
+            You've smashed it with a streak of <b>{score}</b> correct answers!
+            Keep being awesome! 🚀✨
           </CertificateText>
 
           <BadgeContainer>
@@ -175,7 +171,6 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
 
           <CertificateFooter>
             <FooterItem fullWidth>
-              <SignatureLabel>Issue Date</SignatureLabel>
               <FooterText>{new Date().toLocaleDateString()}</FooterText>
             </FooterItem>
           </CertificateFooter>
