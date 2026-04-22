@@ -1,0 +1,1 @@
+import{n as i,F as r,H as t,ai as u}from"./index-ry-C20ZN.js";const x=({title:a="Difficulty",options:l,currentValue:s,onChange:c,name:n})=>i.jsxs(r,{children:[i.jsx(t,{children:a}),l.map(e=>i.jsxs(u,{$isActive:s===e.value,children:[i.jsx("input",{type:"radio",name:n,checked:s===e.value,onChange:()=>c(e.value)}),e.label]},e.value))]});export{x as D};
