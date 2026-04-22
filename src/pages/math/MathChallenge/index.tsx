@@ -25,6 +25,7 @@ import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
 import Certificate from "../../../components/Certificate";
+import { TRANSLATIONS } from "../../../constants/translations";
 
 export const MathChallenge: React.FC = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ export const MathChallenge: React.FC = () => {
   const [options, setOptions] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
   const [showCertificate, setShowCertificate] = useState(false);
+  const t = TRANSLATIONS.en;
 
   const generateQuestion = useCallback(() => {
     const maxVal = getMaxNumber(maxDigits);
@@ -93,9 +95,9 @@ export const MathChallenge: React.FC = () => {
   };
 
   const opOptions = [
-    { value: "+", label: "Addition" },
-    { value: "-", label: "Subtraction" },
-    { value: "*", label: "Multiplication" },
+    { value: "+", label: t.math_addition },
+    { value: "-", label: t.math_subtraction },
+    { value: "*", label: t.math_multiplication },
   ];
 
   const diffOptions = [
@@ -109,15 +111,12 @@ export const MathChallenge: React.FC = () => {
       <GameLayout>
         <ChallengeHeader
           icon={Calculator}
-          title="Math Magic"
-          subtitle="Master numbers with fun addition and subtraction!"
+          title={t.math_mathMagic}
+          subtitle={t.math_countingDesc}
           streak={streak}
         />
 
-        <SurpriseCard
-          title="Ready for the Big Test? 🏆"
-          subtitle="Once you master these sums, try the 'Math Master' test to win a trophy!"
-        />
+        <SurpriseCard title={t.com_readyForTest} subtitle={t.com_masterTryTrophy} />
 
         <GameActivityArea data-testid="activity-area">
           <SessionStats>
@@ -165,7 +164,7 @@ export const MathChallenge: React.FC = () => {
 
         <SettingsArea data-testid="settings-area">
           <DifficultyPicker
-            title="Operation"
+            title={t.com_operation}
             name="operator"
             options={opOptions}
             currentValue={operator}
@@ -188,9 +187,9 @@ export const MathChallenge: React.FC = () => {
               setShowCertificate(false);
               dispatch(resetAll());
             }}
-            challengeName="Math Magic"
+            challengeName={t.math_mathMagic}
             score={streak}
-            level={`${maxDigits} Digits`}
+            level={`${maxDigits} ${t.com_level}`}
           />
         )}
       </AnimatePresence>

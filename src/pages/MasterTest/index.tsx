@@ -54,6 +54,7 @@ import {
   LogicDisplay,
 } from "./styles";
 import ChallengeHeader from "../../components/ChallengeHeader";
+import { TRANSLATIONS } from "../../constants/translations";
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
 
 type QuestionType = "math" | "spelling" | "missing_letter" | "comparison" | "hindi" | "logic";
@@ -86,30 +87,31 @@ const MasterTest: React.FC = () => {
   const [showCertificate, setShowCertificate] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const isMasterTest = testId === "master_test" || !testId;
+  const t = TRANSLATIONS.en;
 
   const getTestTitle = () => {
-    if (isMasterTest) return "Grand Master";
+    if (isMasterTest) return t.mst_grandMaster;
     switch (testId) {
       case "math_addition":
-        return "Addition";
+        return t.math_addition;
       case "math_subtraction":
-        return "Subtraction";
+        return t.math_subtraction;
       case "math_multiplication":
-        return "Multiplication";
+        return t.math_multiplication;
       case "math_test":
-        return "Math Hero";
+        return t.math_mathHero;
       case "english_missing_letters":
-        return "Missing Letters";
+        return t.eng_missingLetters;
       case "english_spelling":
-        return "Listen and Find";
+        return t.eng_listenAndFind;
       case "spelling_test":
-        return "Spelling Hero";
+        return t.eng_spellingHero;
       case "hindi_test":
-        return "Hindi Legend";
+        return t.hindi_hindiLegend;
       case "logic_test":
-        return "Grand Logic";
+        return t.log_grandLogic;
       default:
-        return "Test Challenge";
+        return t.com_tryAgain;
     }
   };
 
@@ -174,7 +176,7 @@ const MasterTest: React.FC = () => {
           ans = n1 * n2;
         }
 
-        q.prompt = "Solve the math!";
+        q.prompt = t.math_solveMath;
         q.correctAnswer = ans.toString();
         const opts = new Set<string>([q.correctAnswer]);
         while (opts.size < 4) {
@@ -189,7 +191,7 @@ const MasterTest: React.FC = () => {
         };
       } else if (type === "spelling") {
         const word = getRandomWord(words).toUpperCase();
-        q.prompt = "Tap the word you hear!";
+        q.prompt = t.eng_tapTheWord;
         q.correctAnswer = word;
         const opts = new Set<string>([word]);
         while (opts.size < 4) opts.add(getRandomWord(words).toUpperCase());
@@ -200,7 +202,7 @@ const MasterTest: React.FC = () => {
         const displayWord = word.split("");
         const actualLetter = displayWord[missingIndex];
         displayWord[missingIndex] = "_";
-        q.prompt = "Choose the missing letter!";
+        q.prompt = t.eng_chooseMissing;
         q.correctAnswer = actualLetter;
         const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const opts = new Set<string>([actualLetter]);
@@ -217,7 +219,7 @@ const MasterTest: React.FC = () => {
           if (!nums.includes(n)) nums.push(n);
         }
         const findSmallest = Math.random() > 0.5;
-        q.prompt = findSmallest ? "Tap the smallest number!" : "Tap the biggest number!";
+        q.prompt = findSmallest ? t.math_smallestNumber : t.math_biggestNumber;
         q.correctAnswer = findSmallest
           ? Math.min(...nums).toString()
           : Math.max(...nums).toString();
@@ -233,7 +235,7 @@ const MasterTest: React.FC = () => {
           { sequence: ["🍦", "🍩", "🍦"], next: "🍩" },
         ];
         const p = patterns[Math.floor(Math.random() * patterns.length)];
-        q.prompt = "What comes next?";
+        q.prompt = t.log_whatNext;
         q.correctAnswer = p.next;
         const opts = new Set<string>([p.next]);
         while (opts.size < 4) {
@@ -246,7 +248,7 @@ const MasterTest: React.FC = () => {
         };
       } else if (type === "hindi") {
         const letter = hindiLetters[Math.floor(Math.random() * hindiLetters.length)];
-        q.prompt = "Tap the letter you hear!";
+        q.prompt = t.hindi_tapLetter;
         q.correctAnswer = letter;
         const opts = new Set<string>([letter]);
         while (opts.size < 4)
@@ -264,7 +266,7 @@ const MasterTest: React.FC = () => {
     setScore(0);
     setCurrentIndex(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [testId]);
+  }, [testId, t]);
 
   useEffect(() => {
     generateTest();
@@ -352,7 +354,7 @@ const MasterTest: React.FC = () => {
           {(q.type === "spelling" || q.type === "hindi") && q.data && (
             <SpeakContainer>
               <KidoText color="textSecondary" fontSize="md" fontWeight={600}>
-                Tap the speaker below to hear
+                {t.eng_tapSpeaker}
               </KidoText>
             </SpeakContainer>
           )}
@@ -390,7 +392,7 @@ const MasterTest: React.FC = () => {
             />
             {currentIndex === questions.length - 1 ? (
               <KidButton
-                title="FINISH TEST"
+                title={t.com_finish.toUpperCase()}
                 onClick={handleNext}
                 variant="primary"
                 minWidth="180px"
@@ -406,12 +408,7 @@ const MasterTest: React.FC = () => {
 
   return (
     <PageContainer>
-      <ChallengeHeader
-        icon={Trophy}
-        title={getTestTitle()}
-        subtitle="Show what you know and earn a certificate!"
-        streak={0}
-      />
+      <ChallengeHeader icon={Trophy} title={getTestTitle()} subtitle={t.mst_subtitle} streak={0} />
       <TestContainer>
         <AnimatePresence mode="wait">
           {currentQuestion && (
@@ -445,30 +442,28 @@ const MasterTest: React.FC = () => {
               </ScoreValue>
 
               <FeedbackText fontSize="2rem" fontWeight={800}>
-                {score >= 8 ? "You're a Genius! 🎉" : "Good effort! 💪"}
+                {score >= 8 ? t.com_genius : t.com_goodEffort}
               </FeedbackText>
 
               <SubFeedbackText fontSize="lg" color="textSecondary">
-                {score >= 8
-                  ? "You've mastered the curriculum! Your brain is officially a supercomputer."
-                  : "Keep practicing and you'll get a perfect score next time!"}
+                {score >= 8 ? t.com_masteredCurriculum : t.com_keepPracticing}
               </SubFeedbackText>
 
               <ActionsGrid>
                 <KidButton
-                  title="Review Answers"
+                  title={t.com_reviewAnswers}
                   onClick={() => setShowReview(true)}
                   variant="secondary"
                 />
                 {score >= 8 && (
                   <KidButton
-                    title="Get Certificate"
+                    title={t.com_getCertificate}
                     onClick={() => setShowCertificate(true)}
                     variant="primary"
                   />
                 )}
-                <KidButton title="Try Again" onClick={generateTest} variant="secondary" />
-                <KidButton title="Home" onClick={() => navigate("/")} variant="primary" />
+                <KidButton title={t.com_tryAgain} onClick={generateTest} variant="secondary" />
+                <KidButton title={t.com_home} onClick={() => navigate("/")} variant="primary" />
               </ActionsGrid>
             </ResultBox>
           )}
@@ -476,9 +471,9 @@ const MasterTest: React.FC = () => {
           {showReview && !showCertificate && (
             <ReviewOverlayBox initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
               <ReviewHeader fontSize="2rem" fontWeight={900} color="primary">
-                Test Review
+                {t.com_testReview}
               </ReviewHeader>
-              <ReviewSubHeader color="textSecondary">See what you learned today!</ReviewSubHeader>
+              <ReviewSubHeader color="textSecondary">{t.com_seeWhatLearned}</ReviewSubHeader>
 
               <ReviewList>
                 {questions.map((q) => {
@@ -499,7 +494,7 @@ const MasterTest: React.FC = () => {
 
                       <CorrectionRow>
                         <KidoText fontSize="sm" color="textSecondary">
-                          Your answer:
+                          {t.com_yourAnswer}
                         </KidoText>
                         <KidoText
                           fontSize="sm"
@@ -513,7 +508,7 @@ const MasterTest: React.FC = () => {
                       {!isCorrect && (
                         <CorrectionRow>
                           <KidoText fontSize="sm" color="textSecondary">
-                            Correct answer:
+                            {t.com_correctAnswer}
                           </KidoText>
                           <KidoText fontSize="sm" fontWeight={700} color="success">
                             {q.correctAnswer}
@@ -527,18 +522,18 @@ const MasterTest: React.FC = () => {
 
               <ActionsGrid>
                 <KidButton
-                  title="Back to Score"
+                  title={t.com_backToScore}
                   onClick={() => setShowReview(false)}
                   variant="secondary"
                 />
                 {score >= 8 && (
                   <KidButton
-                    title="Get Certificate"
+                    title={t.com_getCertificate}
                     onClick={() => setShowCertificate(true)}
                     variant="primary"
                   />
                 )}
-                <KidButton title="Home" onClick={() => navigate("/")} variant="primary" />
+                <KidButton title={t.com_home} onClick={() => navigate("/")} variant="primary" />
               </ActionsGrid>
             </ReviewOverlayBox>
           )}

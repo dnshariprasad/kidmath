@@ -35,6 +35,7 @@ import Certificate from "../../../components/Certificate";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
 import { getEncouragement } from "../../../utils/index";
 import { HintIconWrapper, ChallengeTextContainer, WordDisplay } from "./styles";
+import { TRANSLATIONS } from "../../../constants/translations";
 
 const MissingLettersChallenge = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const MissingLettersChallenge = () => {
   const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
   const [showHint, setShowHint] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
+  const t = TRANSLATIONS.en;
 
   const generateChallenge = useCallback(() => {
     let words = getAllWords();
@@ -95,9 +97,9 @@ const MissingLettersChallenge = () => {
   };
 
   const difficultyOptions = [
-    { value: "Easy", label: "Easy Words" },
-    { value: "Medium", label: "Medium Words" },
-    { value: "Hard", label: "Hard Words" },
+    { value: "Easy", label: t.com_easyWords },
+    { value: "Medium", label: t.com_mediumWords },
+    { value: "Hard", label: t.com_hardWords },
   ];
 
   return (
@@ -105,15 +107,15 @@ const MissingLettersChallenge = () => {
       <GameLayout>
         <ChallengeHeader
           icon={Type}
-          title="Missing Letters"
-          subtitle="Fill in the gap to complete the word!"
+          title={t.eng_missingLetters}
+          subtitle={t.eng_missingLettersSubtitle}
           streak={streak}
         />
 
         <SurpriseCard
-          title="Ready for the Test? 🏆"
-          subtitle="Try the Spelling Hero exam!"
-          onClick={() => navigate("/test/spelling_hero")}
+          title={t.com_readyForTest}
+          subtitle={t.eng_spellingHeroPromo}
+          onClick={() => navigate("/test/spelling_test")}
         />
 
         <GameActivityArea data-testid="activity-area">
@@ -140,7 +142,7 @@ const MissingLettersChallenge = () => {
               setShowHint(true);
               setTimeout(() => setShowHint(false), 2000);
             }}
-            title="Need a hint?"
+            title={t.com_hint}
           >
             <HelpCircle size={28} />
           </HintIconWrapper>
@@ -174,7 +176,7 @@ const MissingLettersChallenge = () => {
 
           <ControlBar>
             <KidButton
-              title="Check Answer"
+              title={t.com_checkAnswer}
               onClick={handleSubmit}
               variant="primary"
               minWidth="220px"
@@ -201,7 +203,7 @@ const MissingLettersChallenge = () => {
               setShowCertificate(false);
               dispatch(resetAll());
             }}
-            challengeName="Missing Letters"
+            challengeName={t.eng_missingLetters}
             score={streak}
             level={complexity}
           />

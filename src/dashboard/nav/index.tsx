@@ -19,6 +19,7 @@ import {
 import NamePrompt from "../../components/NamePrompt/index.tsx";
 import SetStreakModal from "../../components/SetStreakModal/index.tsx";
 import { RootState } from "../../store/store";
+import { TRANSLATIONS } from "../../constants/translations";
 import {
   toggleMobileMenu,
   toggleMute,
@@ -52,6 +53,7 @@ const Navbar: React.FC = () => {
   const [activeSubMenu, setActiveSubMenu] = useState<null | "fontSize">(null);
   const [showNameUpdate, setShowNameUpdate] = useState(false);
   const [showSetStreak, setShowSetStreak] = useState(false);
+  const t = TRANSLATIONS.en;
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -104,7 +106,7 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-                    <span>{isMuted ? "Unmute Sound" : "Mute Sound"}</span>
+                    <span>{isMuted ? t.nav_unmuteSound : t.nav_muteSound}</span>
                   </DropdownItem>
 
                   <DropdownItem
@@ -114,12 +116,12 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     {themeMode === "light" ? <Moon size={20} /> : <Sun size={20} />}
-                    <span>{themeMode === "light" ? "Dark Mode" : "Light Mode"}</span>
+                    <span>{themeMode === "light" ? t.nav_darkMode : t.nav_lightMode}</span>
                   </DropdownItem>
 
                   <DropdownItem onClick={() => setActiveSubMenu("fontSize")}>
                     <Type size={20} />
-                    <span>Font Size</span>
+                    <span>{t.nav_fontSize}</span>
                     <ArrowRight>
                       <ChevronRight size={18} />
                     </ArrowRight>
@@ -132,7 +134,7 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     <User size={20} />
-                    <span>Update Name</span>
+                    <span>{t.nav_updateName}</span>
                   </DropdownItem>
 
                   <DropdownItem
@@ -142,14 +144,14 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     <Zap size={20} />
-                    <span>Set Progress</span>
+                    <span>{t.nav_setProgress}</span>
                   </DropdownItem>
                 </>
               ) : (
                 <>
                   <BackItem onClick={() => setActiveSubMenu(null)}>
                     <ChevronLeft size={20} />
-                    <span>Back</span>
+                    <span>{t.com_back}</span>
                   </BackItem>
                   <DropdownItem
                     onClick={() => {
@@ -159,7 +161,7 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     <Type size={16} />
-                    <span>Small</span>
+                    <span>{t.nav_small}</span>
                   </DropdownItem>
                   <DropdownItem
                     onClick={() => {
@@ -169,7 +171,7 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     <Type size={20} />
-                    <span>Medium</span>
+                    <span>{t.nav_medium}</span>
                   </DropdownItem>
                   <DropdownItem
                     onClick={() => {
@@ -179,7 +181,7 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     <Type size={24} />
-                    <span>Large</span>
+                    <span>{t.nav_large}</span>
                   </DropdownItem>
                 </>
               )}
