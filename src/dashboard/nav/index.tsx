@@ -17,6 +17,7 @@ import {
   BackItem,
 } from "./styles";
 import NamePrompt from "../../components/NamePrompt/index.tsx";
+import SetStreakModal from "../../components/SetStreakModal/index.tsx";
 import { RootState } from "../../store/store";
 import {
   toggleMobileMenu,
@@ -37,6 +38,7 @@ import {
   ChevronRight,
   ChevronLeft,
   User,
+  Zap,
 } from "lucide-react";
 
 const Navbar: React.FC = () => {
@@ -49,6 +51,7 @@ const Navbar: React.FC = () => {
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState<null | "fontSize">(null);
   const [showNameUpdate, setShowNameUpdate] = useState(false);
+  const [showSetStreak, setShowSetStreak] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -131,6 +134,16 @@ const Navbar: React.FC = () => {
                     <User size={20} />
                     <span>Update Name</span>
                   </DropdownItem>
+
+                  <DropdownItem
+                    onClick={() => {
+                      setShowSetStreak(true);
+                      setIsMoreMenuOpen(false);
+                    }}
+                  >
+                    <Zap size={20} />
+                    <span>Set Progress</span>
+                  </DropdownItem>
                 </>
               ) : (
                 <>
@@ -175,6 +188,7 @@ const Navbar: React.FC = () => {
         </MoreMenuWrapper>
       </UserSection>
       {showNameUpdate && <NamePrompt onComplete={() => setShowNameUpdate(false)} />}
+      {showSetStreak && <SetStreakModal onClose={() => setShowSetStreak(false)} />}
     </NavbarContainer>
   );
 };

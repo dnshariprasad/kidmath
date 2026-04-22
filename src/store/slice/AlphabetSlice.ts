@@ -168,6 +168,13 @@ const kiddooSlice = createSlice({
       };
       saveState(state);
     },
+    setStreak: (state, action: PayloadAction<{ gameId: string; streak: number }>) => {
+      const { gameId, streak } = action.payload;
+      if (state.gameStats && state.gameStats[gameId]) {
+        state.gameStats[gameId].streak = streak;
+      }
+      saveState(state);
+    },
   },
 });
 
@@ -186,6 +193,7 @@ export const {
   setMode,
   setUserName,
   resetAll,
+  setStreak,
 } = kiddooSlice.actions;
 
 export default kiddooSlice.reducer;
