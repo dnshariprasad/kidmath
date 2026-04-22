@@ -74,6 +74,7 @@ const initialState: KiddooState = {
     sight_words: { ...initialGameStats, ...persistedState?.gameStats?.sight_words },
     sudoku: { ...initialGameStats, ...persistedState?.gameStats?.sudoku },
     alphabet_hindi: { ...initialGameStats, ...persistedState?.gameStats?.alphabet_hindi },
+    master_test: { ...initialGameStats, ...persistedState?.gameStats?.master_test },
   },
   isMobileMenuOpen: false,
   isMuted: persistedState?.isMuted ?? false,
@@ -102,7 +103,7 @@ const kiddooSlice = createSlice({
       state.loading = false;
     },
     incrementScore: (state, action: PayloadAction<string | undefined>) => {
-      const gameId = action.payload;
+      const gameId = action?.payload;
 
       // Update global score
       state.userStats.score += 10;
@@ -110,17 +111,17 @@ const kiddooSlice = createSlice({
       state.userStats.lastPlayed = new Date().toISOString();
 
       // Update game specific score
-      if (gameId && state.gameStats[gameId]) {
+      if (gameId && state.gameStats && state.gameStats[gameId]) {
         state.gameStats[gameId].score += 10;
         state.gameStats[gameId].streak += 1;
       }
       saveState(state);
     },
     resetStreak: (state, action: PayloadAction<string | undefined>) => {
-      const gameId = action.payload;
+      const gameId = action?.payload;
       state.userStats.streak = 0;
 
-      if (gameId && state.gameStats[gameId]) {
+      if (gameId && state.gameStats && state.gameStats[gameId]) {
         state.gameStats[gameId].streak = 0;
       }
       saveState(state);
@@ -163,6 +164,7 @@ const kiddooSlice = createSlice({
         sight_words: { score: 0, streak: 0 },
         sudoku: { score: 0, streak: 0 },
         alphabet_hindi: { score: 0, streak: 0 },
+        master_test: { score: 0, streak: 0 },
       };
       saveState(state);
     },

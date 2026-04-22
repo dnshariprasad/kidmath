@@ -42,6 +42,7 @@ import {
   CertificateWrapper,
   CardProgressBar,
   CardProgressFill,
+  EncouragementBadge,
 } from "./styles";
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
 
@@ -164,6 +165,20 @@ const MasterTest: React.FC = () => {
     setAnswers((prev) => ({ ...prev, [id]: val }));
   };
 
+  const getEncouragement = (index: number) => {
+    if (index === 0) return "Let's go! You can do it! 🚀";
+    if (index === 1) return "Nice one! Next up... 🌟";
+    if (index === 2) return "Great start! Keep going! 🔥";
+    if (index === 3) return "You're a star! Super! ⭐";
+    if (index === 4) return "Halfway there! Amazing! ✨";
+    if (index === 5) return "Fantastic! You got this! 🙌";
+    if (index === 6) return "So smart! Keep it up! 🧠";
+    if (index === 7) return "Almost finished! Be careful! 💪";
+    if (index === 8) return "Nearly there! On fire! 🚒";
+    if (index === 9) return "Last one! Go for gold! 🏆";
+    return "Doing great! 🌟";
+  };
+
   const handleSubmit = () => {
     let finalScore = 0;
     questions.forEach((q) => {
@@ -215,7 +230,16 @@ const MasterTest: React.FC = () => {
           />
         </CardProgressBar>
         <QuestionNumber>QUESTION {q.id} OF 10</QuestionNumber>
-        <SubjectBadge $type={q.type}>{q.type.replace("_", " ")}</SubjectBadge>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <SubjectBadge $type={q.type}>{q.type.replace("_", " ")}</SubjectBadge>
+          <EncouragementBadge
+            key={currentIndex}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            {getEncouragement(currentIndex)}
+          </EncouragementBadge>
+        </div>
 
         {q.type !== "math" && (
           <QuestionHeader>

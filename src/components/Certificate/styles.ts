@@ -54,7 +54,9 @@ export const CertificateBorder = styled.div`
       : "radial-gradient(circle, #ffffff 0%, #fffdf0 100%)"};
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 0 4px #ffd70040, inset 0 0 100px #ffd70010;
+  box-shadow:
+    0 0 0 4px #ffd70040,
+    inset 0 0 100px #ffd70010;
 
   @media (max-width: 480px) {
     padding: 25px 15px 40px;
@@ -235,50 +237,12 @@ export const FooterItem = styled.div<{ fullWidth?: boolean }>`
   width: ${(props) => (props.fullWidth ? "100%" : "auto")};
 `;
 
-export const VerifiedLabel = styled.span`
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: ${(props) => props.theme.colors.primary};
-  margin-top: 2px;
-`;
-
-export const QRCodePlaceholder = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  background: white;
-  border: 2px solid ${(props) => props.theme.colors.primary};
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: ${(props) => props.theme.colors.primary};
-  z-index: 2;
-
-  @media (max-width: 480px) {
-    width: 45px;
-    height: 45px;
-    top: 10px;
-    right: 10px;
-  }
-`;
-
-export const SignatureLabel = styled.span`
-  font-size: 0.8rem; /* Increased size */
-  color: ${(props) => props.theme.colors.textPrimary};
-  font-weight: 800;
-  text-transform: uppercase;
-  opacity: 0.7;
-`;
-
 export const FooterText = styled.div`
-  font-weight: 900; /* Bolder */
-  font-size: 1rem; /* Larger */
+  font-weight: 900;
+  font-size: 1rem;
   color: ${(props) => props.theme.colors.textPrimary};
   font-family: ${(props) => props.theme.fonts.secondary};
+  opacity: 0.6;
 `;
 
 export const ActionButtons = styled.div`

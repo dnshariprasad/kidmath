@@ -1,5 +1,5 @@
 import React from "react";
-import { Trophy, Download, X, Share2, Loader2, QrCode } from "lucide-react";
+import { Trophy, Download, X, Share2, Loader2 } from "lucide-react";
 import KidButton from "../KidButton";
 import {
   ModalOverlay,
@@ -15,12 +15,9 @@ import {
   Badge,
   CertificateFooter,
   FooterItem,
-  SignatureLabel,
-  QRCodePlaceholder,
   FooterText,
   ActionButtons,
   CloseButton,
-  VerifiedLabel,
 } from "./styles";
 import { toPng } from "html-to-image";
 // @ts-expect-error - downloadjs lacks TypeScript declarations
@@ -158,9 +155,9 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
           <WinnerName>{userName || "Super Star"}</WinnerName>
 
           <CertificateText>
-            For being an absolute legend in the <b>{challengeName}</b> challenge!
-            You've smashed it with a streak of <b>{score}</b> correct answers!
-            Keep being awesome! 🚀✨
+            For being an absolute legend in the <b>{challengeName}</b> challenge
+            {level ? ` (${level} level)` : ""}! You've smashed it with a streak of <b>{score}</b>{" "}
+            correct answers! Keep being awesome! 🚀✨
           </CertificateText>
 
           <BadgeContainer>
