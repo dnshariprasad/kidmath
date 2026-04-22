@@ -579,19 +579,3 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
     }
   }
 `;
-
-export const EncouragementBadge = styled(motion.div)`
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: #6366f1;
-  background: #6366f110;
-  padding: 6px 14px;
-  border-radius: 12px;
-  border: 1px solid #6366f120;
-  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.05);
-
-  @media (max-width: 480px) {
-    font-size: 0.8rem;
-    padding: 4px 10px;
-  }
-`;

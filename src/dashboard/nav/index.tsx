@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   AppName,
@@ -16,6 +16,7 @@ import {
   ArrowRight,
   BackItem,
 } from "./styles";
+import NamePrompt from "../../components/NamePrompt/index.tsx";
 import { RootState } from "../../store/store";
 import {
   toggleMobileMenu,
@@ -35,16 +36,19 @@ import {
   Type,
   ChevronRight,
   ChevronLeft,
+  User,
 } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const isOpen = useSelector((state: RootState) => state.alphabet.isMobileMenuOpen);
   const isMuted = useSelector((state: RootState) => state.alphabet.isMuted);
   const themeMode = useSelector((state: RootState) => state.alphabet.theme);
 
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState<null | "fontSize">(null);
+  const [showNameUpdate, setShowNameUpdate] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -117,6 +121,16 @@ const Navbar: React.FC = () => {
                       <ChevronRight size={18} />
                     </ArrowRight>
                   </DropdownItem>
+
+                  <DropdownItem
+                    onClick={() => {
+                      setShowNameUpdate(true);
+                      setIsMoreMenuOpen(false);
+                    }}
+                  >
+                    <User size={20} />
+                    <span>Update Name</span>
+                  </DropdownItem>
                 </>
               ) : (
                 <>
@@ -160,6 +174,7 @@ const Navbar: React.FC = () => {
           )}
         </MoreMenuWrapper>
       </UserSection>
+      {showNameUpdate && <NamePrompt onComplete={() => setShowNameUpdate(false)} />}
     </NavbarContainer>
   );
 };
