@@ -1,0 +1,1 @@
+import{al as n}from"./index-qy8GCxoy.js";function c(t,s="en-US"){if(n.getState().alphabet.isMuted)return;window.speechSynthesis.cancel();const e=new SpeechSynthesisUtterance(t);e.lang=s,e.rate=.95,e.pitch=1.1,window.speechSynthesis.speak(e)}export{c as r};
