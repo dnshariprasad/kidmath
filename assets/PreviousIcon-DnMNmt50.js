@@ -1,4 +1,4 @@
-import{i as o,p as s,n as r,a as t,C as i}from"./index-DO3JajC9.js";const n=o(s.div)`
+import{i as o,p as s,n as r,a as t,C as i}from"./index-BAJfjDHv.js";const n=o(s.div)`
   width: 56px;
   height: 56px;
   flex-shrink: 0; /* Prevents squashing in flex containers */
