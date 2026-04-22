@@ -26,6 +26,7 @@ const GreaterLessEqualGame = lazy(() => import("./pages/math/GreaterLessEqualGam
 const MathChallenge = lazy(() => import("./pages/math/MathChallenge/index.tsx"));
 const NumberSorter = lazy(() => import("./pages/math/NumberSorter/index.tsx"));
 const MasterTest = lazy(() => import("./pages/MasterTest/index.tsx"));
+const NumbersPage = lazy(() => import("./pages/math/NumbersPage/index.tsx"));
 
 const ConnectedThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const themeMode = useSelector((state: RootState) => state.alphabet.theme);
@@ -80,6 +81,14 @@ createRoot(document.getElementById("root")!).render(
                     element={
                       <NameRequiredRoute>
                         <MathChallenge />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="learn_numbers"
+                    element={
+                      <NameRequiredRoute>
+                        <NumbersPage />
                       </NameRequiredRoute>
                     }
                   />

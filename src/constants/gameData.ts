@@ -21,6 +21,14 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
       subject: "English",
     },
     {
+      id: "learn_numbers",
+      title: "Learn Numbers",
+      desc: "Count 1, 2, 3 with fun objects",
+      iconName: "Hash",
+      path: "/learn_numbers",
+      subject: "Math",
+    },
+    {
       id: "alphabet_hindi",
       title: "Hindi Letters",
       desc: "Varnamala with joy",
