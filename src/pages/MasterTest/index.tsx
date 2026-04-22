@@ -43,6 +43,7 @@ import {
   CardProgressBar,
   CardProgressFill,
 } from "./styles";
+import ChallengeHeader from "../../components/ChallengeHeader";
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
 
 type QuestionType = "math" | "spelling" | "missing_letter" | "comparison" | "hindi";
@@ -74,10 +75,44 @@ const MasterTest: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCertificate, setShowCertificate] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const isMasterTest = testId === "master_test" || !testId;
+
+  const getTestTitle = () => {
+    if (isMasterTest) return "Grand Master";
+    switch (testId) {
+      case "math_addition":
+        return "Addition Master";
+      case "math_subtraction":
+        return "Subtraction Master";
+      case "math_multiplication":
+        return "Multiplication Master";
+      case "math_test":
+        return "Math Master";
+      case "spelling_test":
+        return "Spelling Hero";
+      case "hindi_test":
+        return "Hindi Legend";
+      default:
+        return "Test Challenge";
+    }
+  };
 
   const generateTest = useCallback(() => {
     const newQuestions: Question[] = [];
-    let allowedTypes: QuestionType[] = ["math", "spelling", "missing_letter", "comparison"];
+    let allowedTypes: QuestionType[] = [
+      "math",
+      "spelling",
+      "missing_letter",
+      "comparison",
+      "hindi",
+    ];
+    if (
+      testId === "math_addition" ||
+      testId === "math_subtraction" ||
+      testId === "math_multiplication"
+    ) {
+      allowedTypes = ["math"];
+    }
     if (testId === "math_test") allowedTypes = ["math", "comparison"];
     if (testId === "spelling_test") allowedTypes = ["spelling", "missing_letter"];
     if (testId === "hindi_test") allowedTypes = ["hindi"];
@@ -92,8 +127,33 @@ const MasterTest: React.FC = () => {
       if (type === "math") {
         const n1 = Math.floor(Math.random() * 10) + 1;
         const n2 = Math.floor(Math.random() * 10) + 1;
-        const op = Math.random() > 0.5 ? "+" : "-";
-        const ans = op === "+" ? n1 + n2 : Math.max(n1, n2) - Math.min(n1, n2);
+
+        let op = "+";
+        if (testId === "math_addition") op = "+";
+        else if (testId === "math_subtraction") op = "-";
+        else if (testId === "math_multiplication") op = "*";
+        else {
+          const ops = ["+", "-"];
+          if (testId === "math_test" || testId === "math_multiplication" || !testId) {
+            ops.push("*");
+          }
+          op = ops[Math.floor(Math.random() * ops.length)];
+        }
+
+        let num1_final = n1;
+        let num2_final = n2;
+        let ans = 0;
+
+        if (op === "+") {
+          ans = n1 + n2;
+        } else if (op === "-") {
+          num1_final = Math.max(n1, n2);
+          num2_final = Math.min(n1, n2);
+          ans = num1_final - num2_final;
+        } else {
+          ans = n1 * n2;
+        }
+
         q.prompt = "Solve the math!";
         q.correctAnswer = ans.toString();
         const opts = new Set<string>([q.correctAnswer]);
@@ -101,7 +161,12 @@ const MasterTest: React.FC = () => {
           const off = Math.floor(Math.random() * 5) + 1;
           opts.add((Math.random() > 0.5 ? ans + off : Math.max(0, ans - off)).toString());
         }
-        q.data = { n1, n2, op, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
+        q.data = {
+          n1: num1_final,
+          n2: num2_final,
+          op,
+          optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
+        };
       } else if (type === "spelling") {
         const word = getRandomWord(words).toUpperCase();
         q.prompt = "Tap the word you hear!";
@@ -131,8 +196,11 @@ const MasterTest: React.FC = () => {
           const n = Math.floor(Math.random() * 100);
           if (!nums.includes(n)) nums.push(n);
         }
-        q.prompt = "Tap the biggest number!";
-        q.correctAnswer = Math.max(...nums).toString();
+        const findSmallest = Math.random() > 0.5;
+        q.prompt = findSmallest ? "Tap the smallest number!" : "Tap the biggest number!";
+        q.correctAnswer = findSmallest
+          ? Math.min(...nums).toString()
+          : Math.max(...nums).toString();
         q.data = { optionsStrings: nums.map(String) };
       } else if (type === "hindi") {
         const letter = hindiLetters[Math.floor(Math.random() * hindiLetters.length)];
@@ -293,6 +361,12 @@ const MasterTest: React.FC = () => {
 
   return (
     <PageContainer>
+      <ChallengeHeader
+        icon={Trophy}
+        title={getTestTitle()}
+        subtitle="Show what you know and earn a certificate!"
+        streak={0}
+      />
       <TestContainer>
         <AnimatePresence mode="wait">
           {currentQuestion && (
