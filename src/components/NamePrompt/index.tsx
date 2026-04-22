@@ -44,7 +44,13 @@ const IconWrapper = styled.div`
   color: ${(props) => props.theme.colors.primary};
 `;
 
-const StyledInput = styled.input`
+const StyledInput = styled.input.attrs({
+  onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 300);
+  },
+})`
   width: 100%;
   padding: 16px 24px;
   border-radius: 16px;

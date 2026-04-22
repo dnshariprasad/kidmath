@@ -102,7 +102,7 @@ const NumbersPage: React.FC = () => {
         rotate: Math.random() * 40 - 20,
       };
     });
-  }, [currentIndex, currentItem.value]);
+  }, [currentItem.value]);
 
   useEffect(() => {
     // Speak the number when it changes

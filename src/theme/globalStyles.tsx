@@ -73,7 +73,13 @@ export const Card = styled.div`
   }
 `;
 
-export const StyledInput = styled.input<{ width?: string }>`
+export const StyledInput = styled.input.attrs({
+  onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 300);
+  },
+})<{ width?: string }>`
   padding: 10px 20px;
   margin: 15px 0;
   background: ${(props) => props.theme.colors.surface};
@@ -277,8 +283,8 @@ export const TitleArea = styled.div`
 
   @media (max-width: 992px) {
     height: auto;
-    min-height: 120px;
-    padding: 25px 15px;
+    min-height: 80px;
+    padding: 10px 15px;
     margin-bottom: 0;
   }
 `;
@@ -323,7 +329,7 @@ export const GhostHeader = styled(TitleArea)`
 
   @media (max-width: 992px) {
     order: 10;
-    min-height: 120px;
+    min-height: 100px;
     height: auto;
     margin-top: 20px;
   }
@@ -435,9 +441,9 @@ export const GameActivityArea = styled(ActivityArea)`
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    min-height: 350px;
-    padding: 15px 20px;
-    gap: 15px;
+    min-height: 300px;
+    padding: 10px 15px;
+    gap: 10px;
   }
 `;
 
@@ -507,7 +513,7 @@ export const GameLayout = styled.div`
   width: 100%;
   align-items: start;
 
-  @media (max-width: 992px) {
+  @media (max-width: 820px) {
     display: flex;
     flex-direction: column;
     gap: 20px;

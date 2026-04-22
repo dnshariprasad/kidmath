@@ -14,7 +14,7 @@ export const LayoutContainer = styled.div`
     flex-direction: column;
     height: auto;
     margin-top: 70px;
-    padding-top: 24px;
+    padding-top: 10px;
     overflow: visible;
   }
 `;
