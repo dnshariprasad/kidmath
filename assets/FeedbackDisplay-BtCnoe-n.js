@@ -1,1 +1,0 @@
-import{n as i,A as t,q as r}from"./index-NzOoTDV7.js";import{F as a}from"./globalStyles-CxNgPgHO.js";const n=({feedback:e,fontSize:s="lg"})=>i.jsx(t,{children:e&&i.jsx(a,{initial:{y:20,opacity:0},animate:{y:0,opacity:1},exit:{y:-20,opacity:0},children:i.jsx(r,{color:e.isCorrect?"success":"accent",fontSize:s,fontWeight:"bold",children:e.message})})});export{n as F};

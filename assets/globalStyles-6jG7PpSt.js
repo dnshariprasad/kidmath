@@ -1,8 +1,8 @@
-import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
+import{Z as r,i as t,p as o}from"./index-DO3JajC9.js";r`
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.12),
     0 1px 2px rgba(0, 0, 0, 0.24);
-`;const i=r`
+`;r`
   box-shadow:
     0 3px 6px rgba(0, 0, 0, 0.16),
     0 3px 6px rgba(0, 0, 0, 0.23);
@@ -10,13 +10,13 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   box-shadow:
     0 10px 20px rgba(0, 0, 0, 0.19),
     0 6px 6px rgba(0, 0, 0, 0.23);
-`;const m=t.div`
+`;const c=t.div`
   display: flex;
   gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-`,a=t.div`
+`,i=t.div`
   background: ${e=>e.theme.colors.surface};
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -33,10 +33,7 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   overflow: hidden;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow:
-      0 6px 15px rgba(0, 0, 0, 0.05),
-      0 12px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
     border-color: ${e=>e.theme.colors.primary}30;
   }
 
@@ -44,11 +41,11 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
     padding: 20px 20px;
     border-radius: 20px;
   }
-`,g=t.input`
+`,m=t.input`
   padding: 10px 20px;
   margin: 15px 0;
   background: ${e=>e.theme.colors.surface};
-  border: 3px solid ${e=>e.theme.colors.primary}20;
+  border: 3px solid ${e=>e.theme.colors.primary}15;
   border-radius: 16px;
   font-size: ${e=>e.theme.fontSize.xl};
   font-weight: 800;
@@ -66,10 +63,8 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   }
 
   &:focus {
-    background: ${e=>e.theme.colors.surface};
     border-color: ${e=>e.theme.colors.primary};
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px ${e=>e.theme.colors.primary}15;
+    transform: translateY(-2px);
   }
 
   @media (max-width: 768px) {
@@ -77,7 +72,7 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
     font-size: ${e=>e.theme.fontSize.lg};
     width: ${e=>e.width||"100px"};
   }
-`,h=t.span`
+`,g=t.span`
   color: ${e=>e.$color||(e.$isActive?"white":e.theme.colors.textSecondary)};
   background: ${e=>e.$bg||(e.$isActive?e.theme.colors.primary:e.theme.colors.surfaceVariant)};
   padding: 10px 18px;
@@ -94,13 +89,11 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   min-height: 44px;
   border: 1px solid
     ${e=>e.$isActive?e.theme.colors.primary:e.theme.colors.primary+"10"};
-  ${e=>e.$isActive?i:"none"}
 
   &:hover {
     background: ${e=>e.$isActive?e.theme.colors.primary:e.theme.colors.primary+"15"};
     color: ${e=>e.$isActive?"white":e.theme.colors.primary};
     transform: translateY(-2px);
-    ${i}
   }
 
   &:active {
@@ -118,13 +111,13 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   gap: 10px;
   min-height: 60px; /* Matches the visual height of the PageTitle line */
   padding-top: 5px;
-`;const f=t.div`
+`;const h=t.div`
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 20px;
-`,b=t.div`
+`,f=t.div`
   padding: 0 30px 24px; /* Standardized side/bottom padding */
   display: flex;
   flex-direction: column;
@@ -199,7 +192,7 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
-`;const n=t.div`
+`;const a=t.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -223,8 +216,12 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
     padding: 25px 15px;
     margin-bottom: 0;
   }
-`,u=t(n)`
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+`,b=t(a)`
+  background: linear-gradient(
+    135deg,
+    ${e=>e.theme.colors.primary} 0%,
+    ${e=>e.theme.colors.primary}CC 100%
+  );
   border: none;
   position: relative;
   overflow: hidden;
@@ -263,7 +260,7 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
     height: auto;
     margin-top: 20px;
   }
-`,y=t(o.button)`
+`;t(o.button)`
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -293,14 +290,14 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   svg {
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
   }
-`,$=t.div`
+`;const u=t.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   padding-bottom: 0;
   gap: 8px;
-`,w=t.h1`
+`,y=t.h1`
   font-family: ${e=>e.theme.fonts.primary};
   font-size: ${e=>e.theme.fontSize.xl};
   font-weight: 800;
@@ -324,7 +321,7 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
     background: ${e=>e.theme.colors.primary}25;
     border-radius: 10px;
   }
-`,v=t.p`
+`,w=t.p`
   font-family: ${e=>e.theme.fonts.secondary};
   font-size: ${e=>e.theme.fontSize.base};
   color: ${e=>e.theme.colors.textSecondary};
@@ -334,7 +331,7 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   max-width: 600px;
   text-align: center;
   font-weight: 500;
-`,s=t(a)`
+`,n=t(i)`
   background: ${e=>e.theme.colors.surface};
   border: 1px solid ${e=>e.theme.colors.primary}20;
   max-width: none;
@@ -343,9 +340,9 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   &:hover {
     transform: translateY(-4px);
   }
-`,p=t(a)`
+`,s=t(i)`
   /* This represents the primary educational content module */
-`,k=t(p)`
+`,$=t(s)`
   text-align: center;
   min-height: 400px;
   display: flex;
@@ -361,32 +358,32 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
     padding: 15px 20px;
     gap: 15px;
   }
-`,d=t(o.span)`
+`,p=t(o.span)`
   font-size: ${e=>e.theme.fontSize.lg};
-`,z=t(d)`
+`,v=t(p)`
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-`,S=t.span`
+`,k=t.span`
   position: absolute;
   font-size: 0.7rem;
   font-weight: 900;
   color: #1e293b;
   margin-top: 2px;
-`,A=t.span`
+`,z=t.span`
   font-size: 1.5rem;
-`,j=t.span`
+`,S=t.span`
   margin-left: 5px;
   font-weight: 800;
   color: #ffd700;
-`,C=t(o.div)`
+`,j=t(o.div)`
   margin-top: 15px;
-`,l=t(s)`
+`,d=t(n)`
   /* This represents the configuration/settings module */
-`;t(l)`
+`;t(d)`
   /* This represents the configuration/settings module */
-`;const x=t.div`
+`;const l=t.div`
   display: flex;
   gap: 15px;
   align-items: center;
@@ -397,9 +394,9 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   @media (max-width: 480px) {
     gap: 10px;
   }
-`,T=t(x)`
+`,A=t(l)`
   margin-top: 15px;
-`,P=t.div`
+`,C=t.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
   grid-template-rows: auto 1fr;
@@ -416,7 +413,7 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   display: contents;
 `;t.div`
   display: contents;
-`;const G=t.div`
+`;const T=t.div`
   margin-bottom: 20px;
   padding-bottom: 12px;
   border-bottom: 2px dashed ${e=>e.theme.colors.primary}15;
@@ -425,7 +422,7 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
   &:last-child {
     border-bottom: none;
   }
-`,N=t.h4`
+`,P=t.h4`
   color: ${e=>e.theme.colors.textSecondary};
   font-family: ${e=>e.theme.fonts.primary};
   font-size: ${e=>e.theme.fontSize.sm};
@@ -486,4 +483,4 @@ import{_ as r,i as t,p as o}from"./index-NzOoTDV7.js";r`
       transform: scale(1);
     }
   }
-`;export{a as C,C as F,P as G,y as M,T as N,Y as O,b as P,l as S,f as T,$ as a,w as b,v as c,k as d,G as e,N as f,h as g,g as h,x as i,u as j,n as k,m as l,z as m,A as n,S as o,j as p};
+`;export{i as C,j as F,C as G,v as N,Y as O,f as P,c as S,h as T,u as a,y as b,w as c,$ as d,z as e,k as f,S as g,A as h,d as i,T as j,P as k,g as l,m,l as n,b as o,a as p};

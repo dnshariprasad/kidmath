@@ -1,4 +1,4 @@
-import{i as t,p as s,n as r,V as a}from"./index-NzOoTDV7.js";import{r as i}from"./DifficultyPicker-Y23e4tn9.js";const n=t(s.div)`
+import{i as t,p as s,n as r,V as a}from"./index-DO3JajC9.js";import{r as i}from"./index-hEdiZV1j.js";const n=t(s.div)`
   width: 56px;
   height: 56px;
   flex-shrink: 0; /* Prevents squashing in flex containers */
