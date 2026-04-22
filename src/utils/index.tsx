@@ -17,18 +17,18 @@ export function readText(text: string, lang: string = "en-US") {
 
 export const getEncouragement = (count: number) => {
   const messages = [
-    "Let's go! You can do it! 🚀",
-    "Nice one! Next up... 🌟",
-    "Great start! Keep going! 🔥",
-    "You're a star! Super! ⭐",
-    "Halfway there! Amazing! ✨",
-    "Fantastic! You got this! 🙌",
-    "So smart! Keep it up! 🧠",
-    "Almost finished! Be careful! 💪",
-    "Nearly there! On fire! 🚒",
-    "Last one! Go for gold! 🏆",
+    "Good Start",
+    "Keep Going",
+    "Well Done",
+    "So Smart",
+    "Half Way",
+    "Great Job",
+    "Amazing",
+    "Brilliant",
+    "Nearly There",
+    "Almost Done",
   ];
 
-  if (count < 0) return "You're doing great! 🌟";
+  if (count < 0) return "Keep going";
   return messages[count % messages.length];
 };
