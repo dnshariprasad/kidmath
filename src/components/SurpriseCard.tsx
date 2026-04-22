@@ -50,7 +50,7 @@ export const SurpriseCard: React.FC<SurpriseCardProps> = ({
         whileHover={onClick ? { backgroundColor: "rgba(255,255,255,0.08)" } : {}}
         whileTap={onClick ? { scale: 0.98 } : {}}
       >
-        <StyledSurpriseText fontSize="md" color="white" fontWeight="800">
+        <StyledSurpriseText fontSize="sm" color="white" fontWeight="800">
           {title}
         </StyledSurpriseText>
         {subtitle && (

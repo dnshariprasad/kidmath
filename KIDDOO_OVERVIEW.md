@@ -1,4 +1,4 @@
-# Kiddoo (KidMath) Project Overview
+# Kiddoo Project Overview
 
 Kiddoo is a React-based educational application designed for children to learn and practice fundamental skills in Mathematics, English, and Hindi. The app features various interactive challenges and games.
 
