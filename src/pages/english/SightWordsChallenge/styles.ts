@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 export const WordDisplay = styled(motion.div)`
-  font-size: clamp(6rem, 15vw, 12rem);
+  font-size: clamp(4rem, 12vw, 8rem);
   font-weight: 900;
   color: ${(props) => props.theme.colors.primary};
   text-align: center;

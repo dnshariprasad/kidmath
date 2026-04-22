@@ -6,6 +6,11 @@ import {
   SettingsArea,
   GameLayout,
   GameActivityArea,
+  SessionStats,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../../../theme/globalStyles";
 import SpeakIcon from "../../../components/SpeakIcon";
 import { KidoText } from "../../../components/KidoText";
@@ -31,7 +36,7 @@ import { incrementScore, resetStreak, resetAll } from "../../../store/slice/Alph
 
 const SpellingChallenge = () => {
   const dispatch = useDispatch();
-  const streak = useSelector((state: RootState) => state.alphabet.gameStats.spelling.streak);
+  const streak = useSelector((state: RootState) => state.alphabet.gameStats?.spelling?.streak ?? 0);
   const [currentWord, setCurrentWord] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
@@ -57,16 +62,9 @@ const SpellingChallenge = () => {
     setShowHint(false);
   }, [complexity]);
 
-  const handleFeelingLucky = () => {
-    const complexites: ("Easy" | "Medium" | "Hard")[] = ["Easy", "Medium", "Hard"];
-    const randomComp = complexites[Math.floor(Math.random() * complexites.length)];
-    setComplexity(randomComp);
-    readText("Spelling Surprise!");
-  };
-
   useEffect(() => {
     generateChallenge();
-  }, [complexity]);
+  }, [generateChallenge]);
 
   useEffect(() => {
     if (streak > 0 && streak % 10 === 0) {
@@ -138,9 +136,31 @@ const SpellingChallenge = () => {
           streak={streak}
         />
 
-        <SurpriseCard title="Spelling surprise?" onShuffle={handleFeelingLucky} />
+        <SurpriseCard
+          title="Certificate Progress"
+          subtitle={
+            streak < 10
+              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
+              : "Milestone reached! 🎉"
+          }
+        />
 
-        <GameActivityArea>
+        <GameActivityArea data-testid="activity-area">
+          <SessionStats>
+            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
+              <NumberedStar
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+              >
+                <StarEmoji>⭐</StarEmoji>
+                <StarNumber>{i + 1}</StarNumber>
+              </NumberedStar>
+            ))}
+            {streak >= 10 && <PlusSign>+</PlusSign>}
+          </SessionStats>
+
           <HintIconWrapper
             $showHint={showHint}
             whileHover={{ scale: 1.1 }}

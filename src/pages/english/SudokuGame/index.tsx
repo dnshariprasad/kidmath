@@ -11,15 +11,19 @@ import {
   ConfigSection,
   ConfigSubTitle,
   GameActivityArea,
+  SessionStats,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../../../theme/globalStyles";
-import { readText } from "../../../utils/index";
 import { RootState } from "../../../store/store";
 import { SudokuGrid, SudokuCell, NumberPad, TipsBox } from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 
 const SudokuGame: React.FC = () => {
-  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const streak = useSelector((state: RootState) => state.alphabet.gameStats?.sudoku?.streak ?? 0);
   const [grid, setGrid] = useState<(number | null)[]>(Array(16).fill(null));
   const [fixed, setFixed] = useState<boolean[]>(Array(16).fill(false));
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
@@ -51,13 +55,6 @@ const SudokuGame: React.FC = () => {
     setSelectedCell(null);
   }, [difficulty]);
 
-  const handleFeelingLucky = () => {
-    const difficulties: ("Easy" | "Hard")[] = ["Easy", "Hard"];
-    const randomDiff = difficulties[Math.floor(Math.random() * difficulties.length)];
-    setDifficulty(randomDiff);
-    readText("Sudoku Surprise!");
-  };
-
   useEffect(() => {
     generatePuzzle();
   }, [generatePuzzle]);
@@ -82,7 +79,7 @@ const SudokuGame: React.FC = () => {
   ];
 
   return (
-    <PageContainer data-testid="page-sudoku">
+    <PageContainer data-testid="view-sudoku">
       <GameLayout>
         <ChallengeHeader
           icon={Grid3X3}
@@ -91,9 +88,31 @@ const SudokuGame: React.FC = () => {
           streak={streak}
         />
 
-        <SurpriseCard title="Sudoku surprise?" onShuffle={handleFeelingLucky} />
+        <SurpriseCard
+          title="Certificate Progress"
+          subtitle={
+            streak < 10
+              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
+              : "Milestone reached! 🎉"
+          }
+        />
 
-        <GameActivityArea>
+        <GameActivityArea data-testid="activity-area">
+          <SessionStats>
+            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
+              <NumberedStar
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+              >
+                <StarEmoji>⭐</StarEmoji>
+                <StarNumber>{i + 1}</StarNumber>
+              </NumberedStar>
+            ))}
+            {streak >= 10 && <PlusSign>+</PlusSign>}
+          </SessionStats>
+
           <SudokuGrid>
             {grid.map((val, i) => (
               <SudokuCell

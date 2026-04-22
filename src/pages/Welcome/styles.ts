@@ -15,7 +15,6 @@ export const CategoryCard = styled(motion.div)<{ $color: string }>`
   background: ${(props) => props.theme.colors.surface};
   padding: 24px;
   border-radius: 24px;
-  box-shadow: ${(props) => props.theme.colors.shadow};
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -29,7 +28,6 @@ export const CategoryCard = styled(motion.div)<{ $color: string }>`
   &:hover {
     border-color: ${(props) => props.$color}40;
     transform: translateY(-5px);
-    box-shadow: 0 12px 30px ${(props) => props.$color}15;
   }
 `;
 
@@ -74,7 +72,6 @@ export const PromoCard = styled(Card)`
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 15px 35px ${(props) => props.theme.colors.primary}40;
   }
 `;
 
@@ -110,6 +107,5 @@ export const WhiteKidButtonWrapper = styled.div`
     background: ${(props) => props.theme.colors.onPrimary} !important;
     color: ${(props) => props.theme.colors.primary} !important;
     border: none !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
   }
 `;

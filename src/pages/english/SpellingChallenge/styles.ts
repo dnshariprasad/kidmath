@@ -32,8 +32,6 @@ export const LetterSlot = styled(motion.div)<{
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
-  box-shadow: ${(props) =>
-    props.$isActive ? `0 10px 20px ${props.theme.colors.primary}20` : "none"};
   transition: all 0.2s ease;
 
   @media (max-width: 768px) {
@@ -48,7 +46,6 @@ export const BigSpeakWrapper = styled(motion.div)`
   background: ${(props) => props.theme.colors.surface};
   padding: 30px;
   border-radius: 40px;
-  box-shadow: 0 15px 35px ${(props) => props.theme.colors.shadow};
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -58,7 +55,7 @@ export const BigSpeakWrapper = styled(motion.div)`
 
   &:hover {
     border-color: ${(props) => props.theme.colors.primary}40;
-    transform: translateY(-5px);
+    transform: translateY(-2px);
   }
 `;
 

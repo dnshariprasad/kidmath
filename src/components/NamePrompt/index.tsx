@@ -28,7 +28,6 @@ const Modal = styled(motion.div)`
   border-radius: 32px;
   width: 100%;
   max-width: 450px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   text-align: center;
   border: 4px solid ${(props) => props.theme.colors.primary}20;
 `;

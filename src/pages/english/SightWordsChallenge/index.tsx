@@ -11,6 +11,11 @@ import {
   ConfigSubTitle,
   GameActivityArea,
   SettingsArea,
+  SessionStats,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../../../theme/globalStyles";
 import SpeakIcon from "../../../components/SpeakIcon";
 import NextIcon from "../../../components/NextIcon";
@@ -27,7 +32,9 @@ import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 
 const SightWordsChallenge = () => {
-  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const streak = useSelector(
+    (state: RootState) => state.alphabet.gameStats?.sight_words?.streak ?? 0,
+  );
   const [level, setLevel] = useState(1);
   const [count, setCount] = useState(0);
 
@@ -84,11 +91,33 @@ const SightWordsChallenge = () => {
           streak={streak}
         />
 
-        <SurpriseCard title="Reading surprise?" onShuffle={handleFeelingLucky} />
+        <SurpriseCard
+          title="Certificate Progress"
+          subtitle={
+            streak < 10
+              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
+              : "Milestone reached! 🎉"
+          }
+        />
 
-        <GameActivityArea>
+        <GameActivityArea data-testid="activity-area">
           {filteredWords.length > 0 ? (
             <>
+              <SessionStats>
+                {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
+                  <NumberedStar
+                    key={i}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+                  >
+                    <StarEmoji>⭐</StarEmoji>
+                    <StarNumber>{i + 1}</StarNumber>
+                  </NumberedStar>
+                ))}
+                {streak >= 10 && <PlusSign>+</PlusSign>}
+              </SessionStats>
+
               <AnimatePresence mode="wait">
                 <WordDisplay
                   key={currentWord}

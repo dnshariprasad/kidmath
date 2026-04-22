@@ -1,4 +1,5 @@
 import { StrictMode, lazy, Suspense, useState } from "react";
+import styled from "styled-components";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { HashRouter, Routes, Route } from "react-router-dom";
@@ -51,12 +52,19 @@ const NameRequiredRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+`;
+
 const LoadingState = () => (
-  <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50vh" }}>
+  <LoadingWrapper>
     <KidoText fontSize="xl" color="primary">
       Loading Magic...
     </KidoText>
-  </div>
+  </LoadingWrapper>
 );
 
 createRoot(document.getElementById("root")!).render(

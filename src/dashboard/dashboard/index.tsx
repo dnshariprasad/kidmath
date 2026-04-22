@@ -27,10 +27,10 @@ const Dashboard: React.FC = () => {
   const isMobileMenuOpen = useSelector((state: RootState) => state.alphabet.isMobileMenuOpen);
 
   return (
-    <LayoutContainer>
+    <LayoutContainer data-testid="view-dashboard">
       <Overlay $show={isMobileMenuOpen} onClick={() => dispatch(closeMobileMenu())} />
       <MainMenu />
-      <ContentContainer>
+      <ContentContainer data-testid="dashboard-content">
         <Outlet />
       </ContentContainer>
     </LayoutContainer>

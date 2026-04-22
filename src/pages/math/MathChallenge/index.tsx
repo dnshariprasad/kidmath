@@ -9,6 +9,11 @@ import {
   SettingsArea,
   GameLayout,
   GameActivityArea,
+  SessionStats,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../../../theme/globalStyles";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
 import { readText } from "../../../utils/index";
@@ -23,7 +28,7 @@ import Certificate from "../../../components/Certificate";
 
 export const MathChallenge: React.FC = () => {
   const dispatch = useDispatch();
-  const streak = useSelector((state: RootState) => state.alphabet.gameStats.math.streak);
+  const streak = useSelector((state: RootState) => state.alphabet.gameStats?.math?.streak ?? 0);
   const [maxDigits, setMaxDigits] = useState(1);
   const [operator, setOperator] = useState<"+" | "-" | "*">("+");
   const [num1, setNum1] = useState(0);
@@ -53,15 +58,6 @@ export const MathChallenge: React.FC = () => {
     setOptions(Array.from(newOptions).sort(() => Math.random() - 0.5));
     setFeedback(null);
   }, [maxDigits, operator]);
-
-  const handleFeelingLucky = () => {
-    const randomDigits = Math.floor(Math.random() * 3) + 1;
-    const operators: ("+" | "-" | "*")[] = ["+", "-", "*"];
-    const randomOp = operators[Math.floor(Math.random() * operators.length)];
-    setMaxDigits(randomDigits);
-    setOperator(randomOp);
-    readText("Math Surprise!");
-  };
 
   useEffect(() => {
     generateQuestion();
@@ -108,7 +104,7 @@ export const MathChallenge: React.FC = () => {
   ];
 
   return (
-    <PageContainer data-testid="page-math-challenge">
+    <PageContainer data-testid="view-counting">
       <GameLayout>
         <ChallengeHeader
           icon={Calculator}
@@ -117,9 +113,30 @@ export const MathChallenge: React.FC = () => {
           streak={streak}
         />
 
-        <SurpriseCard title="Math surprise?" onShuffle={handleFeelingLucky} />
+        <SurpriseCard
+          title="Certificate Progress"
+          subtitle={
+            streak < 10
+              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
+              : "Milestone reached! 🎉"
+          }
+        />
 
         <GameActivityArea data-testid="activity-area">
+          <SessionStats>
+            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
+              <NumberedStar
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+              >
+                <StarEmoji>⭐</StarEmoji>
+                <StarNumber>{i + 1}</StarNumber>
+              </NumberedStar>
+            ))}
+            {streak >= 10 && <PlusSign>+</PlusSign>}
+          </SessionStats>
           <AnimatePresence mode="wait">
             <MathExpression
               key={`${num1}-${num2}-${operator}`}

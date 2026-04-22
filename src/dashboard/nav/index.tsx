@@ -13,8 +13,6 @@ import {
   NavLeftSection,
   LogoIconContainer,
   AppNameText,
-  StatItem,
-  StatText,
   ArrowRight,
   BackItem,
 } from "./styles";
@@ -26,8 +24,6 @@ import {
   setFontSizeLevel,
 } from "../../store/slice/AlphabetSlice";
 import {
-  Star,
-  Flame,
   Menu,
   X,
   Balloon,
@@ -43,7 +39,6 @@ import {
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
-  const stats = useSelector((state: RootState) => state.alphabet.userStats);
   const isOpen = useSelector((state: RootState) => state.alphabet.isMobileMenuOpen);
   const isMuted = useSelector((state: RootState) => state.alphabet.isMuted);
   const themeMode = useSelector((state: RootState) => state.alphabet.theme);
@@ -84,17 +79,6 @@ const Navbar: React.FC = () => {
       </NavLeftSection>
 
       <UserSection>
-        <StatItem $color="#FBC531">
-          <Star size={20} fill="#FBC531" strokeWidth={2} />
-          <StatText>{stats.score}</StatText>
-        </StatItem>
-        {stats.streak > 0 && (
-          <StatItem $color="#FF7675">
-            <Flame size={20} fill="#FF7675" strokeWidth={2} />
-            <StatText>{stats.streak}</StatText>
-          </StatItem>
-        )}
-
         <MoreMenuWrapper ref={menuRef}>
           <IconButton onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}>
             <MoreVertical size={22} />

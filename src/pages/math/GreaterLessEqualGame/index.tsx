@@ -11,6 +11,11 @@ import {
   ConfigSection,
   ConfigSubTitle,
   GameActivityArea,
+  SessionStats,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../../../theme/globalStyles";
 import { readText } from "../../../utils/index";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
@@ -33,7 +38,9 @@ import Certificate from "../../../components/Certificate";
 
 export const GreaterLessEqualGame: React.FC = () => {
   const dispatch = useDispatch();
-  const streak = useSelector((state: RootState) => state.alphabet.gameStats.comparison.streak);
+  const streak = useSelector(
+    (state: RootState) => state.alphabet.gameStats?.comparison?.streak ?? 0,
+  );
   const [maxDigits, setMaxDigits] = useState(2);
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
@@ -46,12 +53,6 @@ export const GreaterLessEqualGame: React.FC = () => {
     setNum2(getRandomNumber(maxVal));
     setFeedback(null);
   }, [maxDigits]);
-
-  const handleFeelingLucky = () => {
-    const randomDigits = Math.floor(Math.random() * 3) + 1;
-    setMaxDigits(randomDigits);
-    readText("Greater Less Surprise!");
-  };
 
   useEffect(() => {
     resetGame();
@@ -95,7 +96,7 @@ export const GreaterLessEqualGame: React.FC = () => {
   ];
 
   return (
-    <PageContainer data-testid="page-greater-less-equal">
+    <PageContainer data-testid="view-comparison">
       <GameLayout>
         <ChallengeHeader
           icon={Scale}
@@ -104,9 +105,31 @@ export const GreaterLessEqualGame: React.FC = () => {
           streak={streak}
         />
 
-        <SurpriseCard title="Size surprise?" onShuffle={handleFeelingLucky} />
+        <SurpriseCard
+          title="Certificate Progress"
+          subtitle={
+            streak < 10
+              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
+              : "Milestone reached! 🎉"
+          }
+        />
 
-        <GameActivityArea>
+        <GameActivityArea data-testid="activity-area">
+          <SessionStats>
+            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
+              <NumberedStar
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+              >
+                <StarEmoji>⭐</StarEmoji>
+                <StarNumber>{i + 1}</StarNumber>
+              </NumberedStar>
+            ))}
+            {streak >= 10 && <PlusSign>+</PlusSign>}
+          </SessionStats>
+
           <AnimatePresence mode="wait">
             <NumberDisplay
               key={`${num1}-${num2}`}

@@ -25,10 +25,10 @@ export const CertificateContainer = styled(motion.div)`
   border-radius: 28px;
   position: relative;
   overflow-y: auto;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   gap: 10px;
+  border: 1px solid ${(props) => props.theme.colors.primary}15;
 
   /* Hide scrollbar */
   scrollbar-width: none;
@@ -150,7 +150,6 @@ export const Badge = styled.div`
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 5px 15px ${(props) => props.theme.colors.primary}40;
   position: relative;
 
   &::before {
@@ -210,7 +209,6 @@ export const QRCodePlaceholder = styled.div`
   justify-content: center;
   color: ${(props) => props.theme.colors.primary};
   z-index: 2;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 480px) {
     width: 45px;
@@ -268,7 +266,6 @@ export const CloseButton = styled.button`
   transition: all 0.2s ease;
   color: ${(props) => (props.theme.theme === "dark" ? "#cbd5e1" : "#64748b")};
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
   &:hover {
     background: ${(props) => (props.theme.theme === "dark" ? "#475569" : "#f1f5f9")};

@@ -11,6 +11,11 @@ import {
   ControlBar,
   GameLayout,
   GameActivityArea,
+  SessionStats,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../../../theme/globalStyles";
 import { readText } from "../../../utils/index";
 import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
@@ -25,7 +30,7 @@ import Certificate from "../../../components/Certificate";
 
 export const NumberSorter: React.FC = () => {
   const dispatch = useDispatch();
-  const streak = useSelector((state: RootState) => state.alphabet.gameStats.sorting.streak);
+  const streak = useSelector((state: RootState) => state.alphabet.gameStats?.sorting?.streak ?? 0);
   const [maxDigits, setMaxDigits] = useState(1);
   const [order, setOrder] = useState<"ascending" | "descending">("ascending");
   const [numbers, setNumbers] = useState<number[]>([]);
@@ -42,14 +47,6 @@ export const NumberSorter: React.FC = () => {
     setNumbers(newNumbers.sort(() => Math.random() - 0.5));
     setFeedback(null);
   }, [maxDigits]);
-
-  const handleFeelingLucky = () => {
-    const randomOrder = Math.random() > 0.5 ? "ascending" : "descending";
-    const randomDigits = Math.floor(Math.random() * 3) + 1;
-    setOrder(randomOrder);
-    setMaxDigits(randomDigits);
-    readText("Shuffle Surprise!");
-  };
 
   useEffect(() => {
     resetGame();
@@ -105,9 +102,31 @@ export const NumberSorter: React.FC = () => {
           streak={streak}
         />
 
-        <SurpriseCard title="Shuffle surprise?" onShuffle={handleFeelingLucky} />
+        <SurpriseCard
+          title="Certificate Progress"
+          subtitle={
+            streak < 10
+              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
+              : "Milestone reached! 🎉"
+          }
+        />
 
-        <GameActivityArea>
+        <GameActivityArea data-testid="activity-area">
+          <SessionStats>
+            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
+              <NumberedStar
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+              >
+                <StarEmoji>⭐</StarEmoji>
+                <StarNumber>{i + 1}</StarNumber>
+              </NumberedStar>
+            ))}
+            {streak >= 10 && <PlusSign>+</PlusSign>}
+          </SessionStats>
+
           <KidoText fontSize="xl" color="textSecondary" fontWeight="bold">
             Sort in {order} order
           </KidoText>

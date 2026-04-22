@@ -8,6 +8,11 @@ import {
   ControlBar,
   GameLayout,
   GameActivityArea,
+  SessionStats,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../../../theme/globalStyles";
 import KidButton from "../../../components/KidButton";
 import { KidoText } from "../../../components/KidoText";
@@ -31,7 +36,9 @@ import { HintIconWrapper, ChallengeTextContainer, WordDisplay } from "./styles";
 
 const MissingLettersChallenge = () => {
   const dispatch = useDispatch();
-  const streak = useSelector((state: RootState) => state.alphabet.gameStats.missing_letters.streak);
+  const streak = useSelector(
+    (state: RootState) => state.alphabet.gameStats?.missing_letters?.streak ?? 0,
+  );
   const [randomString, setRandomString] = useState<string>("");
   const [randomStringWithMissingLetter, setRandomStringWithMissingLetter] = useState<string>("");
   const [inputValue, setInputValue] = useState("");
@@ -54,16 +61,9 @@ const MissingLettersChallenge = () => {
     setShowHint(false);
   }, [complexity]);
 
-  const handleFeelingLucky = () => {
-    const complexites: ("Easy" | "Medium" | "Hard")[] = ["Easy", "Medium", "Hard"];
-    const randomComp = complexites[Math.floor(Math.random() * complexites.length)];
-    setComplexity(randomComp);
-    readText("Word Surprise!");
-  };
-
   useEffect(() => {
     generateChallenge();
-  }, [complexity]);
+  }, [generateChallenge]);
 
   useEffect(() => {
     if (streak > 0 && streak % 10 === 0) {
@@ -97,7 +97,7 @@ const MissingLettersChallenge = () => {
   ];
 
   return (
-    <PageContainer data-testid="page-missing-letters">
+    <PageContainer data-testid="view-missing-letters">
       <GameLayout>
         <ChallengeHeader
           icon={Type}
@@ -106,9 +106,31 @@ const MissingLettersChallenge = () => {
           streak={streak}
         />
 
-        <SurpriseCard title="Word surprise?" onShuffle={handleFeelingLucky} />
+        <SurpriseCard
+          title="Certificate Progress"
+          subtitle={
+            streak < 10
+              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
+              : "Milestone reached! 🎉"
+          }
+        />
 
         <GameActivityArea data-testid="activity-area">
+          <SessionStats>
+            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
+              <NumberedStar
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+              >
+                <StarEmoji>⭐</StarEmoji>
+                <StarNumber>{i + 1}</StarNumber>
+              </NumberedStar>
+            ))}
+            {streak >= 10 && <PlusSign>+</PlusSign>}
+          </SessionStats>
+
           <HintIconWrapper
             $showHint={showHint}
             whileHover={{ scale: 1.1 }}

@@ -45,10 +45,7 @@ export const Card = styled.div`
   overflow: hidden;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow:
-      0 6px 15px rgba(0, 0, 0, 0.05),
-      0 12px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
     border-color: ${(props) => props.theme.colors.primary}30;
   }
 
@@ -62,7 +59,7 @@ export const StyledInput = styled.input<{ width?: string }>`
   padding: 10px 20px;
   margin: 15px 0;
   background: ${(props) => props.theme.colors.surface};
-  border: 3px solid ${(props) => props.theme.colors.primary}20;
+  border: 3px solid ${(props) => props.theme.colors.primary}15;
   border-radius: 16px;
   font-size: ${(props) => props.theme.fontSize.xl};
   font-weight: 800;
@@ -80,10 +77,8 @@ export const StyledInput = styled.input<{ width?: string }>`
   }
 
   &:focus {
-    background: ${(props) => props.theme.colors.surface};
     border-color: ${(props) => props.theme.colors.primary};
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px ${(props) => props.theme.colors.primary}15;
+    transform: translateY(-2px);
   }
 
   @media (max-width: 768px) {
@@ -118,14 +113,12 @@ export const Tag = styled.span<{
   min-height: 44px;
   border: 1px solid
     ${(props) => (props.$isActive ? props.theme.colors.primary : props.theme.colors.primary + "10")};
-  ${(props) => (props.$isActive ? elevation2 : "none")}
 
   &:hover {
     background: ${(props) =>
       props.$isActive ? props.theme.colors.primary : props.theme.colors.primary + "15"};
     color: ${(props) => (props.$isActive ? "white" : props.theme.colors.primary)};
     transform: translateY(-2px);
-    ${elevation2}
   }
 
   &:active {
@@ -273,7 +266,11 @@ export const TitleArea = styled.div`
 `;
 
 export const GhostHeader = styled(TitleArea)`
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  background: linear-gradient(
+    135deg,
+    ${(props) => props.theme.colors.primary} 0%,
+    ${(props) => props.theme.colors.primary}CC 100%
+  );
   border: none;
   position: relative;
   overflow: hidden;

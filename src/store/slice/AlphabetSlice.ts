@@ -63,17 +63,21 @@ const initialState: KiddooState = {
     streak: 0,
     lastPlayed: null,
   },
-  gameStats: persistedState?.gameStats || {
-    math: { ...initialGameStats },
-    spelling: { ...initialGameStats },
-    missing_letters: { ...initialGameStats },
-    comparison: { ...initialGameStats },
-    sorting: { ...initialGameStats },
+  gameStats: {
+    math: { ...initialGameStats, ...persistedState?.gameStats?.math },
+    spelling: { ...initialGameStats, ...persistedState?.gameStats?.spelling },
+    missing_letters: { ...initialGameStats, ...persistedState?.gameStats?.missing_letters },
+    comparison: { ...initialGameStats, ...persistedState?.gameStats?.comparison },
+    sorting: { ...initialGameStats, ...persistedState?.gameStats?.sorting },
+    alphabet: { ...initialGameStats, ...persistedState?.gameStats?.alphabet },
+    sight_words: { ...initialGameStats, ...persistedState?.gameStats?.sight_words },
+    sudoku: { ...initialGameStats, ...persistedState?.gameStats?.sudoku },
+    alphabet_hindi: { ...initialGameStats, ...persistedState?.gameStats?.alphabet_hindi },
   },
   isMobileMenuOpen: false,
   isMuted: persistedState?.isMuted ?? false,
   theme: persistedState?.theme || "light",
-  fontSizeLevel: persistedState?.fontSizeLevel || "medium",
+  fontSizeLevel: persistedState?.fontSizeLevel || "large",
   userName: persistedState?.userName || "",
 };
 
@@ -149,6 +153,10 @@ const kiddooSlice = createSlice({
         missing_letters: { score: 0, streak: 0 },
         comparison: { score: 0, streak: 0 },
         sorting: { score: 0, streak: 0 },
+        alphabet: { score: 0, streak: 0 },
+        sight_words: { score: 0, streak: 0 },
+        sudoku: { score: 0, streak: 0 },
+        alphabet_hindi: { score: 0, streak: 0 },
       };
       saveState(state);
     },

@@ -11,13 +11,17 @@ import {
   ConfigSection,
   ConfigSubTitle,
   GameActivityArea,
+  SessionStats,
+  NumberedStar,
+  StarEmoji,
+  StarNumber,
+  PlusSign,
 } from "../../../theme/globalStyles";
 import SpeakIcon from "../../../components/SpeakIcon";
 import NextIcon from "../../../components/NextIcon";
 import PreviousIcon from "../../../components/PreviousIcon";
 import { Languages } from "lucide-react";
 import { SurpriseCard } from "../../../components/SurpriseCard";
-import { readText } from "../../../utils/index";
 import {
   cha,
   hindiCombinedCharacters,
@@ -35,7 +39,9 @@ import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 
 const AlphabetHindiChallenge = () => {
-  const streak = useSelector((state: RootState) => state.alphabet.userStats.streak);
+  const streak = useSelector(
+    (state: RootState) => state.alphabet.gameStats?.alphabet_hindi?.streak ?? 0,
+  );
   const [index, setIndex] = useState(0);
   const [filter, setFilter] = useState<"all" | "vowels" | "consonants">("all");
 
@@ -61,12 +67,6 @@ const AlphabetHindiChallenge = () => {
   const handlePrev = () =>
     setIndex((prev) => (prev - 1 + filteredAlphabet.length) % filteredAlphabet.length);
 
-  const handleFeelingLucky = () => {
-    const randomIndex = Math.floor(Math.random() * filteredAlphabet.length);
-    setIndex(randomIndex);
-    readText("Hindi Surprise!");
-  };
-
   const filterOptions = [
     { value: "all", label: "All Characters" },
     { value: "vowels", label: "Vowels (Svar)" },
@@ -74,7 +74,7 @@ const AlphabetHindiChallenge = () => {
   ];
 
   return (
-    <PageContainer data-testid="page-hindi-alphabet">
+    <PageContainer data-testid="view-hindi">
       <GameLayout>
         <ChallengeHeader
           icon={Languages}
@@ -83,9 +83,31 @@ const AlphabetHindiChallenge = () => {
           streak={streak}
         />
 
-        <SurpriseCard title="Hindi surprise?" onShuffle={handleFeelingLucky} />
+        <SurpriseCard
+          title="Certificate Progress"
+          subtitle={
+            streak < 10
+              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
+              : "Milestone reached! 🎉"
+          }
+        />
 
-        <GameActivityArea>
+        <GameActivityArea data-testid="activity-area">
+          <SessionStats>
+            {Array.from({ length: streak % 10 || (streak > 0 ? 10 : 0) }).map((_, i) => (
+              <NumberedStar
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", damping: 10, delay: i * 0.05 }}
+              >
+                <StarEmoji>⭐</StarEmoji>
+                <StarNumber>{i + 1}</StarNumber>
+              </NumberedStar>
+            ))}
+            {streak >= 10 && <PlusSign>+</PlusSign>}
+          </SessionStats>
+
           <AnimatePresence mode="wait">
             <HindiDisplay
               key={currentLetter}

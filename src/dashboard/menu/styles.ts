@@ -1,26 +1,42 @@
 import styled from "styled-components";
 
 export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
-  flex: 0 0 300px; /* Fixed width on desktop */
+  flex: 0 0 300px;
   width: 300px;
-  background-color: ${(props) => props.theme.colors.background};
-  padding: 0 16px 40px; /* Top padding handled by layout container */
+  background-color: ${(props) => props.theme.colors.surface};
+  padding: 16px;
   box-sizing: border-box;
-  height: 100%;
-  position: relative; /* Part of flex flow on desktop */
+  height: calc(100% - 24px);
+  margin-left: 24px;
+  margin-bottom: 24px;
+  position: relative;
   overflow-y: auto;
   transition: all 0.3s ease;
-  border-right: 1px solid ${(props) => props.theme.colors.primary}10;
+  border-radius: 32px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    0 8px 24px rgba(0, 0, 0, 0.04);
+  border: 1px solid ${(props) => props.theme.colors.primary}15;
   z-index: 10;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${(props) => props.theme.colors.primary}20;
+    border-radius: 10px;
+  }
 
   @media (max-width: 768px) {
     position: fixed;
-    left: ${(props) => (props.$isOpen ? "0" : "-100%")};
-    top: 70px;
-    width: 300px;
-    height: calc(100vh - 70px);
-    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
-    background-color: ${(props) => props.theme.colors.background};
+    left: ${(props) => (props.$isOpen ? "16px" : "-100%")};
+    top: 86px;
+    width: calc(100% - 32px);
+    max-width: 300px;
+    height: calc(100vh - 110px);
+    margin: 0;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 24px;
     z-index: 1000;
   }
 `;

@@ -62,17 +62,6 @@ export const AppNameText = styled.span`
   letter-spacing: -1px;
 `;
 
-export const StatItem = styled.div<{ $color: string }>`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: ${(props) => props.$color};
-`;
-
-export const StatText = styled.span`
-  font-weight: 800;
-`;
-
 export const UserSection = styled.div`
   display: flex;
   align-items: center;

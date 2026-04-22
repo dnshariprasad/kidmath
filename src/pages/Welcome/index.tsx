@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import KidButton from "../../components/KidButton";
 import { PageContainer, PageHeader, PageTitle, PageSubtitle } from "../../theme/globalStyles";
 import { Calculator, Type, Languages, Trophy } from "lucide-react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 import {
   DashboardGrid,
   CategoryCard,
@@ -20,6 +22,7 @@ import {
 
 const Welcome: React.FC = () => {
   const navigate = useNavigate();
+  const userName = useSelector((state: RootState) => state.alphabet.userName);
 
   const categories = [
     {
@@ -46,10 +49,10 @@ const Welcome: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
-      <PageHeader>
+    <PageContainer data-testid="view-welcome">
+      <PageHeader data-testid="welcome-header">
         <PageTitle>
-          Hi there!{" "}
+          Hi, {userName || "there"}!{" "}
           <WavingEmoji
             animate={{ rotate: [0, 20, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
@@ -62,7 +65,7 @@ const Welcome: React.FC = () => {
         </PageSubtitle>
       </PageHeader>
 
-      <DashboardGrid>
+      <DashboardGrid data-testid="category-grid">
         {categories.map((cat, i) => (
           <CategoryCard
             key={cat.title}
@@ -80,20 +83,20 @@ const Welcome: React.FC = () => {
         ))}
       </DashboardGrid>
 
-      <PromoCard>
+      <PromoCard data-testid="promo-section">
         <PromoHeader>
           <Trophy size={48} color="#FFEAA7" />
-          <PromoTitle>Quick Challenge!</PromoTitle>
+          <PromoTitle>Earn Your Awards!</PromoTitle>
         </PromoHeader>
         <PromoDesc>
-          Feeling lucky? Try the "Missing Letters" challenge and win extra stars! ✨
+          Reach a 10-streak in any challenge to win a personalized Achievement Certificate! 🏆✨
         </PromoDesc>
         <PromoActionArea>
           <WhiteKidButtonWrapper>
             <KidButton
-              title="Start Challenge"
+              title="Choose a Challenge"
               variant="secondary"
-              onClick={() => navigate("/missing_letters")}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             />
           </WhiteKidButtonWrapper>
         </PromoActionArea>
