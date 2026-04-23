@@ -95,6 +95,7 @@ export const QuestionNumber = styled.div`
   color: ${(props) => props.theme.colors.textSecondary};
   opacity: 0.5;
   text-transform: uppercase;
+  font-family: ${(props) => props.theme.fonts.primary};
 
   @media (max-width: 600px) {
     top: 20px;
@@ -113,6 +114,7 @@ export const SubjectBadge = styled.div<{ $type: string }>`
   letter-spacing: 2px;
   padding: 6px 16px;
   border-radius: 12px;
+  font-family: ${(props) => props.theme.fonts.primary};
   background: ${(props) => {
     switch (props.$type) {
       case "math":
@@ -183,8 +185,8 @@ export const BigDisplay = styled.div<{ $fontSize?: string }>`
   font-weight: 900;
   color: ${(props) => props.theme.colors.textPrimary};
   text-align: center;
-  letter-spacing: 4px;
-  font-family: ${(props) => props.theme.fonts.secondary};
+  letter-spacing: 2px;
+  font-family: ${(props) => props.theme.fonts.primary};
 
   @media (max-width: 600px) {
     font-size: ${(props) => (props.$fontSize ? "1.5rem" : "2rem")};
@@ -198,16 +200,16 @@ export const LogicDisplay = styled(BigDisplay)`
 `;
 
 export const ComparisonGrid = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
   width: 100%;
-  flex-wrap: wrap;
+  max-width: 700px;
+  margin: 0 auto;
 
   @media (max-width: 600px) {
-    gap: 20px;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 `;
 
@@ -228,6 +230,7 @@ export const ChoiceCard = styled(motion.div)<{ $selected: boolean; $color?: stri
   cursor: pointer;
   min-width: 160px;
   text-align: center;
+  font-family: ${(props) => props.theme.fonts.primary};
   box-shadow: ${(props) =>
     props.$selected ? `0 10px 25px -5px ${props.theme.colors.primary}50` : "none"};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -404,6 +407,7 @@ export const GradeBadge = styled(motion.div)<{ $score: number }>`
   letter-spacing: 2px;
   margin-top: 20px;
   border: 2px solid ${(props) => (props.$score >= 8 ? "#FFD700" : "#94A3B8")}40;
+  font-family: ${(props) => props.theme.fonts.primary};
 `;
 
 export const ReviewHeader = styled(KidoText)`
