@@ -166,8 +166,8 @@ export const QuestionContent = styled.div`
   }
 `;
 
-export const BigDisplay = styled.div`
-  font-size: clamp(2rem, 5vw, 3.5rem);
+export const BigDisplay = styled.div<{ $fontSize?: string }>`
+  font-size: ${(props) => props.$fontSize || "clamp(2rem, 5vw, 3.5rem)"};
   font-weight: 900;
   color: ${(props) => props.theme.colors.textPrimary};
   text-align: center;
@@ -175,7 +175,7 @@ export const BigDisplay = styled.div`
   font-family: ${(props) => props.theme.fonts.secondary};
 
   @media (max-width: 600px) {
-    font-size: 2rem;
+    font-size: ${(props) => (props.$fontSize ? "1.5rem" : "2rem")};
     letter-spacing: 2px;
   }
 `;

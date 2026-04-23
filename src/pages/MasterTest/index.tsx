@@ -15,6 +15,7 @@ import {
   Languages,
   XCircle,
   Brain,
+  ArrowUpDown,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import Certificate from "../../components/Certificate";
@@ -57,7 +58,14 @@ import ChallengeHeader from "../../components/ChallengeHeader";
 import { TRANSLATIONS } from "../../constants/translations";
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
 
-type QuestionType = "math" | "spelling" | "missing_letter" | "comparison" | "hindi" | "logic";
+type QuestionType =
+  | "math"
+  | "spelling"
+  | "missing_letter"
+  | "comparison"
+  | "hindi"
+  | "logic"
+  | "sorting";
 
 interface Question {
   id: number;
@@ -100,6 +108,8 @@ const MasterTest: React.FC = () => {
         return t.math_multiplication;
       case "math_test":
         return t.math_mathHero;
+      case "math_sorting":
+        return t.math_sorting;
       case "english_missing_letters":
         return t.eng_missingLetters;
       case "english_spelling":
@@ -124,6 +134,7 @@ const MasterTest: React.FC = () => {
       "comparison",
       "hindi",
       "logic",
+      "sorting",
     ];
     if (
       testId === "math_addition" ||
@@ -132,7 +143,8 @@ const MasterTest: React.FC = () => {
     ) {
       allowedTypes = ["math"];
     }
-    if (testId === "math_test") allowedTypes = ["math", "comparison"];
+    if (testId === "math_test") allowedTypes = ["math", "comparison", "sorting"];
+    if (testId === "math_sorting") allowedTypes = ["sorting"];
     if (testId === "english_missing_letters") allowedTypes = ["missing_letter"];
     if (testId === "english_spelling") allowedTypes = ["spelling"];
     if (testId === "spelling_test") allowedTypes = ["spelling", "missing_letter"];
@@ -254,6 +266,26 @@ const MasterTest: React.FC = () => {
         while (opts.size < 4)
           opts.add(hindiLetters[Math.floor(Math.random() * hindiLetters.length)]);
         q.data = { letter, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
+      } else if (type === "sorting") {
+        const nums: number[] = [];
+        while (nums.length < 3) {
+          const n = Math.floor(Math.random() * 20) + 1;
+          if (!nums.includes(n)) nums.push(n);
+        }
+        const isAsc = Math.random() > 0.5;
+        q.prompt = isAsc ? t.math_sortAsc : t.math_sortDesc;
+        const sorted = isAsc ? [...nums].sort((a, b) => a - b) : [...nums].sort((a, b) => b - a);
+        q.correctAnswer = sorted.join(", ");
+
+        const opts = new Set<string>([q.correctAnswer]);
+        while (opts.size < 4) {
+          const shuffled = [...nums].sort(() => Math.random() - 0.5);
+          opts.add(shuffled.join(", "));
+        }
+        q.data = {
+          displayWord: nums.join("  •  "),
+          optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
+        };
       }
 
       newQuestions.push(q as Question);
@@ -337,6 +369,7 @@ const MasterTest: React.FC = () => {
               {q.type === "comparison" && <Scale size={40} />}
               {q.type === "hindi" && <Languages size={40} />}
               {q.type === "logic" && <Brain size={40} />}
+              {q.type === "sorting" && <ArrowUpDown size={40} />}
             </IconWrapper>
             <PromptText fontSize="clamp(1.2rem, 4vw, 1.75rem)" fontWeight={900} color="textPrimary">
               {q.prompt}
@@ -362,6 +395,10 @@ const MasterTest: React.FC = () => {
           {q.type === "missing_letter" && q.data && <BigDisplay>{q.data.displayWord}</BigDisplay>}
 
           {q.type === "logic" && q.data && <LogicDisplay>{q.data.displayWord}</LogicDisplay>}
+
+          {q.type === "sorting" && q.data && (
+            <BigDisplay $fontSize="clamp(2rem, 8vw, 4rem)">{q.data.displayWord}</BigDisplay>
+          )}
 
           {q.data.optionsStrings && (
             <ComparisonGrid>

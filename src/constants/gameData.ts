@@ -121,6 +121,14 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
       subject: "Math",
     },
     {
+      id: "math_sorting",
+      title: "Sorting",
+      desc: "Order numbers (Asc/Desc)",
+      iconName: "ArrowUpDown",
+      path: "/test/math_sorting",
+      subject: "Math",
+    },
+    {
       id: "math_test",
       title: "Math Hero",
       desc: "Mix of + , - , x",

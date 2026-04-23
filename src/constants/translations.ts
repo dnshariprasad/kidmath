@@ -60,6 +60,7 @@ export const TRANSLATIONS = {
     // Math (math_)
     math_mathMagic: "Math Magic",
     math_mathHero: "Math Hero",
+    math_sorting: "Sorting",
     math_addition: "Addition",
     math_subtraction: "Subtraction",
     math_multiplication: "Multiplication",
@@ -67,6 +68,8 @@ export const TRANSLATIONS = {
     math_biggestNumber: "Tap the biggest number!",
     math_smallestNumber: "Tap the smallest number!",
     math_solveMath: "Solve the math!",
+    math_sortAsc: "Sort these numbers from Smallest to Biggest!",
+    math_sortDesc: "Sort these numbers from Biggest to Smallest!",
 
     // English (eng_)
     eng_spellingHero: "Spelling Hero",
