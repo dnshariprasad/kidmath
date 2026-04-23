@@ -53,6 +53,7 @@ import {
   CardProgressBar,
   CardProgressFill,
   LogicDisplay,
+  GradeBadge,
 } from "./styles";
 import ChallengeHeader from "../../components/ChallengeHeader";
 import { TRANSLATIONS } from "../../constants/translations";
@@ -477,6 +478,21 @@ const MasterTest: React.FC = () => {
               <ScoreValue fontSize="4rem" fontWeight={900} color="primary">
                 {score} / 10
               </ScoreValue>
+
+              <GradeBadge
+                $score={score}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                {score === 10
+                  ? "GRAND MASTER"
+                  : score === 9
+                    ? "LEGEND"
+                    : score === 8
+                      ? "PRODIGY"
+                      : "KIDDOO HERO"}
+              </GradeBadge>
 
               <FeedbackText fontSize="2rem" fontWeight={800}>
                 {score >= 8 ? t.com_genius : t.com_goodEffort}

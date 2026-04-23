@@ -47,10 +47,22 @@ export const QuestionCard = styled(Card)<{ $type: string }>`
   background: ${(props) => props.theme.colors.surface};
   border-radius: 32px;
   border: 1px solid ${(props) => props.theme.colors.primary}15;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
-
   overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+      ${(props) => props.theme.colors.primary}10 1px,
+      transparent 1px
+    );
+    background-size: 20px 20px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
 
   @media (max-width: 600px) {
     padding: 70px 20px 30px;
@@ -202,27 +214,52 @@ export const ComparisonGrid = styled.div`
 export const ChoiceCard = styled(motion.div)<{ $selected: boolean; $color?: string }>`
   background: ${(props) =>
     props.$selected
-      ? props.$color || props.theme.colors.primary
-      : props.theme.colors.surfaceVariant + "30"};
+      ? `linear-gradient(135deg, ${props.$color || props.theme.colors.primary}, ${
+          props.$color || props.theme.colors.primary
+        }DD)`
+      : props.theme.colors.surfaceVariant + "15"};
   color: ${(props) => (props.$selected ? "white" : props.theme.colors.textPrimary)};
-  padding: 20px 40px;
-  border-radius: 20px;
-  font-size: 2rem;
+  padding: 24px 48px;
+  border-radius: 24px;
+  font-size: 2.2rem;
   font-weight: 900;
   border: 3px solid
     ${(props) => (props.$selected ? props.$color || props.theme.colors.primary : "transparent")};
   cursor: pointer;
-  min-width: 150px;
+  min-width: 160px;
   text-align: center;
-  box-shadow: ${(props) => (props.$selected ? props.theme.shadows.md : "none")};
-  transition: all 0.2s ease;
+  box-shadow: ${(props) =>
+    props.$selected ? `0 10px 25px -5px ${props.theme.colors.primary}50` : "none"};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+    opacity: ${(props) => (props.$selected ? 1 : 0)};
+  }
 
   &:hover {
     background: ${(props) =>
       props.$selected
-        ? props.$color || props.theme.colors.primary
-        : props.theme.colors.surfaceVariant + "60"};
-    transform: translateY(-4px);
+        ? `linear-gradient(135deg, ${props.$color || props.theme.colors.primary}, ${
+            props.$color || props.theme.colors.primary
+          }DD)`
+        : props.theme.colors.surfaceVariant + "25"};
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: ${(props) =>
+      props.$selected
+        ? `0 15px 30px -5px ${props.theme.colors.primary}60`
+        : "0 8px 20px -5px rgba(0,0,0,0.1)"};
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+    padding: 18px;
+    font-size: 1.75rem;
   }
 `;
 
@@ -271,16 +308,21 @@ export const ReviewList = styled.div`
 
 export const ReviewItem = styled.div<{ $correct: boolean }>`
   background: ${(props) =>
-    props.$correct ? props.theme.colors.success + "10" : props.theme.colors.warning + "10"};
+    props.$correct ? props.theme.colors.success + "08" : props.theme.colors.warning + "08"};
   border: 1px solid
     ${(props) =>
-      props.$correct ? props.theme.colors.success + "30" : props.theme.colors.warning + "30"};
-  padding: 15px 20px;
-  border-radius: 16px;
+      props.$correct ? props.theme.colors.success + "20" : props.theme.colors.warning + "20"};
+  padding: 24px;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   text-align: left;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.01);
+  }
 `;
 
 export const CorrectionRow = styled.div`
@@ -321,6 +363,47 @@ export const ResultBox = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: ${(props) => props.theme.colors.surface};
+  padding: 60px;
+  border-radius: 48px;
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.15);
+  border: 1px solid ${(props) => props.theme.colors.primary}10;
+  max-width: 800px;
+  width: 90%;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      ${(props) => props.theme.colors.primary}05 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  @media (max-width: 600px) {
+    padding: 40px 20px;
+  }
+`;
+
+export const GradeBadge = styled(motion.div)<{ $score: number }>`
+  padding: 12px 30px;
+  border-radius: 100px;
+  background: ${(props) => (props.$score >= 8 ? "#FFD700" : "#94A3B8")}20;
+  color: ${(props) => (props.$score >= 8 ? "#D97706" : "#475569")};
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 20px;
+  border: 2px solid ${(props) => (props.$score >= 8 ? "#FFD700" : "#94A3B8")}40;
 `;
 
 export const ReviewHeader = styled(KidoText)`
@@ -348,10 +431,19 @@ export const ActionsGrid = styled.div`
 `;
 
 export const ReviewOverlayBox = styled(motion.div)`
-  width: 100%;
+  width: 95%;
+  max-width: 900px;
+  background: ${(props) => props.theme.colors.surface};
+  padding: 50px;
+  border-radius: 48px;
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 600px) {
+    padding: 30px 15px;
+  }
 `;
 
 export const ReviewSubHeader = styled(KidoText)`
