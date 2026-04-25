@@ -1,0 +1,1 @@
+import{n as i,A as t,ai as a,K as r}from"./index-D3dMVveu.js";const o=({feedback:e,fontSize:s="lg"})=>i.jsx(t,{children:e&&i.jsx(a,{initial:{y:20,opacity:0},animate:{y:0,opacity:1},exit:{y:-20,opacity:0},children:i.jsx(r,{color:e.isCorrect?"success":"accent",fontSize:s,fontWeight:"bold",children:e.message})})});export{o as F};
