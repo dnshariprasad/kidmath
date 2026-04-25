@@ -175,166 +175,186 @@ const MasterTest: React.FC = () => {
 
     const hindiLetters = ["अ", "आ", "इ", "ई", "उ", "ऊ", "ए", "ऐ", "ओ", "औ", "क", "ख", "ग", "घ"];
 
+    const seenSignatures = new Set<string>();
+
     for (let i = 1; i <= 10; i++) {
-      const type = allowedTypes[Math.floor(Math.random() * allowedTypes.length)];
-      const q: Partial<Question> = { id: i, type };
+      let q: Partial<Question> = {};
+      let attempts = 0;
+      let signature = "";
 
-      if (type === "math") {
-        let maxNum = 10;
-        if (complexity === "Medium") maxNum = 20;
-        if (complexity === "Hard") maxNum = 50;
+      while (attempts < 20) {
+        const type = allowedTypes[Math.floor(Math.random() * allowedTypes.length)];
+        q = { id: i, type };
 
-        const n1 = Math.floor(Math.random() * maxNum) + 1;
-        const n2 = Math.floor(Math.random() * maxNum) + 1;
+        if (type === "math") {
+          let maxNum = 10;
+          if (complexity === "Medium") maxNum = 20;
+          if (complexity === "Hard") maxNum = 50;
 
-        let op = "+";
-        if (testId === "math_addition") op = "+";
-        else if (testId === "math_subtraction") op = "-";
-        else if (testId === "math_multiplication") op = "*";
-        else {
-          const ops = ["+", "-"];
-          if (
-            (testId === "math_test" || !testId || testId === "math_multiplication") &&
-            complexity !== "Easy"
-          ) {
-            ops.push("*");
+          const n1 = Math.floor(Math.random() * maxNum) + 1;
+          const n2 = Math.floor(Math.random() * maxNum) + 1;
+
+          let op = "+";
+          if (testId === "math_addition") op = "+";
+          else if (testId === "math_subtraction") op = "-";
+          else if (testId === "math_multiplication") op = "*";
+          else {
+            const ops = ["+", "-"];
+            if (
+              (testId === "math_test" || !testId || testId === "math_multiplication") &&
+              complexity !== "Easy"
+            ) {
+              ops.push("*");
+            }
+            op = ops[Math.floor(Math.random() * ops.length)];
           }
-          op = ops[Math.floor(Math.random() * ops.length)];
+
+          let num1_final = n1;
+          let num2_final = n2;
+          let ans = 0;
+
+          if (op === "+") {
+            ans = n1 + n2;
+          } else if (op === "-") {
+            num1_final = Math.max(n1, n2);
+            num2_final = Math.min(n1, n2);
+            ans = num1_final - num2_final;
+          } else {
+            let multMax = 5;
+            if (complexity === "Medium") multMax = 6;
+            if (complexity === "Hard") multMax = 10;
+            num1_final = Math.floor(Math.random() * multMax) + 1;
+            num2_final = Math.floor(Math.random() * multMax) + 1;
+            ans = num1_final * num2_final;
+          }
+
+          signature = `math-${num1_final}${op}${num2_final}`;
+          q.prompt = t.math_solveMath;
+          q.correctAnswer = ans.toString();
+          const opts = new Set<string>([q.correctAnswer]);
+          while (opts.size < 4) {
+            const off = Math.floor(Math.random() * 5) + 1;
+            opts.add((Math.random() > 0.5 ? ans + off : Math.max(0, ans - off)).toString());
+          }
+          q.data = {
+            n1: num1_final,
+            n2: num2_final,
+            op,
+            optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
+          };
+        } else if (type === "spelling") {
+          const word = getRandomWord(words).toUpperCase();
+          signature = `spelling-${word}`;
+          q.prompt = t.eng_tapTheWord;
+          q.correctAnswer = word;
+          const opts = new Set<string>([word]);
+          while (opts.size < 4) opts.add(getRandomWord(words).toUpperCase());
+          q.data = { word, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
+        } else if (type === "missing_letter") {
+          const word = getRandomWord(words).toUpperCase();
+          const missingIndex = Math.floor(Math.random() * word.length);
+          const displayWord = word.split("");
+          const actualLetter = displayWord[missingIndex];
+          displayWord[missingIndex] = "_";
+          signature = `missing-${word}-${missingIndex}`;
+          q.prompt = t.eng_chooseMissing;
+          q.correctAnswer = actualLetter;
+          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const opts = new Set<string>([actualLetter]);
+          while (opts.size < 4) opts.add(alphabet[Math.floor(Math.random() * 26)]);
+          q.data = {
+            displayWord: displayWord.join(""),
+            word,
+            optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
+          };
+        } else if (type === "comparison") {
+          const nums: number[] = [];
+          let maxComp = 20;
+          if (complexity === "Medium") maxComp = 50;
+          if (complexity === "Hard") maxComp = 100;
+
+          while (nums.length < 4) {
+            const n = Math.floor(Math.random() * maxComp);
+            if (!nums.includes(n)) nums.push(n);
+          }
+          const findSmallest = Math.random() > 0.5;
+          signature = `comp-${nums.sort().join(",")}-${findSmallest}`;
+          q.prompt = findSmallest ? t.math_smallestNumber : t.math_biggestNumber;
+          q.correctAnswer = findSmallest
+            ? Math.min(...nums).toString()
+            : Math.max(...nums).toString();
+          q.data = { optionsStrings: nums.map(String) };
+        } else if (type === "logic") {
+          const patterns = [
+            { sequence: ["🍎", "🍌", "🍎"], next: "🍌" },
+            { sequence: ["🐶", "🐱", "🐶"], next: "🐱" },
+            { sequence: ["1", "2", "1"], next: "2" },
+            { sequence: ["⭐", "🌙", "⭐"], next: "🌙" },
+            { sequence: ["🔴", "🔵", "🔴"], next: "🔵" },
+            { sequence: ["🚗", "🚕", "🚗"], next: "🚕" },
+            { sequence: ["🍦", "🍩", "🍦"], next: "🍩" },
+          ];
+          const p = patterns[Math.floor(Math.random() * patterns.length)];
+          signature = `logic-${p.sequence.join("")}`;
+          q.prompt = t.log_whatNext;
+          q.correctAnswer = p.next;
+          const opts = new Set<string>([p.next]);
+          while (opts.size < 4) {
+            const randomNext = patterns[Math.floor(Math.random() * patterns.length)].next;
+            opts.add(randomNext);
+          }
+          q.data = {
+            displayWord: p.sequence.join(" ") + " ?",
+            optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
+          };
+        } else if (type === "hindi") {
+          const letter = hindiLetters[Math.floor(Math.random() * hindiLetters.length)];
+          signature = `hindi-${letter}`;
+          q.prompt = t.hindi_tapLetter;
+          q.correctAnswer = letter;
+          const opts = new Set<string>([letter]);
+          while (opts.size < 4)
+            opts.add(hindiLetters[Math.floor(Math.random() * hindiLetters.length)]);
+          q.data = { letter, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
+        } else if (type === "sorting") {
+          const nums: number[] = [];
+          let sortCount = 3;
+          let sortMax = 10;
+          if (complexity === "Medium") {
+            sortCount = 4;
+            sortMax = 20;
+          }
+          if (complexity === "Hard") {
+            sortCount = 5;
+            sortMax = 50;
+          }
+
+          while (nums.length < sortCount) {
+            const n = Math.floor(Math.random() * sortMax) + 1;
+            if (!nums.includes(n)) nums.push(n);
+          }
+          const isAsc = Math.random() > 0.5;
+          signature = `sort-${nums.sort().join(",")}-${isAsc}`;
+          q.prompt = isAsc ? t.math_sortAsc : t.math_sortDesc;
+          const sorted = isAsc ? [...nums].sort((a, b) => a - b) : [...nums].sort((a, b) => b - a);
+          q.correctAnswer = sorted.join(", ");
+
+          const opts = new Set<string>([q.correctAnswer]);
+          while (opts.size < 4) {
+            const shuffled = [...nums].sort(() => Math.random() - 0.5);
+            opts.add(shuffled.join(", "));
+          }
+          q.data = {
+            displayWord: nums.join("  •  "),
+            optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
+          };
         }
 
-        let num1_final = n1;
-        let num2_final = n2;
-        let ans = 0;
-
-        if (op === "+") {
-          ans = n1 + n2;
-        } else if (op === "-") {
-          num1_final = Math.max(n1, n2);
-          num2_final = Math.min(n1, n2);
-          ans = num1_final - num2_final;
-        } else {
-          // For multiplication, keep numbers smaller for better UX
-          let multMax = 5;
-          if (complexity === "Medium") multMax = 6;
-          if (complexity === "Hard") multMax = 10;
-          num1_final = Math.floor(Math.random() * multMax) + 1;
-          num2_final = Math.floor(Math.random() * multMax) + 1;
-          ans = num1_final * num2_final;
+        if (!seenSignatures.has(signature)) {
+          seenSignatures.add(signature);
+          break;
         }
-
-        q.prompt = t.math_solveMath;
-        q.correctAnswer = ans.toString();
-        const opts = new Set<string>([q.correctAnswer]);
-        while (opts.size < 4) {
-          const off = Math.floor(Math.random() * 5) + 1;
-          opts.add((Math.random() > 0.5 ? ans + off : Math.max(0, ans - off)).toString());
-        }
-        q.data = {
-          n1: num1_final,
-          n2: num2_final,
-          op,
-          optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
-        };
-      } else if (type === "spelling") {
-        const word = getRandomWord(words).toUpperCase();
-        q.prompt = t.eng_tapTheWord;
-        q.correctAnswer = word;
-        const opts = new Set<string>([word]);
-        while (opts.size < 4) opts.add(getRandomWord(words).toUpperCase());
-        q.data = { word, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
-      } else if (type === "missing_letter") {
-        const word = getRandomWord(words).toUpperCase();
-        const missingIndex = Math.floor(Math.random() * word.length);
-        const displayWord = word.split("");
-        const actualLetter = displayWord[missingIndex];
-        displayWord[missingIndex] = "_";
-        q.prompt = t.eng_chooseMissing;
-        q.correctAnswer = actualLetter;
-        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const opts = new Set<string>([actualLetter]);
-        while (opts.size < 4) opts.add(alphabet[Math.floor(Math.random() * 26)]);
-        q.data = {
-          displayWord: displayWord.join(""),
-          word,
-          optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
-        };
-      } else if (type === "comparison") {
-        const nums: number[] = [];
-        let maxComp = 20;
-        if (complexity === "Medium") maxComp = 50;
-        if (complexity === "Hard") maxComp = 100;
-
-        while (nums.length < 4) {
-          const n = Math.floor(Math.random() * maxComp);
-          if (!nums.includes(n)) nums.push(n);
-        }
-        const findSmallest = Math.random() > 0.5;
-        q.prompt = findSmallest ? t.math_smallestNumber : t.math_biggestNumber;
-        q.correctAnswer = findSmallest
-          ? Math.min(...nums).toString()
-          : Math.max(...nums).toString();
-        q.data = { optionsStrings: nums.map(String) };
-      } else if (type === "logic") {
-        const patterns = [
-          { sequence: ["🍎", "🍌", "🍎"], next: "🍌" },
-          { sequence: ["🐶", "🐱", "🐶"], next: "🐱" },
-          { sequence: ["1", "2", "1"], next: "2" },
-          { sequence: ["⭐", "🌙", "⭐"], next: "🌙" },
-          { sequence: ["🔴", "🔵", "🔴"], next: "🔵" },
-          { sequence: ["🚗", "🚕", "🚗"], next: "🚕" },
-          { sequence: ["🍦", "🍩", "🍦"], next: "🍩" },
-        ];
-        const p = patterns[Math.floor(Math.random() * patterns.length)];
-        q.prompt = t.log_whatNext;
-        q.correctAnswer = p.next;
-        const opts = new Set<string>([p.next]);
-        while (opts.size < 4) {
-          const randomNext = patterns[Math.floor(Math.random() * patterns.length)].next;
-          opts.add(randomNext);
-        }
-        q.data = {
-          displayWord: p.sequence.join(" ") + " ?",
-          optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
-        };
-      } else if (type === "hindi") {
-        const letter = hindiLetters[Math.floor(Math.random() * hindiLetters.length)];
-        q.prompt = t.hindi_tapLetter;
-        q.correctAnswer = letter;
-        const opts = new Set<string>([letter]);
-        while (opts.size < 4)
-          opts.add(hindiLetters[Math.floor(Math.random() * hindiLetters.length)]);
-        q.data = { letter, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
-      } else if (type === "sorting") {
-        const nums: number[] = [];
-        let sortCount = 3;
-        let sortMax = 10;
-        if (complexity === "Medium") {
-          sortCount = 4;
-          sortMax = 20;
-        }
-        if (complexity === "Hard") {
-          sortCount = 5;
-          sortMax = 50;
-        }
-
-        while (nums.length < sortCount) {
-          const n = Math.floor(Math.random() * sortMax) + 1;
-          if (!nums.includes(n)) nums.push(n);
-        }
-        const isAsc = Math.random() > 0.5;
-        q.prompt = isAsc ? t.math_sortAsc : t.math_sortDesc;
-        const sorted = isAsc ? [...nums].sort((a, b) => a - b) : [...nums].sort((a, b) => b - a);
-        q.correctAnswer = sorted.join(", ");
-
-        const opts = new Set<string>([q.correctAnswer]);
-        while (opts.size < 4) {
-          const shuffled = [...nums].sort(() => Math.random() - 0.5);
-          opts.add(shuffled.join(", "));
-        }
-        q.data = {
-          displayWord: nums.join("  •  "),
-          optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
-        };
+        attempts++;
       }
 
       newQuestions.push(q as Question);

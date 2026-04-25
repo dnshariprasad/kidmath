@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -45,6 +45,7 @@ const SpellingChallenge = () => {
   const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
   const [showCertificate, setShowCertificate] = useState(false);
 
+  const historyRef = useRef<string[]>([]);
   const generateChallenge = useCallback(() => {
     let allWords = getAllWords();
 
@@ -56,7 +57,17 @@ const SpellingChallenge = () => {
       allWords = allWords.filter((w) => w.length > 7);
     }
 
-    const word = getRandomWord(allWords);
+    let attempts = 0;
+    let word = "";
+    while (attempts < 10) {
+      word = getRandomWord(allWords);
+      if (!historyRef.current.includes(word)) {
+        historyRef.current = [word, ...historyRef.current].slice(0, 10);
+        break;
+      }
+      attempts++;
+    }
+
     setCurrentWord(word.toUpperCase());
     setInputValue("");
     setFeedback(null);

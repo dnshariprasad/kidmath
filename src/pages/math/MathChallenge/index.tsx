@@ -39,13 +39,27 @@ export const MathChallenge: React.FC = () => {
   const [showCertificate, setShowCertificate] = useState(false);
   const t = TRANSLATIONS.en;
 
+  const historyRef = React.useRef<string[]>([]);
   const generateQuestion = useCallback(() => {
     const maxVal = getMaxNumber(maxDigits);
-    let n1 = getRandomNumber(maxVal);
-    let n2 = getRandomNumber(maxVal);
+    let attempts = 0;
+    let n1 = 0;
+    let n2 = 0;
 
-    if (operator === "-" && n1 < n2) {
-      [n1, n2] = [n2, n1];
+    while (attempts < 10) {
+      n1 = getRandomNumber(maxVal);
+      n2 = getRandomNumber(maxVal);
+
+      if (operator === "-" && n1 < n2) {
+        [n1, n2] = [n2, n1];
+      }
+
+      const sig = `${n1}${operator}${n2}`;
+      if (!historyRef.current.includes(sig)) {
+        historyRef.current = [sig, ...historyRef.current].slice(0, 10);
+        break;
+      }
+      attempts++;
     }
 
     setNum1(n1);

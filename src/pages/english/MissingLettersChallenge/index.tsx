@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,13 +52,24 @@ const MissingLettersChallenge = () => {
   const [showCertificate, setShowCertificate] = useState(false);
   const t = TRANSLATIONS.en;
 
+  const historyRef = useRef<string[]>([]);
   const generateChallenge = useCallback(() => {
     let words = getAllWords();
     if (complexity === "Easy") words = words.filter((w) => w.length <= 4);
     else if (complexity === "Medium") words = words.filter((w) => w.length > 4 && w.length <= 7);
     else words = words.filter((w) => w.length > 7);
 
-    const rs = getRandomWord(words);
+    let attempts = 0;
+    let rs = "";
+    while (attempts < 10) {
+      rs = getRandomWord(words);
+      if (!historyRef.current.includes(rs)) {
+        historyRef.current = [rs, ...historyRef.current].slice(0, 10);
+        break;
+      }
+      attempts++;
+    }
+
     setRandomString(rs);
     setRandomStringWithMissingLetter(createMissingLetterWord(rs, randomNumber(rs.length)));
     setInputValue("");
