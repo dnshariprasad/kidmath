@@ -33,8 +33,6 @@ export const TestContainer = styled.div`
   flex-direction: column;
   gap: 40px;
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
   padding-bottom: 80px;
 `;
 
@@ -199,70 +197,58 @@ export const LogicDisplay = styled(BigDisplay)`
   letter-spacing: 12px;
 `;
 
-export const ComparisonGrid = styled.div`
+export const ComparisonGrid = styled.div<{ $isLong?: boolean }>`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  grid-template-columns: ${(props) => (props.$isLong ? "1fr" : "repeat(2, 1fr)")};
+  gap: 20px;
   width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
+  max-width: ${(props) => (props.$isLong ? "600px" : "800px")};
+  margin: 20px auto 0;
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
-    gap: 16px;
+    max-width: 100%;
+    gap: 12px;
   }
 `;
 
 export const ChoiceCard = styled(motion.div)<{ $selected: boolean; $color?: string }>`
   background: ${(props) =>
-    props.$selected
-      ? `linear-gradient(135deg, ${props.$color || props.theme.colors.primary}, ${
-          props.$color || props.theme.colors.primary
-        }DD)`
-      : props.theme.colors.surfaceVariant + "15"};
-  color: ${(props) => (props.$selected ? "white" : props.theme.colors.textPrimary)};
-  padding: 24px 48px;
+    props.$selected ? props.theme.colors.primary : props.theme.colors.primary + "10"};
+  color: ${(props) => (props.$selected ? "white" : props.theme.colors.primary)};
+  padding: 12px 24px;
   border-radius: 24px;
-  font-size: 2.2rem;
-  font-weight: 900;
-  border: 3px solid
-    ${(props) => (props.$selected ? props.$color || props.theme.colors.primary : "transparent")};
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  font-weight: 800;
+  border: ${(props) => (props.$selected ? "none" : `2px solid ${props.theme.colors.primary}40`)};
   cursor: pointer;
-  min-width: 160px;
+  flex: 1;
+  min-width: 140px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  word-break: break-word;
+  line-height: 1.2;
   font-family: ${(props) => props.theme.fonts.primary};
-  box-shadow: ${(props) =>
-    props.$selected ? `0 10px 25px -5px ${props.theme.colors.primary}50` : "none"};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: ${(props) => (props.$selected ? props.theme.shadows.md : "none")};
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
-    opacity: ${(props) => (props.$selected ? 1 : 0)};
-  }
-
   &:hover {
     background: ${(props) =>
-      props.$selected
-        ? `linear-gradient(135deg, ${props.$color || props.theme.colors.primary}, ${
-            props.$color || props.theme.colors.primary
-          }DD)`
-        : props.theme.colors.surfaceVariant + "25"};
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: ${(props) =>
-      props.$selected
-        ? `0 15px 30px -5px ${props.theme.colors.primary}60`
-        : "0 8px 20px -5px rgba(0,0,0,0.1)"};
+      props.$selected ? props.theme.colors.primary : props.theme.colors.primary + "15"};
+    transform: translateY(-2px);
+    box-shadow: ${(props) => props.theme.shadows.lg};
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 576px) {
+    height: 64px;
+    font-size: 1.5rem;
+    min-width: 0;
     width: 100%;
-    padding: 18px;
-    font-size: 1.75rem;
   }
 `;
 

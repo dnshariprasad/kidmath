@@ -55,9 +55,13 @@ import {
   LogicDisplay,
   GradeBadge,
 } from "./styles";
+import { SettingsArea, GameLayout } from "../../theme/globalStyles";
+import DifficultyPicker from "../../components/DifficultyPicker";
+import { SurpriseCard } from "../../components/SurpriseCard";
 import ChallengeHeader from "../../components/ChallengeHeader";
 import { TRANSLATIONS } from "../../constants/translations";
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
+import { readText } from "../../utils/index";
 
 type QuestionType =
   | "math"
@@ -95,8 +99,17 @@ const MasterTest: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCertificate, setShowCertificate] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
   const isMasterTest = testId === "master_test" || !testId;
   const t = TRANSLATIONS.en;
+
+  const hasStarted = currentIndex > 0 || Object.keys(answers).length > 0;
+
+  const difficultyOptions = [
+    { value: "Easy", label: t.com_easy },
+    { value: "Medium", label: t.com_medium },
+    { value: "Hard", label: t.com_hard },
+  ];
 
   const getTestTitle = () => {
     if (isMasterTest) return t.mst_grandMaster;
@@ -152,7 +165,14 @@ const MasterTest: React.FC = () => {
     if (testId === "hindi_test") allowedTypes = ["hindi"];
     if (testId === "logic_test") allowedTypes = ["logic", "comparison"];
 
-    const words = getAllWords();
+    const allWords = getAllWords();
+    let words = allWords;
+    if (complexity === "Easy") words = allWords.filter((w) => w.length <= 4);
+    else if (complexity === "Medium") words = allWords.filter((w) => w.length > 4 && w.length <= 7);
+    else words = allWords.filter((w) => w.length > 7);
+
+    if (words.length === 0) words = allWords; // Fallback
+
     const hindiLetters = ["अ", "आ", "इ", "ई", "उ", "ऊ", "ए", "ऐ", "ओ", "औ", "क", "ख", "ग", "घ"];
 
     for (let i = 1; i <= 10; i++) {
@@ -160,8 +180,12 @@ const MasterTest: React.FC = () => {
       const q: Partial<Question> = { id: i, type };
 
       if (type === "math") {
-        const n1 = Math.floor(Math.random() * 10) + 1;
-        const n2 = Math.floor(Math.random() * 10) + 1;
+        let maxNum = 10;
+        if (complexity === "Medium") maxNum = 20;
+        if (complexity === "Hard") maxNum = 50;
+
+        const n1 = Math.floor(Math.random() * maxNum) + 1;
+        const n2 = Math.floor(Math.random() * maxNum) + 1;
 
         let op = "+";
         if (testId === "math_addition") op = "+";
@@ -169,7 +193,10 @@ const MasterTest: React.FC = () => {
         else if (testId === "math_multiplication") op = "*";
         else {
           const ops = ["+", "-"];
-          if (testId === "math_test" || testId === "math_multiplication" || !testId) {
+          if (
+            (testId === "math_test" || !testId || testId === "math_multiplication") &&
+            complexity !== "Easy"
+          ) {
             ops.push("*");
           }
           op = ops[Math.floor(Math.random() * ops.length)];
@@ -186,7 +213,13 @@ const MasterTest: React.FC = () => {
           num2_final = Math.min(n1, n2);
           ans = num1_final - num2_final;
         } else {
-          ans = n1 * n2;
+          // For multiplication, keep numbers smaller for better UX
+          let multMax = 5;
+          if (complexity === "Medium") multMax = 6;
+          if (complexity === "Hard") multMax = 10;
+          num1_final = Math.floor(Math.random() * multMax) + 1;
+          num2_final = Math.floor(Math.random() * multMax) + 1;
+          ans = num1_final * num2_final;
         }
 
         q.prompt = t.math_solveMath;
@@ -227,8 +260,12 @@ const MasterTest: React.FC = () => {
         };
       } else if (type === "comparison") {
         const nums: number[] = [];
+        let maxComp = 20;
+        if (complexity === "Medium") maxComp = 50;
+        if (complexity === "Hard") maxComp = 100;
+
         while (nums.length < 4) {
-          const n = Math.floor(Math.random() * 100);
+          const n = Math.floor(Math.random() * maxComp);
           if (!nums.includes(n)) nums.push(n);
         }
         const findSmallest = Math.random() > 0.5;
@@ -269,8 +306,19 @@ const MasterTest: React.FC = () => {
         q.data = { letter, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
       } else if (type === "sorting") {
         const nums: number[] = [];
-        while (nums.length < 3) {
-          const n = Math.floor(Math.random() * 20) + 1;
+        let sortCount = 3;
+        let sortMax = 10;
+        if (complexity === "Medium") {
+          sortCount = 4;
+          sortMax = 20;
+        }
+        if (complexity === "Hard") {
+          sortCount = 5;
+          sortMax = 50;
+        }
+
+        while (nums.length < sortCount) {
+          const n = Math.floor(Math.random() * sortMax) + 1;
           if (!nums.includes(n)) nums.push(n);
         }
         const isAsc = Math.random() > 0.5;
@@ -299,11 +347,30 @@ const MasterTest: React.FC = () => {
     setScore(0);
     setCurrentIndex(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [testId, t]);
+  }, [testId, t, complexity]);
 
   useEffect(() => {
     generateTest();
   }, [generateTest]);
+
+  const currentQuestion = questions[currentIndex];
+
+  useEffect(() => {
+    if (currentQuestion && !isSubmitted) {
+      const textToSpeak =
+        currentQuestion.type === "math"
+          ? `What is ${currentQuestion.data.n1} ${currentQuestion.data.op === "+" ? "plus" : currentQuestion.data.op === "-" ? "minus" : "times"} ${currentQuestion.data.n2}?`
+          : currentQuestion.type === "missing_letter"
+            ? `What is the missing letter in the word ${currentQuestion.data.word}?`
+            : currentQuestion.data.word || currentQuestion.data.letter || currentQuestion.prompt;
+
+      const lang = currentQuestion.type === "hindi" ? "hi-IN" : "en-US";
+      const timer = setTimeout(() => {
+        readText(textToSpeak, lang);
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, currentQuestion, isSubmitted]);
 
   const handleInputChange = (id: number, val: string) => {
     setAnswers((prev) => ({ ...prev, [id]: val }));
@@ -328,8 +395,6 @@ const MasterTest: React.FC = () => {
       dispatch(incrementScore("master_test"));
     }
   };
-
-  const currentQuestion = questions[currentIndex];
 
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
@@ -402,7 +467,7 @@ const MasterTest: React.FC = () => {
           )}
 
           {q.data.optionsStrings && (
-            <ComparisonGrid>
+            <ComparisonGrid $isLong={q.data.optionsStrings.some((s) => s.length > 12)}>
               {q.data.optionsStrings.map((opt, i) => (
                 <ChoiceCard
                   key={i}
@@ -427,6 +492,7 @@ const MasterTest: React.FC = () => {
                     ? `What is the missing letter in the word ${q.data.word}?`
                     : q.data.word || q.data.letter || q.prompt
               }
+              lang={q.type === "hindi" ? "hi-IN" : "en-US"}
             />
             {currentIndex === questions.length - 1 ? (
               <KidButton
@@ -446,22 +512,45 @@ const MasterTest: React.FC = () => {
 
   return (
     <PageContainer>
-      <ChallengeHeader icon={Trophy} title={getTestTitle()} subtitle={t.mst_subtitle} streak={0} />
-      <TestContainer>
-        <AnimatePresence mode="wait">
-          {currentQuestion && (
-            <CarouselSlide
-              key={currentQuestion.id}
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -50, opacity: 0 }}
-              transition={{ type: "spring", damping: 20, stiffness: 100 }}
-            >
-              {renderQuestion(currentQuestion)}
-            </CarouselSlide>
-          )}
-        </AnimatePresence>
-      </TestContainer>
+      <GameLayout>
+        <ChallengeHeader
+          icon={Trophy}
+          title={getTestTitle()}
+          subtitle={t.mst_subtitle}
+          streak={0}
+        />
+
+        <SurpriseCard title={t.com_readyForTest} subtitle={t.mst_subtitle} onClick={() => {}} />
+
+        <TestContainer>
+          <AnimatePresence mode="wait">
+            {currentQuestion && (
+              <CarouselSlide
+                key={currentQuestion.id}
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -50, opacity: 0 }}
+                transition={{ type: "spring", damping: 20, stiffness: 100 }}
+              >
+                {renderQuestion(currentQuestion)}
+              </CarouselSlide>
+            )}
+          </AnimatePresence>
+        </TestContainer>
+
+        {!isSubmitted && (
+          <SettingsArea data-testid="settings-area">
+            <DifficultyPicker
+              name="complexity"
+              title={t.com_difficulty}
+              options={difficultyOptions}
+              currentValue={complexity}
+              onChange={(val) => setComplexity(val as "Easy" | "Medium" | "Hard")}
+              disabled={hasStarted}
+            />
+          </SettingsArea>
+        )}
+      </GameLayout>
 
       {isSubmitted && (
         <ResultsOverlay initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

@@ -504,11 +504,13 @@ export const SidebarSide = styled.div`
   display: contents;
 `;
 
-export const ConfigSection = styled.div`
+export const ConfigSection = styled.div<{ $disabled?: boolean }>`
   margin-bottom: 20px;
   padding-bottom: 12px;
   border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
   width: 100%;
+  opacity: ${(props) => (props.$disabled ? 0.5 : 1)};
+  pointer-events: ${(props) => (props.$disabled ? "none" : "auto")};
 
   &:last-child {
     border-bottom: none;

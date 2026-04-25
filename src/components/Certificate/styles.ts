@@ -154,6 +154,7 @@ export const WinnerName = styled.div`
   background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: #6366f1; /* Fallback for engines that don't support clip-text */
   letter-spacing: -1px;
 
   @media (max-width: 480px) {
@@ -258,7 +259,7 @@ export const FooterText = styled.div`
   font-size: 1rem;
   color: ${(props) => props.theme.colors.textPrimary};
   font-family: ${(props) => props.theme.fonts.secondary};
-  opacity: 0.6;
+  opacity: 0.9; /* Increased from 0.6 for better visibility in images */
 `;
 
 export const ActionButtons = styled.div`

@@ -48,6 +48,11 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
       const originalWidth = element.style.width;
       element.style.width = "1000px";
 
+      // Wait for fonts to be ready
+      await document.fonts.ready;
+      // Add a small delay for any layout shifts
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
       const dataUrl = await toPng(element, {
         cacheBust: true,
         backgroundColor: "#ffffff",
@@ -77,6 +82,10 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
       // Force width for consistent rendering during capture
       const originalWidth = element.style.width;
       element.style.width = "1000px";
+
+      // Wait for fonts to be ready
+      await document.fonts.ready;
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       const dataUrl = await toPng(element, {
         cacheBust: true,

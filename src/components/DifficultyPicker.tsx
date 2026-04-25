@@ -11,6 +11,7 @@ interface DifficultyPickerProps<T> {
   currentValue: T;
   onChange: (value: T) => void;
   name: string;
+  disabled?: boolean;
 }
 
 const DifficultyPicker = <T extends string | number>({
@@ -19,9 +20,10 @@ const DifficultyPicker = <T extends string | number>({
   currentValue,
   onChange,
   name,
+  disabled = false,
 }: DifficultyPickerProps<T>) => {
   return (
-    <ConfigSection>
+    <ConfigSection $disabled={disabled}>
       <ConfigSubTitle>{title}</ConfigSubTitle>
       {options.map((option) => (
         <OptionLabel key={option.value} $isActive={currentValue === option.value}>
@@ -29,7 +31,8 @@ const DifficultyPicker = <T extends string | number>({
             type="radio"
             name={name}
             checked={currentValue === option.value}
-            onChange={() => onChange(option.value)}
+            onChange={() => !disabled && onChange(option.value)}
+            disabled={disabled}
           />
           {option.label}
         </OptionLabel>

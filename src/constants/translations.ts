@@ -33,6 +33,9 @@ export const TRANSLATIONS = {
     com_easyWords: "Easy Words",
     com_mediumWords: "Medium Words",
     com_hardWords: "Hard Words",
+    com_easy: "Easy",
+    com_medium: "Medium",
+    com_hard: "Hard",
 
     // Nav (nav_)
     nav_updateName: "Update Name",
