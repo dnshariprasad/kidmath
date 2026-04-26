@@ -54,7 +54,7 @@ export const generateTestQuestions = (
   ) {
     allowedTypes = ["math"];
   }
-  if (testId === "math_test") allowedTypes = ["math", "comparison", "sorting"];
+  if (testId === "math_test") allowedTypes = ["math"];
   if (testId === "math_sorting") allowedTypes = ["sorting"];
   if (testId === "english_missing_letters") allowedTypes = ["missing_letter"];
   if (testId === "english_spelling") allowedTypes = ["spelling"];

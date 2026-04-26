@@ -35,6 +35,7 @@ import {
   ActionMenuItem,
   CheckboxContainer,
   CheckboxInput,
+  ConfigSubTitle,
 } from "../../theme/globalStyles";
 import {
   TestContainer,
@@ -78,10 +79,11 @@ import {
   SubjectChip,
   OperationToggleGrid,
   OperationChip,
+  HeroTitle,
+  InstructionBadge,
 } from "./styles";
 import { GameLayout } from "../../theme/globalStyles";
 import DifficultyPicker from "../../components/DifficultyPicker";
-import ChallengeHeader from "../../components/ChallengeHeader";
 
 import { TRANSLATIONS } from "../../constants/translations";
 import { readText } from "../../utils/index";
@@ -108,16 +110,16 @@ const MasterTest: React.FC = () => {
   const [isTestStarted, setIsTestStarted] = useState(false);
   const [timer, setTimer] = useState(0);
   const [targetTime, setTargetTime] = useState<number>(0);
-  const [selectedTestId, setSelectedTestId] = useState<string>(testId || "math_test");
+  const [selectedTestId, setSelectedTestId] = useState<string>("math_test");
   const [selectedMathOps, setSelectedMathOps] = useState<string[]>(["+"]);
   const isMasterTest = selectedTestId === "master_test";
   const t = TRANSLATIONS.en;
 
   const categories = [
-    { id: "math_test", label: "Math", icon: <Calculator size={18} />, color: "#10B981" },
-    { id: "spelling_test", label: "English", icon: <BookOpen size={18} />, color: "#F59E0B" },
-    { id: "hindi_test", label: "Hindi", icon: <Languages size={18} />, color: "#EC4899" },
-    { id: "logic_test", label: "Logic", icon: <Brain size={18} />, color: "#8B5CF6" },
+    { id: "math_test", label: "Math", icon: <Calculator size={18} />, color: "#6366F1" },
+    { id: "spelling_test", label: "English", icon: <BookOpen size={18} />, color: "#6366F1" },
+    { id: "hindi_test", label: "Hindi", icon: <Languages size={18} />, color: "#6366F1" },
+    { id: "logic_test", label: "Logic", icon: <Brain size={18} />, color: "#6366F1" },
     { id: "master_test", label: "Grand Master", icon: <Trophy size={18} />, color: "#6366F1" },
   ];
 
@@ -144,6 +146,13 @@ const MasterTest: React.FC = () => {
     ],
     [t],
   );
+
+  const getInstructions = () => [
+    t.test_qCount,
+    t.test_selectBest,
+    t.test_timeRecorded,
+    t.test_scoreForCert,
+  ];
 
   const getTestTitle = () => {
     if (isMasterTest) return t.mst_grandMaster;
@@ -393,19 +402,6 @@ const MasterTest: React.FC = () => {
   return (
     <PageContainer>
       <GameLayout>
-        <div
-          style={{ gridColumn: "1 / -1", width: "100%", display: "flex", justifyContent: "center" }}
-        >
-          <div style={{ width: "100%", maxWidth: "1100px" }}>
-            <ChallengeHeader
-              icon={Trophy}
-              title={getTestTitle()}
-              subtitle={t.mst_subtitle}
-              streak={0}
-            />
-          </div>
-        </div>
-
         {!isTestStarted && !isSubmitted && (
           <div style={{ gridColumn: "1 / -1", width: "100%" }}>
             <InstructionCard
@@ -420,42 +416,17 @@ const MasterTest: React.FC = () => {
                 >
                   <Trophy size={40} />
                 </IconBox>
-
-                <div style={{ textAlign: "left" }}>
-                  <KidoText fontSize="xxl" fontWeight={900} color="primary">
-                    {t.test_instructions}
-                  </KidoText>
-                  <KidoText fontSize="md" color="textSecondary" fontWeight={600}>
-                    Follow these rules to become a Grand Master!
-                  </KidoText>
-                </div>
+                <HeroTitle
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  key={selectedTestId}
+                >
+                  {getTestTitle()}
+                </HeroTitle>
               </InstructionHeader>
 
-              <InstructionGrid>
-                {[
-                  { icon: <Brain size={24} />, text: t.test_qCount },
-                  { icon: <CheckCircle2 size={24} />, text: t.test_selectBest },
-                  { icon: <Timer size={24} />, text: t.test_timeRecorded },
-                  { icon: <Trophy size={24} />, text: t.test_scoreForCert },
-                ].map((item, idx) => (
-                  <InstructionItem
-                    key={idx}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * idx }}
-                  >
-                    {item.icon}
-                    <span>{item.text}</span>
-                  </InstructionItem>
-                ))}
-              </InstructionGrid>
-
               <SetupSection>
-                <div style={{ textAlign: "center", marginBottom: "10px" }}>
-                  <KidoText fontSize="lg" fontWeight={800} color="primary">
-                    1. Choose Your Subject
-                  </KidoText>
-                </div>
+                <ConfigSubTitle>Choose Your Subject</ConfigSubTitle>
                 <SubjectGrid>
                   {categories.map((cat) => (
                     <SubjectChip
@@ -474,11 +445,7 @@ const MasterTest: React.FC = () => {
 
                 {(selectedTestId === "math_test" || isMasterTest) && (
                   <>
-                    <div style={{ textAlign: "center", marginTop: "10px", marginBottom: "10px" }}>
-                      <KidoText fontSize="md" fontWeight={800} color="primary">
-                        Included Operations
-                      </KidoText>
-                    </div>
+                    <ConfigSubTitle>Included Operations</ConfigSubTitle>
                     <OperationToggleGrid>
                       {[
                         { symbol: "+", label: t.math_addition },
@@ -499,71 +466,97 @@ const MasterTest: React.FC = () => {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          <span>{op.display || op.symbol}</span>
-                          <span>{op.label}</span>
+                          <span className="symbol">{op.display || op.symbol}</span>
+                          <span className="label">{op.label}</span>
                         </OperationChip>
                       ))}
                     </OperationToggleGrid>
                   </>
                 )}
+                <div style={{ marginTop: "12px" }}>
+                  <DifficultyPicker
+                    title="Difficulty"
+                    options={difficultyOptions}
+                    currentValue={complexity}
+                    onChange={(val) => setComplexity(val as number)}
+                    name="test_complexity"
+                  />
+                </div>
 
-                <div style={{ marginTop: "20px" }} />
+                <div style={{ marginTop: "4px" }}>
+                  <DifficultyPicker
+                    title="Target Time"
+                    options={timeOptions}
+                    currentValue={targetTime}
+                    onChange={(val) => setTargetTime(val as number)}
+                    name="test_target_time"
+                  />
+                </div>
 
-                <DifficultyPicker
-                  name="complexity"
-                  title={t.com_difficulty}
-                  options={difficultyOptions}
-                  currentValue={complexity}
-                  onChange={(val) => setComplexity(Number(val))}
-                />
-
-                <DifficultyPicker
-                  name="targetTime"
-                  title={t.test_targetTime}
-                  options={timeOptions}
-                  currentValue={targetTime}
-                  onChange={(val) => setTargetTime(Number(val))}
-                />
-
-                {(testId?.includes("math") || isMasterTest) && (
+                {(selectedTestId.includes("math") || isMasterTest) && (
                   <div
                     style={{
                       display: "flex",
                       gap: "24px",
                       flexWrap: "wrap",
-                      justifyContent: "center",
+                      marginTop: "12px",
                     }}
                   >
-                    {(testId === "math_subtraction" || testId === "math_test" || isMasterTest) && (
-                      <CheckboxContainer>
-                        <CheckboxInput
-                          type="checkbox"
-                          checked={allowNegative}
-                          onChange={(e) => setAllowNegative(e.target.checked)}
-                        />
-                        <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                          {t.com_allowNegative}
-                        </span>
-                      </CheckboxContainer>
-                    )}
-
-                    {(testId === "math_division" || testId === "math_test" || isMasterTest) && (
-                      <CheckboxContainer>
-                        <CheckboxInput
-                          type="checkbox"
-                          checked={allowDecimals}
-                          onChange={(e) => setAllowDecimals(e.target.checked)}
-                        />
-                        <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                          {t.com_allowDecimals}
-                        </span>
-                      </CheckboxContainer>
+                    {(selectedTestId === "math_test" || isMasterTest) && (
+                      <>
+                        <CheckboxContainer>
+                          <CheckboxInput
+                            type="checkbox"
+                            checked={allowNegative}
+                            onChange={(e) => setAllowNegative(e.target.checked)}
+                          />
+                          <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
+                            {t.com_allowNegative}
+                          </span>
+                        </CheckboxContainer>
+                        <CheckboxContainer>
+                          <CheckboxInput
+                            type="checkbox"
+                            checked={allowDecimals}
+                            onChange={(e) => setAllowDecimals(e.target.checked)}
+                          />
+                          <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
+                            {t.com_allowDecimals}
+                          </span>
+                        </CheckboxContainer>
+                      </>
                     )}
                   </div>
                 )}
               </SetupSection>
 
-              <div style={{ marginTop: "50px", width: "100%" }}>
+              <div
+                style={{
+                  width: "100%",
+                  marginTop: "32px",
+                  borderTop: `1px solid ${colors.primary}10`,
+                  paddingTop: "24px",
+                }}
+              >
+                <InstructionBadge>{t.test_instructions}</InstructionBadge>
+                <InstructionGrid>
+                  {getInstructions().map((text, i) => (
+                    <InstructionItem
+                      key={i}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                    >
+                      <CheckCircle2 size={18} color="#10B981" />
+                      <KidoText fontSize="md" fontWeight={600} color="textPrimary">
+                        {text}
+                      </KidoText>
+                    </InstructionItem>
+                  ))}
+                </InstructionGrid>
+              </div>
+
+              <div style={{ marginTop: "24px", width: "100%" }}>
                 <KidButton
                   title={t.test_start}
                   onClick={startTest}

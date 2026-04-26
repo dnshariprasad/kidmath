@@ -27,9 +27,11 @@ const Dashboard: React.FC = () => {
   const location = useLocation();
   const isMobileMenuOpen = useSelector((state: RootState) => state.alphabet.isMobileMenuOpen);
 
-  // Hide sidebar only on welcome page (root path)
+  // Hide sidebar on welcome page and test pages
   const isWelcomePage = location.pathname === "/";
-  const shouldHideSidebar = isWelcomePage;
+  const isTestPage =
+    location.pathname.includes("/test") || location.pathname.includes("/master_test");
+  const shouldHideSidebar = isWelcomePage || isTestPage;
 
   return (
     <LayoutContainer data-testid="view-dashboard">

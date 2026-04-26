@@ -598,42 +598,36 @@ export const SidebarSide = styled.div`
 `;
 
 export const ConfigSection = styled.div<{ $disabled?: boolean }>`
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
+  margin-bottom: 12px;
   opacity: ${(props) => (props.$disabled ? 0.5 : 1)};
   pointer-events: ${(props) => (props.$disabled ? "none" : "auto")};
 
   &:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
   }
 `;
 
 export const ConfigSubTitle = styled.h4`
-  color: ${(props) => props.theme.colors.textSecondary};
+  color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
   font-size: ${(props) => props.theme.fontSize.sm};
-  margin-bottom: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
   gap: 8px;
 `;
 
 export const OptionsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 12px;
   width: 100%;
-  margin: 15px 0 0;
+  margin: 8px 0 0;
   box-sizing: border-box;
-
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 400px) {
-    grid-template-columns: 1fr;
-  }
 `;
 
 export const OptionLabel = styled.label<{ $isActive: boolean }>`
@@ -649,9 +643,10 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
   font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.colors.textPrimary};
   font-weight: 700;
-  justify-content: center;
-  text-align: center;
+  justify-content: flex-start;
+  text-align: left;
   min-height: 48px;
+  padding: 8px 16px;
 
   &:hover {
     background: ${(props) => props.theme.colors.primary}08;
