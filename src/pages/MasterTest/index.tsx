@@ -113,6 +113,7 @@ const MasterTest: React.FC = () => {
   const [showReviewMenu, setShowReviewMenu] = useState(false);
   const [complexity, setComplexity] = useState<number>(1);
   const [allowNegative, setAllowNegative] = useState(false);
+  const [allowDecimals, setAllowDecimals] = useState(false);
   const isMasterTest = testId === "master_test" || !testId;
   const t = TRANSLATIONS.en;
 
@@ -134,6 +135,8 @@ const MasterTest: React.FC = () => {
         return t.math_subtraction;
       case "math_multiplication":
         return t.math_multiplication;
+      case "math_division":
+        return t.math_division;
       case "math_test":
         return t.math_mathHero;
       case "math_sorting":
@@ -167,7 +170,8 @@ const MasterTest: React.FC = () => {
     if (
       testId === "math_addition" ||
       testId === "math_subtraction" ||
-      testId === "math_multiplication"
+      testId === "math_multiplication" ||
+      testId === "math_division"
     ) {
       allowedTypes = ["math"];
     }
@@ -227,20 +231,25 @@ const MasterTest: React.FC = () => {
           if (testId === "math_addition") op = "+";
           else if (testId === "math_subtraction") op = "-";
           else if (testId === "math_multiplication") op = "*";
+          else if (testId === "math_division") op = "/";
           else {
             const ops = ["+", "-"];
             if (
-              (testId === "math_test" || !testId || testId === "math_multiplication") &&
+              (testId === "math_test" ||
+                !testId ||
+                testId === "math_multiplication" ||
+                testId === "math_division") &&
               complexity !== 1
             ) {
               ops.push("*");
+              if (complexity >= 3) ops.push("/");
             }
             op = ops[Math.floor(Math.random() * ops.length)];
           }
 
           let num1_final = n1;
           let num2_final = n2;
-          let ans = 0;
+          let ans: number | string = 0;
 
           if (op === "+") {
             ans = n1 + n2;
@@ -253,13 +262,25 @@ const MasterTest: React.FC = () => {
               num2_final = n2;
             }
             ans = num1_final - num2_final;
-          } else {
+          } else if (op === "*") {
             let multMax = 5;
             if (complexity === 2 || complexity === 3) multMax = 8;
             if (complexity === 4) multMax = 12;
             num1_final = Math.floor(Math.random() * multMax) + 1;
             num2_final = Math.floor(Math.random() * multMax) + 1;
             ans = num1_final * num2_final;
+          } else if (op === "/") {
+            const multMax = complexity === 1 ? 5 : complexity === 2 ? 8 : 12;
+            num2_final = Math.floor(Math.random() * multMax) + 1;
+            if (allowDecimals) {
+              num1_final = Math.floor(Math.random() * (multMax * 5)) + 1;
+              ans = Number((num1_final / num2_final).toFixed(1));
+            } else {
+              const q = Math.floor(Math.random() * multMax) + 1;
+              const r = Math.floor(Math.random() * num2_final);
+              num1_final = num2_final * q + r;
+              ans = `Q:${q} R:${r}`;
+            }
           }
 
           signature = `math-${num1_final}${op}${num2_final}`;
@@ -268,7 +289,16 @@ const MasterTest: React.FC = () => {
           const opts = new Set<string>([q.correctAnswer]);
           while (opts.size < 4) {
             const off = Math.floor(Math.random() * 5) + 1;
-            opts.add((Math.random() > 0.5 ? ans + off : Math.max(0, ans - off)).toString());
+            if (typeof ans === "number") {
+              opts.add((Math.random() > 0.5 ? ans + off : Math.max(0, ans - off)).toString());
+            } else {
+              // Generate string distractor for Q:X R:Y
+              const qOff = Math.floor(Math.random() * 3) - 1;
+              const rOff = Math.floor(Math.random() * 3) - 1;
+              const qVal = Math.max(0, Math.floor(num1_final / (num2_final || 1)) + qOff);
+              const rVal = Math.max(0, (num1_final % (num2_final || 1)) + rOff);
+              opts.add(`Q:${qVal} R:${rVal}`);
+            }
           }
           q.data = {
             n1: num1_final,
@@ -401,7 +431,7 @@ const MasterTest: React.FC = () => {
     setScore(0);
     setCurrentIndex(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [testId, t, complexity, allowNegative]);
+  }, [testId, t, complexity, allowNegative, allowDecimals]);
 
   useEffect(() => {
     generateTest();
@@ -413,7 +443,7 @@ const MasterTest: React.FC = () => {
     if (currentQuestion && !isSubmitted) {
       const textToSpeak =
         currentQuestion.type === "math"
-          ? `What is ${currentQuestion.data.n1} ${currentQuestion.data.op === "+" ? "plus" : currentQuestion.data.op === "-" ? "minus" : "times"} ${currentQuestion.data.n2}?`
+          ? `What is ${currentQuestion.data.n1} ${currentQuestion.data.op === "+" ? "plus" : currentQuestion.data.op === "-" ? "minus" : currentQuestion.data.op === "*" ? "times" : "divided by"} ${currentQuestion.data.n2}?`
           : currentQuestion.type === "missing_letter"
             ? `What is the missing letter in the word ${currentQuestion.data.word}?`
             : currentQuestion.data.word || currentQuestion.data.letter || currentQuestion.prompt;
@@ -541,7 +571,7 @@ const MasterTest: React.FC = () => {
             <SpeakIcon
               text={
                 q.type === "math"
-                  ? `What is ${q.data.n1} ${q.data.op === "+" ? "plus" : q.data.op === "-" ? "minus" : "times"} ${q.data.n2}?`
+                  ? `What is ${q.data.n1} ${q.data.op === "+" ? "plus" : q.data.op === "-" ? "minus" : q.data.op === "*" ? "times" : "divided by"} ${q.data.n2}?`
                   : q.type === "missing_letter"
                     ? `What is the missing letter in the word ${q.data.word}?`
                     : q.data.word || q.data.letter || q.prompt
@@ -612,6 +642,18 @@ const MasterTest: React.FC = () => {
                   disabled={hasStarted}
                 />
                 Allow Negative Numbers
+              </CheckboxContainer>
+            )}
+
+            {(testId === "math_division" || testId === "math_test" || isMasterTest) && (
+              <CheckboxContainer $disabled={hasStarted}>
+                <CheckboxInput
+                  type="checkbox"
+                  checked={allowDecimals}
+                  onChange={(e) => !hasStarted && setAllowDecimals(e.target.checked)}
+                  disabled={hasStarted}
+                />
+                {t.com_allowDecimals}
               </CheckboxContainer>
             )}
           </SettingsArea>

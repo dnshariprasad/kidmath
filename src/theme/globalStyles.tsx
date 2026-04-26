@@ -642,9 +642,10 @@ export const CheckboxContainer = styled.label<{ $disabled?: boolean }>`
   font-size: 1rem;
   padding: 8px 12px;
   background: ${(props) => props.theme.colors.surface};
-  border: 2px solid ${(props) => props.theme.colors.border};
-  border-radius: 12px;
+  border: 2px solid ${(props) => props.theme.colors.primary}15;
+  border-radius: 16px;
   transition: all 0.2s ease;
+  margin-top: 5px;
 
   &:hover {
     border-color: ${(props) =>
@@ -653,10 +654,42 @@ export const CheckboxContainer = styled.label<{ $disabled?: boolean }>`
 `;
 
 export const CheckboxInput = styled.input`
-  width: 18px;
-  height: 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid ${(props) => props.theme.colors.primary}40;
+  border-radius: 6px;
+  background: ${(props) => props.theme.colors.surface};
   cursor: inherit;
-  accent-color: ${(props) => props.theme.colors.primary};
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:checked {
+    background: ${(props) => props.theme.colors.primary};
+    border-color: ${(props) => props.theme.colors.primary};
+  }
+
+  &::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    color: white;
+    font-size: 14px;
+    font-weight: 900;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  &:checked::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px ${(props) => props.theme.colors.primary}30;
+  }
 `;
 
 export const InfoButton = styled.div`

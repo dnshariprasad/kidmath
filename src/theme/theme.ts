@@ -67,6 +67,7 @@ export const lightTheme = {
     surfaceVariant: "#F1F5F9",
     textPrimary: "#1E293B",
     textSecondary: "#64748B",
+    border: "#E2E8F0",
     shadow: "rgba(99, 102, 241, 0.1)",
   },
 };
@@ -90,6 +91,7 @@ export const darkTheme = {
     surfaceVariant: "#334155",
     textPrimary: "#F1F5F9",
     textSecondary: "#94A3B8",
+    border: "#334155",
     shadow: "rgba(0, 0, 0, 0.3)",
   },
 };

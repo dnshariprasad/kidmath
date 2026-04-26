@@ -229,7 +229,7 @@ export const ChoiceCard = styled(motion.div)<{ $selected: boolean; $color?: stri
   align-items: center;
   justify-content: center;
   text-align: center;
-  word-break: break-word;
+  white-space: nowrap;
   line-height: 1.2;
   font-family: ${(props) => props.theme.fonts.primary};
   box-shadow: ${(props) => (props.$selected ? props.theme.shadows.md : "none")};

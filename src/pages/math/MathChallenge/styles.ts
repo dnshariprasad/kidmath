@@ -31,19 +31,19 @@ export const QuestionSpan = styled.span`
 `;
 
 export const AnswerGrid = styled.div`
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
   gap: 20px;
   width: 100%;
-  max-width: 800px;
-  margin-top: 20px;
-  flex-wrap: wrap;
+  max-width: 600px;
+  margin: 20px auto 0;
 
   & > button {
-    flex: 1;
-    min-width: 120px;
+    width: 100%;
     height: 80px;
-    font-size: 2rem;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    white-space: nowrap;
   }
 
   @media (max-width: 576px) {
@@ -54,8 +54,9 @@ export const AnswerGrid = styled.div`
 
     & > button {
       height: 64px;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       min-width: 0;
+      white-space: nowrap;
     }
   }
 `;

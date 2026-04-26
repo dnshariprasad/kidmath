@@ -121,6 +121,14 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
       subject: "Math",
     },
     {
+      id: "math_division",
+      title: "Division",
+      desc: "Practice divide (/) sums",
+      iconName: "Calculator",
+      path: "/test/math_division",
+      subject: "Math",
+    },
+    {
       id: "math_sorting",
       title: "Sorting",
       desc: "Order numbers (Asc/Desc)",
