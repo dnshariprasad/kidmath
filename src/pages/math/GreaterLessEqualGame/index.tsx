@@ -18,9 +18,9 @@ import {
   PlusSign,
 } from "../../../theme/globalStyles";
 import { readText, getEncouragement } from "../../../utils/index";
-import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
+import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
-import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
+
 import { RootState } from "../../../store/store";
 import {
   NumberDisplay,
@@ -34,10 +34,14 @@ import {
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
-import Certificate from "../../../components/Certificate";
+
+import { TRANSLATIONS } from "../../../constants/translations";
+import { generateComparisonQuestion, checkComparisonAnswer } from "./utils";
+import { colors } from "../../../theme/colors";
 
 export const GreaterLessEqualGame: React.FC = () => {
   const dispatch = useDispatch();
+  const t = TRANSLATIONS.en;
   const streak = useSelector(
     (state: RootState) => state.alphabet.gameStats?.comparison?.streak ?? 0,
   );
@@ -45,12 +49,10 @@ export const GreaterLessEqualGame: React.FC = () => {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
-  const [showCertificate, setShowCertificate] = useState(false);
-
   const resetGame = useCallback(() => {
-    const maxVal = getMaxNumber(maxDigits);
-    setNum1(getRandomNumber(maxVal));
-    setNum2(getRandomNumber(maxVal));
+    const { num1: n1, num2: n2 } = generateComparisonQuestion(maxDigits);
+    setNum1(n1);
+    setNum2(n2);
     setFeedback(null);
   }, [maxDigits]);
 
@@ -60,17 +62,24 @@ export const GreaterLessEqualGame: React.FC = () => {
 
   useEffect(() => {
     if (streak > 0 && streak % 10 === 0) {
-      setShowCertificate(true);
+      setFeedback({ message: "Incredible! 10 in a row! 🌟", isCorrect: true });
+      readText("Incredible! 10 in a row! You are a superstar!");
+      confetti({
+        particleCount: 300,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#6366f1", "#4f46e5", "#818cf8"],
+      });
+      const timer = setTimeout(() => {
+        dispatch(resetStreak("comparison"));
+        setFeedback(null);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [streak]);
+  }, [streak, dispatch]);
 
   const handleChoice = (choice: "greater" | "less" | "equal") => {
-    let correct = false;
-    if (choice === "greater" && num1 > num2) correct = true;
-    else if (choice === "less" && num1 < num2) correct = true;
-    else if (choice === "equal" && num1 === num2) correct = true;
-
-    if (correct) {
+    if (checkComparisonAnswer(num1, num2, choice)) {
       const msg = getEncouragement(streak);
       setFeedback({ message: msg, isCorrect: true });
       readText(msg);
@@ -79,21 +88,21 @@ export const GreaterLessEqualGame: React.FC = () => {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#6366F1", "#4F46E5", "#FF7675"],
+        colors: [colors.primary, colors.primaryDark, colors.accentLight],
       });
       setTimeout(resetGame, 1500);
     } else {
-      setFeedback({ message: "Oops! Try again! 😅", isCorrect: false });
-      readText("Oops! Try again");
+      setFeedback({ message: t.fb_oops, isCorrect: false });
+      readText(t.fb_oopsRead);
       dispatch(resetStreak("comparison"));
       setTimeout(() => setFeedback(null), 1500);
     }
   };
 
   const difficultyOptions = [
-    { value: 1, label: "Numbers to 9" },
-    { value: 2, label: "Numbers to 99" },
-    { value: 3, label: "Numbers to 999" },
+    { value: 1, label: t.gle_digits9 },
+    { value: 2, label: t.gle_digits99 },
+    { value: 3, label: t.gle_digits999 },
   ];
 
   return (
@@ -101,17 +110,15 @@ export const GreaterLessEqualGame: React.FC = () => {
       <GameLayout>
         <ChallengeHeader
           icon={Scale}
-          title="Big or Small?"
-          subtitle="Compare the numbers and pick the right sign!"
+          title={t.gle_title}
+          subtitle={t.gle_subtitle}
           streak={streak}
         />
 
         <SurpriseCard
-          title="Certificate Progress"
+          title={t.sdk_certProgress}
           subtitle={
-            streak < 10
-              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
-              : "Milestone reached! 🎉"
+            streak < 10 ? `${10 - (streak % 10)} ${t.sdk_moreForCert}` : t.sdk_milestoneReached
           }
         />
 
@@ -162,44 +169,30 @@ export const GreaterLessEqualGame: React.FC = () => {
           />
 
           <ConfigSection>
-            <ConfigSubTitle>Quick Tips</ConfigSubTitle>
+            <ConfigSubTitle>{t.gle_quickTips}</ConfigSubTitle>
             <TipsContainer>
               <TipRow>
                 <TipSign>&gt;</TipSign>
                 <TipText>
-                  means <b>GREATER</b> than
+                  {t.gle_means} <b>{t.gle_greater.toUpperCase()}</b> {t.gle_than}
                 </TipText>
               </TipRow>
               <TipRow>
                 <TipSign>&lt;</TipSign>
                 <TipText>
-                  means <b>LESS</b> than
+                  {t.gle_means} <b>{t.gle_less.toUpperCase()}</b> {t.gle_than}
                 </TipText>
               </TipRow>
               <TipRow>
                 <TipSign>=</TipSign>
                 <TipText>
-                  means <b>EQUAL</b> to
+                  {t.gle_means} <b>{t.gle_equal.toUpperCase()}</b> {t.gle_to}
                 </TipText>
               </TipRow>
             </TipsContainer>
           </ConfigSection>
         </SettingsArea>
       </GameLayout>
-
-      <AnimatePresence>
-        {showCertificate && (
-          <Certificate
-            onClose={() => {
-              setShowCertificate(false);
-              dispatch(resetAll());
-            }}
-            challengeName="Big or Small?"
-            score={streak}
-            level={`${maxDigits} Digits`}
-          />
-        )}
-      </AnimatePresence>
     </PageContainer>
   );
 };

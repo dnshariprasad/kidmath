@@ -31,8 +31,8 @@ import {
 } from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
-import Certificate from "../../../components/Certificate";
-import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
+
+import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
 import { getEncouragement } from "../../../utils/index";
 
 const SpellingChallenge = () => {
@@ -43,7 +43,6 @@ const SpellingChallenge = () => {
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
-  const [showCertificate, setShowCertificate] = useState(false);
 
   const historyRef = useRef<string[]>([]);
   const generateChallenge = useCallback(() => {
@@ -80,9 +79,21 @@ const SpellingChallenge = () => {
 
   useEffect(() => {
     if (streak > 0 && streak % 10 === 0) {
-      setShowCertificate(true);
+      setFeedback({ message: "Incredible! 10 in a row! 🌟", isCorrect: true });
+      readText("Incredible! 10 in a row! You are a superstar!");
+      confetti({
+        particleCount: 300,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#6366f1", "#4f46e5", "#818cf8"],
+      });
+      const timer = setTimeout(() => {
+        dispatch(resetStreak("spelling"));
+        setFeedback(null);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [streak]);
+  }, [streak, dispatch]);
 
   useEffect(() => {
     const handleGlobalClick = () => {
@@ -259,20 +270,6 @@ const SpellingChallenge = () => {
           />
         </SettingsArea>
       </GameLayout>
-
-      <AnimatePresence>
-        {showCertificate && (
-          <Certificate
-            onClose={() => {
-              setShowCertificate(false);
-              dispatch(resetAll());
-            }}
-            challengeName="Spelling Bee"
-            score={streak}
-            level={complexity}
-          />
-        )}
-      </AnimatePresence>
     </PageContainer>
   );
 };

@@ -19,15 +19,15 @@ export const MathExpression = styled(motion.div)`
 `;
 
 export const OperatorSpan = styled.span`
-  color: #ff7675;
+  color: ${(props) => props.theme.colors.operator};
 `;
 
 export const EqualSpan = styled.span`
-  color: #6366f1;
+  color: ${(props) => props.theme.colors.equalSign};
 `;
 
 export const QuestionSpan = styled.span`
-  color: #dfe6e9;
+  color: ${(props) => props.theme.colors.questionMark};
 `;
 
 export const AnswerGrid = styled.div`

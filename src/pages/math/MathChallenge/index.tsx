@@ -17,20 +17,22 @@ import {
   CheckboxContainer,
   CheckboxInput,
 } from "../../../theme/globalStyles";
-import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
+import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
 import { readText, getEncouragement } from "../../../utils/index";
 import confetti from "canvas-confetti";
-import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
 import { RootState } from "../../../store/store";
 import { MathExpression, OperatorSpan, EqualSpan, QuestionSpan, AnswerGrid } from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
-import Certificate from "../../../components/Certificate";
+
 import { TRANSLATIONS } from "../../../constants/translations";
+
+import { generateMathQuestion, calculateCorrectAnswer } from "./utils";
 
 export const MathChallenge: React.FC = () => {
   const dispatch = useDispatch();
+  const t = TRANSLATIONS.en;
   const streak = useSelector((state: RootState) => state.alphabet.gameStats?.math?.streak ?? 0);
   const [maxDigits, setMaxDigits] = useState(1);
   const [operator, setOperator] = useState<"+" | "-" | "*" | "/">("+");
@@ -40,69 +42,20 @@ export const MathChallenge: React.FC = () => {
   const [num2, setNum2] = useState(0);
   const [options, setOptions] = useState<(number | string)[]>([]);
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
-  const [showCertificate, setShowCertificate] = useState(false);
-  const t = TRANSLATIONS.en;
 
   const historyRef = React.useRef<string[]>([]);
   const generateQuestion = useCallback(() => {
-    const maxVal = getMaxNumber(maxDigits);
-    let attempts = 0;
-    let n1 = 0;
-    let n2 = 0;
+    const {
+      num1: n1,
+      num2: n2,
+      options: newOptions,
+      signature,
+    } = generateMathQuestion(maxDigits, operator, allowNegative, allowDecimals, historyRef.current);
 
-    while (attempts < 10) {
-      n1 = getRandomNumber(maxVal);
-      n2 = getRandomNumber(maxVal);
-
-      if (operator === "-" && n1 < n2 && !allowNegative) {
-        [n1, n2] = [n2, n1];
-      }
-
-      const sig = `${n1}${operator}${n2}`;
-      if (!historyRef.current.includes(sig)) {
-        historyRef.current = [sig, ...historyRef.current].slice(0, 10);
-        break;
-      }
-      attempts++;
-    }
-
+    historyRef.current = [signature, ...historyRef.current].slice(0, 10);
     setNum1(n1);
     setNum2(n2);
-
-    let correctAnswer: number | string;
-    if (operator === "+") correctAnswer = n1 + n2;
-    else if (operator === "-") correctAnswer = n1 - n2;
-    else if (operator === "*") correctAnswer = n1 * n2;
-    else {
-      if (allowDecimals) {
-        correctAnswer = Number((n1 / (n2 || 1)).toFixed(1));
-      } else {
-        const q = Math.floor(n1 / (n2 || 1));
-        const r = n1 % (n2 || 1);
-        correctAnswer = `Q:${q} R:${r}`;
-      }
-    }
-
-    const newOptions = new Set<number | string>([correctAnswer]);
-    while (newOptions.size < 4) {
-      if (typeof correctAnswer === "number") {
-        const offset = getRandomNumber(10) - 5;
-        if (offset !== 0) {
-          const opt = allowDecimals
-            ? Number((correctAnswer + offset / 10).toFixed(1))
-            : correctAnswer + offset;
-          if (allowNegative || opt >= 0) newOptions.add(opt);
-        }
-      } else {
-        const qOffset = getRandomNumber(5) - 2;
-        const rOffset = getRandomNumber(5) - 2;
-        const q = Math.max(0, Math.floor(n1 / (n2 || 1)) + qOffset);
-        const r = Math.max(0, (n1 % (n2 || 1)) + rOffset);
-        const opt = `Q:${q} R:${r}`;
-        if (opt !== correctAnswer) newOptions.add(opt);
-      }
-    }
-    setOptions(Array.from(newOptions).sort(() => Math.random() - 0.5));
+    setOptions(newOptions);
     setFeedback(null);
   }, [maxDigits, operator, allowDecimals, allowNegative]);
 
@@ -112,24 +65,28 @@ export const MathChallenge: React.FC = () => {
 
   useEffect(() => {
     if (streak > 0 && streak % 10 === 0) {
-      setShowCertificate(true);
+      setFeedback({
+        message: "Incredible! 10 in a row! 🌟",
+        isCorrect: true,
+      });
+      readText("Incredible! 10 in a row! You are a superstar!");
+      confetti({
+        particleCount: 300,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#6366f1", "#4f46e5", "#818cf8"],
+      });
+      const timer = setTimeout(() => {
+        dispatch(resetStreak("math"));
+        setFeedback(null);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [streak]);
+  }, [streak, dispatch]);
 
   const handleAnswer = (choice: number | string) => {
-    let correctAnswer: number | string;
-    if (operator === "+") correctAnswer = num1 + num2;
-    else if (operator === "-") correctAnswer = num1 - num2;
-    else if (operator === "*") correctAnswer = num1 * num2;
-    else {
-      if (allowDecimals) {
-        correctAnswer = Number((num1 / (num2 || 1)).toFixed(1));
-      } else {
-        const q = Math.floor(num1 / (num2 || 1));
-        const r = num1 % (num2 || 1);
-        correctAnswer = `Q:${q} R:${r}`;
-      }
-    }
+    const correctAnswer = calculateCorrectAnswer(num1, num2, operator, allowDecimals);
+
     if (choice === correctAnswer) {
       const msg = getEncouragement(streak);
       setFeedback({ message: msg, isCorrect: true });
@@ -139,12 +96,12 @@ export const MathChallenge: React.FC = () => {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#6366F1", "#4F46E5", "#FF7675"],
+        colors: ["#6366f1", "#4f46e5", "#818cf8"],
       });
       setTimeout(generateQuestion, 1500);
     } else {
-      setFeedback({ message: "Keep trying! 💪", isCorrect: false });
-      readText("Keep trying");
+      setFeedback({ message: t.fb_keepTrying, isCorrect: false });
+      readText(t.fb_tryAgain);
       dispatch(resetStreak("math"));
       setTimeout(() => setFeedback(null), 1500);
     }
@@ -258,20 +215,6 @@ export const MathChallenge: React.FC = () => {
           />
         </SettingsArea>
       </GameLayout>
-
-      <AnimatePresence>
-        {showCertificate && (
-          <Certificate
-            onClose={() => {
-              setShowCertificate(false);
-              dispatch(resetAll());
-            }}
-            challengeName={t.math_mathMagic}
-            score={streak}
-            level={`${maxDigits} ${t.com_level}`}
-          />
-        )}
-      </AnimatePresence>
     </PageContainer>
   );
 };

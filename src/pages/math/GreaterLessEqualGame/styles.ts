@@ -21,7 +21,8 @@ export const NumberDisplay = styled(motion.div)`
 `;
 
 export const QuestionMark = styled.span`
-  color: #dfe6e9;
+  color: ${(props) => props.theme.colors.questionMark};
+
   width: 80px;
   text-align: center;
   font-family: ${(props) => props.theme.fonts.primary};

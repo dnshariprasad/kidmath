@@ -18,7 +18,7 @@ import {
   PlusSign,
 } from "../../../theme/globalStyles";
 import { readText, getEncouragement } from "../../../utils/index";
-import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
+import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
 import confetti from "canvas-confetti";
 import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
 import { RootState } from "../../../store/store";
@@ -26,7 +26,6 @@ import { SortContainer, SortItem } from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
-import Certificate from "../../../components/Certificate";
 
 export const NumberSorter: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,8 +34,6 @@ export const NumberSorter: React.FC = () => {
   const [order, setOrder] = useState<"ascending" | "descending">("ascending");
   const [numbers, setNumbers] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
-  const [showCertificate, setShowCertificate] = useState(false);
-
   const resetGame = useCallback(() => {
     const maxVal = getMaxNumber(maxDigits);
     const newNumbers: number[] = [];
@@ -54,9 +51,21 @@ export const NumberSorter: React.FC = () => {
 
   useEffect(() => {
     if (streak > 0 && streak % 10 === 0) {
-      setShowCertificate(true);
+      setFeedback({ message: "Incredible! 10 in a row! 🌟", isCorrect: true });
+      readText("Incredible! 10 in a row! You are a superstar!");
+      confetti({
+        particleCount: 300,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#6366f1", "#4f46e5", "#818cf8"],
+      });
+      const timer = setTimeout(() => {
+        dispatch(resetStreak("sorting"));
+        setFeedback(null);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [streak]);
+  }, [streak, dispatch]);
 
   const checkOrder = () => {
     const sorted = [...numbers].sort((a, b) => (order === "ascending" ? a - b : b - a));
@@ -175,19 +184,6 @@ export const NumberSorter: React.FC = () => {
           />
         </SettingsArea>
       </GameLayout>
-
-      <AnimatePresence>
-        {showCertificate && (
-          <Certificate
-            onClose={() => {
-              setShowCertificate(false);
-              dispatch(resetAll());
-            }}
-            challengeName="Number Sorter"
-            score={streak}
-          />
-        )}
-      </AnimatePresence>
     </PageContainer>
   );
 };

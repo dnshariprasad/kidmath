@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Hash } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import {
@@ -103,11 +103,6 @@ const NumbersPage: React.FC = () => {
       };
     });
   }, [currentItem.value]);
-
-  useEffect(() => {
-    // Speak the number when it changes
-    readText(currentItem.value.toString());
-  }, [currentIndex, currentItem.value]);
 
   const nextNumber = () => {
     if (currentIndex < NUM_ITEMS.length - 1) {

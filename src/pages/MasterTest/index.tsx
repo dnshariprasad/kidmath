@@ -72,33 +72,10 @@ import { GameLayout } from "../../theme/globalStyles";
 import DifficultyPicker from "../../components/DifficultyPicker";
 import ChallengeHeader from "../../components/ChallengeHeader";
 import { TRANSLATIONS } from "../../constants/translations";
-import { getAllWords, getRandomWord } from "../../utils/wordUtils";
 import { readText } from "../../utils/index";
 
-type QuestionType =
-  | "math"
-  | "spelling"
-  | "missing_letter"
-  | "comparison"
-  | "hindi"
-  | "logic"
-  | "sorting";
-
-interface Question {
-  id: number;
-  type: QuestionType;
-  prompt: string;
-  correctAnswer: string;
-  data: {
-    n1?: number;
-    n2?: number;
-    op?: string;
-    word?: string;
-    displayWord?: string;
-    letter?: string;
-    optionsStrings?: string[];
-  };
-}
+import { Question, generateTestQuestions, getQuestionTextToSpeak, getGradeTitle } from "./utils";
+import { colors } from "../../theme/colors";
 
 const MasterTest: React.FC = () => {
   const { testId } = useParams<{ testId: string }>();
@@ -122,10 +99,10 @@ const MasterTest: React.FC = () => {
   const t = TRANSLATIONS.en;
 
   const difficultyOptions = [
-    { value: 1, label: "Level 1", info: "Single digits (1-9)" },
-    { value: 2, label: "Level 2", info: "One single & one double digit" },
-    { value: 3, label: "Level 3", info: "Two double digits (10-99)" },
-    { value: 4, label: "Level 4", info: "3-digit numbers (100-999)" },
+    { value: 1, label: t.com_level + " 1", info: "Single digits (1-9)" },
+    { value: 2, label: t.com_level + " 2", info: "One single & one double digit" },
+    { value: 3, label: t.com_level + " 3", info: "Two double digits (10-99)" },
+    { value: 4, label: t.com_level + " 4", info: "3-digit numbers (100-999)" },
   ];
 
   const getTestTitle = () => {
@@ -159,272 +136,7 @@ const MasterTest: React.FC = () => {
   };
 
   const generateTest = useCallback(() => {
-    const newQuestions: Question[] = [];
-    let allowedTypes: QuestionType[] = [
-      "math",
-      "spelling",
-      "missing_letter",
-      "comparison",
-      "hindi",
-      "logic",
-      "sorting",
-    ];
-    if (
-      testId === "math_addition" ||
-      testId === "math_subtraction" ||
-      testId === "math_multiplication" ||
-      testId === "math_division"
-    ) {
-      allowedTypes = ["math"];
-    }
-    if (testId === "math_test") allowedTypes = ["math", "comparison", "sorting"];
-    if (testId === "math_sorting") allowedTypes = ["sorting"];
-    if (testId === "english_missing_letters") allowedTypes = ["missing_letter"];
-    if (testId === "english_spelling") allowedTypes = ["spelling"];
-    if (testId === "spelling_test") allowedTypes = ["spelling", "missing_letter"];
-    if (testId === "hindi_test") allowedTypes = ["hindi"];
-    if (testId === "logic_test") allowedTypes = ["logic", "comparison"];
-
-    const allWords = getAllWords();
-    let words = allWords;
-    if (complexity === 1) words = allWords.filter((w) => w.length <= 4);
-    else if (complexity === 2 || complexity === 3)
-      words = allWords.filter((w) => w.length > 4 && w.length <= 7);
-    else words = allWords.filter((w) => w.length > 7);
-
-    if (words.length === 0) words = allWords; // Fallback
-
-    const hindiLetters = ["अ", "आ", "इ", "ई", "उ", "ऊ", "ए", "ऐ", "ओ", "औ", "क", "ख", "ग", "घ"];
-
-    const seenSignatures = new Set<string>();
-
-    for (let i = 1; i <= 10; i++) {
-      let q: Partial<Question> = {};
-      let attempts = 0;
-      let signature = "";
-
-      while (attempts < 20) {
-        const type = allowedTypes[Math.floor(Math.random() * allowedTypes.length)];
-        q = { id: i, type };
-
-        if (type === "math") {
-          let n1, n2;
-          if (complexity === 1) {
-            n1 = Math.floor(Math.random() * 9) + 1;
-            n2 = Math.floor(Math.random() * 9) + 1;
-          } else if (complexity === 2) {
-            const isN1Single = Math.random() > 0.5;
-            n1 = isN1Single
-              ? Math.floor(Math.random() * 9) + 1
-              : Math.floor(Math.random() * 90) + 10;
-            n2 = isN1Single
-              ? Math.floor(Math.random() * 90) + 10
-              : Math.floor(Math.random() * 9) + 1;
-          } else if (complexity === 3) {
-            n1 = Math.floor(Math.random() * 90) + 10;
-            n2 = Math.floor(Math.random() * 90) + 10;
-          } else {
-            // Level 4: 3-digit numbers (100-999)
-            n1 = Math.floor(Math.random() * 900) + 100;
-            n2 = Math.floor(Math.random() * 900) + 100;
-          }
-
-          let op = "+";
-          if (testId === "math_addition") op = "+";
-          else if (testId === "math_subtraction") op = "-";
-          else if (testId === "math_multiplication") op = "*";
-          else if (testId === "math_division") op = "/";
-          else {
-            const ops = ["+", "-"];
-            if (
-              (testId === "math_test" ||
-                !testId ||
-                testId === "math_multiplication" ||
-                testId === "math_division") &&
-              complexity !== 1
-            ) {
-              ops.push("*");
-              if (complexity >= 3) ops.push("/");
-            }
-            op = ops[Math.floor(Math.random() * ops.length)];
-          }
-
-          let num1_final = n1;
-          let num2_final = n2;
-          let ans: number | string = 0;
-
-          if (op === "+") {
-            ans = n1 + n2;
-          } else if (op === "-") {
-            if (!allowNegative) {
-              num1_final = Math.max(n1, n2);
-              num2_final = Math.min(n1, n2);
-            } else {
-              num1_final = n1;
-              num2_final = n2;
-            }
-            ans = num1_final - num2_final;
-          } else if (op === "*") {
-            let multMax = 5;
-            if (complexity === 2 || complexity === 3) multMax = 8;
-            if (complexity === 4) multMax = 12;
-            num1_final = Math.floor(Math.random() * multMax) + 1;
-            num2_final = Math.floor(Math.random() * multMax) + 1;
-            ans = num1_final * num2_final;
-          } else if (op === "/") {
-            const multMax = complexity === 1 ? 5 : complexity === 2 ? 8 : 12;
-            num2_final = Math.floor(Math.random() * multMax) + 1;
-            if (allowDecimals) {
-              num1_final = Math.floor(Math.random() * (multMax * 5)) + 1;
-              ans = Number((num1_final / num2_final).toFixed(1));
-            } else {
-              const q = Math.floor(Math.random() * multMax) + 1;
-              const r = Math.floor(Math.random() * num2_final);
-              num1_final = num2_final * q + r;
-              ans = `Q:${q} R:${r}`;
-            }
-          }
-
-          signature = `math-${num1_final}${op}${num2_final}`;
-          q.prompt = t.math_solveMath;
-          q.correctAnswer = ans.toString();
-          const opts = new Set<string>([q.correctAnswer]);
-          while (opts.size < 4) {
-            const off = Math.floor(Math.random() * 5) + 1;
-            if (typeof ans === "number") {
-              opts.add((Math.random() > 0.5 ? ans + off : Math.max(0, ans - off)).toString());
-            } else {
-              // Generate string distractor for Q:X R:Y
-              const qOff = Math.floor(Math.random() * 3) - 1;
-              const rOff = Math.floor(Math.random() * 3) - 1;
-              const qVal = Math.max(0, Math.floor(num1_final / (num2_final || 1)) + qOff);
-              const rVal = Math.max(0, (num1_final % (num2_final || 1)) + rOff);
-              opts.add(`Q:${qVal} R:${rVal}`);
-            }
-          }
-          q.data = {
-            n1: num1_final,
-            n2: num2_final,
-            op,
-            optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
-          };
-        } else if (type === "spelling") {
-          const word = getRandomWord(words).toUpperCase();
-          signature = `spelling-${word}`;
-          q.prompt = t.eng_tapTheWord;
-          q.correctAnswer = word;
-          const opts = new Set<string>([word]);
-          while (opts.size < 4) opts.add(getRandomWord(words).toUpperCase());
-          q.data = { word, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
-        } else if (type === "missing_letter") {
-          const word = getRandomWord(words).toUpperCase();
-          const missingIndex = Math.floor(Math.random() * word.length);
-          const displayWord = word.split("");
-          const actualLetter = displayWord[missingIndex];
-          displayWord[missingIndex] = "_";
-          signature = `missing-${word}-${missingIndex}`;
-          q.prompt = t.eng_chooseMissing;
-          q.correctAnswer = actualLetter;
-          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          const opts = new Set<string>([actualLetter]);
-          while (opts.size < 4) opts.add(alphabet[Math.floor(Math.random() * 26)]);
-          q.data = {
-            displayWord: displayWord.join(""),
-            word,
-            optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
-          };
-        } else if (type === "comparison") {
-          const nums: number[] = [];
-          let maxComp = 20;
-          if (complexity === 2 || complexity === 3) maxComp = 50;
-          if (complexity === 4) maxComp = 1000;
-
-          while (nums.length < 4) {
-            const n = Math.floor(Math.random() * maxComp);
-            if (!nums.includes(n)) nums.push(n);
-          }
-          const findSmallest = Math.random() > 0.5;
-          signature = `comp-${nums.sort().join(",")}-${findSmallest}`;
-          q.prompt = findSmallest ? t.math_smallestNumber : t.math_biggestNumber;
-          q.correctAnswer = findSmallest
-            ? Math.min(...nums).toString()
-            : Math.max(...nums).toString();
-          q.data = { optionsStrings: nums.map(String) };
-        } else if (type === "logic") {
-          const patterns = [
-            { sequence: ["🍎", "🍌", "🍎"], next: "🍌" },
-            { sequence: ["🐶", "🐱", "🐶"], next: "🐱" },
-            { sequence: ["1", "2", "1"], next: "2" },
-            { sequence: ["⭐", "🌙", "⭐"], next: "🌙" },
-            { sequence: ["🔴", "🔵", "🔴"], next: "🔵" },
-            { sequence: ["🚗", "🚕", "🚗"], next: "🚕" },
-            { sequence: ["🍦", "🍩", "🍦"], next: "🍩" },
-          ];
-          const p = patterns[Math.floor(Math.random() * patterns.length)];
-          signature = `logic-${p.sequence.join("")}`;
-          q.prompt = t.log_whatNext;
-          q.correctAnswer = p.next;
-          const opts = new Set<string>([p.next]);
-          while (opts.size < 4) {
-            const randomNext = patterns[Math.floor(Math.random() * patterns.length)].next;
-            opts.add(randomNext);
-          }
-          q.data = {
-            displayWord: p.sequence.join(" ") + " ?",
-            optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
-          };
-        } else if (type === "hindi") {
-          const letter = hindiLetters[Math.floor(Math.random() * hindiLetters.length)];
-          signature = `hindi-${letter}`;
-          q.prompt = t.hindi_tapLetter;
-          q.correctAnswer = letter;
-          const opts = new Set<string>([letter]);
-          while (opts.size < 4)
-            opts.add(hindiLetters[Math.floor(Math.random() * hindiLetters.length)]);
-          q.data = { letter, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
-        } else if (type === "sorting") {
-          const nums: number[] = [];
-          let sortCount = 3;
-          let sortMax = 10;
-          if (complexity === 2 || complexity === 3) {
-            sortCount = 4;
-            sortMax = 20;
-          }
-          if (complexity === 4) {
-            sortCount = 5;
-            sortMax = 50;
-          }
-
-          while (nums.length < sortCount) {
-            const n = Math.floor(Math.random() * sortMax) + 1;
-            if (!nums.includes(n)) nums.push(n);
-          }
-          const isAsc = Math.random() > 0.5;
-          signature = `sort-${nums.sort().join(",")}-${isAsc}`;
-          q.prompt = isAsc ? t.math_sortAsc : t.math_sortDesc;
-          const sorted = isAsc ? [...nums].sort((a, b) => a - b) : [...nums].sort((a, b) => b - a);
-          q.correctAnswer = sorted.join(", ");
-
-          const opts = new Set<string>([q.correctAnswer]);
-          while (opts.size < 4) {
-            const shuffled = [...nums].sort(() => Math.random() - 0.5);
-            opts.add(shuffled.join(", "));
-          }
-          q.data = {
-            displayWord: nums.join("  •  "),
-            optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5),
-          };
-        }
-
-        if (!seenSignatures.has(signature)) {
-          seenSignatures.add(signature);
-          break;
-        }
-        attempts++;
-      }
-
-      newQuestions.push(q as Question);
-    }
+    const newQuestions = generateTestQuestions(testId, complexity, allowNegative, allowDecimals, t);
     setQuestions(newQuestions);
     setAnswers({});
     setIsSubmitted(false);
@@ -451,23 +163,6 @@ const MasterTest: React.FC = () => {
   }, [isTestStarted, isSubmitted]);
 
   const currentQuestion = questions[currentIndex];
-
-  useEffect(() => {
-    if (currentQuestion && !isSubmitted) {
-      const textToSpeak =
-        currentQuestion.type === "math"
-          ? `What is ${currentQuestion.data.n1} ${currentQuestion.data.op === "+" ? "plus" : currentQuestion.data.op === "-" ? "minus" : currentQuestion.data.op === "*" ? "times" : "divided by"} ${currentQuestion.data.n2}?`
-          : currentQuestion.type === "missing_letter"
-            ? `What is the missing letter in the word ${currentQuestion.data.word}?`
-            : currentQuestion.data.word || currentQuestion.data.letter || currentQuestion.prompt;
-
-      const lang = currentQuestion.type === "hindi" ? "hi-IN" : "en-US";
-      const timer = setTimeout(() => {
-        readText(textToSpeak, lang);
-      }, 600);
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, currentQuestion, isSubmitted]);
 
   const handleInputChange = (id: number, val: string) => {
     setAnswers((prev) => ({ ...prev, [id]: val }));
@@ -527,13 +222,15 @@ const MasterTest: React.FC = () => {
           />
         </CardProgressBar>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <QuestionNumber>QUESTION {q.id} OF 10</QuestionNumber>
+          <QuestionNumber>
+            {t.test_question} {q.id} {t.test_of} 10
+          </QuestionNumber>
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              color: "#6366F1",
+              color: colors.primary,
               fontWeight: "bold",
               marginTop: "20px",
             }}
@@ -562,7 +259,11 @@ const MasterTest: React.FC = () => {
 
         <QuestionContent>
           {q.type === "math" && q.data && (
-            <BigDisplay>
+            <BigDisplay
+              onClick={() =>
+                readText(getQuestionTextToSpeak(q), q.type === "hindi" ? "hi-IN" : "en-US")
+              }
+            >
               {q.data.n1 ?? 0} {q.data.op ?? "+"} {q.data.n2 ?? 0}
             </BigDisplay>
           )}
@@ -575,7 +276,15 @@ const MasterTest: React.FC = () => {
             </SpeakContainer>
           )}
 
-          {q.type === "missing_letter" && q.data && <BigDisplay>{q.data.displayWord}</BigDisplay>}
+          {q.type === "missing_letter" && q.data && (
+            <BigDisplay
+              onClick={() =>
+                readText(getQuestionTextToSpeak(q), q.type === "hindi" ? "hi-IN" : "en-US")
+              }
+            >
+              {q.data.displayWord}
+            </BigDisplay>
+          )}
 
           {q.type === "logic" && q.data && <LogicDisplay>{q.data.displayWord}</LogicDisplay>}
 
@@ -589,7 +298,7 @@ const MasterTest: React.FC = () => {
                 <ChoiceCard
                   key={i}
                   $selected={currentVal === opt}
-                  $color="#6366F1"
+                  $color={colors.primary}
                   onClick={() => handleInputChange(q.id, opt)}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -602,13 +311,7 @@ const MasterTest: React.FC = () => {
           <NavControlBar>
             <PreviousIcon onClick={handlePrev} />
             <SpeakIcon
-              text={
-                q.type === "math"
-                  ? `What is ${q.data.n1} ${q.data.op === "+" ? "plus" : q.data.op === "-" ? "minus" : q.data.op === "*" ? "times" : "divided by"} ${q.data.n2}?`
-                  : q.type === "missing_letter"
-                    ? `What is the missing letter in the word ${q.data.word}?`
-                    : q.data.word || q.data.letter || q.prompt
-              }
+              text={getQuestionTextToSpeak(q)}
               lang={q.type === "hindi" ? "hi-IN" : "en-US"}
             />
             {currentIndex === questions.length - 1 ? (
@@ -661,11 +364,11 @@ const MasterTest: React.FC = () => {
                         width: "80px",
                         height: "80px",
                         borderRadius: "50%",
-                        background: "#6366F115",
+                        background: colors.primary + "15",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        color: "#6366F1",
+                        color: colors.primary,
                       }}
                     >
                       <Info size={40} />
@@ -673,7 +376,7 @@ const MasterTest: React.FC = () => {
                   </div>
                   <div style={{ marginBottom: "30px" }}>
                     <KidoText fontSize="xxl" fontWeight={900} color="primary">
-                      Test Instructions
+                      {t.test_instructions}
                     </KidoText>
                   </div>
 
@@ -687,10 +390,10 @@ const MasterTest: React.FC = () => {
                     }}
                   >
                     {[
-                      { icon: <Brain size={20} />, text: "10 questions total" },
-                      { icon: <CheckCircle2 size={20} />, text: "Select the best answer" },
-                      { icon: <Timer size={20} />, text: "Time will be recorded" },
-                      { icon: <Trophy size={20} />, text: "8+ score for certificate" },
+                      { icon: <Brain size={20} />, text: t.test_qCount },
+                      { icon: <CheckCircle2 size={20} />, text: t.test_selectBest },
+                      { icon: <Timer size={20} />, text: t.test_timeRecorded },
+                      { icon: <Trophy size={20} />, text: t.test_scoreForCert },
                     ].map((item, idx) => (
                       <div
                         key={idx}
@@ -699,14 +402,14 @@ const MasterTest: React.FC = () => {
                           alignItems: "center",
                           gap: "12px",
                           padding: "16px",
-                          background: "#6366F108",
+                          background: colors.primary + "08",
                           borderRadius: "16px",
-                          border: "1px solid #6366F115",
+                          border: "1px solid " + colors.primary + "15",
                           color: "#475569",
                           fontWeight: 600,
                         }}
                       >
-                        <div style={{ color: "#6366F1" }}>{item.icon}</div>
+                        <div style={{ color: colors.primary }}>{item.icon}</div>
                         {item.text}
                       </div>
                     ))}
@@ -728,7 +431,7 @@ const MasterTest: React.FC = () => {
                           checked={allowNegative}
                           onChange={(e) => setAllowNegative(e.target.checked)}
                         />
-                        Allow Negative Numbers
+                        {t.com_allowNegative}
                       </CheckboxContainer>
                     )}
 
@@ -746,7 +449,7 @@ const MasterTest: React.FC = () => {
 
                   <div style={{ marginTop: "40px" }}>
                     <KidButton
-                      title="START TEST"
+                      title={t.test_start}
                       onClick={startTest}
                       variant="primary"
                       size="xl"
@@ -817,13 +520,7 @@ const MasterTest: React.FC = () => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                {score === 10
-                  ? "GRAND MASTER"
-                  : score === 9
-                    ? "LEGEND"
-                    : score === 8
-                      ? "PRODIGY"
-                      : "KIDDOO HERO"}
+                {getGradeTitle(score)}
               </GradeBadge>
 
               <FeedbackText fontSize="2rem" fontWeight={800}>
@@ -831,7 +528,7 @@ const MasterTest: React.FC = () => {
               </FeedbackText>
 
               <SubFeedbackText fontSize="lg" color="textSecondary">
-                {score >= 8 ? t.com_masteredCurriculum : t.com_keepPracticing}
+                {score >= 8 ? t.com_masteredCurriculum : t.test_keepPracticing}
               </SubFeedbackText>
 
               <ActionsGrid>

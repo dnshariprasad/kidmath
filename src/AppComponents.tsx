@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./theme/theme.ts";
+import { GlobalCSS } from "./theme/globalStyles.tsx";
 import { RootState } from "./store/store.ts";
 import NamePrompt from "./components/NamePrompt/index.tsx";
 import LoadingScreen from "./components/LoadingScreen";
@@ -16,7 +17,12 @@ export const ConnectedThemeProvider = ({ children }: { children: React.ReactNode
     fontSize: baseTheme.fontSizes[fontSizeLevel],
   };
 
-  return <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={currentTheme}>
+      <GlobalCSS />
+      {children}
+    </ThemeProvider>
+  );
 };
 
 export const NameRequiredRoute = ({ children }: { children: React.ReactNode }) => {

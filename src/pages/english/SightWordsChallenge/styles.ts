@@ -53,7 +53,7 @@ export const SentenceContainer = styled(motion.div)`
 
 export const ExampleSentence = styled.div`
   font-size: 1rem;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.textPrimary};
   font-weight: 600;
   line-height: 1.5;
   text-align: left;

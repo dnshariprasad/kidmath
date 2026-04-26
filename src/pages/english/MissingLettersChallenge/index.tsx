@@ -31,8 +31,8 @@ import { RootState } from "../../../store/store";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import FeedbackDisplay from "../../../components/FeedbackDisplay";
-import Certificate from "../../../components/Certificate";
-import { incrementScore, resetStreak, resetAll } from "../../../store/slice/AlphabetSlice";
+
+import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
 import { getEncouragement } from "../../../utils/index";
 import { HintIconWrapper, ChallengeTextContainer, WordDisplay } from "./styles";
 import { TRANSLATIONS } from "../../../constants/translations";
@@ -49,7 +49,6 @@ const MissingLettersChallenge = () => {
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean } | null>(null);
   const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
   const [showHint, setShowHint] = useState(false);
-  const [showCertificate, setShowCertificate] = useState(false);
   const t = TRANSLATIONS.en;
 
   const historyRef = useRef<string[]>([]);
@@ -83,9 +82,21 @@ const MissingLettersChallenge = () => {
 
   useEffect(() => {
     if (streak > 0 && streak % 10 === 0) {
-      setShowCertificate(true);
+      setFeedback({ message: "Incredible! 10 in a row! 🌟", isCorrect: true });
+      readText("Incredible! 10 in a row! You are a superstar!");
+      confetti({
+        particleCount: 300,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#6366f1", "#4f46e5", "#818cf8"],
+      });
+      const timer = setTimeout(() => {
+        dispatch(resetStreak("missing_letters"));
+        setFeedback(null);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [streak]);
+  }, [streak, dispatch]);
 
   const handleSubmit = () => {
     if (randomString.toLowerCase() === inputValue.toLowerCase()) {
@@ -206,20 +217,6 @@ const MissingLettersChallenge = () => {
           />
         </SettingsArea>
       </GameLayout>
-
-      <AnimatePresence>
-        {showCertificate && (
-          <Certificate
-            onClose={() => {
-              setShowCertificate(false);
-              dispatch(resetAll());
-            }}
-            challengeName={t.eng_missingLetters}
-            score={streak}
-            level={complexity}
-          />
-        )}
-      </AnimatePresence>
     </PageContainer>
   );
 };

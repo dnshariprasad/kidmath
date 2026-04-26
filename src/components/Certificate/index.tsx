@@ -16,9 +16,6 @@ import {
   ActionButtons,
   CloseButton,
 } from "./styles";
-import { toPng } from "html-to-image";
-// @ts-expect-error - downloadjs lacks TypeScript declarations
-import download from "downloadjs";
 
 interface CertificateProps {
   onClose: () => void;
@@ -31,6 +28,10 @@ interface CertificateProps {
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 
+import { TRANSLATIONS } from "../../constants/translations";
+import { downloadCertificate, shareCertificate } from "./utils";
+import { formatDate, formatTime, generateCertificateId } from "../../utils/dateUtils";
+
 const Certificate: React.FC<CertificateProps> = ({
   onClose,
   challengeName,
@@ -38,36 +39,14 @@ const Certificate: React.FC<CertificateProps> = ({
   level,
   timeTaken,
 }) => {
+  const t = TRANSLATIONS.en;
   const userName = useSelector((state: RootState) => state.alphabet.userName);
   const [isDownloading, setIsDownloading] = React.useState(false);
 
   const handleDownloadImage = async () => {
-    const element = document.getElementById("certificate-content");
-    if (!element) return;
-
+    setIsDownloading(true);
     try {
-      setIsDownloading(true);
-
-      // To ensure it looks SAME on web and mobile, we temporarily force a width
-      const originalWidth = element.style.width;
-      element.style.width = "1000px";
-
-      // Wait for fonts to be ready
-      await document.fonts.ready;
-      // Add a small delay for any layout shifts
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      const dataUrl = await toPng(element, {
-        cacheBust: true,
-        backgroundColor: "#ffffff",
-        pixelRatio: 2,
-        canvasWidth: 1200,
-        canvasHeight: 900,
-      });
-
-      element.style.width = originalWidth; // Restore
-
-      download(dataUrl, `Kiddoo_Certificate_${challengeName}.png`);
+      await downloadCertificate("certificate-content", challengeName);
     } catch (err) {
       console.error("Error generating image:", err);
       window.print();
@@ -77,65 +56,15 @@ const Certificate: React.FC<CertificateProps> = ({
   };
 
   const handleShare = async () => {
-    const element = document.getElementById("certificate-content");
-    if (!element) return;
-
+    setIsDownloading(true);
     try {
-      setIsDownloading(true);
-
-      // Force width for consistent rendering during capture
-      const originalWidth = element.style.width;
-      element.style.width = "1000px";
-
-      // Wait for fonts to be ready
-      await document.fonts.ready;
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      const dataUrl = await toPng(element, {
-        cacheBust: true,
-        backgroundColor: "#ffffff",
-        pixelRatio: 2,
-        canvasWidth: 1200,
-        canvasHeight: 900,
-      });
-
-      element.style.width = originalWidth;
-
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      const file = new File([blob], `Kiddoo_Certificate_${challengeName}.png`, {
-        type: "image/png",
-      });
-
-      const shareData = {
-        title: "My Kiddoo Achievement!",
-        text: `I just achieved a score of ${score}/10 in the ${challengeName} test on Kiddoo! 🏆 Try it yourself at: https://dnshariprasad.github.io/kiddoo/`,
-        files: [file],
-      };
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share(shareData);
-      } else {
-        // Fallback to URL sharing if files aren't supported
-        const baseUrl = window.location.origin + window.location.pathname;
-        const shareUrl = `${baseUrl}#/?certName=${encodeURIComponent(
-          challengeName,
-        )}&certScore=${score}`;
-
-        if (navigator.share) {
-          await navigator.share({
-            title: shareData.title,
-            text: shareData.text,
-            url: shareUrl,
-          });
-        } else {
-          await navigator.clipboard.writeText(`${shareData.text} Check it out here: ${shareUrl}`);
-          alert("Achievement link copied to clipboard! 📋");
-        }
+      const result = await shareCertificate("certificate-content", challengeName, score);
+      if (result === "copied") {
+        alert(t.cert_copied);
       }
     } catch (err) {
       console.error("Error sharing:", err);
-      alert("Sharing failed. You can download the image instead! 😊");
+      alert(t.cert_failed);
     } finally {
       setIsDownloading(false);
     }
@@ -161,49 +90,40 @@ const Certificate: React.FC<CertificateProps> = ({
         <CertificateBorder id="certificate-content">
           <Sunburst />
 
-          <CertificateHeader>Hooray! You're a PRO!</CertificateHeader>
-          <CertificateSubHeader>Super Duper Achievement Award</CertificateSubHeader>
+          <CertificateHeader>{t.cert_pro}</CertificateHeader>
+          <CertificateSubHeader>{t.cert_award}</CertificateSubHeader>
 
-          <CertificateTitle>This award belongs to our amazing...</CertificateTitle>
+          <CertificateTitle>{t.cert_belongs}</CertificateTitle>
           <WinnerName>
             <Trophy size={48} color="#6366f1" />
             {userName || "Super Star"}
           </WinnerName>
 
           <CertificateText>
-            For being an absolute legend in the <b>{challengeName}</b> challenge
-            {level ? ` (${level} level)` : ""}! You've smashed it with a score of <b>{score}/10</b>
+            {t.cert_legend} <b>{challengeName}</b> {t.cert_challenge}
+            {level ? ` (${level} ${t.cert_level})` : ""}! {t.cert_smashed} <b>{score}/10</b>
             {timeTaken ? (
               <>
                 {" "}
-                in just <b>{timeTaken}</b>
+                {t.cert_inJust} <b>{timeTaken}</b>
               </>
             ) : (
               ""
             )}
-            ! Keep being awesome! 🚀✨
+            ! {t.cert_keepAwesome}
           </CertificateText>
 
           <CertificateFooter>
             <FooterText $variant="small">
-              {new Date().toLocaleDateString()} |{" "}
-              {new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                timeZoneName: "short",
-              })}
+              {formatDate()} | {formatTime()}
             </FooterText>
-            <FooterText $variant="tiny">
-              KIDDOO-{new Date().toISOString().split("T")[0].replace(/-/g, "")}-
-              {Date.now().toString().slice(-6)}-
-              {Math.random().toString(36).substring(7).toUpperCase()}
-            </FooterText>
+            <FooterText $variant="tiny">{generateCertificateId()}</FooterText>
           </CertificateFooter>
         </CertificateBorder>
 
         <ActionButtons className="no-print">
           <KidButton
-            title={isDownloading ? "Generating..." : "Download"}
+            title={isDownloading ? t.cert_generating : t.cert_download}
             variant="primary"
             onClick={handleDownloadImage}
             icon={
@@ -215,7 +135,7 @@ const Certificate: React.FC<CertificateProps> = ({
             }
           />
           <KidButton
-            title="Share"
+            title={t.cert_share}
             variant="secondary"
             onClick={handleShare}
             icon={<Share2 size={20} />}

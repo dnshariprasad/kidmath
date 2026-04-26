@@ -1,6 +1,100 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
 import { shimmerAnimation } from "./styleConstants";
+
+export const GlobalCSS = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@400;500;700&display=swap');
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: ${(props) => props.theme.colors.background};
+    overflow-x: hidden;
+    min-height: 100vh;
+    color: ${(props) => props.theme.colors.textPrimary};
+    font-family: ${(props) => props.theme.fonts.primary};
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    min-height: 100vh;
+    position: relative;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Remove Arrows from Number Input for a cleaner professional look */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  /* Material 3 Styled Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: ${(props) => props.theme.colors.border};
+    border-radius: 10px;
+    border: 2px solid ${(props) => props.theme.colors.background};
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${(props) => props.theme.colors.primary}80;
+  }
+
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #certificate-content,
+    #certificate-content * {
+      visibility: visible;
+    }
+    #certificate-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      border: 10px double ${(props) => props.theme.colors.primary} !important;
+    }
+    .no-print {
+      display: none !important;
+    }
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+`;
+
 export const SkeletonBase = styled.div`
   background: ${(props) => props.theme.colors.surfaceVariant}40;
   background-image: linear-gradient(
@@ -32,6 +126,7 @@ export const Card = styled.div`
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
   width: 100%;
+  box-sizing: border-box;
   max-width: none;
   transition: all 0.3s ease;
   border: 1px solid ${(props) => props.theme.colors.primary}15;
@@ -508,7 +603,6 @@ export const ConfigSection = styled.div<{ $disabled?: boolean }>`
   margin-bottom: 20px;
   padding-bottom: 12px;
   border-bottom: 2px dashed ${(props) => props.theme.colors.primary}15;
-  width: 100%;
   opacity: ${(props) => (props.$disabled ? 0.5 : 1)};
   pointer-events: ${(props) => (props.$disabled ? "none" : "auto")};
 
@@ -528,11 +622,11 @@ export const ConfigSubTitle = styled.h4`
 `;
 
 export const OptionsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  width: auto;
-  margin: 10px 2px 0;
+  width: 100%;
+  margin: 10px 0 0;
   box-sizing: border-box;
 `;
 

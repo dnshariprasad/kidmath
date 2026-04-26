@@ -20,6 +20,10 @@ import {
 
 import { RootState } from "../../../store/store";
 import { SudokuGrid, SudokuCell, NumberPad, TipsBox } from "./styles";
+import { TRANSLATIONS } from "../../../constants/translations";
+import { validateSudoku, generateSudokuPuzzle } from "./utils";
+
+import { colors } from "../../../theme/colors";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice";
@@ -28,6 +32,7 @@ import confetti from "canvas-confetti";
 
 const SudokuGame: React.FC = () => {
   const dispatch = useDispatch();
+  const t = TRANSLATIONS.en;
   const streak = useSelector((state: RootState) => state.alphabet.gameStats?.sudoku?.streak ?? 0);
   const [grid, setGrid] = useState<(number | null)[]>(Array(16).fill(null));
   const [fixed, setFixed] = useState<boolean[]>(Array(16).fill(false));
@@ -36,25 +41,7 @@ const SudokuGame: React.FC = () => {
   const [feedback, setFeedback] = useState<string | null>(null);
 
   const generatePuzzle = useCallback(() => {
-    const newGrid: (number | null)[] = Array(16).fill(null);
-    const newFixed: boolean[] = Array(16).fill(false);
-
-    const base = [
-      [1, 2, 3, 4],
-      [3, 4, 1, 2],
-      [2, 1, 4, 3],
-      [4, 3, 2, 1],
-    ].flat();
-
-    const fillCount = difficulty === "Easy" ? 8 : 4;
-    const indices = Array.from({ length: 16 }, (_, i) => i).sort(() => Math.random() - 0.5);
-
-    for (let i = 0; i < fillCount; i++) {
-      const idx = indices[i];
-      newGrid[idx] = base[idx];
-      newFixed[idx] = true;
-    }
-
+    const { grid: newGrid, fixed: newFixed } = generateSudokuPuzzle(difficulty);
     setGrid(newGrid);
     setFixed(newFixed);
     setSelectedCell(null);
@@ -63,6 +50,24 @@ const SudokuGame: React.FC = () => {
   useEffect(() => {
     generatePuzzle();
   }, [generatePuzzle]);
+
+  useEffect(() => {
+    if (streak > 0 && streak % 10 === 0) {
+      setFeedback("Incredible! 10 in a row! 🌟");
+      readText("Incredible! 10 in a row! You are a superstar!");
+      confetti({
+        particleCount: 300,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#6366f1", "#4f46e5", "#818cf8"],
+      });
+      const timer = setTimeout(() => {
+        dispatch(resetStreak("sudoku"));
+        setFeedback(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [streak, dispatch]);
 
   const handleCellClick = (index: number) => {
     if (!fixed[index]) {
@@ -76,36 +81,10 @@ const SudokuGame: React.FC = () => {
       newGrid[selectedCell] = num;
       setGrid(newGrid);
 
-      // Check if complete and correct
+      // Check if complete
       const isComplete = newGrid.every((cell) => cell !== null);
       if (isComplete) {
-        // Validation logic for 4x4 Sudoku
-        const checkCorrect = () => {
-          // Row check
-          for (let r = 0; r < 4; r++) {
-            const row = newGrid.slice(r * 4, r * 4 + 4);
-            if (new Set(row).size !== 4) return false;
-          }
-          // Col check
-          for (let c = 0; c < 4; c++) {
-            const col = [newGrid[c], newGrid[c + 4], newGrid[c + 8], newGrid[c + 12]];
-            if (new Set(col).size !== 4) return false;
-          }
-          // Block check (2x2)
-          const blocks = [
-            [0, 1, 4, 5],
-            [2, 3, 6, 7],
-            [8, 9, 12, 13],
-            [10, 11, 14, 15],
-          ];
-          for (const b of blocks) {
-            const block = b.map((idx) => newGrid[idx]);
-            if (new Set(block).size !== 4) return false;
-          }
-          return true;
-        };
-
-        if (checkCorrect()) {
+        if (validateSudoku(newGrid)) {
           const msg = getEncouragement(streak);
           setFeedback(msg);
           readText(msg);
@@ -114,12 +93,12 @@ const SudokuGame: React.FC = () => {
             particleCount: 150,
             spread: 70,
             origin: { y: 0.6 },
-            colors: ["#6366F1", "#4F46E5", "#FF7675"],
+            colors: [colors.primary, colors.primaryDark, colors.accentLight],
           });
           setTimeout(generatePuzzle, 3000);
         } else {
-          setFeedback("Almost! Some numbers are repeated. Check again! 💪");
-          readText("Try again");
+          setFeedback(t.sdk_almost);
+          readText(t.sdk_tryAgain);
           dispatch(resetStreak("sudoku"));
         }
       } else {
@@ -129,8 +108,8 @@ const SudokuGame: React.FC = () => {
   };
 
   const diffOptions = [
-    { value: "Easy", label: "Easy (8 Hints)" },
-    { value: "Hard", label: "Hard (4 Hints)" },
+    { value: "Easy", label: t.sdk_easyHints },
+    { value: "Hard", label: t.sdk_hardHints },
   ];
 
   return (
@@ -138,17 +117,15 @@ const SudokuGame: React.FC = () => {
       <GameLayout>
         <ChallengeHeader
           icon={Grid3X3}
-          title="Kid Sudoku"
-          subtitle="Fill the grid so every row and block has numbers 1-4!"
+          title={t.sdk_title}
+          subtitle={t.sdk_subtitle}
           streak={streak}
         />
 
         <SurpriseCard
-          title="Certificate Progress"
+          title={t.sdk_certProgress}
           subtitle={
-            streak < 10
-              ? `${10 - (streak % 10)} more for a Certificate! 🏆`
-              : "Milestone reached! 🎉"
+            streak < 10 ? `${10 - (streak % 10)} ${t.sdk_moreForCert}` : t.sdk_milestoneReached
           }
         />
 
@@ -214,7 +191,7 @@ const SudokuGame: React.FC = () => {
 
         <SettingsArea data-testid="settings-area">
           <DifficultyPicker
-            title="Puzzle Level"
+            title={t.sdk_puzzleLevel}
             name="diff"
             options={diffOptions}
             currentValue={difficulty}
@@ -222,13 +199,12 @@ const SudokuGame: React.FC = () => {
           />
 
           <ConfigSection>
-            <ConfigSubTitle>How to Play</ConfigSubTitle>
+            <ConfigSubTitle>{t.sdk_howToPlay}</ConfigSubTitle>
             <TipsBox>
               <KidoText fontSize="sm" color="textSecondary">
-                • Pick a white box
-                <br />
-                • Tap a number to fill it
-                <br />• Every 2x2 box must have 1, 2, 3, and 4!
+                • {t.sdk_step1}
+                <br />• {t.sdk_step2}
+                <br />• {t.sdk_step3}
               </KidoText>
             </TipsBox>
           </ConfigSection>

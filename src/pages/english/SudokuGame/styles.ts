@@ -20,12 +20,13 @@ export const SudokuCell = styled(motion.div)<{
   $isError: boolean;
 }>`
   aspect-ratio: 1;
-  background: ${(props) => (props.$isFixed ? "#F8F9FA" : "white")};
+  background: ${(props) =>
+    props.$isFixed ? props.theme.colors.cellFixedBg : props.theme.colors.surface};
   border: 3px solid
     ${(props) => {
       if (props.$isError) return props.theme.colors.accent;
       if (props.$isActive) return props.theme.colors.primary;
-      return "#F0F0F0";
+      return props.theme.colors.border;
     }};
   border-radius: 16px;
   display: flex;
@@ -33,7 +34,8 @@ export const SudokuCell = styled(motion.div)<{
   justify-content: center;
   font-size: 2.2rem;
   font-weight: 800;
-  color: ${(props) => (props.$isFixed ? "#636E72" : props.theme.colors.primary)};
+  color: ${(props) =>
+    props.$isFixed ? props.theme.colors.cellFixedText : props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
   cursor: ${(props) => (props.$isFixed ? "default" : "pointer")};
   transition: all 0.2s ease;
@@ -52,6 +54,6 @@ export const NumberPad = styled.div`
 
 export const TipsBox = styled.div`
   padding: 15px;
-  background: rgba(99, 102, 241, 0.05);
+  background: ${(props) => props.theme.colors.tipBoxBg};
   border-radius: 15px;
 `;
