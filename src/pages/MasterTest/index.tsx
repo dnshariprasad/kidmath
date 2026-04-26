@@ -471,8 +471,40 @@ const MasterTest: React.FC = () => {
                         </OperationChip>
                       ))}
                     </OperationToggleGrid>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "24px",
+                        flexWrap: "wrap",
+                        marginTop: "16px",
+                        marginBottom: "16px",
+                      }}
+                    >
+                      <CheckboxContainer>
+                        <CheckboxInput
+                          type="checkbox"
+                          checked={allowNegative}
+                          onChange={(e) => setAllowNegative(e.target.checked)}
+                        />
+                        <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
+                          {t.com_allowNegative}
+                        </span>
+                      </CheckboxContainer>
+                      <CheckboxContainer>
+                        <CheckboxInput
+                          type="checkbox"
+                          checked={allowDecimals}
+                          onChange={(e) => setAllowDecimals(e.target.checked)}
+                        />
+                        <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
+                          {t.com_allowDecimals}
+                        </span>
+                      </CheckboxContainer>
+                    </div>
                   </>
                 )}
+
                 <div style={{ marginTop: "12px" }}>
                   <DifficultyPicker
                     title="Difficulty"
@@ -492,42 +524,6 @@ const MasterTest: React.FC = () => {
                     name="test_target_time"
                   />
                 </div>
-
-                {(selectedTestId.includes("math") || isMasterTest) && (
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "24px",
-                      flexWrap: "wrap",
-                      marginTop: "12px",
-                    }}
-                  >
-                    {(selectedTestId === "math_test" || isMasterTest) && (
-                      <>
-                        <CheckboxContainer>
-                          <CheckboxInput
-                            type="checkbox"
-                            checked={allowNegative}
-                            onChange={(e) => setAllowNegative(e.target.checked)}
-                          />
-                          <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                            {t.com_allowNegative}
-                          </span>
-                        </CheckboxContainer>
-                        <CheckboxContainer>
-                          <CheckboxInput
-                            type="checkbox"
-                            checked={allowDecimals}
-                            onChange={(e) => setAllowDecimals(e.target.checked)}
-                          />
-                          <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                            {t.com_allowDecimals}
-                          </span>
-                        </CheckboxContainer>
-                      </>
-                    )}
-                  </div>
-                )}
               </SetupSection>
 
               <div
