@@ -629,3 +629,78 @@ export const ActionMenuItem = styled.button`
     color: ${(props) => props.theme.colors.primary};
   }
 `;
+
+export const CheckboxContainer = styled.label<{ $disabled?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: ${(props) => (props.$disabled ? "not-allowed" : "pointer")};
+  opacity: ${(props) => (props.$disabled ? 0.6 : 1)};
+  color: ${(props) => props.theme.colors.textSecondary};
+  font-family: ${(props) => props.theme.fonts.secondary};
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 8px 12px;
+  background: ${(props) => props.theme.colors.surface};
+  border: 2px solid ${(props) => props.theme.colors.border};
+  border-radius: 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: ${(props) =>
+      props.$disabled ? props.theme.colors.border : props.theme.colors.primary};
+  }
+`;
+
+export const CheckboxInput = styled.input`
+  width: 18px;
+  height: 18px;
+  cursor: inherit;
+  accent-color: ${(props) => props.theme.colors.primary};
+`;
+
+export const InfoButton = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: ${(props) => props.theme.colors.textSecondary};
+  cursor: help;
+  transition: all 0.2s ease;
+  margin-left: 6px;
+  position: relative;
+
+  &:hover {
+    color: ${(props) => props.theme.colors.primary};
+  }
+
+  &:hover::after {
+    content: attr(data-info);
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${(props) => props.theme.colors.surface};
+    color: ${(props) => props.theme.colors.textPrimary};
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid ${(props) => props.theme.colors.border};
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+`;

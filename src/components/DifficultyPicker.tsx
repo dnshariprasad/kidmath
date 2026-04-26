@@ -1,8 +1,10 @@
-import { ConfigSection, ConfigSubTitle, OptionLabel } from "../theme/globalStyles";
+import { Info } from "lucide-react";
+import { ConfigSection, ConfigSubTitle, OptionLabel, InfoButton } from "../theme/globalStyles";
 
 interface DifficultyOption<T> {
   value: T;
   label: string;
+  info?: string;
 }
 
 interface DifficultyPickerProps<T> {
@@ -35,6 +37,11 @@ const DifficultyPicker = <T extends string | number>({
             disabled={disabled}
           />
           {option.label}
+          {option.info && (
+            <InfoButton data-info={option.info}>
+              <Info size={14} />
+            </InfoButton>
+          )}
         </OptionLabel>
       ))}
     </ConfigSection>

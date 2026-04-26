@@ -25,7 +25,13 @@ import Certificate from "../../components/Certificate";
 import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
 import PreviousIcon from "../../components/PreviousIcon";
-import { PopupOverlay, ActionsMenu, ActionMenuItem } from "../../theme/globalStyles";
+import {
+  PopupOverlay,
+  ActionsMenu,
+  ActionMenuItem,
+  CheckboxContainer,
+  CheckboxInput,
+} from "../../theme/globalStyles";
 import {
   TestContainer,
   QuestionCard,
@@ -105,16 +111,18 @@ const MasterTest: React.FC = () => {
   const [showReview, setShowReview] = useState(false);
   const [showResultMenu, setShowResultMenu] = useState(false);
   const [showReviewMenu, setShowReviewMenu] = useState(false);
-  const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
+  const [complexity, setComplexity] = useState<number>(1);
+  const [allowNegative, setAllowNegative] = useState(false);
   const isMasterTest = testId === "master_test" || !testId;
   const t = TRANSLATIONS.en;
 
   const hasStarted = currentIndex > 0 || Object.keys(answers).length > 0;
 
   const difficultyOptions = [
-    { value: "Easy", label: t.com_easy },
-    { value: "Medium", label: t.com_medium },
-    { value: "Hard", label: t.com_hard },
+    { value: 1, label: "Level 1", info: "Single digits (1-9)" },
+    { value: 2, label: "Level 2", info: "One single & one double digit" },
+    { value: 3, label: "Level 3", info: "Two double digits (10-99)" },
+    { value: 4, label: "Level 4", info: "3-digit numbers (100-999)" },
   ];
 
   const getTestTitle = () => {
@@ -173,8 +181,9 @@ const MasterTest: React.FC = () => {
 
     const allWords = getAllWords();
     let words = allWords;
-    if (complexity === "Easy") words = allWords.filter((w) => w.length <= 4);
-    else if (complexity === "Medium") words = allWords.filter((w) => w.length > 4 && w.length <= 7);
+    if (complexity === 1) words = allWords.filter((w) => w.length <= 4);
+    else if (complexity === 2 || complexity === 3)
+      words = allWords.filter((w) => w.length > 4 && w.length <= 7);
     else words = allWords.filter((w) => w.length > 7);
 
     if (words.length === 0) words = allWords; // Fallback
@@ -193,12 +202,26 @@ const MasterTest: React.FC = () => {
         q = { id: i, type };
 
         if (type === "math") {
-          let maxNum = 10;
-          if (complexity === "Medium") maxNum = 20;
-          if (complexity === "Hard") maxNum = 50;
-
-          const n1 = Math.floor(Math.random() * maxNum) + 1;
-          const n2 = Math.floor(Math.random() * maxNum) + 1;
+          let n1, n2;
+          if (complexity === 1) {
+            n1 = Math.floor(Math.random() * 9) + 1;
+            n2 = Math.floor(Math.random() * 9) + 1;
+          } else if (complexity === 2) {
+            const isN1Single = Math.random() > 0.5;
+            n1 = isN1Single
+              ? Math.floor(Math.random() * 9) + 1
+              : Math.floor(Math.random() * 90) + 10;
+            n2 = isN1Single
+              ? Math.floor(Math.random() * 90) + 10
+              : Math.floor(Math.random() * 9) + 1;
+          } else if (complexity === 3) {
+            n1 = Math.floor(Math.random() * 90) + 10;
+            n2 = Math.floor(Math.random() * 90) + 10;
+          } else {
+            // Level 4: 3-digit numbers (100-999)
+            n1 = Math.floor(Math.random() * 900) + 100;
+            n2 = Math.floor(Math.random() * 900) + 100;
+          }
 
           let op = "+";
           if (testId === "math_addition") op = "+";
@@ -208,7 +231,7 @@ const MasterTest: React.FC = () => {
             const ops = ["+", "-"];
             if (
               (testId === "math_test" || !testId || testId === "math_multiplication") &&
-              complexity !== "Easy"
+              complexity !== 1
             ) {
               ops.push("*");
             }
@@ -222,13 +245,18 @@ const MasterTest: React.FC = () => {
           if (op === "+") {
             ans = n1 + n2;
           } else if (op === "-") {
-            num1_final = Math.max(n1, n2);
-            num2_final = Math.min(n1, n2);
+            if (!allowNegative) {
+              num1_final = Math.max(n1, n2);
+              num2_final = Math.min(n1, n2);
+            } else {
+              num1_final = n1;
+              num2_final = n2;
+            }
             ans = num1_final - num2_final;
           } else {
             let multMax = 5;
-            if (complexity === "Medium") multMax = 6;
-            if (complexity === "Hard") multMax = 10;
+            if (complexity === 2 || complexity === 3) multMax = 8;
+            if (complexity === 4) multMax = 12;
             num1_final = Math.floor(Math.random() * multMax) + 1;
             num2_final = Math.floor(Math.random() * multMax) + 1;
             ans = num1_final * num2_final;
@@ -276,8 +304,8 @@ const MasterTest: React.FC = () => {
         } else if (type === "comparison") {
           const nums: number[] = [];
           let maxComp = 20;
-          if (complexity === "Medium") maxComp = 50;
-          if (complexity === "Hard") maxComp = 100;
+          if (complexity === 2 || complexity === 3) maxComp = 50;
+          if (complexity === 4) maxComp = 1000;
 
           while (nums.length < 4) {
             const n = Math.floor(Math.random() * maxComp);
@@ -326,11 +354,11 @@ const MasterTest: React.FC = () => {
           const nums: number[] = [];
           let sortCount = 3;
           let sortMax = 10;
-          if (complexity === "Medium") {
+          if (complexity === 2 || complexity === 3) {
             sortCount = 4;
             sortMax = 20;
           }
-          if (complexity === "Hard") {
+          if (complexity === 4) {
             sortCount = 5;
             sortMax = 50;
           }
@@ -373,7 +401,7 @@ const MasterTest: React.FC = () => {
     setScore(0);
     setCurrentIndex(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [testId, t, complexity]);
+  }, [testId, t, complexity, allowNegative]);
 
   useEffect(() => {
     generateTest();
@@ -571,9 +599,21 @@ const MasterTest: React.FC = () => {
               title={t.com_difficulty}
               options={difficultyOptions}
               currentValue={complexity}
-              onChange={(val) => setComplexity(val as "Easy" | "Medium" | "Hard")}
+              onChange={(val) => setComplexity(Number(val))}
               disabled={hasStarted}
             />
+
+            {(testId === "math_subtraction" || testId === "math_test" || isMasterTest) && (
+              <CheckboxContainer $disabled={hasStarted}>
+                <CheckboxInput
+                  type="checkbox"
+                  checked={allowNegative}
+                  onChange={(e) => !hasStarted && setAllowNegative(e.target.checked)}
+                  disabled={hasStarted}
+                />
+                Allow Negative Numbers
+              </CheckboxContainer>
+            )}
           </SettingsArea>
         )}
       </GameLayout>
