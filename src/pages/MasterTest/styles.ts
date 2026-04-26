@@ -400,7 +400,7 @@ export const ReviewHeader = styled(KidoText)`
 `;
 
 export const ScoreValue = styled(KidoText)`
-  margin: 30px 0;
+  margin: 15px 0;
 `;
 
 export const FeedbackText = styled(KidoText)`
@@ -408,7 +408,7 @@ export const FeedbackText = styled(KidoText)`
 `;
 
 export const SubFeedbackText = styled(KidoText)`
-  margin-bottom: 50px;
+  margin-bottom: 25px;
   max-width: 500px;
 `;
 
@@ -417,6 +417,7 @@ export const ActionsGrid = styled.div`
   gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
+  position: relative;
 `;
 
 export const ReviewOverlayBox = styled(motion.div)`

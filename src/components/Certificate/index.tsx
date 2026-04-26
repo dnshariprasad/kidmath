@@ -11,10 +11,7 @@ import {
   CertificateTitle,
   WinnerName,
   CertificateText,
-  BadgeContainer,
-  Badge,
   CertificateFooter,
-  FooterItem,
   FooterText,
   ActionButtons,
   CloseButton,
@@ -161,7 +158,10 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
           <CertificateSubHeader>Super Duper Achievement Award</CertificateSubHeader>
 
           <CertificateTitle>This award belongs to our amazing...</CertificateTitle>
-          <WinnerName>{userName || "Super Star"}</WinnerName>
+          <WinnerName>
+            <Trophy size={48} color="#6366f1" />
+            {userName || "Super Star"}
+          </WinnerName>
 
           <CertificateText>
             For being an absolute legend in the <b>{challengeName}</b> challenge
@@ -169,22 +169,26 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
             correct answers! Keep being awesome! 🚀✨
           </CertificateText>
 
-          <BadgeContainer>
-            <Badge>
-              <Trophy size={40} />
-            </Badge>
-          </BadgeContainer>
-
           <CertificateFooter>
-            <FooterItem fullWidth>
-              <FooterText>{new Date().toLocaleDateString()}</FooterText>
-            </FooterItem>
+            <FooterText $variant="small">
+              {new Date().toLocaleDateString()} |{" "}
+              {new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZoneName: "short",
+              })}
+            </FooterText>
+            <FooterText $variant="tiny">
+              KIDDOO-{new Date().toISOString().split("T")[0].replace(/-/g, "")}-
+              {Date.now().toString().slice(-6)}-
+              {Math.random().toString(36).substring(7).toUpperCase()}
+            </FooterText>
           </CertificateFooter>
         </CertificateBorder>
 
         <ActionButtons className="no-print">
           <KidButton
-            title={isDownloading ? "Generating..." : "Download Image"}
+            title={isDownloading ? "Generating..." : "Download"}
             variant="primary"
             onClick={handleDownloadImage}
             icon={
@@ -196,7 +200,7 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
             }
           />
           <KidButton
-            title="Share Achievement"
+            title="Share"
             variant="secondary"
             onClick={handleShare}
             icon={<Share2 size={20} />}

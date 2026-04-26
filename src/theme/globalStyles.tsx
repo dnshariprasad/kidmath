@@ -581,3 +581,51 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
     }
   }
 `;
+
+export const PopupOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: transparent;
+`;
+
+export const ActionsMenu = styled(motion.div)`
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: ${(props) => props.theme.colors.surface};
+  border: 2px solid ${(props) => props.theme.colors.primary}20;
+  border-radius: 24px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  z-index: 100;
+  min-width: 220px;
+  overflow: hidden;
+`;
+
+export const ActionMenuItem = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: ${(props) => props.theme.colors.surface};
+  border-radius: 12px;
+  color: ${(props) => props.theme.colors.textPrimary};
+  font-family: ${(props) => props.theme.fonts.secondary};
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.primary}15;
+    color: ${(props) => props.theme.colors.primary};
+  }
+`;

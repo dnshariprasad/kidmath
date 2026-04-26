@@ -53,10 +53,7 @@ export const CertificateBorder = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: ${(props) =>
-    props.theme.theme === "dark"
-      ? "radial-gradient(circle, #2d3748 0%, #1a202c 100%)"
-      : "radial-gradient(circle, #ffffff 0%, #fffdf0 100%)"};
+  background: radial-gradient(circle, #ffffff 0%, #fffdf0 100%);
   position: relative;
   overflow: hidden;
   box-shadow:
@@ -125,12 +122,13 @@ export const CertificateHeader = styled.h1`
   @media (max-width: 480px) {
     font-size: 1.5rem;
   }
+  margin: 0;
 `;
 
 export const CertificateSubHeader = styled.h2`
   font-family: ${(props) => props.theme.fonts.secondary};
   font-size: 1.2rem;
-  color: ${(props) => props.theme.colors.textSecondary};
+  color: #475569 !important; /* Fixed dark slate */
   text-transform: uppercase;
 
   @media (max-width: 480px) {
@@ -141,7 +139,7 @@ export const CertificateSubHeader = styled.h2`
 export const CertificateTitle = styled.div`
   font-family: ${(props) => props.theme.fonts.secondary};
   font-size: ${(props) => props.theme.fontSize.sm};
-  color: ${(props) => props.theme.colors.textSecondary};
+  color: #64748b !important; /* Fixed slate */
   z-index: 1;
 `;
 
@@ -160,19 +158,20 @@ export const WinnerName = styled.div`
   @media (max-width: 480px) {
     font-size: 2rem;
   }
+  margin-top: 10px;
 `;
 
 export const CertificateText = styled.p`
   font-family: ${(props) => props.theme.fonts.secondary};
   font-size: ${(props) => props.theme.fontSize.lg};
-  color: ${(props) => props.theme.colors.textPrimary};
+  color: #1e293b !important; /* Fixed very dark slate */
   max-width: 500px;
   line-height: 1.5;
   z-index: 1;
   font-weight: 600;
-
+  margin: 0;
   b {
-    color: ${(props) => props.theme.colors.primary};
+    color: #6366f1; /* Indigo */
     font-size: 1.2em;
   }
 
@@ -254,12 +253,14 @@ export const FooterItem = styled.div<{ fullWidth?: boolean }>`
   width: ${(props) => (props.fullWidth ? "100%" : "auto")};
 `;
 
-export const FooterText = styled.div`
+export const FooterText = styled.div<{ $variant?: "small" | "tiny" }>`
   font-weight: 900;
-  font-size: 1rem;
-  color: ${(props) => props.theme.colors.textPrimary};
+  font-size: ${(props) =>
+    props.$variant === "small" ? "0.8rem" : props.$variant === "tiny" ? "0.6rem" : "1rem"};
+  color: #1e293b !important;
   font-family: ${(props) => props.theme.fonts.secondary};
-  opacity: 0.9; /* Increased from 0.6 for better visibility in images */
+  opacity: 1 !important;
+  letter-spacing: ${(props) => (props.$variant === "tiny" ? "1px" : "normal")};
 `;
 
 export const ActionButtons = styled.div`

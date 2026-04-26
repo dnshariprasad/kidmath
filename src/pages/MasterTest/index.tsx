@@ -16,12 +16,16 @@ import {
   XCircle,
   Brain,
   ArrowUpDown,
+  ChevronDown,
+  RotateCcw,
+  Home as HomeIcon,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import Certificate from "../../components/Certificate";
 import SpeakIcon from "../../components/SpeakIcon";
 import NextIcon from "../../components/NextIcon";
 import PreviousIcon from "../../components/PreviousIcon";
+import { PopupOverlay, ActionsMenu, ActionMenuItem } from "../../theme/globalStyles";
 import {
   TestContainer,
   QuestionCard,
@@ -99,6 +103,8 @@ const MasterTest: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showCertificate, setShowCertificate] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [showResultMenu, setShowResultMenu] = useState(false);
+  const [showReviewMenu, setShowReviewMenu] = useState(false);
   const [complexity, setComplexity] = useState<"Easy" | "Medium" | "Hard">("Easy");
   const isMasterTest = testId === "master_test" || !testId;
   const t = TRANSLATIONS.en;
@@ -612,11 +618,6 @@ const MasterTest: React.FC = () => {
               </SubFeedbackText>
 
               <ActionsGrid>
-                <KidButton
-                  title={t.com_reviewAnswers}
-                  onClick={() => setShowReview(true)}
-                  variant="secondary"
-                />
                 {score >= 8 && (
                   <KidButton
                     title={t.com_getCertificate}
@@ -624,8 +625,51 @@ const MasterTest: React.FC = () => {
                     variant="primary"
                   />
                 )}
-                <KidButton title={t.com_tryAgain} onClick={generateTest} variant="secondary" />
-                <KidButton title={t.com_home} onClick={() => navigate("/")} variant="primary" />
+
+                <KidButton
+                  title="Options ▾"
+                  onClick={() => setShowResultMenu(!showResultMenu)}
+                  variant="secondary"
+                  icon={<ChevronDown size={20} />}
+                />
+
+                <AnimatePresence>
+                  {showResultMenu && (
+                    <>
+                      <PopupOverlay onClick={() => setShowResultMenu(false)} />
+                      <ActionsMenu
+                        initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                      >
+                        <ActionMenuItem
+                          onClick={() => {
+                            setShowReview(true);
+                            setShowResultMenu(false);
+                          }}
+                        >
+                          <Search size={18} /> {t.com_reviewAnswers}
+                        </ActionMenuItem>
+                        <ActionMenuItem
+                          onClick={() => {
+                            generateTest();
+                            setShowResultMenu(false);
+                          }}
+                        >
+                          <RotateCcw size={18} /> {t.com_tryAgain}
+                        </ActionMenuItem>
+                        <ActionMenuItem
+                          onClick={() => {
+                            navigate("/");
+                            setShowResultMenu(false);
+                          }}
+                        >
+                          <HomeIcon size={18} /> {t.com_home}
+                        </ActionMenuItem>
+                      </ActionsMenu>
+                    </>
+                  )}
+                </AnimatePresence>
               </ActionsGrid>
             </ResultBox>
           )}
@@ -683,11 +727,6 @@ const MasterTest: React.FC = () => {
               </ReviewList>
 
               <ActionsGrid>
-                <KidButton
-                  title={t.com_backToScore}
-                  onClick={() => setShowReview(false)}
-                  variant="secondary"
-                />
                 {score >= 8 && (
                   <KidButton
                     title={t.com_getCertificate}
@@ -695,7 +734,43 @@ const MasterTest: React.FC = () => {
                     variant="primary"
                   />
                 )}
-                <KidButton title={t.com_home} onClick={() => navigate("/")} variant="primary" />
+
+                <KidButton
+                  title="Options ▾"
+                  onClick={() => setShowReviewMenu(!showReviewMenu)}
+                  variant="secondary"
+                  icon={<ChevronDown size={20} />}
+                />
+
+                <AnimatePresence>
+                  {showReviewMenu && (
+                    <>
+                      <PopupOverlay onClick={() => setShowReviewMenu(false)} />
+                      <ActionsMenu
+                        initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                      >
+                        <ActionMenuItem
+                          onClick={() => {
+                            setShowReview(false);
+                            setShowReviewMenu(false);
+                          }}
+                        >
+                          <Search size={18} /> {t.com_backToScore}
+                        </ActionMenuItem>
+                        <ActionMenuItem
+                          onClick={() => {
+                            navigate("/");
+                            setShowReviewMenu(false);
+                          }}
+                        >
+                          <HomeIcon size={18} /> {t.com_home}
+                        </ActionMenuItem>
+                      </ActionsMenu>
+                    </>
+                  )}
+                </AnimatePresence>
               </ActionsGrid>
             </ReviewOverlayBox>
           )}
