@@ -20,6 +20,19 @@ const AlphabetHindiChallenge = lazy(() => import("./pages/hindi/AlphabetHindiCha
 const AlphabetTeluguChallenge = lazy(
   () => import("./pages/telugu/AlphabetTeluguChallenge/index.tsx"),
 );
+const WeeksPage = lazy(() => import("./pages/english/WeeksPage/index.tsx"));
+const MonthsPage = lazy(() => import("./pages/english/MonthsPage/index.tsx"));
+const WeeksTeluguPage = lazy(() => import("./pages/telugu/WeeksTeluguPage/index.tsx"));
+const WeeksHindiPage = lazy(() => import("./pages/hindi/WeeksHindiPage/index.tsx"));
+const ShapesPage = lazy(() => import("./pages/math/ShapesPage/index.tsx"));
+const NumbersEnglishPage = lazy(() => import("./pages/english/NumbersEnglishPage/index.tsx"));
+const NumbersHindiPage = lazy(() => import("./pages/hindi/NumbersHindiPage/index.tsx"));
+const NumbersTeluguPage = lazy(() => import("./pages/telugu/NumbersTeluguPage/index.tsx"));
+const MonthsTeluguPage = lazy(() => import("./pages/telugu/MonthsTeluguPage/index.tsx"));
+const MonthsHindiPage = lazy(() => import("./pages/hindi/MonthsHindiPage/index.tsx"));
+const PlaceValuesPage = lazy(() => import("./pages/math/PlaceValuesPage/index.tsx"));
+const BodyPartsPage = lazy(() => import("./pages/science/BodyPartsPage/index.tsx"));
+const SenseOrgansPage = lazy(() => import("./pages/science/SenseOrgansPage/index.tsx"));
 const MissingLettersChallenge = lazy(
   () => import("./pages/english/MissingLettersChallenge/index.tsx"),
 );
@@ -134,6 +147,110 @@ createRoot(document.getElementById("root")!).render(
                     element={
                       <NameRequiredRoute>
                         <AlphabetTeluguChallenge />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="weeks_english"
+                    element={
+                      <NameRequiredRoute>
+                        <WeeksPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="months_english"
+                    element={
+                      <NameRequiredRoute>
+                        <MonthsPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="weeks_telugu"
+                    element={
+                      <NameRequiredRoute>
+                        <WeeksTeluguPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="weeks_hindi"
+                    element={
+                      <NameRequiredRoute>
+                        <WeeksHindiPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="shapes"
+                    element={
+                      <NameRequiredRoute>
+                        <ShapesPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="place_values"
+                    element={
+                      <NameRequiredRoute>
+                        <PlaceValuesPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="numbers_english_spelling"
+                    element={
+                      <NameRequiredRoute>
+                        <NumbersEnglishPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="numbers_hindi"
+                    element={
+                      <NameRequiredRoute>
+                        <NumbersHindiPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="numbers_telugu"
+                    element={
+                      <NameRequiredRoute>
+                        <NumbersTeluguPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="months_telugu"
+                    element={
+                      <NameRequiredRoute>
+                        <MonthsTeluguPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="months_hindi"
+                    element={
+                      <NameRequiredRoute>
+                        <MonthsHindiPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="body_parts"
+                    element={
+                      <NameRequiredRoute>
+                        <BodyPartsPage />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="sense_organs"
+                    element={
+                      <NameRequiredRoute>
+                        <SenseOrgansPage />
                       </NameRequiredRoute>
                     }
                   />

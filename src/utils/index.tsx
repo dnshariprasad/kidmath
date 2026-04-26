@@ -4,15 +4,35 @@ export function readText(text: string, lang: string = "en-US") {
   const isMuted = store.getState().alphabet.isMuted;
   if (isMuted) return;
 
-  // Cancel any ongoing speech to prevent overlap
+  // Cancel any ongoing speech
   window.speechSynthesis.cancel();
 
-  const speech = new SpeechSynthesisUtterance(text);
-  speech.lang = lang;
-  speech.rate = 0.95; // Slightly slower for clearer kid comprehension
-  speech.pitch = 1.1; // Slightly higher pitch for a friendlier tone
+  const speak = () => {
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = lang;
+    speech.rate = 0.9;
+    speech.pitch = 1.0;
 
-  window.speechSynthesis.speak(speech);
+    const voices = window.speechSynthesis.getVoices();
+    // Prefer a voice that matches the language exactly, then one that starts with it
+    const voice =
+      voices.find((v) => v.lang === lang) ||
+      voices.find((v) => v.lang.startsWith(lang.split("-")[0]));
+
+    if (voice) {
+      speech.voice = voice;
+    }
+
+    window.speechSynthesis.speak(speech);
+  };
+
+  // If voices are already loaded, speak immediately
+  if (window.speechSynthesis.getVoices().length > 0) {
+    speak();
+  } else {
+    // Wait for voices to load
+    window.speechSynthesis.onvoiceschanged = speak;
+  }
 }
 
 export const getEncouragement = (count: number) => {

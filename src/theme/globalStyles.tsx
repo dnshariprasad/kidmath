@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import { shimmerAnimation } from "./styleConstants";
 
 export const GlobalCSS = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@400;500;700&display=swap');
-
   html,
   body {
     margin: 0;
