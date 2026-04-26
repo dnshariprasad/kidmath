@@ -1,0 +1,1 @@
+const t=a=>10**a-1,n=a=>Math.floor(Math.random()*a)+1,o=(a,m)=>Math.floor(Math.random()*(m-a+1))+a,x={LEVEL_1:{min:1,max:10,multMax:5},LEVEL_2:{min:1,max:99,multMax:10},LEVEL_3:{min:10,max:99,multMax:12},LEVEL_4:{min:100,max:999,multMax:20},LEVEL_5:{min:1e3,max:9999,multMax:30}};export{x as M,t as a,o as b,n as g};
