@@ -67,7 +67,7 @@ const MainMenu: React.FC = () => {
                 <span className="title-wrapper">{mode.label} Mode</span>
               </MenuHeadingWrapper>
             </MenuHeading>
-            <MenuList isVisible={true}>
+            <MenuList $isVisible={true}>
               {Object.entries(groupedBySubject).map(([subject, subjectGames]) => (
                 <div key={subject} style={{ marginBottom: "12px" }}>
                   <div

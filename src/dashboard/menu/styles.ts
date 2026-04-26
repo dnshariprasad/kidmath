@@ -20,12 +20,10 @@ export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
   z-index: 10;
 
   &::-webkit-scrollbar {
-    width: 6px;
+    display: none;
   }
-  &::-webkit-scrollbar-thumb {
-    background: ${(props) => props.theme.colors.primary}20;
-    border-radius: 10px;
-  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 
   @media (max-width: 768px) {
     position: fixed;
@@ -41,7 +39,7 @@ export const MenuContainer = styled.div<{ $isOpen?: boolean }>`
 `;
 
 export const MenuSection = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `;
 
 export const MenuHeadingWrapper = styled.div`
@@ -100,19 +98,19 @@ export const MenuHeading = styled.div<{ $isActive?: boolean; $color?: string }>`
   }
 `;
 
-export const MenuList = styled.div<{ isVisible: boolean }>`
-  padding: 4px 8px 0;
+export const MenuList = styled.div<{ $isVisible: boolean }>`
+  padding: 2px 8px 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   overflow: hidden;
-  max-height: ${(props) => (props.isVisible ? "500px" : "0")};
-  opacity: ${(props) => (props.isVisible ? "1" : "0")};
-  transition: all 0.3s ease;
+  max-height: ${(props) => (props.$isVisible ? "2000px" : "0")};
+  opacity: ${(props) => (props.$isVisible ? "1" : "0")};
+  transition: all 0.4s ease;
 `;
 
 export const MenuItem = styled.div<{ $active?: boolean; $color?: string }>`
-  padding: 10px 16px;
+  padding: 8px 16px;
   background-color: ${(props) =>
     props.$active ? (props.$color || props.theme.colors.primary) + "15" : "transparent"};
   border-radius: 8px;

@@ -25,12 +25,19 @@ interface CertificateProps {
   challengeName: string;
   score: number;
   level?: string;
+  timeTaken?: string;
 }
 
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 
-const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score, level }) => {
+const Certificate: React.FC<CertificateProps> = ({
+  onClose,
+  challengeName,
+  score,
+  level,
+  timeTaken,
+}) => {
   const userName = useSelector((state: RootState) => state.alphabet.userName);
   const [isDownloading, setIsDownloading] = React.useState(false);
 
@@ -165,8 +172,16 @@ const Certificate: React.FC<CertificateProps> = ({ onClose, challengeName, score
 
           <CertificateText>
             For being an absolute legend in the <b>{challengeName}</b> challenge
-            {level ? ` (${level} level)` : ""}! You've smashed it with a streak of <b>{score}</b>{" "}
-            correct answers! Keep being awesome! 🚀✨
+            {level ? ` (${level} level)` : ""}! You've smashed it with a score of <b>{score}/10</b>
+            {timeTaken ? (
+              <>
+                {" "}
+                in just <b>{timeTaken}</b>
+              </>
+            ) : (
+              ""
+            )}
+            ! Keep being awesome! 🚀✨
           </CertificateText>
 
           <CertificateFooter>

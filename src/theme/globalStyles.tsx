@@ -527,6 +527,14 @@ export const ConfigSubTitle = styled.h4`
   gap: 8px;
 `;
 
+export const OptionsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-top: 10px;
+`;
+
 export const OptionLabel = styled.label<{ $isActive: boolean }>`
   display: flex;
   align-items: center;
@@ -536,7 +544,6 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-bottom: 5px;
   border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
   font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.colors.textPrimary};

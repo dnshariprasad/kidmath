@@ -4,7 +4,7 @@
 
 
 /Users/Hari/Code/ReactJS/kiddoo/src/components/DifficultyPicker.tsx
-  27:7  error  Prop "style" is forbidden on Components  react/forbid-component-props
+  41:13  error  Prop "style" is forbidden on Components  react/forbid-component-props
 
 /Users/Hari/Code/ReactJS/kiddoo/src/main.tsx
   13:7  warning  Fast refresh only works when a file has exports. Move your component(s) to a separate file  react-refresh/only-export-components

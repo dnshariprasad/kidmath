@@ -1,5 +1,11 @@
 import { Info } from "lucide-react";
-import { ConfigSection, ConfigSubTitle, OptionLabel, InfoButton } from "../theme/globalStyles";
+import {
+  ConfigSection,
+  ConfigSubTitle,
+  OptionLabel,
+  InfoButton,
+  OptionsGrid,
+} from "../theme/globalStyles";
 
 interface DifficultyOption<T> {
   value: T;
@@ -27,23 +33,25 @@ const DifficultyPicker = <T extends string | number>({
   return (
     <ConfigSection $disabled={disabled}>
       <ConfigSubTitle>{title}</ConfigSubTitle>
-      {options.map((option) => (
-        <OptionLabel key={option.value} $isActive={currentValue === option.value}>
-          <input
-            type="radio"
-            name={name}
-            checked={currentValue === option.value}
-            onChange={() => !disabled && onChange(option.value)}
-            disabled={disabled}
-          />
-          {option.label}
-          {option.info && (
-            <InfoButton data-info={option.info}>
-              <Info size={14} />
-            </InfoButton>
-          )}
-        </OptionLabel>
-      ))}
+      <OptionsGrid>
+        {options.map((option) => (
+          <OptionLabel key={option.value} $isActive={currentValue === option.value}>
+            <input
+              type="radio"
+              name={name}
+              checked={currentValue === option.value}
+              onChange={() => !disabled && onChange(option.value)}
+              disabled={disabled}
+            />
+            {option.label}
+            {option.info && (
+              <InfoButton data-info={option.info}>
+                <Info size={14} />
+              </InfoButton>
+            )}
+          </OptionLabel>
+        ))}
+      </OptionsGrid>
     </ConfigSection>
   );
 };

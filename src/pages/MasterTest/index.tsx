@@ -19,6 +19,8 @@ import {
   ChevronDown,
   RotateCcw,
   Home as HomeIcon,
+  Timer,
+  Info,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import Certificate from "../../components/Certificate";
@@ -31,6 +33,7 @@ import {
   ActionMenuItem,
   CheckboxContainer,
   CheckboxInput,
+  Card,
 } from "../../theme/globalStyles";
 import {
   TestContainer,
@@ -65,9 +68,8 @@ import {
   LogicDisplay,
   GradeBadge,
 } from "./styles";
-import { SettingsArea, GameLayout } from "../../theme/globalStyles";
+import { GameLayout } from "../../theme/globalStyles";
 import DifficultyPicker from "../../components/DifficultyPicker";
-import { SurpriseCard } from "../../components/SurpriseCard";
 import ChallengeHeader from "../../components/ChallengeHeader";
 import { TRANSLATIONS } from "../../constants/translations";
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
@@ -114,10 +116,10 @@ const MasterTest: React.FC = () => {
   const [complexity, setComplexity] = useState<number>(1);
   const [allowNegative, setAllowNegative] = useState(false);
   const [allowDecimals, setAllowDecimals] = useState(false);
+  const [isTestStarted, setIsTestStarted] = useState(false);
+  const [timer, setTimer] = useState(0);
   const isMasterTest = testId === "master_test" || !testId;
   const t = TRANSLATIONS.en;
-
-  const hasStarted = currentIndex > 0 || Object.keys(answers).length > 0;
 
   const difficultyOptions = [
     { value: 1, label: "Level 1", info: "Single digits (1-9)" },
@@ -430,12 +432,23 @@ const MasterTest: React.FC = () => {
     setShowCertificate(false);
     setScore(0);
     setCurrentIndex(0);
+    setTimer(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [testId, t, complexity, allowNegative, allowDecimals]);
 
   useEffect(() => {
     generateTest();
   }, [generateTest]);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | undefined;
+    if (isTestStarted && !isSubmitted) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTestStarted, isSubmitted]);
 
   const currentQuestion = questions[currentIndex];
 
@@ -458,6 +471,11 @@ const MasterTest: React.FC = () => {
 
   const handleInputChange = (id: number, val: string) => {
     setAnswers((prev) => ({ ...prev, [id]: val }));
+  };
+
+  const startTest = () => {
+    setIsTestStarted(true);
+    setTimer(0);
   };
 
   const handleSubmit = () => {
@@ -508,7 +526,22 @@ const MasterTest: React.FC = () => {
             transition={{ type: "spring", stiffness: 100 }}
           />
         </CardProgressBar>
-        <QuestionNumber>QUESTION {q.id} OF 10</QuestionNumber>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <QuestionNumber>QUESTION {q.id} OF 10</QuestionNumber>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "#6366F1",
+              fontWeight: "bold",
+              marginTop: "20px",
+            }}
+          >
+            <Timer size={18} />
+            {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}
+          </div>
+        </div>
         <SubjectBadge $type={q.type}>{q.type.replace("_", " ")}</SubjectBadge>
 
         {q.type !== "math" && (
@@ -597,66 +630,153 @@ const MasterTest: React.FC = () => {
   return (
     <PageContainer>
       <GameLayout>
-        <ChallengeHeader
-          icon={Trophy}
-          title={getTestTitle()}
-          subtitle={t.mst_subtitle}
-          streak={0}
-        />
+        <div style={{ gridColumn: "1 / -1", width: "100%" }}>
+          <ChallengeHeader
+            icon={Trophy}
+            title={getTestTitle()}
+            subtitle={t.mst_subtitle}
+            streak={0}
+          />
+        </div>
 
-        <SurpriseCard title={t.com_readyForTest} subtitle={t.mst_subtitle} onClick={() => {}} />
+        {!isTestStarted && !isSubmitted && (
+          <div
+            style={{
+              gridColumn: "1 / -1",
+              display: "flex",
+              flexDirection: "column",
+              gap: "32px",
+              width: "100%",
+              maxWidth: "none",
+              margin: "0 auto",
+              padding: 0,
+            }}
+          >
+            <div style={{ width: "100%", borderRadius: "24px", overflow: "hidden" }}>
+              <Card>
+                <div style={{ padding: "20px 40px 40px", textAlign: "center" }}>
+                  <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                    <div
+                      style={{
+                        width: "80px",
+                        height: "80px",
+                        borderRadius: "50%",
+                        background: "#6366F115",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#6366F1",
+                      }}
+                    >
+                      <Info size={40} />
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: "30px" }}>
+                    <KidoText fontSize="xxl" fontWeight={900} color="primary">
+                      Test Instructions
+                    </KidoText>
+                  </div>
 
-        <TestContainer>
-          <AnimatePresence mode="wait">
-            {currentQuestion && (
-              <CarouselSlide
-                key={currentQuestion.id}
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -50, opacity: 0 }}
-                transition={{ type: "spring", damping: 20, stiffness: 100 }}
-              >
-                {renderQuestion(currentQuestion)}
-              </CarouselSlide>
-            )}
-          </AnimatePresence>
-        </TestContainer>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                      gap: "20px",
+                      textAlign: "left",
+                      marginBottom: "40px",
+                    }}
+                  >
+                    {[
+                      { icon: <Brain size={20} />, text: "10 questions total" },
+                      { icon: <CheckCircle2 size={20} />, text: "Select the best answer" },
+                      { icon: <Timer size={20} />, text: "Time will be recorded" },
+                      { icon: <Trophy size={20} />, text: "8+ score for certificate" },
+                    ].map((item, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
+                          padding: "16px",
+                          background: "#6366F108",
+                          borderRadius: "16px",
+                          border: "1px solid #6366F115",
+                          color: "#475569",
+                          fontWeight: 600,
+                        }}
+                      >
+                        <div style={{ color: "#6366F1" }}>{item.icon}</div>
+                        {item.text}
+                      </div>
+                    ))}
+                  </div>
 
-        {!isSubmitted && (
-          <SettingsArea data-testid="settings-area">
-            <DifficultyPicker
-              name="complexity"
-              title={t.com_difficulty}
-              options={difficultyOptions}
-              currentValue={complexity}
-              onChange={(val) => setComplexity(Number(val))}
-              disabled={hasStarted}
-            />
+                  <div style={{ marginTop: "40px" }}>
+                    <DifficultyPicker
+                      name="complexity"
+                      title={t.com_difficulty}
+                      options={difficultyOptions}
+                      currentValue={complexity}
+                      onChange={(val) => setComplexity(Number(val))}
+                    />
 
-            {(testId === "math_subtraction" || testId === "math_test" || isMasterTest) && (
-              <CheckboxContainer $disabled={hasStarted}>
-                <CheckboxInput
-                  type="checkbox"
-                  checked={allowNegative}
-                  onChange={(e) => !hasStarted && setAllowNegative(e.target.checked)}
-                  disabled={hasStarted}
-                />
-                Allow Negative Numbers
-              </CheckboxContainer>
-            )}
+                    {(testId === "math_subtraction" || testId === "math_test" || isMasterTest) && (
+                      <CheckboxContainer>
+                        <CheckboxInput
+                          type="checkbox"
+                          checked={allowNegative}
+                          onChange={(e) => setAllowNegative(e.target.checked)}
+                        />
+                        Allow Negative Numbers
+                      </CheckboxContainer>
+                    )}
 
-            {(testId === "math_division" || testId === "math_test" || isMasterTest) && (
-              <CheckboxContainer $disabled={hasStarted}>
-                <CheckboxInput
-                  type="checkbox"
-                  checked={allowDecimals}
-                  onChange={(e) => !hasStarted && setAllowDecimals(e.target.checked)}
-                  disabled={hasStarted}
-                />
-                {t.com_allowDecimals}
-              </CheckboxContainer>
-            )}
-          </SettingsArea>
+                    {(testId === "math_division" || testId === "math_test" || isMasterTest) && (
+                      <CheckboxContainer>
+                        <CheckboxInput
+                          type="checkbox"
+                          checked={allowDecimals}
+                          onChange={(e) => setAllowDecimals(e.target.checked)}
+                        />
+                        {t.com_allowDecimals}
+                      </CheckboxContainer>
+                    )}
+                  </div>
+
+                  <div style={{ marginTop: "40px" }}>
+                    <KidButton
+                      title="START TEST"
+                      onClick={startTest}
+                      variant="primary"
+                      size="xl"
+                      width="100%"
+                    />
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        )}
+
+        {isTestStarted && !isSubmitted && (
+          <div style={{ gridColumn: "1 / -1", width: "100%" }}>
+            <TestContainer>
+              <AnimatePresence mode="wait">
+                {currentQuestion && (
+                  <CarouselSlide
+                    key={currentQuestion.id}
+                    initial={{ x: 50, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -50, opacity: 0 }}
+                    transition={{ type: "spring", damping: 20, stiffness: 100 }}
+                  >
+                    {renderQuestion(currentQuestion)}
+                  </CarouselSlide>
+                )}
+              </AnimatePresence>
+            </TestContainer>
+          </div>
         )}
       </GameLayout>
 
@@ -675,6 +795,21 @@ const MasterTest: React.FC = () => {
               <ScoreValue fontSize="4rem" fontWeight={900} color="primary">
                 {score} / 10
               </ScoreValue>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                  color: "#64748B",
+                  marginBottom: "20px",
+                }}
+              >
+                <Timer size={24} />
+                Time: {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}
+              </div>
 
               <GradeBadge
                 $score={score}
@@ -735,6 +870,7 @@ const MasterTest: React.FC = () => {
                         <ActionMenuItem
                           onClick={() => {
                             generateTest();
+                            setIsTestStarted(false);
                             setShowResultMenu(false);
                           }}
                         >
@@ -864,6 +1000,7 @@ const MasterTest: React.FC = () => {
                 challengeName={testId?.replace("_", " ").toUpperCase() || "Master Test"}
                 score={score}
                 level="Genius"
+                timeTaken={`${Math.floor(timer / 60)}:${(timer % 60).toString().padStart(2, "0")}`}
               />
             </CertificateWrapper>
           )}
