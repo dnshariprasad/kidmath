@@ -359,20 +359,18 @@ export const ResultBox = styled(motion.div)`
   max-width: 800px;
   width: 90%;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 
   &::before {
     content: "";
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    inset: 0;
     background: radial-gradient(
-      circle,
+      circle at center,
       ${(props) => props.theme.colors.primary}05 0%,
       transparent 70%
     );
+    border-radius: inherit;
     pointer-events: none;
   }
 
@@ -418,6 +416,17 @@ export const ActionsGrid = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   position: relative;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+
+    & > button {
+      width: 100%;
+    }
+  }
 `;
 
 export const ReviewOverlayBox = styled(motion.div)`
