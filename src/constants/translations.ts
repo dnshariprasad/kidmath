@@ -183,6 +183,20 @@ export const TRANSLATIONS = {
     test_review: "Review Answers",
     test_playAgain: "Play Again",
     test_home: "Back to Home",
+
+    // Telugu (tel_)
+    tel_teluguLegend: "Telugu Legend",
+    tel_tapLetter: "Tap the letter you hear!",
+    tel_title: "Telugu Alphabet",
+    tel_subtitle: "Explore the beautiful Telugu Varnasala!",
+    tel_achulu: "Vowels (Achulu)",
+    tel_hallulu: "Consonants (Hallulu)",
+
+    // Dashboard extra
+    dash_telugu: "Telugu",
+
+    // Games extra
+    game_alphabet_telugu: "Telugu Letters",
   },
 };
 

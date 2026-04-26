@@ -74,6 +74,7 @@ const initialState: KiddooState = {
     sight_words: { ...initialGameStats, ...persistedState?.gameStats?.sight_words },
     sudoku: { ...initialGameStats, ...persistedState?.gameStats?.sudoku },
     alphabet_hindi: { ...initialGameStats, ...persistedState?.gameStats?.alphabet_hindi },
+    alphabet_telugu: { ...initialGameStats, ...persistedState?.gameStats?.alphabet_telugu },
     master_test: { ...initialGameStats, ...persistedState?.gameStats?.master_test },
   },
   isMobileMenuOpen: false,
@@ -164,6 +165,7 @@ const kiddooSlice = createSlice({
         sight_words: { score: 0, streak: 0 },
         sudoku: { score: 0, streak: 0 },
         alphabet_hindi: { score: 0, streak: 0 },
+        alphabet_telugu: { score: 0, streak: 0 },
         master_test: { score: 0, streak: 0 },
       };
       saveState(state);

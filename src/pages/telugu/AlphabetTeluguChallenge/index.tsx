@@ -16,50 +16,38 @@ import PreviousIcon from "../../../components/PreviousIcon";
 import { Languages } from "lucide-react";
 import { SurpriseCard } from "../../../components/SurpriseCard";
 import {
-  cha,
-  hindiCombinedCharacters,
-  hindiVowels,
-  kha,
-  ta,
-  tha,
-  pa,
-  ya,
-  se,
-  hindiGroups,
-} from "../../../constants/hindiAlphabet";
+  teluguVowels,
+  teluguConsonants,
+  teluguCombined,
+  teluguVowelsGroups,
+  teluguConsonantsGroups,
+  teluguGroups,
+} from "../../../constants/teluguAlphabet";
 import { RootState } from "../../../store/store";
-import { HindiDisplay } from "./styles";
+import { TeluguDisplay } from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
+import { TRANSLATIONS } from "../../../constants/translations";
 
-const AlphabetHindiChallenge = () => {
+const AlphabetTeluguChallenge = () => {
   const navigate = useNavigate();
   const streak = useSelector(
-    (state: RootState) => state.alphabet.gameStats?.alphabet_hindi?.streak ?? 0,
+    (state: RootState) => state.alphabet.gameStats?.alphabet_telugu?.streak ?? 0,
   );
   const [index, setIndex] = useState(0);
   const [filter, setFilter] = useState<"all" | "vowels" | "consonants">("all");
+  const t = TRANSLATIONS.en;
 
   const filteredAlphabet = useMemo(() => {
-    if (filter === "vowels") return hindiVowels;
-    if (filter === "consonants") return [...kha, ...cha, ...pa, ...se, ...ta, ...tha, ...ya];
-    return [
-      ...hindiVowels,
-      ...kha,
-      ...cha,
-      ...pa,
-      ...se,
-      ...ta,
-      ...tha,
-      ...ya,
-      ...hindiCombinedCharacters,
-    ];
+    if (filter === "vowels") return teluguVowels;
+    if (filter === "consonants") return teluguConsonants;
+    return teluguCombined;
   }, [filter]);
 
   const filteredGroups = useMemo(() => {
-    if (filter === "vowels") return [hindiVowels];
-    if (filter === "consonants") return [kha, cha, ta, tha, pa, ya, se];
-    return hindiGroups;
+    if (filter === "vowels") return teluguVowelsGroups;
+    if (filter === "consonants") return teluguConsonantsGroups;
+    return teluguGroups;
   }, [filter]);
 
   const currentLetter = filteredAlphabet[index % filteredAlphabet.length];
@@ -70,31 +58,32 @@ const AlphabetHindiChallenge = () => {
 
   const filterOptions = [
     { value: "all", label: "All Characters" },
-    { value: "vowels", label: "Vowels (Svar)" },
-    { value: "consonants", label: "Consonants (Vyanjan)" },
+    { value: "vowels", label: t.tel_achulu },
+    { value: "consonants", label: t.tel_hallulu },
   ];
 
+  // Build a flat index map to know the flat index of each char in each group
   const flatChars = filteredGroups.flat();
 
   return (
-    <PageContainer data-testid="view-hindi">
+    <PageContainer data-testid="view-telugu">
       <GameLayout>
         <ChallengeHeader
           icon={Languages}
-          title="Hindi Alphabet"
-          subtitle="Explore the beautiful Hindi Varnamala!"
+          title={t.tel_title}
+          subtitle={t.tel_subtitle}
           streak={streak}
         />
 
         <SurpriseCard
           title="Take the Test? ✍️"
-          subtitle="Try the Hindi Legend exam!"
-          onClick={() => navigate("/test/hindi_legend")}
+          subtitle="Try the Telugu Legend exam!"
+          onClick={() => navigate("/test/telugu_test")}
         />
 
         <GameActivityArea data-testid="activity-area">
           <AnimatePresence mode="wait">
-            <HindiDisplay
+            <TeluguDisplay
               key={currentLetter}
               initial={{ y: 20, opacity: 0, scale: 0.8 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -102,12 +91,12 @@ const AlphabetHindiChallenge = () => {
               transition={{ type: "spring", damping: 12 }}
             >
               {currentLetter}
-            </HindiDisplay>
+            </TeluguDisplay>
           </AnimatePresence>
 
           <NavControlBar>
             <PreviousIcon onClick={handlePrev} />
-            <SpeakIcon text={currentLetter} lang="hi-IN" />
+            <SpeakIcon text={currentLetter} lang="te-IN" />
             <NextIcon onClick={handleNext} />
           </NavControlBar>
 
@@ -161,4 +150,4 @@ const AlphabetHindiChallenge = () => {
   );
 };
 
-export default AlphabetHindiChallenge;
+export default AlphabetTeluguChallenge;

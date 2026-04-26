@@ -7,3 +7,5 @@ export const pa = ["प", "फ", "ब", "भ", "म"];
 export const ya = ["य", "र", "ल", "व"];
 export const se = ["श", "ष", "स", "ह"];
 export const hindiCombinedCharacters = ["क्ष", "त्र", "ज्ञ", "श्र"];
+
+export const hindiGroups = [hindiVowels, kha, cha, ta, tha, pa, ya, se, hindiCombinedCharacters];

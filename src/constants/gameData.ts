@@ -1,5 +1,5 @@
 export type GameMode = "learn" | "practice" | "test";
-export type Subject = "English" | "Hindi" | "Math" | "Logic";
+export type Subject = "English" | "Hindi" | "Telugu" | "Math" | "Logic";
 
 export interface GameInfo {
   id: string;
@@ -43,6 +43,14 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
       iconName: "BookOpen",
       path: "/sight_words",
       subject: "English",
+    },
+    {
+      id: "alphabet_telugu",
+      title: "Telugu Letters",
+      desc: "Learn Telugu Varnasala",
+      iconName: "Languages",
+      path: "/alphabet_telugu",
+      subject: "Telugu",
     },
   ],
   practice: [
@@ -175,6 +183,14 @@ export const GAME_CATEGORIES: Record<GameMode, GameInfo[]> = {
       iconName: "Languages",
       path: "/test/hindi_test",
       subject: "Hindi",
+    },
+    {
+      id: "telugu_test",
+      title: "Telugu Legend",
+      desc: "Master the Varnasala",
+      iconName: "Languages",
+      path: "/test/telugu_test",
+      subject: "Telugu",
     },
     {
       id: "logic_test",

@@ -5,10 +5,7 @@ import {
   SettingsArea,
   PageContainer,
   Tag,
-  TagList,
   GameLayout,
-  ConfigSection,
-  ConfigSubTitle,
   GameActivityArea,
   NavControlBar,
 } from "../../../theme/globalStyles";
@@ -179,24 +176,52 @@ const NumbersPage: React.FC = () => {
             <SpeakIcon text={currentItem.value.toString()} />
             <NextIcon onClick={nextNumber} />
           </NavControlBar>
+
+          <div style={{ marginTop: "20px", width: "100%" }}>
+            <h4
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                color: "inherit",
+                fontSize: "0.85rem",
+                marginBottom: "10px",
+                fontWeight: 700,
+              }}
+            >
+              Pick a Number
+            </h4>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "6px", alignItems: "center" }}
+            >
+              {[
+                NUM_ITEMS.slice(0, 10),
+                NUM_ITEMS.slice(10, 20),
+                NUM_ITEMS.slice(20, 30),
+                NUM_ITEMS.slice(30, 40),
+                NUM_ITEMS.slice(40, 50),
+                NUM_ITEMS.slice(50, 60),
+                NUM_ITEMS.slice(60, 70),
+                NUM_ITEMS.slice(70, 80),
+                NUM_ITEMS.slice(80, 90),
+                NUM_ITEMS.slice(90, 100),
+              ].map((group, gi) => (
+                <div key={gi} style={{ display: "flex", gap: "6px", flexWrap: "nowrap" }}>
+                  {group.map((item, idx) => (
+                    <Tag
+                      key={item.value}
+                      $isActive={currentIndex === gi * 10 + idx}
+                      onClick={() => setCurrentIndex(gi * 10 + idx)}
+                    >
+                      {item.value}
+                    </Tag>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         </GameActivityArea>
 
-        <SettingsArea>
-          <ConfigSection>
-            <ConfigSubTitle>Pick a Number</ConfigSubTitle>
-            <TagList>
-              {NUM_ITEMS.map((item, idx) => (
-                <Tag
-                  key={item.value}
-                  $isActive={currentIndex === idx}
-                  onClick={() => setCurrentIndex(idx)}
-                >
-                  {item.value}
-                </Tag>
-              ))}
-            </TagList>
-          </ConfigSection>
-        </SettingsArea>
+        <SettingsArea>{/* Settings reserved for future options */}</SettingsArea>
       </GameLayout>
     </PageContainer>
   );

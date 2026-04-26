@@ -17,6 +17,9 @@ const SightWordsChallenge = lazy(() => import("./pages/english/SightWordsChallen
 const SpellingChallenge = lazy(() => import("./pages/english/SpellingChallenge/index.tsx"));
 const CrosswordSudoku = lazy(() => import("./pages/english/SudokuGame/index.tsx"));
 const AlphabetHindiChallenge = lazy(() => import("./pages/hindi/AlphabetHindiChallenge/index.tsx"));
+const AlphabetTeluguChallenge = lazy(
+  () => import("./pages/telugu/AlphabetTeluguChallenge/index.tsx"),
+);
 const MissingLettersChallenge = lazy(
   () => import("./pages/english/MissingLettersChallenge/index.tsx"),
 );
@@ -123,6 +126,14 @@ createRoot(document.getElementById("root")!).render(
                     element={
                       <NameRequiredRoute>
                         <AlphabetHindiChallenge />
+                      </NameRequiredRoute>
+                    }
+                  />
+                  <Route
+                    path="alphabet_telugu"
+                    element={
+                      <NameRequiredRoute>
+                        <AlphabetTeluguChallenge />
                       </NameRequiredRoute>
                     }
                   />

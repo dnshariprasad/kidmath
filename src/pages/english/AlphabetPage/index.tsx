@@ -6,11 +6,8 @@ import {
   SettingsArea,
   PageContainer,
   Tag,
-  TagList,
   NavControlBar,
   GameLayout,
-  ConfigSection,
-  ConfigSubTitle,
   GameActivityArea,
 } from "../../../theme/globalStyles";
 import SpeakIcon from "../../../components/SpeakIcon";
@@ -23,18 +20,27 @@ import { BigLetter } from "./styles";
 import ChallengeHeader from "../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../components/DifficultyPicker";
 
+const BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+// English alphabet in rows: A-G, H-N, O-U, V-Z
+const LETTER_GROUPS = [
+  BIG.slice(0, 7), // A–G
+  BIG.slice(7, 14), // H–N
+  BIG.slice(14, 21), // O–U
+  BIG.slice(21), // V–Z
+];
+
 const AlphabetPage = () => {
   const navigate = useNavigate();
-  const big = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   const streak = useSelector((state: RootState) => state.alphabet.gameStats?.alphabet?.streak ?? 0);
   const [index, setIndex] = useState(0);
   const [letterCase, setLetterCase] = useState<"big" | "small">("big");
 
-  const currentLetterData = big[index];
+  const currentLetterData = BIG[index];
   const currentLetter = letterCase === "big" ? currentLetterData : currentLetterData.toLowerCase();
 
-  const handleNext = () => setIndex((prev) => (prev + 1) % big.length);
-  const handlePrevious = () => setIndex((prev) => (prev - 1 + big.length) % big.length);
+  const handleNext = () => setIndex((prev) => (prev + 1) % BIG.length);
+  const handlePrevious = () => setIndex((prev) => (prev - 1 + BIG.length) % BIG.length);
 
   const caseOptions = [
     { value: "big", label: "BIG LETTERS (A)" },
@@ -75,6 +81,41 @@ const AlphabetPage = () => {
             <SpeakIcon text={currentLetter} />
             <NextIcon onClick={handleNext} />
           </NavControlBar>
+
+          <div style={{ marginTop: "20px", width: "100%" }}>
+            <h4
+              style={{
+                justifyContent: "center",
+                display: "flex",
+                color: "inherit",
+                fontSize: "0.85rem",
+                marginBottom: "10px",
+                fontWeight: 700,
+              }}
+            >
+              Pick a Letter
+            </h4>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "6px", alignItems: "center" }}
+            >
+              {LETTER_GROUPS.map((group, gi) => (
+                <div key={gi} style={{ display: "flex", gap: "6px", flexWrap: "nowrap" }}>
+                  {group.map((letter) => {
+                    const flatIdx = BIG.indexOf(letter);
+                    return (
+                      <Tag
+                        key={letter}
+                        $isActive={index === flatIdx}
+                        onClick={() => setIndex(flatIdx)}
+                      >
+                        {letterCase === "big" ? letter : letter.toLowerCase()}
+                      </Tag>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
         </GameActivityArea>
 
         <SettingsArea data-testid="settings-area">
@@ -85,17 +126,6 @@ const AlphabetPage = () => {
             currentValue={letterCase}
             onChange={(val) => setLetterCase(val as "big" | "small")}
           />
-
-          <ConfigSection>
-            <ConfigSubTitle>Pick a Letter</ConfigSubTitle>
-            <TagList>
-              {big.map((letter, i) => (
-                <Tag key={letter} $isActive={index === i} onClick={() => setIndex(i)}>
-                  {letter}
-                </Tag>
-              ))}
-            </TagList>
-          </ConfigSection>
         </SettingsArea>
       </GameLayout>
     </PageContainer>
