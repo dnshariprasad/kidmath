@@ -40,6 +40,7 @@ import {
   ChevronLeft,
   User,
   Zap,
+  Share2,
 } from "lucide-react";
 
 const Navbar: React.FC = () => {
@@ -145,6 +146,29 @@ const Navbar: React.FC = () => {
                   >
                     <Zap size={20} />
                     <span>{t.nav_setProgress}</span>
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={async () => {
+                      setIsMoreMenuOpen(false);
+                      const shareData = {
+                        title: "Kiddoo - Fun Learning for Kids",
+                        text: "Check out Kiddoo, a fun and interactive learning platform for kids! 🚀",
+                        url: "https://dnshariprasad.github.io/kiddoo/",
+                      };
+                      try {
+                        if (navigator.share) {
+                          await navigator.share(shareData);
+                        } else {
+                          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+                          alert("Link copied to clipboard! 📋");
+                        }
+                      } catch (err) {
+                        console.error("Error sharing:", err);
+                      }
+                    }}
+                  >
+                    <Share2 size={20} />
+                    <span>Share Kiddoo</span>
                   </DropdownItem>
                 </>
               ) : (

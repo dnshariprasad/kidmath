@@ -109,7 +109,7 @@ const Certificate: React.FC<CertificateProps> = ({
 
       const shareData = {
         title: "My Kiddoo Achievement!",
-        text: `I just achieved a streak of ${score} correct answers in the ${challengeName} challenge on Kiddoo! 🏆`,
+        text: `I just achieved a score of ${score}/10 in the ${challengeName} test on Kiddoo! 🏆 Try it yourself at: https://dnshariprasad.github.io/kiddoo/`,
         files: [file],
       };
 

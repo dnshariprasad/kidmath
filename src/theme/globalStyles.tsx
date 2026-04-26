@@ -531,8 +531,9 @@ export const OptionsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 12px;
-  width: 100%;
-  margin-top: 10px;
+  width: auto;
+  margin: 10px 2px 0;
+  box-sizing: border-box;
 `;
 
 export const OptionLabel = styled.label<{ $isActive: boolean }>`
