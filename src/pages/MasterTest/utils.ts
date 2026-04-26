@@ -33,6 +33,7 @@ export const generateTestQuestions = (
   allowNegative: boolean,
   allowDecimals: boolean,
   t: TranslationKeys,
+  selectedMathOps: string[] = ["+", "-", "*", "/"],
 ): Question[] => {
   const newQuestions: Question[] = [];
   let allowedTypes: QuestionType[] = [
@@ -94,18 +95,14 @@ export const generateTestQuestions = (
         else if (testId === "math_multiplication") op = "*";
         else if (testId === "math_division") op = "/";
         else {
-          const ops = ["+", "-"];
-          if (
-            (testId === "math_test" ||
-              !testId ||
-              testId === "math_multiplication" ||
-              testId === "math_division") &&
-            complexity >= 2
-          ) {
-            ops.push("*");
-            if (complexity >= 3) ops.push("/");
-          }
+          // If in general math_test or master_test, use the selected operations
+          const ops = selectedMathOps.length > 0 ? selectedMathOps : ["+"];
           op = ops[Math.floor(Math.random() * ops.length)];
+
+          // Filter by complexity if needed (though user selection usually overrides this)
+          if (complexity < 2 && (op === "*" || op === "/")) {
+            op = "+"; // Fallback for very low complexity if user somehow picked * or /
+          }
         }
 
         if (op === "*") {

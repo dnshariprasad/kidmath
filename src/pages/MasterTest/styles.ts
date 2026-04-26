@@ -600,3 +600,69 @@ export const SettingsTitle = styled(KidoText)`
   opacity: 0.6;
   letter-spacing: 2px;
 `;
+
+export const SubjectGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+`;
+
+export const SubjectChip = styled(motion.button)<{ $active: boolean; $color: string }>`
+  padding: 12px 24px;
+  border-radius: 100px;
+  background: ${(props) => (props.$active ? props.$color : props.theme.colors.surface)};
+  color: ${(props) => (props.$active ? "white" : props.theme.colors.textSecondary)};
+  border: 2px solid ${(props) => (props.$active ? props.$color : props.theme.colors.primary + "20")};
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  font-family: ${(props) => props.theme.fonts.primary};
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: ${(props) => props.theme.shadows.md};
+  }
+`;
+
+export const OperationToggleGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+`;
+
+export const OperationChip = styled(motion.button)<{ $active: boolean }>`
+  height: 50px;
+  padding: 0 24px;
+  border-radius: 16px;
+  background: ${(props) =>
+    props.$active ? props.theme.colors.primary : props.theme.colors.surface};
+  color: ${(props) => (props.$active ? "white" : props.theme.colors.primary)};
+  border: 2px solid
+    ${(props) => (props.$active ? props.theme.colors.primary : props.theme.colors.primary + "30")};
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  font-family: ${(props) => props.theme.fonts.primary};
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: ${(props) => props.theme.shadows.md};
+  }
+
+  span:first-child {
+    font-size: 1.6rem;
+    font-weight: 900;
+  }
+`;

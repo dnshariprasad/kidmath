@@ -21,6 +21,8 @@ import {
   Home as HomeIcon,
   Timer,
   Zap,
+  Calculator,
+  BookOpen,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import Certificate from "../../components/Certificate";
@@ -72,6 +74,10 @@ import {
   InstructionItem,
   SetupSection,
   GradeBadge,
+  SubjectGrid,
+  SubjectChip,
+  OperationToggleGrid,
+  OperationChip,
 } from "./styles";
 import { GameLayout } from "../../theme/globalStyles";
 import DifficultyPicker from "../../components/DifficultyPicker";
@@ -102,8 +108,18 @@ const MasterTest: React.FC = () => {
   const [isTestStarted, setIsTestStarted] = useState(false);
   const [timer, setTimer] = useState(0);
   const [targetTime, setTargetTime] = useState<number>(0);
-  const isMasterTest = testId === "master_test" || !testId;
+  const [selectedTestId, setSelectedTestId] = useState<string>(testId || "math_test");
+  const [selectedMathOps, setSelectedMathOps] = useState<string[]>(["+"]);
+  const isMasterTest = selectedTestId === "master_test";
   const t = TRANSLATIONS.en;
+
+  const categories = [
+    { id: "math_test", label: "Math", icon: <Calculator size={18} />, color: "#10B981" },
+    { id: "spelling_test", label: "English", icon: <BookOpen size={18} />, color: "#F59E0B" },
+    { id: "hindi_test", label: "Hindi", icon: <Languages size={18} />, color: "#EC4899" },
+    { id: "logic_test", label: "Logic", icon: <Brain size={18} />, color: "#8B5CF6" },
+    { id: "master_test", label: "Grand Master", icon: <Trophy size={18} />, color: "#6366F1" },
+  ];
 
   const difficultyOptions = React.useMemo(
     () => [
@@ -131,7 +147,7 @@ const MasterTest: React.FC = () => {
 
   const getTestTitle = () => {
     if (isMasterTest) return t.mst_grandMaster;
-    switch (testId) {
+    switch (selectedTestId) {
       case "math_addition":
         return t.math_addition;
       case "math_subtraction":
@@ -160,7 +176,14 @@ const MasterTest: React.FC = () => {
   };
 
   const generateTest = useCallback(() => {
-    const newQuestions = generateTestQuestions(testId, complexity, allowNegative, allowDecimals, t);
+    const newQuestions = generateTestQuestions(
+      selectedTestId,
+      complexity,
+      allowNegative,
+      allowDecimals,
+      t,
+      selectedMathOps,
+    );
     setQuestions(newQuestions);
     setAnswers({});
     setIsSubmitted(false);
@@ -170,7 +193,7 @@ const MasterTest: React.FC = () => {
     setCurrentIndex(0);
     setTimer(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [testId, t, complexity, allowNegative, allowDecimals]);
+  }, [selectedTestId, t, complexity, allowNegative, allowDecimals, selectedMathOps]);
 
   const handleSubmit = useCallback(() => {
     let finalScore = 0;
@@ -428,6 +451,64 @@ const MasterTest: React.FC = () => {
               </InstructionGrid>
 
               <SetupSection>
+                <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                  <KidoText fontSize="lg" fontWeight={800} color="primary">
+                    1. Choose Your Subject
+                  </KidoText>
+                </div>
+                <SubjectGrid>
+                  {categories.map((cat) => (
+                    <SubjectChip
+                      key={cat.id}
+                      $active={selectedTestId === cat.id}
+                      $color={cat.color}
+                      onClick={() => setSelectedTestId(cat.id)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {cat.icon}
+                      {cat.label}
+                    </SubjectChip>
+                  ))}
+                </SubjectGrid>
+
+                {(selectedTestId === "math_test" || isMasterTest) && (
+                  <>
+                    <div style={{ textAlign: "center", marginTop: "10px", marginBottom: "10px" }}>
+                      <KidoText fontSize="md" fontWeight={800} color="primary">
+                        Included Operations
+                      </KidoText>
+                    </div>
+                    <OperationToggleGrid>
+                      {[
+                        { symbol: "+", label: t.math_addition },
+                        { symbol: "-", label: t.math_subtraction },
+                        { symbol: "*", label: t.math_multiplication, display: "×" },
+                        { symbol: "/", label: t.math_division, display: "÷" },
+                      ].map((op) => (
+                        <OperationChip
+                          key={op.symbol}
+                          $active={selectedMathOps.includes(op.symbol)}
+                          onClick={() =>
+                            setSelectedMathOps((prev) =>
+                              prev.includes(op.symbol)
+                                ? prev.filter((o) => o !== op.symbol)
+                                : [...prev, op.symbol],
+                            )
+                          }
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <span>{op.display || op.symbol}</span>
+                          <span>{op.label}</span>
+                        </OperationChip>
+                      ))}
+                    </OperationToggleGrid>
+                  </>
+                )}
+
+                <div style={{ marginTop: "20px" }} />
+
                 <DifficultyPicker
                   name="complexity"
                   title={t.com_difficulty}
