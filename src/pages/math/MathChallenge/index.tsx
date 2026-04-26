@@ -115,11 +115,11 @@ export const MathChallenge: React.FC = () => {
   ];
 
   const diffOptions = [
-    { value: 1, label: "1-10" },
-    { value: 2, label: "Mixed" },
-    { value: 3, label: "2-Digits" },
-    { value: 4, label: "3-Digits" },
-    { value: 5, label: "Elite" },
+    { value: 1, label: t.diff_beginner },
+    { value: 2, label: t.diff_explorer },
+    { value: 3, label: t.diff_achiever },
+    { value: 4, label: t.diff_master },
+    { value: 5, label: t.diff_elite },
   ];
 
   return (

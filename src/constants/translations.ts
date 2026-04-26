@@ -40,6 +40,11 @@ export const TRANSLATIONS = {
     com_medium: "Medium",
     com_hard: "Hard",
     com_time: "Time",
+    diff_beginner: "Beginner",
+    diff_explorer: "Explorer",
+    diff_achiever: "Achiever",
+    diff_master: "Master",
+    diff_elite: "Elite",
 
     // Nav (nav_)
     nav_updateName: "Update Name",

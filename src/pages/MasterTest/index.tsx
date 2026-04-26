@@ -107,11 +107,11 @@ const MasterTest: React.FC = () => {
 
   const difficultyOptions = React.useMemo(
     () => [
-      { value: 1, label: t.com_level + " 1", info: "Beginner: Numbers 1-10" },
-      { value: 2, label: t.com_level + " 2", info: "Explorer: One single & one double digit" },
-      { value: 3, label: t.com_level + " 3", info: "Achiever: Two double digits (10-99)" },
-      { value: 4, label: t.com_level + " 4", info: "Master: 3-digit numbers (100-999)" },
-      { value: 5, label: t.com_level + " 5", info: "Elite: 4-digit numbers (1000-9999)" },
+      { value: 1, label: t.diff_beginner, info: "Numbers 1-10" },
+      { value: 2, label: t.diff_explorer, info: "One single & one double digit" },
+      { value: 3, label: t.diff_achiever, info: "Two double digits (10-99)" },
+      { value: 4, label: t.diff_master, info: "3-digit numbers (100-999)" },
+      { value: 5, label: t.diff_elite, info: "4-digit numbers (1000-9999)" },
     ],
     [t],
   );
