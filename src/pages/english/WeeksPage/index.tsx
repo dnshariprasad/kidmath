@@ -18,18 +18,13 @@ import ChallengeHeader from "../../../components/ChallengeHeader";
 import { SurpriseCard } from "../../../components/SurpriseCard";
 import { englishWeeks } from "../../../constants/weeksData";
 import { BigDisplay, EmojiDisplay, SubLabel } from "../../shared/learnStyles";
-
-const FACTS = [
-  { emoji: "📅", fact: "There are 7 days in a week." },
-  { emoji: "🗓️", fact: "4 weeks make 1 month." },
-  { emoji: "📆", fact: "52 weeks make 1 year." },
-  { emoji: "☀️", fact: "The week starts on Sunday." },
-  { emoji: "🎉", fact: "Saturday and Sunday are the weekend!" },
-];
+import { TRANSLATIONS } from "../../../constants/translations";
+import { colors } from "../../../theme/colors";
 
 const WeeksPage = () => {
   const [index, setIndex] = useState(0);
   const current = englishWeeks[index];
+  const t = TRANSLATIONS.en;
 
   const handleNext = () => setIndex((p) => (p + 1) % englishWeeks.length);
   const handlePrev = () => setIndex((p) => (p - 1 + englishWeeks.length) % englishWeeks.length);
@@ -37,17 +32,9 @@ const WeeksPage = () => {
   return (
     <PageContainer data-testid="view-weeks-english">
       <GameLayout>
-        <ChallengeHeader
-          icon={Calendar}
-          title="Days of the Week"
-          subtitle="Learn the 7 days of the week!"
-          streak={0}
-        />
+        <ChallengeHeader icon={Calendar} title={t.wee_title} subtitle={t.wee_subtitle} streak={0} />
 
-        <SurpriseCard
-          title="Fun Fact! 📅"
-          subtitle="There are 7 days in a week and 52 weeks in a year!"
-        />
+        <SurpriseCard title={t.wee_funFact} subtitle={t.wee_funFactDetail} />
 
         <GameActivityArea data-testid="activity-area">
           <AnimatePresence mode="wait">
@@ -80,7 +67,7 @@ const WeeksPage = () => {
                 color: "inherit",
               }}
             >
-              Pick a Day
+              {t.wee_pickDay}
             </h4>
             <div
               style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}
@@ -96,8 +83,8 @@ const WeeksPage = () => {
 
         <SettingsArea data-testid="settings-area">
           <ConfigSection>
-            <ConfigSubTitle>Did You Know? 🌟</ConfigSubTitle>
-            {FACTS.map((f, i) => (
+            <ConfigSubTitle>{t.wee_didYouKnow}</ConfigSubTitle>
+            {t.wee_facts.map((f, i) => (
               <div
                 key={i}
                 style={{
@@ -105,7 +92,8 @@ const WeeksPage = () => {
                   alignItems: "flex-start",
                   gap: "10px",
                   padding: "10px 0",
-                  borderBottom: i < FACTS.length - 1 ? "1px dashed rgba(99,102,241,0.15)" : "none",
+                  borderBottom:
+                    i < t.wee_facts.length - 1 ? `1px dashed ${colors.primary}25` : "none",
                   fontSize: "0.85rem",
                   lineHeight: 1.5,
                   fontWeight: 600,

@@ -1,4 +1,5 @@
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
+import { TranslationKeys } from "../../constants/translations";
 
 export type QuestionType =
   | "math"
@@ -30,7 +31,7 @@ export const generateTestQuestions = (
   complexity: number,
   allowNegative: boolean,
   allowDecimals: boolean,
-  t: Record<string, string>,
+  t: TranslationKeys,
 ): Question[] => {
   const newQuestions: Question[] = [];
   let allowedTypes: QuestionType[] = [

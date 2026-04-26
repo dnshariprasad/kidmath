@@ -52,6 +52,15 @@ export const colors = {
   equalSign: "#6366F1",
   questionMark: "#DFE6E9",
 
+  // Feedback & Reward colors
+  gold: "#FFD700",
+  goldDark: "#D97706",
+  goldLight: "#FDE68A",
+
+  slate: "#94A3B8",
+  slateDark: "#475569",
+  slateLight: "#E2E8F0",
+
   // Category specific (if they differ from primary)
   math: "#6366F1",
   english: "#6366F1",

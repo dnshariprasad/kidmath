@@ -321,11 +321,9 @@ export const CorrectionRow = styled.div`
   gap: 10px;
   font-size: 0.9rem;
 `;
-
 export const IconWrapper = styled.div`
-  color: #6366f1;
+  color: ${(props) => props.theme.colors.primary};
 `;
-
 export const PromptText = styled(KidoText)`
   text-align: center;
 `;
@@ -384,14 +382,17 @@ export const ResultBox = styled(motion.div)`
 export const GradeBadge = styled(motion.div)<{ $score: number }>`
   padding: 12px 30px;
   border-radius: 100px;
-  background: ${(props) => (props.$score >= 8 ? "#FFD700" : "#94A3B8")}20;
-  color: ${(props) => (props.$score >= 8 ? "#D97706" : "#475569")};
+  background: ${(props) =>
+    props.$score >= 8 ? props.theme.colors.gold : props.theme.colors.slate}20;
+  color: ${(props) =>
+    props.$score >= 8 ? props.theme.colors.goldDark : props.theme.colors.slateDark};
   font-weight: 900;
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-top: 20px;
-  border: 2px solid ${(props) => (props.$score >= 8 ? "#FFD700" : "#94A3B8")}40;
+  border: 2px solid
+    ${(props) => (props.$score >= 8 ? props.theme.colors.gold : props.theme.colors.slate)}40;
   font-family: ${(props) => props.theme.fonts.primary};
 `;
 

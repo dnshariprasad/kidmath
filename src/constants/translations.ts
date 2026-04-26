@@ -39,6 +39,7 @@ export const TRANSLATIONS = {
     com_easy: "Easy",
     com_medium: "Medium",
     com_hard: "Hard",
+    com_time: "Time",
 
     // Nav (nav_)
     nav_updateName: "Update Name",
@@ -186,7 +187,28 @@ export const TRANSLATIONS = {
     test_targetTime: "Target Time",
     test_noLimit: "No Limit",
     test_beatenTarget: "You beat the target time! ⚡",
-    test_missedTarget: "Target time exceeded. Keep practicing! 🐢",
+    test_timeExceeded: "Target time exceeded. Keep practicing! 🐢",
+    test_time30s: "30s",
+    test_time1m: "1 Min",
+    test_time2m: "2 Min",
+    test_time3m: "3 Min",
+    test_time4m: "4 Min",
+    test_time5m: "5 Min",
+    test_timeLimitInfo: {
+      none: "Take all the time you need",
+      s30: "Quick Sprint",
+      m1: "Quick Challenge",
+      m2: "Standard Pace",
+      m3: "Relaxed Pace",
+      m4: "Focused Pace",
+      m5: "Taking it Slow",
+    },
+
+    // Extra Feedback
+    fb_incredible10: "Incredible! 10 in a row! 🌟",
+    fb_superstar: "Incredible! 10 in a row! You are a superstar!",
+    fb_notQuite: "Not quite, try again! 😅",
+    fb_tryAgainShort: "Try again",
 
     // Telugu (tel_)
     tel_teluguLegend: "Telugu Legend",
@@ -195,6 +217,36 @@ export const TRANSLATIONS = {
     tel_subtitle: "Explore the beautiful Telugu Varnasala!",
     tel_achulu: "Vowels (Achulu)",
     tel_hallulu: "Consonants (Hallulu)",
+
+    // Weeks (wee_)
+    wee_title: "Days of the Week",
+    wee_subtitle: "Learn the 7 days of the week!",
+    wee_funFact: "Fun Fact! 📅",
+    wee_funFactDetail: "There are 7 days in a week and 52 weeks in a year!",
+    wee_pickDay: "Pick a Day",
+    wee_didYouKnow: "Did You Know? 🌟",
+    wee_facts: [
+      { emoji: "📅", fact: "There are 7 days in a week." },
+      { emoji: "🗓️", fact: "4 weeks make 1 month." },
+      { emoji: "📆", fact: "52 weeks make 1 year." },
+      { emoji: "☀️", fact: "The week starts on Sunday." },
+      { emoji: "🎉", fact: "Saturday and Sunday are the weekend!" },
+    ],
+
+    // Encouragement (enc_)
+    enc_messages: [
+      "Good Start!",
+      "Keep Going!",
+      "Well Done!",
+      "So Smart!",
+      "Half Way!",
+      "Great Job!",
+      "Amazing!",
+      "Brilliant!",
+      "Nearly There!",
+      "Almost Done!",
+    ],
+    enc_default: "Keep going!",
 
     // Dashboard extra
     dash_telugu: "Telugu",

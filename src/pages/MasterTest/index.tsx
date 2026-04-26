@@ -105,22 +105,28 @@ const MasterTest: React.FC = () => {
   const isMasterTest = testId === "master_test" || !testId;
   const t = TRANSLATIONS.en;
 
-  const difficultyOptions = [
-    { value: 1, label: t.com_level + " 1", info: "Single digits (1-9)" },
-    { value: 2, label: t.com_level + " 2", info: "One single & one double digit" },
-    { value: 3, label: t.com_level + " 3", info: "Two double digits (10-99)" },
-    { value: 4, label: t.com_level + " 4", info: "3-digit numbers (100-999)" },
-  ];
+  const difficultyOptions = React.useMemo(
+    () => [
+      { value: 1, label: t.com_level + " 1", info: "Single digits (1-9)" },
+      { value: 2, label: t.com_level + " 2", info: "One single & one double digit" },
+      { value: 3, label: t.com_level + " 3", info: "Two double digits (10-99)" },
+      { value: 4, label: t.com_level + " 4", info: "3-digit numbers (100-999)" },
+    ],
+    [t],
+  );
 
-  const timeOptions = [
-    { value: 0, label: t.test_noLimit, info: "Take all the time you need" },
-    { value: 30, label: "30s", info: "Quick Sprint" },
-    { value: 60, label: "1 Min", info: "Quick Challenge" },
-    { value: 120, label: "2 Min", info: "Standard Pace" },
-    { value: 180, label: "3 Min", info: "Relaxed Pace" },
-    { value: 240, label: "4 Min", info: "Focused Pace" },
-    { value: 300, label: "5 Min", info: "Taking it Slow" },
-  ];
+  const timeOptions = React.useMemo(
+    () => [
+      { value: 0, label: t.test_noLimit, info: t.test_timeLimitInfo.none },
+      { value: 30, label: t.test_time30s, info: t.test_timeLimitInfo.s30 },
+      { value: 60, label: t.test_time1m, info: t.test_timeLimitInfo.m1 },
+      { value: 120, label: t.test_time2m, info: t.test_timeLimitInfo.m2 },
+      { value: 180, label: t.test_time3m, info: t.test_timeLimitInfo.m3 },
+      { value: 240, label: t.test_time4m, info: t.test_timeLimitInfo.m4 },
+      { value: 300, label: t.test_time5m, info: t.test_timeLimitInfo.m5 },
+    ],
+    [t],
+  );
 
   const getTestTitle = () => {
     if (isMasterTest) return t.mst_grandMaster;
@@ -518,7 +524,7 @@ const MasterTest: React.FC = () => {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", damping: 10 }}
               >
-                <Trophy size={120} color={score >= 8 ? "#FFD700" : "#94A3B8"} />
+                <Trophy size={120} color={score >= 8 ? colors.gold : colors.slate} />
               </motion.div>
 
               <ScoreValue fontSize="4rem" fontWeight={900} color="primary">
@@ -532,12 +538,13 @@ const MasterTest: React.FC = () => {
                   gap: "10px",
                   fontSize: "1.5rem",
                   fontWeight: "bold",
-                  color: "#64748B",
+                  color: colors.textSecondary,
                   marginBottom: "20px",
                 }}
               >
                 <Timer size={24} />
-                Time: {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}
+                {t.com_time || "Time"}: {Math.floor(timer / 60)}:
+                {(timer % 60).toString().padStart(2, "0")}
               </div>
 
               <GradeBadge
@@ -576,8 +583,8 @@ const MasterTest: React.FC = () => {
                     marginTop: "15px",
                     padding: "10px 20px",
                     borderRadius: "12px",
-                    background: timer <= targetTime ? "#10B98115" : "#F59E0B15",
-                    color: timer <= targetTime ? "#059669" : "#D97706",
+                    background: timer <= targetTime ? `${colors.success}15` : `${colors.warning}15`,
+                    color: timer <= targetTime ? colors.successDark : colors.goldDark,
                     fontWeight: 700,
                     fontSize: "0.9rem",
                     display: "flex",
@@ -586,7 +593,7 @@ const MasterTest: React.FC = () => {
                   }}
                 >
                   {timer <= targetTime ? <Zap size={18} /> : <RotateCcw size={18} />}
-                  {timer <= targetTime ? t.test_beatenTarget : t.test_missedTarget}
+                  {timer <= targetTime ? t.test_beatenTarget : t.test_timeExceeded}
                 </div>
               )}
 

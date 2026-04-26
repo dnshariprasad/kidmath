@@ -35,20 +35,10 @@ export function readText(text: string, lang: string = "en-US") {
   }
 }
 
-export const getEncouragement = (count: number) => {
-  const messages = [
-    "Good Start",
-    "Keep Going",
-    "Well Done",
-    "So Smart",
-    "Half Way",
-    "Great Job",
-    "Amazing",
-    "Brilliant",
-    "Nearly There",
-    "Almost Done",
-  ];
+import { TRANSLATIONS } from "../constants/translations";
 
-  if (count < 0) return "Keep going";
-  return messages[count % messages.length];
+export const getEncouragement = (count: number) => {
+  const t = TRANSLATIONS.en;
+  if (count < 0) return t.enc_default;
+  return t.enc_messages[count % t.enc_messages.length];
 };

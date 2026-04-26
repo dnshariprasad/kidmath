@@ -36,6 +36,7 @@ import { incrementScore, resetStreak } from "../../../store/slice/AlphabetSlice"
 import { getEncouragement } from "../../../utils/index";
 import { HintIconWrapper, ChallengeTextContainer, WordDisplay } from "./styles";
 import { TRANSLATIONS } from "../../../constants/translations";
+import { colors } from "../../../theme/colors";
 
 const MissingLettersChallenge = () => {
   const navigate = useNavigate();
@@ -82,13 +83,13 @@ const MissingLettersChallenge = () => {
 
   useEffect(() => {
     if (streak > 0 && streak % 10 === 0) {
-      setFeedback({ message: "Incredible! 10 in a row! 🌟", isCorrect: true });
-      readText("Incredible! 10 in a row! You are a superstar!");
+      setFeedback({ message: t.fb_incredible10, isCorrect: true });
+      readText(t.fb_superstar);
       confetti({
         particleCount: 300,
         spread: 100,
         origin: { y: 0.6 },
-        colors: ["#6366f1", "#4f46e5", "#818cf8"],
+        colors: [colors.primary, colors.primaryDark, colors.primaryLight],
       });
       const timer = setTimeout(() => {
         dispatch(resetStreak("missing_letters"));
@@ -96,7 +97,15 @@ const MissingLettersChallenge = () => {
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [streak, dispatch]);
+  }, [
+    streak,
+    dispatch,
+    t.fb_incredible10,
+    t.fb_superstar,
+    colors.primary,
+    colors.primaryDark,
+    colors.primaryLight,
+  ]);
 
   const handleSubmit = () => {
     if (randomString.toLowerCase() === inputValue.toLowerCase()) {
@@ -108,12 +117,12 @@ const MissingLettersChallenge = () => {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#6366F1", "#4F46E5", "#FF7675"],
+        colors: [colors.primary, colors.primaryDark, colors.accentLight],
       });
       setTimeout(generateChallenge, 2000);
     } else {
-      setFeedback({ message: "Not quite, try again! 😅", isCorrect: false });
-      readText("Try again");
+      setFeedback({ message: t.fb_notQuite, isCorrect: false });
+      readText(t.fb_tryAgainShort);
       dispatch(resetStreak("missing_letters"));
     }
   };
