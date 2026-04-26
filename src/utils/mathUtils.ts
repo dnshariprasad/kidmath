@@ -9,6 +9,17 @@ export const getRandomNumber = (max: number) => Math.floor(Math.random() * max) 
 export const getRandomOperation = (selectedOperations: string[]) =>
   selectedOperations[Math.floor(Math.random() * selectedOperations.length)];
 
+export const getRandomRange = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
+export const MATH_LEVELS = {
+  LEVEL_1: { min: 1, max: 10, multMax: 5 },
+  LEVEL_2: { min: 1, max: 99, multMax: 10 }, // Mix of 1 and 2 digits
+  LEVEL_3: { min: 10, max: 99, multMax: 12 }, // Strictly 2 digits
+  LEVEL_4: { min: 100, max: 999, multMax: 20 },
+  LEVEL_5: { min: 1000, max: 9999, multMax: 30 },
+};
+
 export const generateChallenge = (
   maxDigits: number,
   cplxty: string,

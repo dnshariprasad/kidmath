@@ -1,5 +1,6 @@
 import { getAllWords, getRandomWord } from "../../utils/wordUtils";
 import { TranslationKeys } from "../../constants/translations";
+import { getRandomRange, MATH_LEVELS } from "../../utils/mathUtils";
 
 export type QuestionType =
   | "math"
@@ -77,26 +78,15 @@ export const generateTestQuestions = (
     let attempts = 0;
     let signature = "";
 
-    while (attempts < 20) {
+    while (attempts < 100) {
       const type = allowedTypes[Math.floor(Math.random() * allowedTypes.length)];
       q = { id: i, type };
 
       if (type === "math") {
+        const levelKey = `LEVEL_${complexity}` as keyof typeof MATH_LEVELS;
+        const config = MATH_LEVELS[levelKey] || MATH_LEVELS.LEVEL_1;
+
         let n1, n2;
-        if (complexity === 1) {
-          n1 = Math.floor(Math.random() * 9) + 1;
-          n2 = Math.floor(Math.random() * 9) + 1;
-        } else if (complexity === 2) {
-          const isN1Single = Math.random() > 0.5;
-          n1 = isN1Single ? Math.floor(Math.random() * 9) + 1 : Math.floor(Math.random() * 90) + 10;
-          n2 = isN1Single ? Math.floor(Math.random() * 90) + 10 : Math.floor(Math.random() * 9) + 1;
-        } else if (complexity === 3) {
-          n1 = Math.floor(Math.random() * 90) + 10;
-          n2 = Math.floor(Math.random() * 90) + 10;
-        } else {
-          n1 = Math.floor(Math.random() * 900) + 100;
-          n2 = Math.floor(Math.random() * 900) + 100;
-        }
 
         let op = "+";
         if (testId === "math_addition") op = "+";
@@ -110,12 +100,34 @@ export const generateTestQuestions = (
               !testId ||
               testId === "math_multiplication" ||
               testId === "math_division") &&
-            complexity !== 1
+            complexity >= 2
           ) {
             ops.push("*");
             if (complexity >= 3) ops.push("/");
           }
           op = ops[Math.floor(Math.random() * ops.length)];
+        }
+
+        if (op === "*") {
+          n1 = getRandomRange(1, config.multMax);
+          n2 = getRandomRange(1, config.multMax);
+        } else if (op === "/") {
+          const divisorMax = Math.min(config.multMax, 12);
+          n2 = getRandomRange(1, divisorMax);
+          n1 = n2 * getRandomRange(1, divisorMax);
+          if (allowDecimals && complexity >= 4) {
+            n1 += getRandomRange(0, n2 - 1);
+          }
+        } else if (complexity === 2) {
+          const isN1Single = Math.random() > 0.5;
+          n1 = isN1Single ? getRandomRange(1, 9) : getRandomRange(10, 99);
+          n2 = isN1Single ? getRandomRange(10, 99) : getRandomRange(1, 9);
+        } else if (complexity === 3) {
+          n1 = getRandomRange(10, 99);
+          n2 = getRandomRange(10, 99);
+        } else {
+          n1 = getRandomRange(config.min, config.max);
+          n2 = getRandomRange(config.min, config.max);
         }
 
         let num1_final = n1;
@@ -128,29 +140,17 @@ export const generateTestQuestions = (
           if (!allowNegative) {
             num1_final = Math.max(n1, n2);
             num2_final = Math.min(n1, n2);
-          } else {
-            num1_final = n1;
-            num2_final = n2;
           }
           ans = num1_final - num2_final;
         } else if (op === "*") {
-          let multMax = 5;
-          if (complexity === 2 || complexity === 3) multMax = 8;
-          if (complexity === 4) multMax = 12;
-          num1_final = Math.floor(Math.random() * multMax) + 1;
-          num2_final = Math.floor(Math.random() * multMax) + 1;
-          ans = num1_final * num2_final;
+          ans = n1 * n2;
         } else if (op === "/") {
-          const multMax = complexity === 1 ? 5 : complexity === 2 ? 8 : 12;
-          num2_final = Math.floor(Math.random() * multMax) + 1;
-          if (allowDecimals) {
-            num1_final = Math.floor(Math.random() * (multMax * 5)) + 1;
+          if (allowDecimals && complexity >= 4) {
             ans = Number((num1_final / num2_final).toFixed(1));
           } else {
-            const qVal = Math.floor(Math.random() * multMax) + 1;
-            const rVal = Math.floor(Math.random() * num2_final);
-            num1_final = num2_final * qVal + rVal;
-            ans = `Q:${qVal} R:${rVal}`;
+            const qVal = Math.floor(num1_final / num2_final);
+            const rVal = num1_final % num2_final;
+            ans = rVal === 0 ? qVal : `Q:${qVal} R:${rVal}`;
           }
         }
 
@@ -227,6 +227,15 @@ export const generateTestQuestions = (
           { sequence: ["🔴", "🔵", "🔴"], next: "🔵" },
           { sequence: ["🚗", "🚕", "🚗"], next: "🚕" },
           { sequence: ["🍦", "🍩", "🍦"], next: "🍩" },
+          { sequence: ["🛸", "🚀", "🛸"], next: "🚀" },
+          { sequence: ["🍎", "🍎", "🍌"], next: "🍌" },
+          { sequence: ["1", "3", "5"], next: "7" },
+          { sequence: ["A", "B", "A"], next: "B" },
+          { sequence: ["🔼", "🔽", "🔼"], next: "🔽" },
+          { sequence: ["🟢", "🟡", "🟢"], next: "🟡" },
+          { sequence: ["10", "20", "30"], next: "40" },
+          { sequence: ["M", "N", "M"], next: "N" },
+          { sequence: ["🦁", "🐯", "🦁"], next: "🐯" },
         ];
         const p = patterns[Math.floor(Math.random() * patterns.length)];
         signature = `logic-${p.sequence.join("")}`;

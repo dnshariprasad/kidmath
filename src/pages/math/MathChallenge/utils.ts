@@ -1,4 +1,4 @@
-import { getRandomNumber, getMaxNumber } from "../../../utils/mathUtils";
+import { getRandomRange, MATH_LEVELS } from "../../../utils/mathUtils";
 
 export const calculateCorrectAnswer = (
   num1: number,
@@ -10,30 +10,59 @@ export const calculateCorrectAnswer = (
   if (operator === "-") return num1 - num2;
   if (operator === "*") return num1 * num2;
 
-  if (allowDecimals) {
-    return Number((num1 / (num2 || 1)).toFixed(1));
-  } else {
-    const q = Math.floor(num1 / (num2 || 1));
-    const r = num1 % (num2 || 1);
-    return `Q:${q} R:${r}`;
+  if (operator === "/") {
+    if (num2 === 0) return "∞";
+    if (allowDecimals) {
+      return Number((num1 / num2).toFixed(1));
+    } else {
+      const q = Math.floor(num1 / num2);
+      const r = num1 % num2;
+      return `Q:${q} R:${r}`;
+    }
   }
+  return 0;
 };
 
 export const generateMathQuestion = (
-  maxDigits: number,
+  level: number,
   operator: string,
   allowNegative: boolean,
   allowDecimals: boolean,
   history: string[],
 ) => {
-  const maxVal = getMaxNumber(maxDigits);
+  const levelKey = `LEVEL_${level}` as keyof typeof MATH_LEVELS;
+  const config = MATH_LEVELS[levelKey] || MATH_LEVELS.LEVEL_1;
+
   let attempts = 0;
   let n1 = 0;
   let n2 = 0;
 
-  while (attempts < 10) {
-    n1 = getRandomNumber(maxVal);
-    n2 = getRandomNumber(maxVal);
+  while (attempts < 50) {
+    if (operator === "*") {
+      n1 = getRandomRange(1, config.multMax);
+      n2 = getRandomRange(1, config.multMax);
+    } else if (operator === "/") {
+      const divisorMax = Math.min(config.multMax, 12);
+      n2 = getRandomRange(1, divisorMax);
+      if (allowDecimals) {
+        n1 = getRandomRange(config.min, config.max);
+      } else {
+        // For simple division, ensure easy multiples for lower levels
+        const q = getRandomRange(1, divisorMax);
+        const r = level >= 3 ? getRandomRange(0, n2 - 1) : 0;
+        n1 = n2 * q + r;
+      }
+    } else if (level === 2) {
+      const isN1Single = Math.random() > 0.5;
+      n1 = isN1Single ? getRandomRange(1, 9) : getRandomRange(10, 99);
+      n2 = isN1Single ? getRandomRange(10, 99) : getRandomRange(1, 9);
+    } else if (level === 3) {
+      n1 = getRandomRange(10, 99);
+      n2 = getRandomRange(10, 99);
+    } else {
+      n1 = getRandomRange(config.min, config.max);
+      n2 = getRandomRange(config.min, config.max);
+    }
 
     if (operator === "-" && n1 < n2 && !allowNegative) {
       [n1, n2] = [n2, n1];
@@ -51,16 +80,14 @@ export const generateMathQuestion = (
   const newOptions = new Set<number | string>([correctAnswer]);
   while (newOptions.size < 4) {
     if (typeof correctAnswer === "number") {
-      const offset = getRandomNumber(10) - 5;
-      if (offset !== 0) {
-        const opt = allowDecimals
-          ? Number((correctAnswer + offset / 10).toFixed(1))
-          : correctAnswer + offset;
-        if (allowNegative || opt >= 0) newOptions.add(opt);
-      }
+      const offset = getRandomRange(1, 10) * (Math.random() > 0.5 ? 1 : -1);
+      const opt = allowDecimals
+        ? Number((correctAnswer + offset / 10).toFixed(1))
+        : correctAnswer + offset;
+      if (allowNegative || opt >= 0) newOptions.add(opt);
     } else {
-      const qOffset = getRandomNumber(5) - 2;
-      const rOffset = getRandomNumber(5) - 2;
+      const qOffset = getRandomRange(-2, 2);
+      const rOffset = getRandomRange(-2, 2);
       const q = Math.max(0, Math.floor(n1 / (n2 || 1)) + qOffset);
       const r = Math.max(0, (n1 % (n2 || 1)) + rOffset);
       const opt = `Q:${q} R:${r}`;
