@@ -20,7 +20,7 @@ import {
   RotateCcw,
   Home as HomeIcon,
   Timer,
-  Info,
+  Zap,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import Certificate from "../../components/Certificate";
@@ -33,7 +33,6 @@ import {
   ActionMenuItem,
   CheckboxContainer,
   CheckboxInput,
-  Card,
 } from "../../theme/globalStyles";
 import {
   TestContainer,
@@ -66,11 +65,18 @@ import {
   CardProgressBar,
   CardProgressFill,
   LogicDisplay,
+  InstructionCard,
+  InstructionHeader,
+  IconBox,
+  InstructionGrid,
+  InstructionItem,
+  SetupSection,
   GradeBadge,
 } from "./styles";
 import { GameLayout } from "../../theme/globalStyles";
 import DifficultyPicker from "../../components/DifficultyPicker";
 import ChallengeHeader from "../../components/ChallengeHeader";
+
 import { TRANSLATIONS } from "../../constants/translations";
 import { readText } from "../../utils/index";
 
@@ -95,6 +101,7 @@ const MasterTest: React.FC = () => {
   const [allowDecimals, setAllowDecimals] = useState(false);
   const [isTestStarted, setIsTestStarted] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [targetTime, setTargetTime] = useState<number>(0);
   const isMasterTest = testId === "master_test" || !testId;
   const t = TRANSLATIONS.en;
 
@@ -103,6 +110,16 @@ const MasterTest: React.FC = () => {
     { value: 2, label: t.com_level + " 2", info: "One single & one double digit" },
     { value: 3, label: t.com_level + " 3", info: "Two double digits (10-99)" },
     { value: 4, label: t.com_level + " 4", info: "3-digit numbers (100-999)" },
+  ];
+
+  const timeOptions = [
+    { value: 0, label: t.test_noLimit, info: "Take all the time you need" },
+    { value: 30, label: "30s", info: "Quick Sprint" },
+    { value: 60, label: "1 Min", info: "Quick Challenge" },
+    { value: 120, label: "2 Min", info: "Standard Pace" },
+    { value: 180, label: "3 Min", info: "Relaxed Pace" },
+    { value: 240, label: "4 Min", info: "Focused Pace" },
+    { value: 300, label: "5 Min", info: "Taking it Slow" },
   ];
 
   const getTestTitle = () => {
@@ -148,32 +165,7 @@ const MasterTest: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [testId, t, complexity, allowNegative, allowDecimals]);
 
-  useEffect(() => {
-    generateTest();
-  }, [generateTest]);
-
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | undefined;
-    if (isTestStarted && !isSubmitted) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev + 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isTestStarted, isSubmitted]);
-
-  const currentQuestion = questions[currentIndex];
-
-  const handleInputChange = (id: number, val: string) => {
-    setAnswers((prev) => ({ ...prev, [id]: val }));
-  };
-
-  const startTest = () => {
-    setIsTestStarted(true);
-    setTimer(0);
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     let finalScore = 0;
     questions.forEach((q) => {
       if (answers[q.id]?.trim().toUpperCase() === q.correctAnswer.trim().toUpperCase()) {
@@ -191,6 +183,39 @@ const MasterTest: React.FC = () => {
       });
       dispatch(incrementScore("master_test"));
     }
+  }, [questions, answers, dispatch]);
+
+  useEffect(() => {
+    generateTest();
+  }, [generateTest]);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | undefined;
+    if (isTestStarted && !isSubmitted) {
+      interval = setInterval(() => {
+        setTimer((prev) => {
+          const next = prev + 1;
+          if (targetTime > 0 && next >= targetTime) {
+            clearInterval(interval);
+            handleSubmit();
+            return targetTime;
+          }
+          return next;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTestStarted, isSubmitted, targetTime, handleSubmit]);
+
+  const currentQuestion = questions[currentIndex];
+
+  const handleInputChange = (id: number, val: string) => {
+    setAnswers((prev) => ({ ...prev, [id]: val }));
+  };
+
+  const startTest = () => {
+    setIsTestStarted(true);
+    setTimer(0);
   };
 
   const handleNext = () => {
@@ -237,6 +262,11 @@ const MasterTest: React.FC = () => {
           >
             <Timer size={18} />
             {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}
+            {targetTime > 0 && (
+              <span style={{ fontSize: "0.8rem", opacity: 0.6, marginLeft: "4px" }}>
+                / {Math.floor(targetTime / 60)}:{(targetTime % 60).toString().padStart(2, "0")}
+              </span>
+            )}
           </div>
         </div>
         <SubjectBadge $type={q.type}>{q.type.replace("_", " ")}</SubjectBadge>
@@ -333,97 +363,89 @@ const MasterTest: React.FC = () => {
   return (
     <PageContainer>
       <GameLayout>
-        <div style={{ gridColumn: "1 / -1", width: "100%" }}>
-          <ChallengeHeader
-            icon={Trophy}
-            title={getTestTitle()}
-            subtitle={t.mst_subtitle}
-            streak={0}
-          />
+        <div
+          style={{ gridColumn: "1 / -1", width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <div style={{ width: "100%", maxWidth: "1100px" }}>
+            <ChallengeHeader
+              icon={Trophy}
+              title={getTestTitle()}
+              subtitle={t.mst_subtitle}
+              streak={0}
+            />
+          </div>
         </div>
 
         {!isTestStarted && !isSubmitted && (
-          <div
-            style={{
-              gridColumn: "1 / -1",
-              display: "flex",
-              flexDirection: "column",
-              gap: "32px",
-              width: "100%",
-              maxWidth: "none",
-              margin: "0 auto",
-              padding: 0,
-            }}
-          >
-            <div style={{ width: "100%", borderRadius: "24px", overflow: "hidden" }}>
-              <Card>
-                <div style={{ padding: "20px 40px 40px", textAlign: "center" }}>
-                  <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                    <div
-                      style={{
-                        width: "80px",
-                        height: "80px",
-                        borderRadius: "50%",
-                        background: colors.primary + "15",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: colors.primary,
-                      }}
-                    >
-                      <Info size={40} />
-                    </div>
-                  </div>
-                  <div style={{ marginBottom: "30px" }}>
-                    <KidoText fontSize="xxl" fontWeight={900} color="primary">
-                      {t.test_instructions}
-                    </KidoText>
-                  </div>
+          <div style={{ gridColumn: "1 / -1", width: "100%" }}>
+            <InstructionCard
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: "spring", damping: 20 }}
+            >
+              <InstructionHeader>
+                <IconBox
+                  animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Trophy size={40} />
+                </IconBox>
 
+                <div style={{ textAlign: "left" }}>
+                  <KidoText fontSize="xxl" fontWeight={900} color="primary">
+                    {t.test_instructions}
+                  </KidoText>
+                  <KidoText fontSize="md" color="textSecondary" fontWeight={600}>
+                    Follow these rules to become a Grand Master!
+                  </KidoText>
+                </div>
+              </InstructionHeader>
+
+              <InstructionGrid>
+                {[
+                  { icon: <Brain size={24} />, text: t.test_qCount },
+                  { icon: <CheckCircle2 size={24} />, text: t.test_selectBest },
+                  { icon: <Timer size={24} />, text: t.test_timeRecorded },
+                  { icon: <Trophy size={24} />, text: t.test_scoreForCert },
+                ].map((item, idx) => (
+                  <InstructionItem
+                    key={idx}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * idx }}
+                  >
+                    {item.icon}
+                    <span>{item.text}</span>
+                  </InstructionItem>
+                ))}
+              </InstructionGrid>
+
+              <SetupSection>
+                <DifficultyPicker
+                  name="complexity"
+                  title={t.com_difficulty}
+                  options={difficultyOptions}
+                  currentValue={complexity}
+                  onChange={(val) => setComplexity(Number(val))}
+                />
+
+                <DifficultyPicker
+                  name="targetTime"
+                  title={t.test_targetTime}
+                  options={timeOptions}
+                  currentValue={targetTime}
+                  onChange={(val) => setTargetTime(Number(val))}
+                />
+
+                {(testId?.includes("math") || isMasterTest) && (
                   <div
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                      gap: "20px",
-                      textAlign: "left",
-                      marginBottom: "40px",
+                      display: "flex",
+                      gap: "24px",
+                      flexWrap: "wrap",
+                      justifyContent: "center",
                     }}
                   >
-                    {[
-                      { icon: <Brain size={20} />, text: t.test_qCount },
-                      { icon: <CheckCircle2 size={20} />, text: t.test_selectBest },
-                      { icon: <Timer size={20} />, text: t.test_timeRecorded },
-                      { icon: <Trophy size={20} />, text: t.test_scoreForCert },
-                    ].map((item, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "12px",
-                          padding: "16px",
-                          background: colors.primary + "08",
-                          borderRadius: "16px",
-                          border: "1px solid " + colors.primary + "15",
-                          color: "#475569",
-                          fontWeight: 600,
-                        }}
-                      >
-                        <div style={{ color: colors.primary }}>{item.icon}</div>
-                        {item.text}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div style={{ marginTop: "40px" }}>
-                    <DifficultyPicker
-                      name="complexity"
-                      title={t.com_difficulty}
-                      options={difficultyOptions}
-                      currentValue={complexity}
-                      onChange={(val) => setComplexity(Number(val))}
-                    />
-
                     {(testId === "math_subtraction" || testId === "math_test" || isMasterTest) && (
                       <CheckboxContainer>
                         <CheckboxInput
@@ -431,7 +453,9 @@ const MasterTest: React.FC = () => {
                           checked={allowNegative}
                           onChange={(e) => setAllowNegative(e.target.checked)}
                         />
-                        {t.com_allowNegative}
+                        <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
+                          {t.com_allowNegative}
+                        </span>
                       </CheckboxContainer>
                     )}
 
@@ -442,23 +466,25 @@ const MasterTest: React.FC = () => {
                           checked={allowDecimals}
                           onChange={(e) => setAllowDecimals(e.target.checked)}
                         />
-                        {t.com_allowDecimals}
+                        <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
+                          {t.com_allowDecimals}
+                        </span>
                       </CheckboxContainer>
                     )}
                   </div>
+                )}
+              </SetupSection>
 
-                  <div style={{ marginTop: "40px" }}>
-                    <KidButton
-                      title={t.test_start}
-                      onClick={startTest}
-                      variant="primary"
-                      size="xl"
-                      width="100%"
-                    />
-                  </div>
-                </div>
-              </Card>
-            </div>
+              <div style={{ marginTop: "50px", width: "100%" }}>
+                <KidButton
+                  title={t.test_start}
+                  onClick={startTest}
+                  variant="primary"
+                  width="100%"
+                  size="lg"
+                />
+              </div>
+            </InstructionCard>
           </div>
         )}
 
@@ -523,6 +549,19 @@ const MasterTest: React.FC = () => {
                 {getGradeTitle(score)}
               </GradeBadge>
 
+              {targetTime > 0 && timer >= targetTime && (
+                <div
+                  style={{
+                    color: "#EF4444",
+                    fontWeight: 900,
+                    fontSize: "1.2rem",
+                    marginTop: "10px",
+                  }}
+                >
+                  ⏰ TIME'S UP!
+                </div>
+              )}
+
               <FeedbackText fontSize="2rem" fontWeight={800}>
                 {score >= 8 ? t.com_genius : t.com_goodEffort}
               </FeedbackText>
@@ -530,6 +569,26 @@ const MasterTest: React.FC = () => {
               <SubFeedbackText fontSize="lg" color="textSecondary">
                 {score >= 8 ? t.com_masteredCurriculum : t.test_keepPracticing}
               </SubFeedbackText>
+
+              {targetTime > 0 && (
+                <div
+                  style={{
+                    marginTop: "15px",
+                    padding: "10px 20px",
+                    borderRadius: "12px",
+                    background: timer <= targetTime ? "#10B98115" : "#F59E0B15",
+                    color: timer <= targetTime ? "#059669" : "#D97706",
+                    fontWeight: 700,
+                    fontSize: "0.9rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  {timer <= targetTime ? <Zap size={18} /> : <RotateCcw size={18} />}
+                  {timer <= targetTime ? t.test_beatenTarget : t.test_missedTarget}
+                </div>
+              )}
 
               <ActionsGrid>
                 {score >= 8 && (

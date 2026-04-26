@@ -33,6 +33,8 @@ export const TestContainer = styled.div`
   flex-direction: column;
   gap: 40px;
   width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
   padding-bottom: 80px;
 `;
 
@@ -470,4 +472,130 @@ export const CertificateWrapper = styled.div`
   inset: 0;
   z-index: 3000;
   background: white;
+`;
+
+export const InstructionHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 40px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+`;
+
+export const IconBox = styled(motion.div)`
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: ${(props) => props.theme.colors.primary}15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${(props) => props.theme.colors.primary};
+  flex-shrink: 0;
+`;
+
+export const InstructionCard = styled(motion.div)`
+  padding: 40px;
+  background: ${(props) => props.theme.colors.surface};
+  border: 1px solid ${(props) => props.theme.colors.primary}15;
+  border-radius: 48px;
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(
+      circle at center,
+      ${(props) => props.theme.colors.primary}08 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  @media (max-width: 600px) {
+    padding: 30px 20px;
+    border-radius: 32px;
+  }
+`;
+
+export const InstructionGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin: 40px 0;
+  text-align: left;
+`;
+
+export const SetupGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+`;
+
+export const InstructionItem = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  background: ${(props) => props.theme.colors.primary}05;
+  border-radius: 24px;
+  border: 1px solid ${(props) => props.theme.colors.primary}10;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${(props) => props.theme.colors.primary}08;
+    transform: translateY(-2px);
+    border-color: ${(props) => props.theme.colors.primary}25;
+  }
+
+  svg {
+    color: ${(props) => props.theme.colors.primary};
+    flex-shrink: 0;
+  }
+
+  span {
+    color: ${(props) => props.theme.colors.textSecondary};
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+`;
+
+export const SetupSection = styled.div<{ $minimal?: boolean }>`
+  margin-top: ${(props) => (props.$minimal ? "0" : "50px")};
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: ${(props) => (props.$minimal ? "0" : "40px")};
+  border-top: ${(props) =>
+    props.$minimal ? "none" : `2px dashed ${props.theme.colors.primary}15`};
+  width: 100%;
+`;
+
+export const SettingsTitle = styled(KidoText)`
+  margin-bottom: -15px;
+  text-align: center;
+  opacity: 0.6;
+  letter-spacing: 2px;
 `;

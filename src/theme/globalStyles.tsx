@@ -620,12 +620,20 @@ export const ConfigSubTitle = styled.h4`
 `;
 
 export const OptionsGrid = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   width: 100%;
-  margin: 10px 0 0;
+  margin: 15px 0 0;
   box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const OptionLabel = styled.label<{ $isActive: boolean }>`
@@ -640,9 +648,14 @@ export const OptionLabel = styled.label<{ $isActive: boolean }>`
   border: 2px solid ${(props) => (props.$isActive ? props.theme.colors.primary : "transparent")};
   font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.colors.textPrimary};
+  font-weight: 700;
+  justify-content: center;
+  text-align: center;
+  min-height: 48px;
 
   &:hover {
     background: ${(props) => props.theme.colors.primary}08;
+    transform: translateY(-1px);
   }
 
   input {

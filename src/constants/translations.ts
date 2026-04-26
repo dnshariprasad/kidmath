@@ -183,6 +183,10 @@ export const TRANSLATIONS = {
     test_review: "Review Answers",
     test_playAgain: "Play Again",
     test_home: "Back to Home",
+    test_targetTime: "Target Time",
+    test_noLimit: "No Limit",
+    test_beatenTarget: "You beat the target time! ⚡",
+    test_missedTarget: "Target time exceeded. Keep practicing! 🐢",
 
     // Telugu (tel_)
     tel_teluguLegend: "Telugu Legend",
