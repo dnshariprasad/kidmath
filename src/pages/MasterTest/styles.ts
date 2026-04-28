@@ -515,16 +515,10 @@ export const HeroTitle = styled(motion.h1)`
 `;
 
 export const InstructionBadge = styled.div`
-  padding: 6px 16px;
-  background: ${(props) => props.theme.colors.primary}10;
   color: ${(props) => props.theme.colors.primary};
-  border-radius: 100px;
   font-weight: 800;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 4px;
-  display: inline-block;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
 `;
 
 export const InstructionCard = styled(motion.div)`

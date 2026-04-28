@@ -610,11 +610,9 @@ export const ConfigSection = styled.div<{ $disabled?: boolean }>`
 export const ConfigSubTitle = styled.h4`
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: ${(props) => props.theme.fontSize.sm};
+  font-size: 1.1rem;
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
