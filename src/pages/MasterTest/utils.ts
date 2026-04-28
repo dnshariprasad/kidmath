@@ -8,6 +8,7 @@ export type QuestionType =
   | "missing_letter"
   | "comparison"
   | "hindi"
+  | "telugu"
   | "logic"
   | "sorting";
 
@@ -72,6 +73,7 @@ export const generateTestQuestions = (
   if (words.length === 0) words = allWords;
 
   const hindiLetters = ["अ", "आ", "इ", "ई", "उ", "ऊ", "ए", "ऐ", "ओ", "औ", "क", "ख", "ग", "घ"];
+  const teluguLetters = ["అ", "ఆ", "ఇ", "ఈ", "ఉ", "ఊ", "ఎ", "ఏ", "ఐ", "క", "ఖ", "గ", "ఘ"];
   const seenSignatures = new Set<string>();
 
   for (let i = 1; i <= 10; i++) {
@@ -251,6 +253,15 @@ export const generateTestQuestions = (
         while (opts.size < 4)
           opts.add(hindiLetters[Math.floor(Math.random() * hindiLetters.length)]);
         q.data = { letter, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
+      } else if (type === "telugu") {
+        const letter = teluguLetters[Math.floor(Math.random() * teluguLetters.length)];
+        signature = `telugu-${letter}`;
+        q.prompt = t.tel_tapLetter;
+        q.correctAnswer = letter;
+        const opts = new Set<string>([letter]);
+        while (opts.size < 4)
+          opts.add(teluguLetters[Math.floor(Math.random() * teluguLetters.length)]);
+        q.data = { letter, optionsStrings: Array.from(opts).sort(() => Math.random() - 0.5) };
       } else if (type === "sorting") {
         const nums: number[] = [];
         let sortCount = 3;
@@ -309,6 +320,9 @@ export const getQuestionTextToSpeak = (q: Question) => {
   }
   if (q.type === "missing_letter") {
     return `What is the missing letter in the word ${q.data.word}?`;
+  }
+  if (q.type === "hindi" || q.type === "telugu") {
+    return q.data.letter || q.correctAnswer;
   }
   return q.data.word || q.data.letter || q.prompt;
 };

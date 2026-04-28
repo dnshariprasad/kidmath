@@ -330,14 +330,17 @@ const MasterTest: React.FC = () => {
           {q.type === "math" && q.data && (
             <BigDisplay
               onClick={() =>
-                readText(getQuestionTextToSpeak(q), q.type === "hindi" ? "hi-IN" : "en-US")
+                readText(
+                  getQuestionTextToSpeak(q),
+                  q.type === "hindi" ? "hi-IN" : q.type === "telugu" ? "te-IN" : "en-US",
+                )
               }
             >
               {q.data.n1 ?? 0} {q.data.op ?? "+"} {q.data.n2 ?? 0}
             </BigDisplay>
           )}
 
-          {(q.type === "spelling" || q.type === "hindi") && q.data && (
+          {(q.type === "spelling" || q.type === "hindi" || q.type === "telugu") && q.data && (
             <SpeakContainer>
               <KidoText color="textSecondary" fontSize="md" fontWeight={600}>
                 {t.eng_tapSpeaker}
@@ -348,7 +351,10 @@ const MasterTest: React.FC = () => {
           {q.type === "missing_letter" && q.data && (
             <BigDisplay
               onClick={() =>
-                readText(getQuestionTextToSpeak(q), q.type === "hindi" ? "hi-IN" : "en-US")
+                readText(
+                  getQuestionTextToSpeak(q),
+                  q.type === "hindi" ? "hi-IN" : q.type === "telugu" ? "te-IN" : "en-US",
+                )
               }
             >
               {q.data.displayWord}
@@ -381,7 +387,7 @@ const MasterTest: React.FC = () => {
             <PreviousIcon onClick={handlePrev} />
             <SpeakIcon
               text={getQuestionTextToSpeak(q)}
-              lang={q.type === "hindi" ? "hi-IN" : "en-US"}
+              lang={q.type === "hindi" ? "hi-IN" : q.type === "telugu" ? "te-IN" : "en-US"}
             />
             {currentIndex === questions.length - 1 ? (
               <KidButton

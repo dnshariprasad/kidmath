@@ -87,7 +87,7 @@ const SpeakIcon: React.FC<SpeakIconProps> = ({ text, lang = "en-US", size }) => 
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       role="button"
-      aria-label="Read text"
+      aria-label={text.length <= 2 ? text : "Read text"}
     >
       <Volume2 strokeWidth={2.5} />
     </SpeakButton>
