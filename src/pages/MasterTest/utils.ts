@@ -98,11 +98,6 @@ export const generateTestQuestions = (
           // If in general math_test or master_test, use the selected operations
           const ops = selectedMathOps.length > 0 ? selectedMathOps : ["+"];
           op = ops[Math.floor(Math.random() * ops.length)];
-
-          // Filter by complexity if needed (though user selection usually overrides this)
-          if (complexity < 2 && (op === "*" || op === "/")) {
-            op = "+"; // Fallback for very low complexity if user somehow picked * or /
-          }
         }
 
         if (op === "*") {

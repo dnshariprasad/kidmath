@@ -472,36 +472,42 @@ const MasterTest: React.FC = () => {
                       ))}
                     </OperationToggleGrid>
 
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "24px",
-                        flexWrap: "wrap",
-                        marginTop: "16px",
-                        marginBottom: "16px",
-                      }}
-                    >
-                      <CheckboxContainer>
-                        <CheckboxInput
-                          type="checkbox"
-                          checked={allowNegative}
-                          onChange={(e) => setAllowNegative(e.target.checked)}
-                        />
-                        <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                          {t.com_allowNegative}
-                        </span>
-                      </CheckboxContainer>
-                      <CheckboxContainer>
-                        <CheckboxInput
-                          type="checkbox"
-                          checked={allowDecimals}
-                          onChange={(e) => setAllowDecimals(e.target.checked)}
-                        />
-                        <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                          {t.com_allowDecimals}
-                        </span>
-                      </CheckboxContainer>
-                    </div>
+                    {(selectedMathOps.includes("-") || selectedMathOps.includes("/")) && (
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "24px",
+                          flexWrap: "wrap",
+                          marginTop: "16px",
+                          marginBottom: "16px",
+                        }}
+                      >
+                        {selectedMathOps.includes("-") && (
+                          <CheckboxContainer>
+                            <CheckboxInput
+                              type="checkbox"
+                              checked={allowNegative}
+                              onChange={(e) => setAllowNegative(e.target.checked)}
+                            />
+                            <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
+                              {t.com_allowNegative}
+                            </span>
+                          </CheckboxContainer>
+                        )}
+                        {selectedMathOps.includes("/") && (
+                          <CheckboxContainer>
+                            <CheckboxInput
+                              type="checkbox"
+                              checked={allowDecimals}
+                              onChange={(e) => setAllowDecimals(e.target.checked)}
+                            />
+                            <span style={{ fontWeight: 700, fontSize: "0.9rem" }}>
+                              {t.com_allowDecimals}
+                            </span>
+                          </CheckboxContainer>
+                        )}
+                      </div>
+                    )}
                   </>
                 )}
 
