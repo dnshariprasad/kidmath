@@ -1,0 +1,1 @@
+import{o as s,Y as i,at as a,K as o}from"./index-CGfIUdAK.js";const c=({feedback:e,fontSize:t="lg"})=>s.jsx(i,{children:e&&s.jsx(a,{initial:{y:20,opacity:0},animate:{y:0,opacity:1},exit:{y:-20,opacity:0},children:s.jsx(o,{color:e.isCorrect?"success":"accent",fontSize:t,fontWeight:"bold",children:e.message})})});export{c as F};
