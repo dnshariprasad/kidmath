@@ -25,7 +25,10 @@ import {
   toggleMute,
   toggleTheme,
   setFontSizeLevel,
+  logout,
 } from "../../store/slice/AlphabetSlice";
+import { auth } from "../../firebase/config";
+import { signOut } from "firebase/auth";
 import {
   Menu,
   X,
@@ -41,6 +44,8 @@ import {
   User,
   Zap,
   Share2,
+  History,
+  LogOut,
 } from "lucide-react";
 
 const Navbar: React.FC = () => {
@@ -49,6 +54,7 @@ const Navbar: React.FC = () => {
   const isOpen = useSelector((state: RootState) => state.alphabet.isMobileMenuOpen);
   const isMuted = useSelector((state: RootState) => state.alphabet.isMuted);
   const themeMode = useSelector((state: RootState) => state.alphabet.theme);
+  const user = useSelector((state: RootState) => state.alphabet.user);
 
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState<null | "fontSize">(null);
@@ -75,6 +81,10 @@ const Navbar: React.FC = () => {
   }, [isMoreMenuOpen]);
 
   const isWelcomePage = location.pathname === "/" || !location.pathname;
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <NavbarContainer data-testid="layout-navbar">
@@ -146,6 +156,28 @@ const Navbar: React.FC = () => {
                   >
                     <Zap size={20} />
                     <span>{t.nav_setProgress}</span>
+                  </DropdownItem>
+                  <DropdownItem
+                    as={Link}
+                    to="/test_history"
+                    onClick={() => setIsMoreMenuOpen(false)}
+                  >
+                    <History size={20} />
+                    <span>Test History</span>
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={async () => {
+                      try {
+                        await signOut(auth);
+                        dispatch(logout());
+                        setIsMoreMenuOpen(false);
+                      } catch (err) {
+                        console.error("Logout error:", err);
+                      }
+                    }}
+                  >
+                    <LogOut size={20} />
+                    <span>Logout</span>
                   </DropdownItem>
                   <DropdownItem
                     onClick={async () => {

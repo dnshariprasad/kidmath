@@ -26,6 +26,11 @@ interface KiddooState {
   fontSizeLevel: FontSizeLevel;
   currentMode: "learn" | "practice" | "test" | null;
   userName: string;
+  user: {
+    uid: string;
+    email: string | null;
+    displayName: string | null;
+  } | null;
 }
 
 const STORAGE_KEY = "kiddoo_app_state";
@@ -99,6 +104,7 @@ const initialState: KiddooState = {
   theme: persistedState?.theme || "light",
   fontSizeLevel: persistedState?.fontSizeLevel || "large",
   userName: persistedState?.userName || "",
+  user: null,
 };
 
 const kiddooSlice = createSlice({
@@ -169,6 +175,18 @@ const kiddooSlice = createSlice({
       state.userName = action.payload;
       saveState(state);
     },
+    setUser: (state, action: PayloadAction<KiddooState["user"]>) => {
+      state.user = action.payload;
+      if (action.payload?.displayName) {
+        state.userName = action.payload.displayName;
+      }
+      saveState(state);
+    },
+    logout: (state) => {
+      state.user = null;
+      state.userName = "";
+      saveState(state);
+    },
     resetAll: (state) => {
       state.userStats = { score: 0, streak: 0, lastPlayed: null };
       state.gameStats = {
@@ -223,6 +241,8 @@ export const {
   setFontSizeLevel,
   setMode,
   setUserName,
+  setUser,
+  logout,
   resetAll,
   setStreak,
 } = kiddooSlice.actions;

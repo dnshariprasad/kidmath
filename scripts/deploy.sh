@@ -17,7 +17,11 @@ npm run build
 echo "🌐 Deploying to GitHub Pages..."
 npm run deploy
 
-# 4. Stage and Commit changes (Only if deploy succeeded)
+# 4. Deploy to Firebase Hosting
+echo "🔥 Deploying to Firebase Hosting..."
+firebase deploy --only hosting
+
+# 5. Stage and Commit changes (Only if deploy succeeded)
 echo "💾 Staging all changes..."
 git add .
 

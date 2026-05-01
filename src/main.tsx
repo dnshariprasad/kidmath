@@ -7,11 +7,17 @@ import { store } from "./store/store.ts";
 import Navbar from "./dashboard/nav/index.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import SharedCertificate from "./components/SharedCertificate/index.tsx";
-import { ConnectedThemeProvider, NameRequiredRoute, LoadingState } from "./AppComponents";
+import {
+  ConnectedThemeProvider,
+  NameRequiredRoute,
+  LoadingState,
+  AuthStateListener,
+} from "./AppComponents";
 
 // Lazy load pages
 const Dashboard = lazy(() => import("./dashboard/dashboard/index.tsx"));
 const Welcome = lazy(() => import("./pages/Welcome/index.tsx"));
+const Login = lazy(() => import("./pages/Login/index.tsx"));
 const AlphabetPage = lazy(() => import("./pages/english/AlphabetPage/index.tsx"));
 const SightWordsChallenge = lazy(() => import("./pages/english/SightWordsChallenge/index.tsx"));
 const SpellingChallenge = lazy(() => import("./pages/english/SpellingChallenge/index.tsx"));
@@ -41,6 +47,7 @@ const MathChallenge = lazy(() => import("./pages/math/MathChallenge/index.tsx"))
 const NumberSorter = lazy(() => import("./pages/math/NumberSorter/index.tsx"));
 const MasterTest = lazy(() => import("./pages/MasterTest/index.tsx"));
 const NumbersPage = lazy(() => import("./pages/math/NumbersPage/index.tsx"));
+const TestHistory = lazy(() => import("./pages/TestHistory/index.tsx"));
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -48,231 +55,249 @@ createRoot(document.getElementById("root")!).render(
       <ConnectedThemeProvider>
         <ErrorBoundary>
           <HashRouter>
-            <Navbar />
-            <SharedCertificate />
-            <Suspense fallback={<LoadingState />}>
-              <Routes>
-                <Route path="/" element={<Dashboard />}>
-                  <Route index element={<Welcome />} />
+            <AuthStateListener>
+              <Navbar />
+              <SharedCertificate />
+              <Suspense fallback={<LoadingState />}>
+                <Routes>
+                  <Route path="/login" element={<Login />} />
                   <Route
-                    path="alphabet"
+                    path="/"
                     element={
                       <NameRequiredRoute>
-                        <AlphabetPage />
+                        <Dashboard />
                       </NameRequiredRoute>
                     }
-                  />
-                  <Route
-                    path="counting"
-                    element={
-                      <NameRequiredRoute>
-                        <MathChallenge />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="learn_numbers"
-                    element={
-                      <NameRequiredRoute>
-                        <NumbersPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="sight_words"
-                    element={
-                      <NameRequiredRoute>
-                        <SightWordsChallenge />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="spelling"
-                    element={
-                      <NameRequiredRoute>
-                        <SpellingChallenge />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="comparison"
-                    element={
-                      <NameRequiredRoute>
-                        <GreaterLessEqualGame />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="sudoku"
-                    element={
-                      <NameRequiredRoute>
-                        <CrosswordSudoku />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="missing_letters"
-                    element={
-                      <NameRequiredRoute>
-                        <MissingLettersChallenge />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="sorting_numbers"
-                    element={
-                      <NameRequiredRoute>
-                        <NumberSorter />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="missing_numbers"
-                    element={
-                      <NameRequiredRoute>
-                        <MissingLettersChallenge />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="alphabet_hindi"
-                    element={
-                      <NameRequiredRoute>
-                        <AlphabetHindiChallenge />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="alphabet_telugu"
-                    element={
-                      <NameRequiredRoute>
-                        <AlphabetTeluguChallenge />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="weeks_english"
-                    element={
-                      <NameRequiredRoute>
-                        <WeeksPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="months_english"
-                    element={
-                      <NameRequiredRoute>
-                        <MonthsPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="weeks_telugu"
-                    element={
-                      <NameRequiredRoute>
-                        <WeeksTeluguPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="weeks_hindi"
-                    element={
-                      <NameRequiredRoute>
-                        <WeeksHindiPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="shapes"
-                    element={
-                      <NameRequiredRoute>
-                        <ShapesPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="place_values"
-                    element={
-                      <NameRequiredRoute>
-                        <PlaceValuesPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="numbers_english_spelling"
-                    element={
-                      <NameRequiredRoute>
-                        <NumbersEnglishPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="numbers_hindi"
-                    element={
-                      <NameRequiredRoute>
-                        <NumbersHindiPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="numbers_telugu"
-                    element={
-                      <NameRequiredRoute>
-                        <NumbersTeluguPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="months_telugu"
-                    element={
-                      <NameRequiredRoute>
-                        <MonthsTeluguPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="months_hindi"
-                    element={
-                      <NameRequiredRoute>
-                        <MonthsHindiPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="body_parts"
-                    element={
-                      <NameRequiredRoute>
-                        <BodyPartsPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="sense_organs"
-                    element={
-                      <NameRequiredRoute>
-                        <SenseOrgansPage />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="test/:testId"
-                    element={
-                      <NameRequiredRoute>
-                        <MasterTest />
-                      </NameRequiredRoute>
-                    }
-                  />
-                  <Route
-                    path="master_test"
-                    element={
-                      <NameRequiredRoute>
-                        <MasterTest />
-                      </NameRequiredRoute>
-                    }
-                  />
-                </Route>
-              </Routes>
-            </Suspense>
+                  >
+                    <Route index element={<Welcome />} />
+                    <Route
+                      path="alphabet"
+                      element={
+                        <NameRequiredRoute>
+                          <AlphabetPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="counting"
+                      element={
+                        <NameRequiredRoute>
+                          <MathChallenge />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="learn_numbers"
+                      element={
+                        <NameRequiredRoute>
+                          <NumbersPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="sight_words"
+                      element={
+                        <NameRequiredRoute>
+                          <SightWordsChallenge />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="spelling"
+                      element={
+                        <NameRequiredRoute>
+                          <SpellingChallenge />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="comparison"
+                      element={
+                        <NameRequiredRoute>
+                          <GreaterLessEqualGame />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="sudoku"
+                      element={
+                        <NameRequiredRoute>
+                          <CrosswordSudoku />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="missing_letters"
+                      element={
+                        <NameRequiredRoute>
+                          <MissingLettersChallenge />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="sorting_numbers"
+                      element={
+                        <NameRequiredRoute>
+                          <NumberSorter />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="missing_numbers"
+                      element={
+                        <NameRequiredRoute>
+                          <MissingLettersChallenge />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="alphabet_hindi"
+                      element={
+                        <NameRequiredRoute>
+                          <AlphabetHindiChallenge />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="alphabet_telugu"
+                      element={
+                        <NameRequiredRoute>
+                          <AlphabetTeluguChallenge />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="weeks_english"
+                      element={
+                        <NameRequiredRoute>
+                          <WeeksPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="months_english"
+                      element={
+                        <NameRequiredRoute>
+                          <MonthsPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="weeks_telugu"
+                      element={
+                        <NameRequiredRoute>
+                          <WeeksTeluguPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="weeks_hindi"
+                      element={
+                        <NameRequiredRoute>
+                          <WeeksHindiPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="shapes"
+                      element={
+                        <NameRequiredRoute>
+                          <ShapesPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="place_values"
+                      element={
+                        <NameRequiredRoute>
+                          <PlaceValuesPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="numbers_english_spelling"
+                      element={
+                        <NameRequiredRoute>
+                          <NumbersEnglishPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="numbers_hindi"
+                      element={
+                        <NameRequiredRoute>
+                          <NumbersHindiPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="numbers_telugu"
+                      element={
+                        <NameRequiredRoute>
+                          <NumbersTeluguPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="months_telugu"
+                      element={
+                        <NameRequiredRoute>
+                          <MonthsTeluguPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="months_hindi"
+                      element={
+                        <NameRequiredRoute>
+                          <MonthsHindiPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="body_parts"
+                      element={
+                        <NameRequiredRoute>
+                          <BodyPartsPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="sense_organs"
+                      element={
+                        <NameRequiredRoute>
+                          <SenseOrgansPage />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="test/:testId"
+                      element={
+                        <NameRequiredRoute>
+                          <MasterTest />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="master_test"
+                      element={
+                        <NameRequiredRoute>
+                          <MasterTest />
+                        </NameRequiredRoute>
+                      }
+                    />
+                    <Route
+                      path="test_history"
+                      element={
+                        <NameRequiredRoute>
+                          <TestHistory />
+                        </NameRequiredRoute>
+                      }
+                    />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </AuthStateListener>
           </HashRouter>
         </ErrorBoundary>
       </ConnectedThemeProvider>

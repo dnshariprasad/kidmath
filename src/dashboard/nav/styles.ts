@@ -126,7 +126,7 @@ export const DropdownMenu = styled.div`
   border-radius: 16px;
   box-shadow: 0 10px 25px ${(props) => props.theme.colors.shadow};
   padding: 8px;
-  min-width: 160px;
+  min-width: 220px;
   z-index: 1100;
   border: 1px solid ${(props) => props.theme.colors.primary}10;
   animation: fadeIn 0.2s ease-out;

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { incrementScore } from "../../store/slice/AlphabetSlice";
+import { RootState } from "../../store/store";
+import { saveTestResult } from "../../firebase/testService";
 import KidButton from "../../components/KidButton";
 import { KidoText } from "../../components/KidoText";
 import { PageContainer, NavControlBar } from "../../theme/globalStyles";
@@ -95,6 +97,7 @@ const MasterTest: React.FC = () => {
   const { testId } = useParams<{ testId: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.alphabet.user);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -222,7 +225,21 @@ const MasterTest: React.FC = () => {
       });
       dispatch(incrementScore("master_test"));
     }
-  }, [questions, answers, dispatch]);
+
+    // Save to Firestore
+    if (user) {
+      saveTestResult({
+        userId: user.uid,
+        testId: selectedTestId,
+        testTitle: getTestTitle(),
+        score: finalScore,
+        totalQuestions: questions.length,
+        timeTaken: timer,
+        category: selectedTestId,
+        difficulty: complexity,
+      }).catch((err) => console.error("Failed to save test result:", err));
+    }
+  }, [questions, answers, dispatch, user, selectedTestId, complexity, timer, getTestTitle]);
 
   useEffect(() => {
     generateTest();

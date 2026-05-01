@@ -13,6 +13,7 @@ interface ButtonProps {
   minWidth?: string;
   fontSize?: string;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const StyledButton = styled(motion.button)<{
@@ -99,6 +100,9 @@ const StyledButton = styled(motion.button)<{
   &:active {
     transform: translateY(0);
   }
+
+  opacity: ${(props) => (props.disabled ? 0.6 : 1)};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
 `;
 
 const KidButton: React.FC<ButtonProps> = ({
@@ -112,6 +116,8 @@ const KidButton: React.FC<ButtonProps> = ({
   minWidth,
   fontSize,
   icon,
+  disabled,
+  type = "button",
 }) => {
   return (
     <StyledButton
@@ -122,10 +128,16 @@ const KidButton: React.FC<ButtonProps> = ({
       $minWidth={minWidth}
       $fontSize={fontSize}
       onClick={onClick}
-      whileHover={{
-        scale: 1.02,
-        y: -1,
-      }}
+      disabled={disabled}
+      type={type}
+      whileHover={
+        disabled
+          ? {}
+          : {
+              scale: 1.02,
+              y: -1,
+            }
+      }
       whileTap={{ scale: 0.98 }}
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
