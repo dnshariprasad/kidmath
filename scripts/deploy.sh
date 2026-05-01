@@ -19,7 +19,7 @@ npm run deploy
 
 # 4. Deploy to Firebase Hosting
 echo "🔥 Deploying to Firebase Hosting..."
-firebase deploy --only hosting
+npm run deploy-firebase
 
 # 5. Stage and Commit changes (Only if deploy succeeded)
 echo "💾 Staging all changes..."
