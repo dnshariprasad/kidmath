@@ -338,15 +338,15 @@ export const TitleArea = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 120px;
-  height: 120px;
+  min-height: 80px;
+  height: auto;
   background: ${(props) => props.theme.colors.surface};
   border-radius: 24px;
   border: 1px solid ${(props) => props.theme.colors.primary}15;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
-  padding: 20px;
+  padding: 12px 24px;
   margin-bottom: 0;
   box-sizing: border-box;
 
@@ -442,42 +442,33 @@ export const PageHeader = styled.div`
   align-items: center;
   width: 100%;
   padding-bottom: 0;
-  gap: 8px;
+  gap: 4px;
 `;
 
 export const PageTitle = styled.h1`
   font-family: ${(props) => props.theme.fonts.primary};
-  font-size: ${(props) => props.theme.fontSize.xl};
+  font-size: ${(props) => props.theme.fontSize.lg};
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 15px;
-  letter-spacing: -0.5px;
+  gap: 12px;
+  letter-spacing: -0.2px;
   text-align: center;
   position: relative;
 
   &::after {
-    content: "";
-    position: absolute;
-    bottom: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 6px;
-    background: ${(props) => props.theme.colors.primary}25;
-    border-radius: 10px;
+    display: none;
   }
 `;
 
 export const PageSubtitle = styled.p`
   font-family: ${(props) => props.theme.fonts.secondary};
-  font-size: ${(props) => props.theme.fontSize.base};
+  font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.colors.textSecondary};
   margin: 0;
-  margin-top: 5px;
-  opacity: 0.8;
+  opacity: 0.9;
   max-width: 600px;
   text-align: center;
   font-weight: 500;

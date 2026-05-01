@@ -20,7 +20,7 @@ const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({
     <TitleArea data-testid="title-area">
       <PageHeader>
         <PageTitle>
-          <Icon size={40} color={iconColor} strokeWidth={2.5} />
+          <Icon size={32} color={iconColor} strokeWidth={2.5} />
           {title}
         </PageTitle>
         <PageSubtitle>{subtitle}</PageSubtitle>
