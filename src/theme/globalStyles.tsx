@@ -589,13 +589,8 @@ export const SidebarSide = styled.div`
 `;
 
 export const ConfigSection = styled.div<{ $disabled?: boolean }>`
-  margin-bottom: 12px;
   opacity: ${(props) => (props.$disabled ? 0.5 : 1)};
   pointer-events: ${(props) => (props.$disabled ? "none" : "auto")};
-
-  &:last-child {
-    margin-bottom: 0;
-  }
 `;
 
 export const ConfigSubTitle = styled.h4`

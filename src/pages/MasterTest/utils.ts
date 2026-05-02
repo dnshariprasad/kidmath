@@ -35,6 +35,7 @@ export const generateTestQuestions = (
   allowDecimals: boolean,
   t: TranslationKeys,
   selectedMathOps: string[] = ["+", "-", "*", "/"],
+  count: number = 10,
 ): Question[] => {
   const newQuestions: Question[] = [];
   let allowedTypes: QuestionType[] = [
@@ -76,7 +77,7 @@ export const generateTestQuestions = (
   const teluguLetters = ["అ", "ఆ", "ఇ", "ఈ", "ఉ", "ఊ", "ఎ", "ఏ", "ఐ", "క", "ఖ", "గ", "ఘ"];
   const seenSignatures = new Set<string>();
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= count; i++) {
     let q: Partial<Question> = {};
     let attempts = 0;
     let signature = "";
@@ -327,9 +328,10 @@ export const getQuestionTextToSpeak = (q: Question) => {
   return q.data.word || q.data.letter || q.prompt;
 };
 
-export const getGradeTitle = (score: number): string => {
-  if (score === 10) return "GRAND MASTER";
-  if (score === 9) return "LEGEND";
-  if (score === 8) return "PRODIGY";
+export const getGradeTitle = (score: number, total: number): string => {
+  const ratio = score / total;
+  if (ratio === 1) return "GRAND MASTER";
+  if (ratio >= 0.9) return "LEGEND";
+  if (ratio >= 0.8) return "PRODIGY";
   return "KIDDOO HERO";
 };

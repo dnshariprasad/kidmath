@@ -15,9 +15,9 @@ import {
   AppNameText,
   ArrowRight,
   BackItem,
+  UserAvatarContainer,
+  UserInitial,
 } from "./styles";
-import NamePrompt from "../../components/NamePrompt/index.tsx";
-import SetStreakModal from "../../components/SetStreakModal/index.tsx";
 import { RootState } from "../../store/store";
 import { TRANSLATIONS } from "../../constants/translations";
 import {
@@ -35,17 +35,15 @@ import {
   Balloon,
   Volume2,
   VolumeX,
-  MoreVertical,
   Sun,
   Moon,
   Type,
   ChevronRight,
   ChevronLeft,
-  User,
-  Zap,
   Share2,
   History,
   LogOut,
+  ChevronDown,
 } from "lucide-react";
 
 const Navbar: React.FC = () => {
@@ -58,8 +56,6 @@ const Navbar: React.FC = () => {
 
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState<null | "fontSize">(null);
-  const [showNameUpdate, setShowNameUpdate] = useState(false);
-  const [showSetStreak, setShowSetStreak] = useState(false);
   const t = TRANSLATIONS.en;
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -86,6 +82,8 @@ const Navbar: React.FC = () => {
     return null;
   }
 
+  const userInitial = user.displayName ? user.displayName[0] : user.email ? user.email[0] : "U";
+
   return (
     <NavbarContainer data-testid="layout-navbar">
       <NavLeftSection>
@@ -101,10 +99,38 @@ const Navbar: React.FC = () => {
       </NavLeftSection>
 
       <UserSection>
+        <IconButton as={Link} to="/test_history" title="Test History">
+          <History size={20} />
+        </IconButton>
+
+        <IconButton
+          onClick={async () => {
+            const shareData = {
+              title: "Kiddoo - Fun Learning for Kids",
+              text: "Check out Kiddoo, a fun and interactive learning platform for kids! 🚀",
+              url: "https://dnshariprasad.github.io/kiddoo/",
+            };
+            try {
+              if (navigator.share) {
+                await navigator.share(shareData);
+              } else {
+                await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+                alert("Link copied to clipboard! 📋");
+              }
+            } catch (err) {
+              console.error("Error sharing:", err);
+            }
+          }}
+          title="Share Kiddoo"
+        >
+          <Share2 size={20} />
+        </IconButton>
+
         <MoreMenuWrapper ref={menuRef}>
-          <IconButton onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}>
-            <MoreVertical size={22} />
-          </IconButton>
+          <UserAvatarContainer onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}>
+            <UserInitial>{userInitial}</UserInitial>
+            <ChevronDown size={16} color="white" />
+          </UserAvatarContainer>
 
           {isMoreMenuOpen && (
             <DropdownMenu>
@@ -137,34 +163,6 @@ const Navbar: React.FC = () => {
                       <ChevronRight size={18} />
                     </ArrowRight>
                   </DropdownItem>
-
-                  <DropdownItem
-                    onClick={() => {
-                      setShowNameUpdate(true);
-                      setIsMoreMenuOpen(false);
-                    }}
-                  >
-                    <User size={20} />
-                    <span>{t.nav_updateName}</span>
-                  </DropdownItem>
-
-                  <DropdownItem
-                    onClick={() => {
-                      setShowSetStreak(true);
-                      setIsMoreMenuOpen(false);
-                    }}
-                  >
-                    <Zap size={20} />
-                    <span>{t.nav_setProgress}</span>
-                  </DropdownItem>
-                  <DropdownItem
-                    as={Link}
-                    to="/test_history"
-                    onClick={() => setIsMoreMenuOpen(false)}
-                  >
-                    <History size={20} />
-                    <span>Test History</span>
-                  </DropdownItem>
                   <DropdownItem
                     onClick={async () => {
                       try {
@@ -178,29 +176,6 @@ const Navbar: React.FC = () => {
                   >
                     <LogOut size={20} />
                     <span>Logout</span>
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={async () => {
-                      setIsMoreMenuOpen(false);
-                      const shareData = {
-                        title: "Kiddoo - Fun Learning for Kids",
-                        text: "Check out Kiddoo, a fun and interactive learning platform for kids! 🚀",
-                        url: "https://dnshariprasad.github.io/kiddoo/",
-                      };
-                      try {
-                        if (navigator.share) {
-                          await navigator.share(shareData);
-                        } else {
-                          await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-                          alert("Link copied to clipboard! 📋");
-                        }
-                      } catch (err) {
-                        console.error("Error sharing:", err);
-                      }
-                    }}
-                  >
-                    <Share2 size={20} />
-                    <span>Share Kiddoo</span>
                   </DropdownItem>
                 </>
               ) : (
@@ -245,8 +220,6 @@ const Navbar: React.FC = () => {
           )}
         </MoreMenuWrapper>
       </UserSection>
-      {showNameUpdate && <NamePrompt onComplete={() => setShowNameUpdate(false)} />}
-      {showSetStreak && <SetStreakModal onClose={() => setShowSetStreak(false)} />}
     </NavbarContainer>
   );
 };

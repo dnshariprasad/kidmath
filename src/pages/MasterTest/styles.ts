@@ -41,14 +41,14 @@ export const TestContainer = styled.div`
 export const QuestionCard = styled(Card)<{ $type: string }>`
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 60px 30px 35px;
+  gap: 15px;
+  padding: 50px 30px 25px;
   position: relative;
   background: ${(props) => props.theme.colors.surface};
   border-radius: 32px;
   border: 1px solid ${(props) => props.theme.colors.primary}15;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
+  margin-top: 10px;
   overflow: hidden;
 
   &::before {
@@ -65,8 +65,8 @@ export const QuestionCard = styled(Card)<{ $type: string }>`
   }
 
   @media (max-width: 600px) {
-    padding: 70px 20px 30px;
-    gap: 20px;
+    padding: 60px 20px 20px;
+    gap: 15px;
     border-radius: 24px;
   }
 `;
@@ -89,69 +89,79 @@ export const QuestionNumber = styled.div`
   position: absolute;
   top: 25px;
   left: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: ${(props) => props.theme.fonts.primary};
+  width: calc(100% - 60px);
+
+  @media (max-width: 600px) {
+    top: 20px;
+    left: 20px;
+    width: calc(100% - 40px);
+  }
+`;
+
+export const HeaderRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  width: 100%;
+`;
+
+export const QCountText = styled.div`
   font-weight: 900;
   font-size: 0.75rem;
   letter-spacing: 2px;
   color: ${(props) => props.theme.colors.textSecondary};
   opacity: 0.5;
   text-transform: uppercase;
-  font-family: ${(props) => props.theme.fonts.primary};
 
   @media (max-width: 600px) {
-    top: 20px;
-    left: 20px;
     font-size: 0.65rem;
   }
 `;
 
-export const SubjectBadge = styled.div<{ $type: string }>`
-  position: absolute;
-  top: 25px;
-  right: 30px;
-  font-size: 0.75rem;
+export const InlineTimer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  padding: 6px 16px;
-  border-radius: 12px;
-  font-family: ${(props) => props.theme.fonts.primary};
-  background: ${(props) => {
-    switch (props.$type) {
-      case "math":
-        return (props.theme.colors.math || props.theme.colors.primary) + "15";
-      case "spelling":
-      case "missing_letter":
-        return (props.theme.colors.english || props.theme.colors.primary) + "15";
-      case "hindi":
-        return (props.theme.colors.hindi || props.theme.colors.primary) + "15";
-      case "comparison":
-        return (props.theme.colors.math || props.theme.colors.primary) + "15";
-      default:
-        return props.theme.colors.primary + "15";
-    }
-  }};
-  color: ${(props) => {
-    switch (props.$type) {
-      case "math":
-        return props.theme.colors.math || props.theme.colors.primary;
-      case "spelling":
-      case "missing_letter":
-        return props.theme.colors.english || props.theme.colors.primary;
-      case "hindi":
-        return props.theme.colors.hindi || props.theme.colors.primary;
-      case "comparison":
-        return props.theme.colors.math || props.theme.colors.primary;
-      default:
-        return props.theme.colors.primary;
-    }
-  }};
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.colors.primary};
+  background: ${(props) => props.theme.colors.primary}10;
+  padding: 2px 10px;
+  border-radius: 20px;
+  letter-spacing: 1px;
 
   @media (max-width: 600px) {
-    top: 20px;
-    right: 20px;
     font-size: 0.65rem;
-    padding: 4px 12px;
+    padding: 2px 8px;
   }
+`;
+
+export const TestSubTitle = styled.div`
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: ${(props) => props.theme.colors.primary};
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+
+  @media (max-width: 600px) {
+    font-size: 0.7rem;
+  }
+`;
+
+export const TimerContainer = styled.div`
+  display: none;
+`;
+
+/* SubjectBadge is now hidden to favor TimerContainer */
+export const SubjectBadge = styled.div<{ $type: string }>`
+  display: none;
 `;
 
 export const QuestionHeader = styled.div`
@@ -171,12 +181,12 @@ export const QuestionContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
-  padding: 15px 0;
+  gap: 30px;
+  padding: 40px 0 10px;
 
   @media (max-width: 600px) {
-    gap: 30px;
-    padding: 15px 0;
+    gap: 20px;
+    padding: 30px 0 10px;
   }
 `;
 
@@ -202,10 +212,10 @@ export const LogicDisplay = styled(BigDisplay)`
 export const ComparisonGrid = styled.div<{ $isLong?: boolean }>`
   display: grid;
   grid-template-columns: ${(props) => (props.$isLong ? "1fr" : "repeat(2, 1fr)")};
-  gap: 20px;
+  gap: 16px;
   width: 100%;
   max-width: ${(props) => (props.$isLong ? "600px" : "800px")};
-  margin: 20px auto 0;
+  margin: 10px auto 0;
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
@@ -226,7 +236,7 @@ export const ChoiceCard = styled(motion.div)<{ $selected: boolean; $color?: stri
   cursor: pointer;
   flex: 1;
   min-width: 140px;
-  min-height: 80px;
+  min-height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -483,7 +493,7 @@ export const InstructionHeader = styled.div`
   text-align: center;
   width: 100%;
   gap: 12px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 `;
 
 export const IconBox = styled(motion.div)`
@@ -603,10 +613,12 @@ export const SetupSection = styled.div<{ $minimal?: boolean }>`
 `;
 
 export const SettingsTitle = styled(KidoText)`
-  margin-bottom: -15px;
   text-align: center;
-  opacity: 0.6;
-  letter-spacing: 2px;
+  width: 100%;
+  margin-bottom: 8px;
+  font-weight: 900;
+  color: ${(props) => props.theme.colors.primary};
+  letter-spacing: -0.5px;
 `;
 
 export const SubjectGrid = styled.div`
@@ -614,7 +626,6 @@ export const SubjectGrid = styled.div`
   justify-content: flex-start;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
 `;
 
 export const SubjectChip = styled(motion.button)<{ $active: boolean; $color: string }>`
@@ -673,4 +684,9 @@ export const OperationChip = styled(motion.button)<{ $active: boolean }>`
     font-size: 1.6rem;
     font-weight: 900;
   }
+`;
+
+import { ConfigSubTitle as GlobalConfigSubTitle } from "../../theme/globalStyles";
+export const ConfigSubTitle = styled(GlobalConfigSubTitle)`
+  margin-top: 12px;
 `;

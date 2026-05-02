@@ -175,3 +175,32 @@ export const BackItem = styled(DropdownItem)`
   border-bottom: 1px solid ${(props) => props.theme.colors.primary}10;
   margin-bottom: 5px;
 `;
+
+export const UserAvatarContainer = styled.div`
+  min-width: 65px;
+  height: 40px;
+  border-radius: 20px;
+  background: ${(props) => props.theme.colors.primary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px ${(props) => props.theme.colors.primary}40;
+  transition: all 0.2s ease;
+  border: 2px solid ${(props) => props.theme.colors.surface};
+  gap: 5px;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px ${(props) => props.theme.colors.primary}60;
+  }
+`;
+
+export const UserInitial = styled.span`
+  color: white;
+  font-weight: 800;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-family: ${(props) => props.theme.fonts.primary};
+`;

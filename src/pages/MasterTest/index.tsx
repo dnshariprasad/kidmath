@@ -37,12 +37,15 @@ import {
   ActionMenuItem,
   CheckboxContainer,
   CheckboxInput,
-  ConfigSubTitle,
 } from "../../theme/globalStyles";
 import {
   TestContainer,
   QuestionCard,
   QuestionNumber,
+  HeaderRow,
+  QCountText,
+  InlineTimer,
+  TestSubTitle,
   SubjectBadge,
   QuestionHeader,
   QuestionContent,
@@ -71,17 +74,16 @@ import {
   CardProgressFill,
   LogicDisplay,
   InstructionCard,
-  InstructionHeader,
-  IconBox,
   InstructionGrid,
   InstructionItem,
   SetupSection,
+  ConfigSubTitle,
+  SettingsTitle,
   GradeBadge,
   SubjectGrid,
   SubjectChip,
   OperationToggleGrid,
   OperationChip,
-  HeroTitle,
   InstructionBadge,
 } from "./styles";
 import { GameLayout } from "../../theme/globalStyles";
@@ -115,6 +117,7 @@ const MasterTest: React.FC = () => {
   const [targetTime, setTargetTime] = useState<number>(0);
   const [selectedTestId, setSelectedTestId] = useState<string>("math_test");
   const [selectedMathOps, setSelectedMathOps] = useState<string[]>(["+"]);
+  const [questionCount, setQuestionCount] = useState<number>(10);
   const isMasterTest = selectedTestId === "master_test";
   const t = TRANSLATIONS.en;
 
@@ -150,6 +153,17 @@ const MasterTest: React.FC = () => {
     [t],
   );
 
+  const questionCountOptions = React.useMemo(
+    () => [
+      { value: 10, label: "10 Questions", info: "Perfect for a quick practice" },
+      { value: 15, label: "15 Questions", info: "A bit more challenging" },
+      { value: 20, label: "20 Questions", info: "Testing your endurance" },
+      { value: 25, label: "25 Questions", info: "The ultimate challenge" },
+      { value: 50, label: "50 Questions", info: "The Grand Master's Marathon" },
+    ],
+    [],
+  );
+
   const getInstructions = () => [
     t.test_qCount,
     t.test_selectBest,
@@ -157,7 +171,7 @@ const MasterTest: React.FC = () => {
     t.test_scoreForCert,
   ];
 
-  const getTestTitle = () => {
+  const getTestTitle = useCallback(() => {
     if (isMasterTest) return t.mst_grandMaster;
     switch (selectedTestId) {
       case "math_addition":
@@ -185,7 +199,29 @@ const MasterTest: React.FC = () => {
       default:
         return t.com_tryAgain;
     }
-  };
+  }, [isMasterTest, t, selectedTestId]);
+
+  const getFullTestInfo = useCallback(() => {
+    const parts = [getTestTitle()];
+
+    // Add difficulty
+    const diff = difficultyOptions.find((d) => d.value === complexity);
+    if (diff) parts.push(diff.label);
+
+    // Add math ops if relevant
+    if ((selectedTestId === "math_test" || isMasterTest) && selectedMathOps.length > 0) {
+      const opNames = selectedMathOps.map((op) => {
+        if (op === "+") return "Add";
+        if (op === "-") return "Sub";
+        if (op === "*") return "Mult";
+        if (op === "/") return "Div";
+        return op;
+      });
+      parts.push(opNames.join(", "));
+    }
+
+    return parts.join(" • ");
+  }, [getTestTitle, difficultyOptions, complexity, selectedTestId, isMasterTest, selectedMathOps]);
 
   const generateTest = useCallback(() => {
     const newQuestions = generateTestQuestions(
@@ -195,6 +231,7 @@ const MasterTest: React.FC = () => {
       allowDecimals,
       t,
       selectedMathOps,
+      questionCount,
     );
     setQuestions(newQuestions);
     setAnswers({});
@@ -205,7 +242,7 @@ const MasterTest: React.FC = () => {
     setCurrentIndex(0);
     setTimer(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [selectedTestId, t, complexity, allowNegative, allowDecimals, selectedMathOps]);
+  }, [selectedTestId, t, complexity, allowNegative, allowDecimals, selectedMathOps, questionCount]);
 
   const handleSubmit = useCallback(() => {
     let finalScore = 0;
@@ -217,7 +254,8 @@ const MasterTest: React.FC = () => {
     setScore(finalScore);
     setIsSubmitted(true);
 
-    if (finalScore >= 8) {
+    const passThreshold = questions.length * 0.8;
+    if (finalScore >= passThreshold) {
       confetti({
         particleCount: 150,
         spread: 70,
@@ -298,33 +336,29 @@ const MasterTest: React.FC = () => {
         <CardProgressBar>
           <CardProgressFill
             initial={{ width: 0 }}
-            animate={{ width: `${((currentIndex + 1) / 10) * 100}%` }}
+            animate={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
             transition={{ type: "spring", stiffness: 100 }}
           />
         </CardProgressBar>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <QuestionNumber>
-            {t.test_question} {q.id} {t.test_of} 10
-          </QuestionNumber>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              color: colors.primary,
-              fontWeight: "bold",
-              marginTop: "20px",
-            }}
-          >
-            <Timer size={18} />
-            {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}
-            {targetTime > 0 && (
-              <span style={{ fontSize: "0.8rem", opacity: 0.6, marginLeft: "4px" }}>
-                / {Math.floor(targetTime / 60)}:{(targetTime % 60).toString().padStart(2, "0")}
-              </span>
-            )}
-          </div>
-        </div>
+        <QuestionNumber>
+          <HeaderRow>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <QCountText>
+                {t.test_question} {q.id} {t.test_of} {questions.length}
+              </QCountText>
+              <InlineTimer>
+                <Timer size={14} />
+                {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}
+                {targetTime > 0 && (
+                  <span style={{ fontSize: "0.6rem", opacity: 0.6, marginLeft: "4px" }}>
+                    / {Math.floor(targetTime / 60)}:{(targetTime % 60).toString().padStart(2, "0")}
+                  </span>
+                )}
+              </InlineTimer>
+            </div>
+            <TestSubTitle>{getFullTestInfo()}</TestSubTitle>
+          </HeaderRow>
+        </QuestionNumber>
         <SubjectBadge $type={q.type}>{q.type.replace("_", " ")}</SubjectBadge>
 
         {q.type !== "math" && (
@@ -432,21 +466,9 @@ const MasterTest: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ type: "spring", damping: 20 }}
             >
-              <InstructionHeader>
-                <IconBox
-                  animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <Trophy size={40} />
-                </IconBox>
-                <HeroTitle
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  key={selectedTestId}
-                >
-                  {getTestTitle()}
-                </HeroTitle>
-              </InstructionHeader>
+              <SettingsTitle fontSize="2xl" fontWeight={900}>
+                Ready for a Challenge? Let's Go!
+              </SettingsTitle>
 
               <SetupSection>
                 <ConfigSubTitle>Choose Your Subject</ConfigSubTitle>
@@ -534,25 +556,29 @@ const MasterTest: React.FC = () => {
                   </>
                 )}
 
-                <div style={{ marginTop: "12px" }}>
-                  <DifficultyPicker
-                    title="Difficulty"
-                    options={difficultyOptions}
-                    currentValue={complexity}
-                    onChange={(val) => setComplexity(val as number)}
-                    name="test_complexity"
-                  />
-                </div>
+                <DifficultyPicker
+                  title="Difficulty"
+                  options={difficultyOptions}
+                  currentValue={complexity}
+                  onChange={(val) => setComplexity(val as number)}
+                  name="test_complexity"
+                />
 
-                <div style={{ marginTop: "4px" }}>
-                  <DifficultyPicker
-                    title="Target Time"
-                    options={timeOptions}
-                    currentValue={targetTime}
-                    onChange={(val) => setTargetTime(val as number)}
-                    name="test_target_time"
-                  />
-                </div>
+                <DifficultyPicker
+                  title="Number of Questions"
+                  options={questionCountOptions}
+                  currentValue={questionCount}
+                  onChange={(val) => setQuestionCount(val as number)}
+                  name="test_question_count"
+                />
+
+                <DifficultyPicker
+                  title="Target Time"
+                  options={timeOptions}
+                  currentValue={targetTime}
+                  onChange={(val) => setTargetTime(val as number)}
+                  name="test_target_time"
+                />
               </SetupSection>
 
               <div
@@ -628,7 +654,7 @@ const MasterTest: React.FC = () => {
               </motion.div>
 
               <ScoreValue fontSize="4rem" fontWeight={900} color="primary">
-                {score} / 10
+                {score} / {questions.length}
               </ScoreValue>
 
               <div
@@ -653,7 +679,7 @@ const MasterTest: React.FC = () => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                {getGradeTitle(score)}
+                {getGradeTitle(score, questions.length)}
               </GradeBadge>
 
               {targetTime > 0 && timer >= targetTime && (
@@ -670,11 +696,11 @@ const MasterTest: React.FC = () => {
               )}
 
               <FeedbackText fontSize="2rem" fontWeight={800}>
-                {score >= 8 ? t.com_genius : t.com_goodEffort}
+                {score >= questions.length * 0.8 ? t.com_genius : t.com_goodEffort}
               </FeedbackText>
 
               <SubFeedbackText fontSize="lg" color="textSecondary">
-                {score >= 8 ? t.com_masteredCurriculum : t.test_keepPracticing}
+                {score >= questions.length * 0.8 ? t.com_masteredCurriculum : t.test_keepPracticing}
               </SubFeedbackText>
 
               {targetTime > 0 && (
