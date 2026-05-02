@@ -1,1 +1,0 @@
-import{z as i,p as e,aM as l,t as o,v as n,w as d}from"./index-DknSt3NM.js";const c=({icon:a,title:s,subtitle:t,iconColor:r="#6366F1"})=>e.jsx(l,{"data-testid":"title-area",children:e.jsxs(o,{children:[e.jsxs(n,{children:[e.jsx(a,{size:32,color:r,strokeWidth:2.5}),s]}),e.jsx(d,{children:t})]})}),h=i.memo(c);export{h as C};
