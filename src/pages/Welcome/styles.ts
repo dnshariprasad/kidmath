@@ -4,7 +4,7 @@ import { Card } from "../../theme/globalStyles";
 
 export const ColumnsContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 25px;
   width: 100%;
   max-width: 1200px;
@@ -48,6 +48,7 @@ export const GameItem = styled(motion.div)`
   display: flex;
   align-items: center;
   gap: 14px;
+  min-height: 80px; /* Fixed height for parity */
   cursor: pointer;
   border: 1px solid ${(props) => props.theme.colors.primary}08;
   transition: all 0.2s ease;

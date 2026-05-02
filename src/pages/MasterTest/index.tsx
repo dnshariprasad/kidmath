@@ -100,6 +100,7 @@ const MasterTest: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.alphabet.user);
+  const userName = useSelector((state: RootState) => state.alphabet.userName);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -266,18 +267,34 @@ const MasterTest: React.FC = () => {
 
     // Save to Firestore
     if (user) {
+      const finalName =
+        userName && userName !== "Explorer" ? userName : user.displayName || user.email || "Hari";
+      console.log("Saving test result for user:", finalName);
+
       saveTestResult({
         userId: user.uid,
+        userName: finalName,
         testId: selectedTestId,
         testTitle: getTestTitle(),
         score: finalScore,
+        scorePercentage: Math.round((finalScore / questions.length) * 100),
         totalQuestions: questions.length,
         timeTaken: timer,
         category: selectedTestId,
         difficulty: complexity,
       }).catch((err) => console.error("Failed to save test result:", err));
     }
-  }, [questions, answers, dispatch, user, selectedTestId, complexity, timer, getTestTitle]);
+  }, [
+    questions,
+    answers,
+    dispatch,
+    user,
+    userName,
+    selectedTestId,
+    complexity,
+    timer,
+    getTestTitle,
+  ]);
 
   useEffect(() => {
     generateTest();

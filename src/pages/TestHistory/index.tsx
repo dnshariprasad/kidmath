@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { getUserTestHistory, TestResult } from "../../firebase/testService";
+import { getUserTestHistory, getGlobalLeaderboard, TestResult } from "../../firebase/testService";
 import { PageContainer } from "../../theme/globalStyles";
 import {
   HistoryContainer,
+  SplitLayout,
+  SectionHeader,
   HistoryList,
   HistoryItem,
   TestInfo,
@@ -16,36 +18,91 @@ import {
   ScoreBadge,
   EmptyState,
   EmptyMessage,
+  LeaderboardTable,
+  LeaderboardRow,
+  RankText,
+  AvatarSmall,
+  TitleIconWrapper,
+  HeaderContent,
+  ScoreWrapper,
+  IconContainer,
+  RankIconWrapper,
+  NameSection,
+  ScoreValue,
+  TimeValue,
+  IconMargin,
 } from "./styles";
-import { Trophy, Timer, Brain, Calendar, Award, Medal } from "lucide-react";
+import {
+  Trophy,
+  Calendar,
+  Medal,
+  Star,
+  Award,
+  TrendingUp,
+  Sparkles,
+  Clock,
+  Target,
+  Timer,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import KidButton from "../../components/KidButton";
 import LoadingScreen from "../../components/LoadingScreen";
 import ChallengeHeader from "../../components/ChallengeHeader";
 import { colors } from "../../theme/colors";
+import { KidoText } from "../../components/KidoText";
 
 const TestHistory: React.FC = () => {
   const user = useSelector((state: RootState) => state.alphabet.user);
   const [history, setHistory] = useState<(TestResult & { id: string })[]>([]);
+  const [leaders, setLeaders] = useState<(TestResult & { id: string })[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchHistory = async () => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      // Fetch History
       if (user) {
-        try {
-          const data = await getUserTestHistory(user.uid);
-          setHistory(data);
-        } catch (error) {
-          console.error("Error fetching history:", error);
-        } finally {
-          setLoading(false);
-        }
+        getUserTestHistory(user.uid)
+          .then(setHistory)
+          .catch((err) => console.error("History fetch error:", err));
       }
+
+      // Fetch Leaderboard
+      getGlobalLeaderboard(undefined, 10)
+        .then(setLeaders)
+        .catch((err) => console.error("Leaderboard fetch error:", err))
+        .finally(() => setLoading(false));
     };
 
-    fetchHistory();
+    fetchData();
   }, [user]);
+
+  const getRankIcon = (rank: number) => {
+    if (rank === 1) {
+      return (
+        <RankIconWrapper>
+          <Trophy size={20} color="#FFD700" />
+        </RankIconWrapper>
+      );
+    }
+    if (rank === 2) {
+      return (
+        <RankIconWrapper>
+          <Award size={18} color="#C0C0C0" />
+        </RankIconWrapper>
+      );
+    }
+    if (rank === 3) {
+      return (
+        <RankIconWrapper>
+          <Medal size={18} color="#CD7F32" />
+        </RankIconWrapper>
+      );
+    }
+    return null;
+  };
 
   if (loading) return <LoadingScreen />;
 
@@ -55,76 +112,183 @@ const TestHistory: React.FC = () => {
         <ChallengeHeader
           icon={Medal}
           title="Achievement Board"
-          subtitle="Tracking your journey to becoming a superstar! 🌟"
+          subtitle="Tracking your journey and the world's top stars! 🌟"
           streak={0}
         />
 
-        {history.length === 0 ? (
-          <EmptyState>
-            <Trophy size={80} color={colors.slate} opacity={0.3} />
-            <EmptyMessage>
-              Your achievement board is empty. Ready for your first challenge?
-            </EmptyMessage>
-            <KidButton
-              title="Start a Test"
-              onClick={() => navigate("/master_test")}
-              variant="primary"
-              size="lg"
-            />
-          </EmptyState>
-        ) : (
-          <HistoryList>
-            {history.map((item, index) => (
-              <HistoryItem
-                key={item.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <TestInfo>
-                  <TestName>{item.testTitle}</TestName>
-                  <DateText>
-                    <Calendar size={14} />
-                    {item.timestamp.toDate().toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </DateText>
-                </TestInfo>
+        <SplitLayout>
+          {/* MY ACHIEVEMENTS */}
+          <div>
+            <SectionHeader>
+              <TitleIconWrapper>
+                <TrendingUp size={24} />
+              </TitleIconWrapper>
+              <HeaderContent>
+                <KidoText fontSize="lg" fontWeight={900} $textAlign="left" $margin="0">
+                  My Achievements
+                </KidoText>
+                <KidoText fontSize="xs" color="textSecondary" $textAlign="left" $margin="2px 0 0 0">
+                  Your personal progress and history
+                </KidoText>
+              </HeaderContent>
+            </SectionHeader>
 
-                <StatBox>
-                  <StatLabel>Duration</StatLabel>
-                  <StatValue>
-                    <Timer size={18} />
-                    {Math.floor(item.timeTaken / 60)}:
-                    {(item.timeTaken % 60).toString().padStart(2, "0")}
-                  </StatValue>
-                </StatBox>
+            {history.length === 0 ? (
+              <EmptyState>
+                <IconContainer $bg={colors.primary + "10"}>
+                  <Trophy size={60} color={colors.primary} />
+                </IconContainer>
+                <EmptyMessage>Your trophy cabinet is empty! Let's win some stars! 🚀</EmptyMessage>
+                <KidButton
+                  title="Start a Challenge"
+                  onClick={() => navigate("/master_test")}
+                  variant="primary"
+                />
+              </EmptyState>
+            ) : (
+              <HistoryList>
+                {history.map((item, index) => {
+                  const percentage =
+                    item.scorePercentage ?? Math.round((item.score / item.totalQuestions) * 100);
+                  return (
+                    <HistoryItem
+                      key={item.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <TestInfo>
+                        <TestName>{item.testTitle}</TestName>
+                        <DateText>
+                          <Calendar size={14} />
+                          {item.timestamp.toDate().toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </DateText>
+                      </TestInfo>
 
-                <StatBox>
-                  <StatLabel>Difficulty</StatLabel>
-                  <StatValue $color={colors.primary}>
-                    <Brain size={18} />
-                    Level {item.difficulty}
-                  </StatValue>
-                </StatBox>
+                      <StatBox>
+                        <StatLabel>Total Time</StatLabel>
+                        <StatValue>
+                          <Clock size={16} color={colors.primary} />
+                          {Math.floor(item.timeTaken / 60)}:
+                          {(item.timeTaken % 60).toString().padStart(2, "0")}s
+                        </StatValue>
+                      </StatBox>
 
-                <StatBox>
-                  <StatLabel>Performance</StatLabel>
-                  <StatValue $color={item.score >= 8 ? colors.success : colors.warning}>
-                    <Award size={18} />
-                    {item.score >= 8 ? "Mastered" : "Practicing"}
-                  </StatValue>
-                </StatBox>
+                      <ScoreWrapper>
+                        <ScoreBadge $scorePercentage={percentage}>
+                          {percentage === 100 && (
+                            <IconMargin>
+                              <Sparkles size={16} />
+                            </IconMargin>
+                          )}
+                          {percentage}%
+                        </ScoreBadge>
+                      </ScoreWrapper>
+                    </HistoryItem>
+                  );
+                })}
+              </HistoryList>
+            )}
+          </div>
 
-                <ScoreBadge $score={item.score}>
-                  {item.score} / {item.totalQuestions}
-                </ScoreBadge>
-              </HistoryItem>
-            ))}
-          </HistoryList>
-        )}
+          {/* GLOBAL HALL OF FAME */}
+          <div>
+            <SectionHeader>
+              <TitleIconWrapper>
+                <Trophy size={24} />
+              </TitleIconWrapper>
+              <HeaderContent>
+                <KidoText fontSize="lg" fontWeight={900} $textAlign="left" $margin="0">
+                  Global Hall of Fame
+                </KidoText>
+                <KidoText fontSize="xs" color="textSecondary" $textAlign="left" $margin="2px 0 0 0">
+                  The top champions in the world
+                </KidoText>
+              </HeaderContent>
+            </SectionHeader>
+
+            {leaders.length === 0 ? (
+              <EmptyState>
+                <IconContainer $bg={colors.warning + "10"}>
+                  <Star size={60} color={colors.warning} />
+                </IconContainer>
+                <EmptyMessage>The Hall of Fame is waiting for its first stars! 🌟</EmptyMessage>
+                <KidoText fontSize="xs" fontWeight={600} $margin="10px 0 0 0">
+                  Check back soon to see the top scorers!
+                </KidoText>
+              </EmptyState>
+            ) : (
+              <LeaderboardTable>
+                {leaders.map((leader, index) => {
+                  const rank = index + 1;
+                  const percentage =
+                    leader.scorePercentage ??
+                    Math.round((leader.score / leader.totalQuestions) * 100);
+                  const initials = (leader.userName || "Explorer")
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .slice(0, 2);
+
+                  return (
+                    <LeaderboardRow
+                      key={leader.id}
+                      $isTop3={rank <= 3}
+                      $rank={rank}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <RankText $rank={rank}>
+                        {getRankIcon(rank)}
+                        {rank}
+                      </RankText>
+                      <AvatarSmall $rank={rank}>{initials}</AvatarSmall>
+                      <NameSection>
+                        <KidoText fontSize="md" fontWeight={900} $textAlign="left">
+                          {leader.userName || "Explorer"}
+                        </KidoText>
+                        {rank === 1 && (
+                          <KidoText
+                            fontSize="10px"
+                            color="success"
+                            fontWeight={800}
+                            $textAlign="left"
+                          >
+                            CURRENT CHAMPION 👑
+                          </KidoText>
+                        )}
+                      </NameSection>
+                      <StatBox $align="flex-end">
+                        <StatLabel>Score</StatLabel>
+                        <ScoreValue $rank={rank}>
+                          <IconMargin>
+                            <Target size={14} />
+                          </IconMargin>
+                          {percentage}%
+                        </ScoreValue>
+                      </StatBox>
+                      <StatBox $align="flex-end">
+                        <StatLabel>Time</StatLabel>
+                        <TimeValue>
+                          <IconMargin>
+                            <Timer size={14} />
+                          </IconMargin>
+                          {Math.floor(leader.timeTaken / 60)}:
+                          {(leader.timeTaken % 60).toString().padStart(2, "0")}s
+                        </TimeValue>
+                      </StatBox>
+                    </LeaderboardRow>
+                  );
+                })}
+              </LeaderboardTable>
+            )}
+          </div>
+        </SplitLayout>
       </HistoryContainer>
     </PageContainer>
   );

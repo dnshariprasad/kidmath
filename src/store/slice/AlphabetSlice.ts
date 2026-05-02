@@ -178,7 +178,10 @@ const kiddooSlice = createSlice({
     setUser: (state, action: PayloadAction<KiddooState["user"]>) => {
       state.user = action.payload;
       if (action.payload?.displayName) {
-        state.userName = action.payload.displayName;
+        // Only override if we don't have a name or it's a generic one
+        if (!state.userName || state.userName === "Explorer") {
+          state.userName = action.payload.displayName;
+        }
       }
       saveState(state);
     },

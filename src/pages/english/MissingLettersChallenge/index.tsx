@@ -97,15 +97,7 @@ const MissingLettersChallenge = () => {
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [
-    streak,
-    dispatch,
-    t.fb_incredible10,
-    t.fb_superstar,
-    colors.primary,
-    colors.primaryDark,
-    colors.primaryLight,
-  ]);
+  }, [streak, dispatch, t.fb_incredible10, t.fb_superstar]);
 
   const handleSubmit = () => {
     if (randomString.toLowerCase() === inputValue.toLowerCase()) {

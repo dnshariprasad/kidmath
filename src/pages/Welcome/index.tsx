@@ -33,6 +33,7 @@ import {
   FooterContent,
 } from "./styles";
 import { KidoText } from "../../components/KidoText";
+import { MiniLeaderboard } from "../../components/MiniLeaderboard";
 
 const Welcome: React.FC = () => {
   const navigate = useNavigate();
@@ -115,7 +116,7 @@ const Welcome: React.FC = () => {
               </GameItem>
             ))}
           </GameList>
-          <div style={{ marginTop: "16px", textAlign: "center" }}>
+          <div style={{ marginTop: "auto", textAlign: "center", paddingTop: "16px" }}>
             <KidButton
               title="EXPLORE ALL"
               variant="secondary"
@@ -154,7 +155,7 @@ const Welcome: React.FC = () => {
               </GameItem>
             ))}
           </GameList>
-          <div style={{ marginTop: "16px", textAlign: "center" }}>
+          <div style={{ marginTop: "auto", textAlign: "center", paddingTop: "16px" }}>
             <KidButton
               title="EXPLORE ALL"
               variant="secondary"
@@ -173,31 +174,16 @@ const Welcome: React.FC = () => {
           <ColumnHeader>
             <CheckCircle2 size={28} />
             <KidoText fontSize="xl" color="primary" fontWeight={900}>
-              Test
+              Leaderboard
             </KidoText>
           </ColumnHeader>
-          <GameList>
-            {GAME_CATEGORIES.test.slice(0, 3).map((game) => (
-              <GameItem
-                key={game.path}
-                onClick={() => handleGameClick(game.path, "test")}
-                whileTap={{ scale: 0.98 }}
-              >
-                <GameInfoContainer>
-                  <GameTitle>
-                    <GameIcon>{getIcon(game.iconName)}</GameIcon>
-                    {game.title}
-                  </GameTitle>
-                  <GameDesc>{game.desc}</GameDesc>
-                </GameInfoContainer>
-              </GameItem>
-            ))}
-          </GameList>
-          <div style={{ marginTop: "16px", textAlign: "center" }}>
+
+          <MiniLeaderboard />
+          <div style={{ marginTop: "auto", textAlign: "center", paddingTop: "16px" }}>
             <KidButton
-              title="EXPLORE ALL"
+              title="TAKE THE CHALLENGE"
               variant="secondary"
-              onClick={() => handleExploreClick("test")}
+              onClick={() => navigate("/master_test")}
               width="100%"
             />
           </div>
