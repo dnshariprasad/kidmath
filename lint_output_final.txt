@@ -4,11 +4,7 @@
 
 
 /Users/Hari/Code/ReactJS/kiddoo/src/components/SpeakIcon.tsx
-  88:7  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  97:9  error  Prop "style" is forbidden on Components  react/forbid-component-props
-
-/Users/Hari/Code/ReactJS/kiddoo/src/components/SurpriseCard.tsx
-  3:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  82:9  error  'sizeValue' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 /Users/Hari/Code/ReactJS/kiddoo/src/main.tsx
   15:7  warning  Fast refresh only works when a file has exports. Move your component(s) to a separate file  react-refresh/only-export-components
@@ -42,46 +38,5 @@
   73:7  warning  Fast refresh only works when a file has exports. Move your component(s) to a separate file  react-refresh/only-export-components
   74:7  warning  Fast refresh only works when a file has exports. Move your component(s) to a separate file  react-refresh/only-export-components
 
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/english/AlphabetPage/index.tsx
-  31:9  error  'navigate' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/english/MissingLettersChallenge/index.tsx
-  42:9  error  'navigate' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/english/MonthsPage/index.tsx
-  127:21  error  Prop "style" is forbidden on Components  react/forbid-component-props
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/english/SightWordsChallenge/index.tsx
-   18:27  error  'Sparkles' is defined but never used     @typescript-eslint/no-unused-vars
-  168:27  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  174:44  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  200:21  error  Prop "style" is forbidden on Components  react/forbid-component-props
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/english/WeeksPage/index.tsx
-  109:17  error  Prop "style" is forbidden on Components  react/forbid-component-props
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/hindi/AlphabetHindiChallenge/index.tsx
-  40:9  error  'navigate' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/hindi/MonthsHindiPage/index.tsx
-  125:21  error  Prop "style" is forbidden on Components  react/forbid-component-props
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/hindi/WeeksHindiPage/index.tsx
-  115:17  error  Prop "style" is forbidden on Components  react/forbid-component-props
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/math/NumbersPage/index.tsx
-  5:3  error  'SettingsArea' is defined but never used  @typescript-eslint/no-unused-vars
-
-/Users/Hari/Code/ReactJS/kiddoo/src/modules/activities/math/PlaceValuesPage/index.tsx
-   13:45  error  'Sparkles' is defined but never used     @typescript-eslint/no-unused-vars
-  206:15  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  208:33  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  213:15  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  215:32  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  219:27  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  221:15  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  261:19  error  Prop "style" is forbidden on Components  react/forbid-component-props
-  369:26  error  Prop "style" is forbidden on Components  react/forbid-component-props
-
-✖ 54 problems (24 errors, 30 warnings)
+✖ 31 problems (1 error, 30 warnings)
 

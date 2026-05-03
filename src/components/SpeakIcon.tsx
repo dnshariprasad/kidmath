@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 
-const SpeakButton = styled(motion.div)<{ $size?: string }>`
+const SpeakButton = styled(motion.div)<{ $size?: string | number }>`
   width: ${(props) => {
+    if (typeof props.$size === "number") return `${props.$size}px`;
     switch (props.$size) {
       case "huge":
         return "120px";
@@ -17,6 +18,7 @@ const SpeakButton = styled(motion.div)<{ $size?: string }>`
     }
   }};
   height: ${(props) => {
+    if (typeof props.$size === "number") return `${props.$size}px`;
     switch (props.$size) {
       case "huge":
         return "120px";
@@ -75,7 +77,7 @@ const SpeakButton = styled(motion.div)<{ $size?: string }>`
 interface SpeakIconProps {
   text: string;
   lang?: string;
-  size?: "small" | "medium" | "large" | "huge";
+  size?: "small" | "medium" | "large" | "huge" | number;
 }
 
 const SpeakIcon: React.FC<SpeakIconProps> = ({ text, lang = "en-US", size }) => {
@@ -89,7 +91,10 @@ const SpeakIcon: React.FC<SpeakIconProps> = ({ text, lang = "en-US", size }) => 
       role="button"
       aria-label={text.length <= 2 ? text : "Read text"}
     >
-      <Volume2 strokeWidth={2.5} />
+      <Volume2
+        strokeWidth={2.5}
+        size={size ? (typeof size === "number" ? size * 0.5 : "1em") : undefined}
+      />
     </SpeakButton>
   );
 };

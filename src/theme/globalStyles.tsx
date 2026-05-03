@@ -19,6 +19,8 @@ export const GlobalCSS = createGlobalStyle`
   #root {
     min-height: 100vh;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
   * {
@@ -346,61 +348,18 @@ export const TitleArea = styled.div`
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.02),
     0 8px 24px rgba(0, 0, 0, 0.04);
-  padding: 12px 24px;
+  padding: 15px 30px;
   margin-bottom: 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   @media (max-width: 992px) {
     height: auto;
     min-height: 80px;
     padding: 10px 15px;
     margin-bottom: 0;
-  }
-`;
-
-export const GhostHeader = styled(TitleArea)`
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.theme.colors.primary} 0%,
-    ${(props) => props.theme.colors.primary}CC 100%
-  );
-  border: none;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.02),
-    0 8px 24px rgba(0, 0, 0, 0.04);
-  margin-bottom: 0;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
-    animation: rotate 10s linear infinite;
-  }
-
-  @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (max-width: 992px) {
-    order: 10;
-    min-height: 100px;
-    height: auto;
-    margin-top: 20px;
   }
 `;
 
@@ -441,7 +400,8 @@ export const PageHeader = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-bottom: 0;
+  margin: 0;
+  padding: 0;
   gap: 4px;
 `;
 
@@ -451,6 +411,7 @@ export const PageTitle = styled.h1`
   font-weight: 800;
   color: ${(props) => props.theme.colors.primary};
   margin: 0;
+  line-height: 1;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -468,6 +429,7 @@ export const PageSubtitle = styled.p`
   font-size: ${(props) => props.theme.fontSize.sm};
   color: ${(props) => props.theme.colors.textSecondary};
   margin: 0;
+  line-height: 1;
   opacity: 0.9;
   max-width: 600px;
   text-align: center;
@@ -494,16 +456,16 @@ export const GameActivityArea = styled(ActivityArea)`
   min-height: 400px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  padding: 20px 40px;
-  gap: 20px;
+  padding: 16px 40px !important;
+  gap: 16px;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
     min-height: 300px;
-    padding: 10px 15px;
-    gap: 10px;
+    padding: 16px 15px !important;
+    gap: 16px;
   }
 `;
 
@@ -537,7 +499,7 @@ export const PlusSign = styled.span`
 `;
 
 export const FeedbackWrapper = styled(motion.div)`
-  margin-top: 15px;
+  margin-top: 16px;
 `;
 
 export const SettingsArea = styled(SettingsCard)`
@@ -562,21 +524,18 @@ export const ControlBar = styled.div`
 `;
 
 export const NavControlBar = styled(ControlBar)`
-  margin-top: 15px;
+  margin: 0;
 `;
 
 export const GameLayout = styled.div`
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: auto 1fr;
-  gap: 20px 25px;
+  grid-template-columns: 3fr 1.2fr;
+  gap: 25px;
   width: 100%;
   align-items: start;
 
-  @media (max-width: 820px) {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
   }
 `;
 

@@ -8,42 +8,41 @@ import { KidoText } from "./KidoText";
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Matched exactly to GameList gap */
+  gap: 12px;
 `;
 
 const RankRow = styled(motion.create("div"))<{ $isLoading?: boolean; $isPlaceholder?: boolean }>`
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 80px; /* Matched to GameItem for perfect parity */
-  padding: 14px 18px; /* Matched GameItem padding */
-  background: ${(props) => props.theme.colors.surface}; /* Matched GameItem background */
-  border-radius: 16px;
-  border: 1px solid ${(props) => props.theme.colors.primary}08; /* Matched GameItem border */
+  min-height: 80px;
+  padding: 12px 16px;
+  background: ${(props) => props.theme.colors.surface};
+  border-radius: 18px;
+  border: 1px solid ${(props) => props.theme.colors.primary}05;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
   opacity: ${(props) => (props.$isLoading ? 0.3 : props.$isPlaceholder ? 0.5 : 1)};
   cursor: default;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 
   &:hover {
-    transform: translateX(6px);
-    border-color: ${(props) => props.theme.colors.primary}30;
-    background: ${(props) => props.theme.colors.primary}05;
+    transform: translateY(-2px);
+    border-color: ${(props) => props.theme.colors.primary}20;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
   &:nth-child(1) {
     background: ${(props) =>
       props.$isLoading || props.$isPlaceholder
         ? props.theme.colors.surface
-        : `linear-gradient(90deg, #ffd70015, transparent)`};
-    border-color: ${(props) =>
-      props.$isLoading || props.$isPlaceholder ? props.theme.colors.primary + "08" : "#ffd70030"};
+        : `linear-gradient(90deg, #ffd70008, transparent)`};
   }
 `;
 
 const RankBadge = styled.div<{ $rank: number }>`
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background: ${(props) => {
     if (props.$rank === 1) return "#FFD700";
     if (props.$rank === 2) return "#C0C0C0";
@@ -55,20 +54,20 @@ const RankBadge = styled.div<{ $rank: number }>`
   align-items: center;
   justify-content: center;
   font-weight: 900;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
 `;
 
 const Avatar = styled.div`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: ${(props) => props.theme.colors.primary}20;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: ${(props) => props.theme.colors.primary}10;
   color: ${(props) => props.theme.colors.primary};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 0.8rem;
+  font-weight: 800;
+  font-size: 0.85rem;
   text-transform: uppercase;
 `;
 
@@ -81,7 +80,7 @@ const Info = styled.div`
 const Stats = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin-top: 2px;
 `;
 
@@ -89,9 +88,9 @@ const StatItem = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: ${(props) => props.theme.colors.textSecondary};
-  opacity: 0.8;
+  font-weight: 600;
 `;
 
 const LoadingText = styled.div`
@@ -156,8 +155,14 @@ export const MiniLeaderboard: React.FC = () => {
               <RankBadge $rank={index + 1}>{index + 1}</RankBadge>
               <Avatar>?</Avatar>
               <Info>
-                <KidoText fontSize="sm" fontWeight={700} $textAlign="left" color="textSecondary">
-                  Waiting for Champion...
+                <KidoText
+                  fontSize="sm"
+                  fontWeight={700}
+                  $textAlign="left"
+                  color="textSecondary"
+                  $margin="0"
+                >
+                  Waiting...
                 </KidoText>
                 <Stats>
                   <StatItem>--%</StatItem>
@@ -184,7 +189,7 @@ export const MiniLeaderboard: React.FC = () => {
             <RankBadge $rank={index + 1}>{index + 1}</RankBadge>
             <Avatar>{initials}</Avatar>
             <Info>
-              <KidoText fontSize="sm" fontWeight={700} $textAlign="left">
+              <KidoText fontSize="sm" fontWeight={800} $textAlign="left" $margin="0">
                 {leader.userName || "Explorer"}
               </KidoText>
               <Stats>

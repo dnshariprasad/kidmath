@@ -4,49 +4,73 @@ import { createRoot } from "react-dom/client";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
-import Navbar from "./dashboard/nav/index.tsx";
+import Navbar from "./components/layout/Navbar/index.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import SharedCertificate from "./components/SharedCertificate/index.tsx";
-import {
-  ConnectedThemeProvider,
-  NameRequiredRoute,
-  LoadingState,
-  AuthStateListener,
-} from "./AppComponents";
+import { ConnectedThemeProvider, LoadingState, AuthStateListener } from "./providers/AppProviders";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 // Lazy load pages
-const Dashboard = lazy(() => import("./dashboard/dashboard/index.tsx"));
+const MainLayout = lazy(() => import("./components/layout/MainLayout/index.tsx"));
 const Welcome = lazy(() => import("./pages/Welcome/index.tsx"));
 const Login = lazy(() => import("./pages/Login/index.tsx"));
-const AlphabetPage = lazy(() => import("./pages/english/AlphabetPage/index.tsx"));
-const SightWordsChallenge = lazy(() => import("./pages/english/SightWordsChallenge/index.tsx"));
-const SpellingChallenge = lazy(() => import("./pages/english/SpellingChallenge/index.tsx"));
-const CrosswordSudoku = lazy(() => import("./pages/english/SudokuGame/index.tsx"));
-const AlphabetHindiChallenge = lazy(() => import("./pages/hindi/AlphabetHindiChallenge/index.tsx"));
+const AlphabetPage = lazy(() => import("./modules/activities/english/AlphabetPage/index.tsx"));
+const SightWordsChallenge = lazy(
+  () => import("./modules/activities/english/SightWordsChallenge/index.tsx"),
+);
+const SpellingChallenge = lazy(
+  () => import("./modules/activities/english/SpellingChallenge/index.tsx"),
+);
+const CrosswordSudoku = lazy(() => import("./modules/activities/english/SudokuGame/index.tsx"));
+const AlphabetHindiChallenge = lazy(
+  () => import("./modules/activities/hindi/AlphabetHindiChallenge/index.tsx"),
+);
 const AlphabetTeluguChallenge = lazy(
-  () => import("./pages/telugu/AlphabetTeluguChallenge/index.tsx"),
+  () => import("./modules/activities/telugu/AlphabetTeluguChallenge/index.tsx"),
 );
-const WeeksPage = lazy(() => import("./pages/english/WeeksPage/index.tsx"));
-const MonthsPage = lazy(() => import("./pages/english/MonthsPage/index.tsx"));
-const WeeksTeluguPage = lazy(() => import("./pages/telugu/WeeksTeluguPage/index.tsx"));
-const WeeksHindiPage = lazy(() => import("./pages/hindi/WeeksHindiPage/index.tsx"));
-const ShapesPage = lazy(() => import("./pages/math/ShapesPage/index.tsx"));
-const NumbersEnglishPage = lazy(() => import("./pages/english/NumbersEnglishPage/index.tsx"));
-const NumbersHindiPage = lazy(() => import("./pages/hindi/NumbersHindiPage/index.tsx"));
-const NumbersTeluguPage = lazy(() => import("./pages/telugu/NumbersTeluguPage/index.tsx"));
-const MonthsTeluguPage = lazy(() => import("./pages/telugu/MonthsTeluguPage/index.tsx"));
-const MonthsHindiPage = lazy(() => import("./pages/hindi/MonthsHindiPage/index.tsx"));
-const PlaceValuesPage = lazy(() => import("./pages/math/PlaceValuesPage/index.tsx"));
-const BodyPartsPage = lazy(() => import("./pages/science/BodyPartsPage/index.tsx"));
-const SenseOrgansPage = lazy(() => import("./pages/science/SenseOrgansPage/index.tsx"));
+const WeeksPage = lazy(() => import("./modules/activities/english/WeeksPage/index.tsx"));
+const MonthsPage = lazy(() => import("./modules/activities/english/MonthsPage/index.tsx"));
+const WeeksTeluguPage = lazy(() => import("./modules/activities/telugu/WeeksTeluguPage/index.tsx"));
+const WeeksHindiPage = lazy(() => import("./modules/activities/hindi/WeeksHindiPage/index.tsx"));
+const ShapesPage = lazy(() => import("./modules/activities/math/ShapesPage/index.tsx"));
+const NumbersEnglishPage = lazy(
+  () => import("./modules/activities/english/NumbersEnglishPage/index.tsx"),
+);
+const NumbersHindiPage = lazy(
+  () => import("./modules/activities/hindi/NumbersHindiPage/index.tsx"),
+);
+const NumbersTeluguPage = lazy(
+  () => import("./modules/activities/telugu/NumbersTeluguPage/index.tsx"),
+);
+const MonthsTeluguPage = lazy(
+  () => import("./modules/activities/telugu/MonthsTeluguPage/index.tsx"),
+);
+const MonthsHindiPage = lazy(() => import("./modules/activities/hindi/MonthsHindiPage/index.tsx"));
+const PlaceValuesPage = lazy(() => import("./modules/activities/math/PlaceValuesPage/index.tsx"));
+const BodyPartsPage = lazy(() => import("./modules/activities/science/BodyPartsPage/index.tsx"));
+const SenseOrgansPage = lazy(
+  () => import("./modules/activities/science/SenseOrgansPage/index.tsx"),
+);
 const MissingLettersChallenge = lazy(
-  () => import("./pages/english/MissingLettersChallenge/index.tsx"),
+  () => import("./modules/activities/english/MissingLettersChallenge/index.tsx"),
 );
-const GreaterLessEqualGame = lazy(() => import("./pages/math/GreaterLessEqualGame/index.tsx"));
-const MathChallenge = lazy(() => import("./pages/math/MathChallenge/index.tsx"));
-const NumberSorter = lazy(() => import("./pages/math/NumberSorter/index.tsx"));
+const GreaterLessEqualGame = lazy(
+  () => import("./modules/activities/math/GreaterLessEqualGame/index.tsx"),
+);
+const MathChallenge = lazy(() => import("./modules/activities/math/MathChallenge/index.tsx"));
+const NumberSorter = lazy(() => import("./modules/activities/math/NumberSorter/index.tsx"));
 const MasterTest = lazy(() => import("./pages/MasterTest/index.tsx"));
-const NumbersPage = lazy(() => import("./pages/math/NumbersPage/index.tsx"));
+const NumbersPage = lazy(() => import("./modules/activities/math/NumbersPage/index.tsx"));
 const TestHistory = lazy(() => import("./pages/TestHistory/index.tsx"));
 
 createRoot(document.getElementById("root")!).render(
@@ -55,6 +79,7 @@ createRoot(document.getElementById("root")!).render(
       <ConnectedThemeProvider>
         <ErrorBoundary>
           <HashRouter>
+            <ScrollToTop />
             <AuthStateListener>
               <Navbar />
               <SharedCertificate />
@@ -64,234 +89,234 @@ createRoot(document.getElementById("root")!).render(
                   <Route
                     path="/"
                     element={
-                      <NameRequiredRoute>
-                        <Dashboard />
-                      </NameRequiredRoute>
+                      <ProtectedRoute>
+                        <MainLayout />
+                      </ProtectedRoute>
                     }
                   >
                     <Route index element={<Welcome />} />
                     <Route
                       path="alphabet"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <AlphabetPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="counting"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <MathChallenge />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="learn_numbers"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <NumbersPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="sight_words"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <SightWordsChallenge />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="spelling"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <SpellingChallenge />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="comparison"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <GreaterLessEqualGame />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="sudoku"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <CrosswordSudoku />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="missing_letters"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <MissingLettersChallenge />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="sorting_numbers"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <NumberSorter />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="missing_numbers"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <MissingLettersChallenge />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="alphabet_hindi"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <AlphabetHindiChallenge />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="alphabet_telugu"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <AlphabetTeluguChallenge />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="weeks_english"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <WeeksPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="months_english"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <MonthsPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="weeks_telugu"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <WeeksTeluguPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="weeks_hindi"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <WeeksHindiPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="shapes"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <ShapesPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="place_values"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <PlaceValuesPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="numbers_english_spelling"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <NumbersEnglishPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="numbers_hindi"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <NumbersHindiPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="numbers_telugu"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <NumbersTeluguPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="months_telugu"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <MonthsTeluguPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="months_hindi"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <MonthsHindiPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="body_parts"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <BodyPartsPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="sense_organs"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <SenseOrgansPage />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="test/:testId"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <MasterTest />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="master_test"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <MasterTest />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="test_history"
                       element={
-                        <NameRequiredRoute>
+                        <ProtectedRoute>
                           <TestHistory />
-                        </NameRequiredRoute>
+                        </ProtectedRoute>
                       }
                     />
                   </Route>
