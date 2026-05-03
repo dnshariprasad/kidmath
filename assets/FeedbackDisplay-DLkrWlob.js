@@ -1,1 +1,0 @@
-import{p as s,Y as t,as as a,K as r}from"./index-BzFoXmKK.js";const o=({feedback:e,fontSize:i="lg"})=>s.jsx(t,{children:e&&s.jsx(a,{initial:{y:20,opacity:0},animate:{y:0,opacity:1},exit:{y:-20,opacity:0},children:s.jsx(r,{color:e.isCorrect?"success":"accent",fontSize:i,fontWeight:"bold",children:e.message})})});export{o as F};
