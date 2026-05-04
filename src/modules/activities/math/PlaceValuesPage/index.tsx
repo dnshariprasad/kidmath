@@ -13,6 +13,7 @@ import {
 import { Binary, HelpCircle, Globe, MapPin } from "lucide-react";
 import ChallengeHeader from "../../../../components/ChallengeHeader";
 import styled from "styled-components";
+import { TRANSLATIONS } from "../../../../constants/translations";
 
 import { DisplayWrapper, PulseCircle } from "../../shared/learnStyles";
 
@@ -169,6 +170,7 @@ const COMPARISON_DATA = [
 ];
 
 const PlaceValuesPage = () => {
+  const t = TRANSLATIONS.en;
   const [system, setSystem] = useState<"indian" | "intl">("indian");
   const [activeId, setActiveId] = useState("ones");
 
@@ -195,16 +197,16 @@ const PlaceValuesPage = () => {
         <GameActivityArea data-testid="activity-area">
           <ChallengeHeader
             icon={Binary}
-            title="Place Values"
-            subtitle="Compare Indian vs International Number Systems!"
+            title={t.math_placeValues}
+            subtitle={t.pv_subtitle}
             streak={0}
           />
           <SystemToggle>
             <Tag $isActive={system === "indian"} onClick={() => setSystem("indian")}>
-              <MapPin size={16} /> Indian System (Lakhs)
+              <MapPin size={16} /> {t.pv_indian} ({t.pv_lakhs})
             </Tag>
             <Tag $isActive={system === "intl"} onClick={() => setSystem("intl")}>
-              <Globe size={16} /> International System (Millions)
+              <Globe size={16} /> {t.pv_international} ({t.pv_millions})
             </Tag>
           </SystemToggle>
 
@@ -260,7 +262,9 @@ const PlaceValuesPage = () => {
                     color: current.color,
                   }}
                 >
-                  {system === "indian" ? "INDIAN SYSTEM" : "INTERNATIONAL SYSTEM"}
+                  {system === "indian"
+                    ? t.pv_indian.toUpperCase()
+                    : t.pv_international.toUpperCase()}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -301,7 +305,7 @@ const PlaceValuesPage = () => {
                 fontWeight: 900,
               }}
             >
-              <Globe size={24} /> COMPARISON TABLE
+              <Globe size={24} /> {t.pv_comparisonTable}
             </h3>
             <div
               style={{ overflowX: "auto", width: "100%", borderRadius: "20px", marginTop: "15px" }}
@@ -309,9 +313,9 @@ const PlaceValuesPage = () => {
               <ComparisonTable>
                 <thead>
                   <tr>
-                    <th>Number</th>
-                    <th>Indian System</th>
-                    <th>International System</th>
+                    <th>{t.pv_number}</th>
+                    <th>{t.pv_indian}</th>
+                    <th>{t.pv_international}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -340,22 +344,22 @@ const PlaceValuesPage = () => {
         <SettingsArea data-testid="settings-area">
           <ConfigSection>
             <ConfigSubTitle>
-              <HelpCircle size={16} /> Comma Rule
+              <HelpCircle size={16} /> {t.pv_commaRule}
             </ConfigSubTitle>
             <div style={{ fontSize: "0.85rem", lineHeight: 1.6, fontWeight: 600 }}>
               <p>
-                <strong style={{ color: "#6366F1" }}>Indian System:</strong> 1st comma after 3
+                <strong style={{ color: "#6366F1" }}>{t.pv_indian}:</strong> 1st comma after 3
                 digits, then every 2 digits. (1,00,00,000)
               </p>
               <p style={{ marginTop: "12px" }}>
-                <strong style={{ color: "#EC4899" }}>International:</strong> Commas after every 3
-                digits. (10,000,000)
+                <strong style={{ color: "#EC4899" }}>{t.pv_international}:</strong> Commas after
+                every 3 digits. (10,000,000)
               </p>
             </div>
           </ConfigSection>
 
           <ConfigSection>
-            <ConfigSubTitle>Quick Tip! 💡</ConfigSubTitle>
+            <ConfigSubTitle>{t.pv_quickTip}</ConfigSubTitle>
             <div style={{ fontSize: "0.85rem", lineHeight: 1.6, fontWeight: 600, opacity: 0.9 }}>
               <p>1 Million = 10 Lakhs</p>
               <p style={{ marginTop: "4px" }}>1 Billion = 100 Crores</p>

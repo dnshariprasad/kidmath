@@ -34,10 +34,12 @@ import {
 } from "./styles";
 import { KidoText } from "../../components/KidoText";
 import { MiniLeaderboard } from "../../components/MiniLeaderboard";
+import { TRANSLATIONS } from "../../constants/translations";
 
 const Welcome: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const t = TRANSLATIONS.en;
   const userName = useSelector((state: RootState) => state.alphabet.userName);
   const handleGameClick = (path: string, mode: "learn" | "practice" | "test") => {
     dispatch(setMode(mode));
@@ -82,8 +84,10 @@ const Welcome: React.FC = () => {
   return (
     <PageContainer data-testid="view-welcome">
       <PageHeader>
-        <PageTitle>Welcome, {userName || "Explorer"}! 👋</PageTitle>
-        <PageSubtitle>The ultimate learning playground for curious kids! 🌟</PageSubtitle>
+        <PageTitle>
+          {t.dash_welcome}, {userName || "Explorer"}! 👋
+        </PageTitle>
+        <PageSubtitle>{t.dash_subtitle}</PageSubtitle>
       </PageHeader>
 
       <ColumnsContainer>
@@ -96,7 +100,7 @@ const Welcome: React.FC = () => {
           <ColumnHeader>
             <BookOpen size={28} />
             <KidoText fontSize="xl" color="primary" fontWeight={900}>
-              Learn
+              {t.dash_learn}
             </KidoText>
           </ColumnHeader>
           <GameList>
@@ -118,7 +122,7 @@ const Welcome: React.FC = () => {
           </GameList>
           <div style={{ marginTop: "auto", textAlign: "center", paddingTop: "16px" }}>
             <KidButton
-              title="EXPLORE ALL"
+              title={t.dash_exploreAll}
               variant="secondary"
               onClick={() => handleExploreClick("learn")}
               width="100%"
@@ -135,7 +139,7 @@ const Welcome: React.FC = () => {
           <ColumnHeader>
             <Gamepad2 size={28} />
             <KidoText fontSize="xl" color="primary" fontWeight={900}>
-              Practice
+              {t.dash_practice}
             </KidoText>
           </ColumnHeader>
           <GameList>
@@ -157,7 +161,7 @@ const Welcome: React.FC = () => {
           </GameList>
           <div style={{ marginTop: "auto", textAlign: "center", paddingTop: "16px" }}>
             <KidButton
-              title="EXPLORE ALL"
+              title={t.dash_exploreAll}
               variant="secondary"
               onClick={() => handleExploreClick("practice")}
               width="100%"
@@ -174,14 +178,14 @@ const Welcome: React.FC = () => {
           <ColumnHeader>
             <CheckCircle2 size={28} />
             <KidoText fontSize="xl" color="primary" fontWeight={900}>
-              Leaderboard
+              {t.dash_leaderboard}
             </KidoText>
           </ColumnHeader>
 
           <MiniLeaderboard />
           <div style={{ marginTop: "auto", textAlign: "center", paddingTop: "16px" }}>
             <KidButton
-              title="TAKE THE CHALLENGE"
+              title={t.dash_takeChallenge}
               variant="secondary"
               onClick={() => navigate("/master_test")}
               width="100%"
@@ -194,15 +198,14 @@ const Welcome: React.FC = () => {
         <Trophy size={60} color="#FFEAA7" />
         <FooterContent>
           <KidoText fontSize="2rem" color="onPrimary" fontWeight={900}>
-            Achievement Program 🏆
+            {t.dash_achievementTitle}
           </KidoText>
           <KidoText fontSize="lg" color="onPrimary">
-            Master any subject by reaching a 10-streak to earn your exclusive printable certificate!
-            Track your progress with the stars on each activity.
+            {t.dash_achievementDesc}
           </KidoText>
         </FooterContent>
         <KidButton
-          title="Start Learning! 🚀"
+          title={t.dash_startLearning}
           variant="accent"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           minWidth="220px"

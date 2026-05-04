@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Timer, Star, Medal } from "lucide-react";
 import { PageContainer, PageHeader, PageTitle, PageSubtitle } from "../../theme/globalStyles";
 import { getGlobalLeaderboard, TestResult } from "../../firebase/testService";
+import { TRANSLATIONS } from "../../constants/translations";
 import {
   LeaderboardCard,
   TabContainer,
@@ -17,16 +18,17 @@ import {
 } from "./styles";
 
 const Leaderboard: React.FC = () => {
+  const t = TRANSLATIONS.en;
   const [leaders, setLeaders] = useState<(TestResult & { id: string })[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<string>("all");
 
   const tabs = [
-    { id: "all", label: "Global All" },
-    { id: "math_test", label: "Math Hero" },
-    { id: "english_missing_letters", label: "English" },
-    { id: "spelling_test", label: "Spelling" },
-    { id: "logic_test", label: "Logic" },
+    { id: "all", label: t.lead_tabAll },
+    { id: "math_test", label: t.lead_tabMath },
+    { id: "english_missing_letters", label: t.lead_tabEnglish },
+    { id: "spelling_test", label: t.lead_tabSpelling },
+    { id: "logic_test", label: t.lead_tabLogic },
   ];
 
   useEffect(() => {
@@ -55,8 +57,8 @@ const Leaderboard: React.FC = () => {
   return (
     <PageContainer>
       <PageHeader>
-        <PageTitle>Hall of Fame 🏆</PageTitle>
-        <PageSubtitle>The top achievers in the Kiddoo universe!</PageSubtitle>
+        <PageTitle>{t.lead_title}</PageTitle>
+        <PageSubtitle>{t.lead_subtitle}</PageSubtitle>
       </PageHeader>
 
       <LeaderboardCard
@@ -73,20 +75,20 @@ const Leaderboard: React.FC = () => {
         </TabContainer>
 
         {loading ? (
-          <div style={{ textAlign: "center", padding: "40px" }}>Loading rankings...</div>
+          <div style={{ textAlign: "center", padding: "40px" }}>{t.lead_loading}</div>
         ) : (
           <Table>
             <TableHeader>
-              <div>Rank</div>
-              <div>User</div>
-              <div>Name</div>
-              <div style={{ textAlign: "right" }}>Score</div>
-              <div style={{ textAlign: "right" }}>Time</div>
+              <div>{t.lead_rank}</div>
+              <div>{t.lead_user}</div>
+              <div>{t.lead_name}</div>
+              <div style={{ textAlign: "right" }}>{t.lead_score}</div>
+              <div style={{ textAlign: "right" }}>{t.lead_time}</div>
             </TableHeader>
 
             {leaders.length === 0 ? (
               <div style={{ textAlign: "center", padding: "40px", opacity: 0.6 }}>
-                No rankings yet. Be the first to top the chart! 🚀
+                {t.lead_noRankings}
               </div>
             ) : (
               leaders.map((leader, index) => {

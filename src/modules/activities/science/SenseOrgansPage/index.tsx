@@ -15,6 +15,7 @@ import NextIcon from "../../../../components/NextIcon";
 import PreviousIcon from "../../../../components/PreviousIcon";
 import { Eye } from "lucide-react";
 import ChallengeHeader from "../../../../components/ChallengeHeader";
+import { TRANSLATIONS } from "../../../../constants/translations";
 
 import { senseOrgans } from "../../../../constants/scienceData";
 import {
@@ -29,15 +30,8 @@ import {
   SenseDesc,
 } from "../../shared/learnStyles";
 
-const FACTS = [
-  { emoji: "👁️", fact: "Humans blink about 15-20 times per minute!" },
-  { emoji: "👂", fact: "Your ears never stop hearing, even when you sleep!" },
-  { emoji: "👃", fact: "Your nose can remember 50,000 different scents." },
-  { emoji: "👅", fact: "The tongue is the strongest muscle in the body!" },
-  { emoji: "🤚", fact: "Fingertips are one of the most sensitive parts of the skin." },
-];
-
 const SenseOrgansPage = () => {
+  const t = TRANSLATIONS.en;
   const [index, setIndex] = useState(0);
   const current = senseOrgans[index];
 
@@ -50,8 +44,8 @@ const SenseOrgansPage = () => {
         <GameActivityArea data-testid="activity-area">
           <ChallengeHeader
             icon={Eye}
-            title="Sense Organs"
-            subtitle="Our 5 amazing sense organs!"
+            title={t.sci_senseTitle}
+            subtitle={t.sci_senseSubtitle}
             streak={0}
           />
           <DisplayWrapper>
@@ -121,7 +115,7 @@ const SenseOrgansPage = () => {
                 <SenseEmoji>{organ.emoji}</SenseEmoji>
                 <SenseName>{organ.name}</SenseName>
                 <SenseDesc $isActive={index === i}>
-                  {(organ.description || "").split(" ")[0]} sense
+                  {(organ.description || "").split(" ")[0]} {t.sci_senseLabel}
                 </SenseDesc>
               </SenseCard>
             ))}
@@ -130,9 +124,9 @@ const SenseOrgansPage = () => {
 
         <SettingsArea data-testid="settings-area">
           <ConfigSection>
-            <ConfigSubTitle>Sense Facts! 🌟</ConfigSubTitle>
+            <ConfigSubTitle>{t.sci_senseFactsTitle}</ConfigSubTitle>
             <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-              {FACTS.map((f, i) => (
+              {t.sci_senseFacts.map((f, i) => (
                 <div
                   key={i}
                   style={{

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Timer, Star } from "lucide-react";
 import { getGlobalLeaderboard, TestResult } from "../firebase/testService";
 import { KidoText } from "./KidoText";
+import { TRANSLATIONS } from "../constants/translations";
 
 const ListContainer = styled.div`
   display: flex;
@@ -108,6 +109,7 @@ const LoadingStat = styled.div`
 `;
 
 export const MiniLeaderboard: React.FC = () => {
+  const t = TRANSLATIONS.en;
   const [leaders, setLeaders] = useState<(TestResult & { id: string })[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -162,7 +164,7 @@ export const MiniLeaderboard: React.FC = () => {
                   color="textSecondary"
                   $margin="0"
                 >
-                  Waiting...
+                  {t.lead_waiting}
                 </KidoText>
                 <Stats>
                   <StatItem>--%</StatItem>

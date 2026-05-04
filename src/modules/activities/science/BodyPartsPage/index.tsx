@@ -16,6 +16,7 @@ import NextIcon from "../../../../components/NextIcon";
 import PreviousIcon from "../../../../components/PreviousIcon";
 import { HeartPulse } from "lucide-react";
 import ChallengeHeader from "../../../../components/ChallengeHeader";
+import { TRANSLATIONS } from "../../../../constants/translations";
 
 import { bodyParts, bodyPartsGroups } from "../../../../constants/scienceData";
 import {
@@ -26,23 +27,15 @@ import {
   PulseCircle,
 } from "../../shared/learnStyles";
 
-const FACTS = [
-  { emoji: "🦴", fact: "Adults have 206 bones in their body!" },
-  { emoji: "🧠", fact: "Your brain controls everything you do." },
-  { emoji: "❤️", fact: "Your heart pumps blood all day and night." },
-  { emoji: "💪", fact: "There are over 600 muscles in your body." },
-  { emoji: "🦷", fact: "Enamel on your teeth is the hardest part of your body!" },
-  { emoji: "🖐️", fact: "Your skin is the largest organ you have!" },
-];
-
 const BodyPartsPage = () => {
+  const t = TRANSLATIONS.en;
   const [index, setIndex] = useState(0);
   const current = bodyParts[index];
 
   const handleNext = () => setIndex((p) => (p + 1) % bodyParts.length);
   const handlePrev = () => setIndex((p) => (p - 1 + bodyParts.length) % bodyParts.length);
 
-  const groupLabels = ["Head", "Torso", "Arms", "Legs"];
+  const groupLabels = [t.sci_groupHead, t.sci_groupTorso, t.sci_groupArms, t.sci_groupLegs];
 
   return (
     <PageContainer data-testid="view-body-parts">
@@ -50,8 +43,8 @@ const BodyPartsPage = () => {
         <GameActivityArea data-testid="activity-area">
           <ChallengeHeader
             icon={HeartPulse}
-            title="Body Parts"
-            subtitle="Learn the parts of our body!"
+            title={t.sci_bodyParts}
+            subtitle={t.sci_bodySubtitle}
             streak={0}
           />
           <DisplayWrapper>
@@ -164,9 +157,9 @@ const BodyPartsPage = () => {
 
         <SettingsArea data-testid="settings-area">
           <ConfigSection>
-            <ConfigSubTitle>Amazing Body Facts! 🌟</ConfigSubTitle>
+            <ConfigSubTitle>{t.sci_amazingFacts}</ConfigSubTitle>
             <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-              {FACTS.map((f, i) => (
+              {t.sci_facts.map((f, i) => (
                 <div
                   key={i}
                   style={{

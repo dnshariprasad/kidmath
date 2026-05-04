@@ -94,20 +94,20 @@ const Navbar: React.FC = () => {
           <LogoIconContainer>
             <Balloon size={24} color="white" strokeWidth={2.5} fill="rgba(255, 255, 255, 0.2)" />
           </LogoIconContainer>
-          <AppNameText>kiddoo</AppNameText>
+          <AppNameText>{t.nav_appName}</AppNameText>
         </AppName>
       </NavLeftSection>
 
       <UserSection>
-        <IconButton as={Link} to="/test_history" title="Test History">
+        <IconButton as={Link} to="/test_history" title={t.nav_historyTitle}>
           <History size={20} />
         </IconButton>
 
         <IconButton
           onClick={async () => {
             const shareData = {
-              title: "Kiddoo - Fun Learning for Kids",
-              text: "Check out Kiddoo, a fun and interactive learning platform for kids! 🚀",
+              title: t.nav_appName,
+              text: t.nav_shareText,
               url: "https://dnshariprasad.github.io/kiddoo/",
             };
             try {
@@ -115,13 +115,13 @@ const Navbar: React.FC = () => {
                 await navigator.share(shareData);
               } else {
                 await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-                alert("Link copied to clipboard! 📋");
+                alert(t.cert_copied);
               }
             } catch (err) {
               console.error("Error sharing:", err);
             }
           }}
-          title="Share Kiddoo"
+          title={t.nav_shareTitle}
         >
           <Share2 size={20} />
         </IconButton>
@@ -175,7 +175,7 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     <LogOut size={20} />
-                    <span>Logout</span>
+                    <span>{t.nav_logout}</span>
                   </DropdownItem>
                 </>
               ) : (

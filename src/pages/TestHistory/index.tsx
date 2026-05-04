@@ -50,8 +50,10 @@ import LoadingScreen from "../../components/LoadingScreen";
 import ChallengeHeader from "../../components/ChallengeHeader";
 import { colors } from "../../theme/colors";
 import { KidoText } from "../../components/KidoText";
+import { TRANSLATIONS } from "../../constants/translations";
 
 const TestHistory: React.FC = () => {
+  const t = TRANSLATIONS.en;
   const user = useSelector((state: RootState) => state.alphabet.user);
   const [history, setHistory] = useState<(TestResult & { id: string })[]>([]);
   const [leaders, setLeaders] = useState<(TestResult & { id: string })[]>([]);
@@ -109,12 +111,7 @@ const TestHistory: React.FC = () => {
   return (
     <PageContainer>
       <HistoryContainer>
-        <ChallengeHeader
-          icon={Medal}
-          title="Achievement Board"
-          subtitle="Tracking your journey and the world's top stars! 🌟"
-          streak={0}
-        />
+        <ChallengeHeader icon={Medal} title={t.his_title} subtitle={t.his_subtitle} streak={0} />
 
         <SplitLayout>
           {/* MY ACHIEVEMENTS */}
@@ -125,10 +122,10 @@ const TestHistory: React.FC = () => {
               </TitleIconWrapper>
               <HeaderContent>
                 <KidoText fontSize="lg" fontWeight={900} $textAlign="left" $margin="0">
-                  My Achievements
+                  {t.his_myAchievements}
                 </KidoText>
                 <KidoText fontSize="xs" color="textSecondary" $textAlign="left" $margin="2px 0 0 0">
-                  Your personal progress and history
+                  {t.his_myDesc}
                 </KidoText>
               </HeaderContent>
             </SectionHeader>
@@ -138,9 +135,9 @@ const TestHistory: React.FC = () => {
                 <IconContainer $bg={colors.primary + "10"}>
                   <Trophy size={60} color={colors.primary} />
                 </IconContainer>
-                <EmptyMessage>Your trophy cabinet is empty! Let's win some stars! 🚀</EmptyMessage>
+                <EmptyMessage>{t.his_emptyMsg}</EmptyMessage>
                 <KidButton
-                  title="Start a Challenge"
+                  title={t.dash_takeChallenge}
                   onClick={() => navigate("/master_test")}
                   variant="primary"
                 />
@@ -170,7 +167,7 @@ const TestHistory: React.FC = () => {
                       </TestInfo>
 
                       <StatBox>
-                        <StatLabel>Total Time</StatLabel>
+                        <StatLabel>{t.his_totalTime}</StatLabel>
                         <StatValue>
                           <Clock size={16} color={colors.primary} />
                           {Math.floor(item.timeTaken / 60)}:
@@ -203,10 +200,10 @@ const TestHistory: React.FC = () => {
               </TitleIconWrapper>
               <HeaderContent>
                 <KidoText fontSize="lg" fontWeight={900} $textAlign="left" $margin="0">
-                  Global Hall of Fame
+                  {t.lead_title}
                 </KidoText>
                 <KidoText fontSize="xs" color="textSecondary" $textAlign="left" $margin="2px 0 0 0">
-                  The top champions in the world
+                  {t.lead_subtitle}
                 </KidoText>
               </HeaderContent>
             </SectionHeader>
@@ -216,9 +213,9 @@ const TestHistory: React.FC = () => {
                 <IconContainer $bg={colors.warning + "10"}>
                   <Star size={60} color={colors.warning} />
                 </IconContainer>
-                <EmptyMessage>The Hall of Fame is waiting for its first stars! 🌟</EmptyMessage>
+                <EmptyMessage>{t.lead_noRankings}</EmptyMessage>
                 <KidoText fontSize="xs" fontWeight={600} $margin="10px 0 0 0">
-                  Check back soon to see the top scorers!
+                  {t.his_checkSoon}
                 </KidoText>
               </EmptyState>
             ) : (
@@ -259,12 +256,12 @@ const TestHistory: React.FC = () => {
                             fontWeight={800}
                             $textAlign="left"
                           >
-                            CURRENT CHAMPION 👑
+                            {t.his_champion}
                           </KidoText>
                         )}
                       </NameSection>
                       <StatBox $align="flex-end">
-                        <StatLabel>Score</StatLabel>
+                        <StatLabel>{t.his_score}</StatLabel>
                         <ScoreValue $rank={rank}>
                           <IconMargin>
                             <Target size={14} />
@@ -273,13 +270,13 @@ const TestHistory: React.FC = () => {
                         </ScoreValue>
                       </StatBox>
                       <StatBox $align="flex-end">
-                        <StatLabel>Time</StatLabel>
+                        <StatLabel>{t.his_time}</StatLabel>
                         <TimeValue>
                           <IconMargin>
                             <Timer size={14} />
                           </IconMargin>
                           {Math.floor(leader.timeTaken / 60)}:
-                          {(leader.timeTaken % 60).toString().padStart(2, "0")}s
+                          {(leader.timeTaken % 60).toString().padStart(2, "0")}
                         </TimeValue>
                       </StatBox>
                     </LeaderboardRow>

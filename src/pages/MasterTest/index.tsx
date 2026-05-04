@@ -123,11 +123,21 @@ const MasterTest: React.FC = () => {
   const t = TRANSLATIONS.en;
 
   const categories = [
-    { id: "math_test", label: "Math", icon: <Calculator size={18} />, color: "#6366F1" },
-    { id: "spelling_test", label: "English", icon: <BookOpen size={18} />, color: "#6366F1" },
-    { id: "hindi_test", label: "Hindi", icon: <Languages size={18} />, color: "#6366F1" },
-    { id: "logic_test", label: "Logic", icon: <Brain size={18} />, color: "#6366F1" },
-    { id: "master_test", label: "Grand Master", icon: <Trophy size={18} />, color: "#6366F1" },
+    { id: "math_test", label: t.math_mathMagic, icon: <Calculator size={18} />, color: "#6366F1" },
+    {
+      id: "spelling_test",
+      label: t.eng_spellingHero,
+      icon: <BookOpen size={18} />,
+      color: "#6366F1",
+    },
+    {
+      id: "hindi_test",
+      label: t.hindi_hindiLegend,
+      icon: <Languages size={18} />,
+      color: "#6366F1",
+    },
+    { id: "logic_test", label: t.log_grandLogic, icon: <Brain size={18} />, color: "#6366F1" },
+    { id: "master_test", label: t.mst_grandMaster, icon: <Trophy size={18} />, color: "#6366F1" },
   ];
 
   const difficultyOptions = React.useMemo(
@@ -156,11 +166,11 @@ const MasterTest: React.FC = () => {
 
   const questionCountOptions = React.useMemo(
     () => [
-      { value: 10, label: "10 Questions", info: "Perfect for a quick practice" },
-      { value: 15, label: "15 Questions", info: "A bit more challenging" },
-      { value: 20, label: "20 Questions", info: "Testing your endurance" },
-      { value: 25, label: "25 Questions", info: "The ultimate challenge" },
-      { value: 50, label: "50 Questions", info: "The Grand Master's Marathon" },
+      { value: 10, label: `10 ${t.mst_questionsShort}`, info: "Perfect for a quick practice" },
+      { value: 15, label: `15 ${t.mst_questionsShort}`, info: "A bit more challenging" },
+      { value: 20, label: `20 ${t.mst_questionsShort}`, info: "Testing your endurance" },
+      { value: 25, label: `25 ${t.mst_questionsShort}`, info: "The ultimate challenge" },
+      { value: 50, label: `50 ${t.mst_questionsShort}`, info: "The Grand Master's Marathon" },
     ],
     [],
   );
@@ -484,11 +494,11 @@ const MasterTest: React.FC = () => {
               transition={{ type: "spring", damping: 20 }}
             >
               <SettingsTitle fontSize="2xl" fontWeight={900}>
-                Ready for a Challenge? Let's Go!
+                {t.mst_ready}
               </SettingsTitle>
 
               <SetupSection>
-                <ConfigSubTitle>Choose Your Subject</ConfigSubTitle>
+                <ConfigSubTitle>{t.mst_chooseSubject}</ConfigSubTitle>
                 <SubjectGrid>
                   {categories.map((cat) => (
                     <SubjectChip
@@ -507,7 +517,7 @@ const MasterTest: React.FC = () => {
 
                 {(selectedTestId === "math_test" || isMasterTest) && (
                   <>
-                    <ConfigSubTitle>Included Operations</ConfigSubTitle>
+                    <ConfigSubTitle>{t.mst_includedOperations}</ConfigSubTitle>
                     <OperationToggleGrid>
                       {[
                         { symbol: "+", label: t.math_addition },
@@ -574,7 +584,7 @@ const MasterTest: React.FC = () => {
                 )}
 
                 <DifficultyPicker
-                  title="Difficulty"
+                  title={t.com_difficulty}
                   options={difficultyOptions}
                   currentValue={complexity}
                   onChange={(val) => setComplexity(val as number)}
@@ -582,7 +592,7 @@ const MasterTest: React.FC = () => {
                 />
 
                 <DifficultyPicker
-                  title="Number of Questions"
+                  title={t.mst_questionCount}
                   options={questionCountOptions}
                   currentValue={questionCount}
                   onChange={(val) => setQuestionCount(val as number)}
@@ -590,7 +600,7 @@ const MasterTest: React.FC = () => {
                 />
 
                 <DifficultyPicker
-                  title="Target Time"
+                  title={t.mst_targetTime}
                   options={timeOptions}
                   currentValue={targetTime}
                   onChange={(val) => setTargetTime(val as number)}
@@ -696,7 +706,7 @@ const MasterTest: React.FC = () => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                {getGradeTitle(score, questions.length)}
+                {getGradeTitle(score, questions.length, t)}
               </GradeBadge>
 
               {targetTime > 0 && timer >= targetTime && (
@@ -708,7 +718,7 @@ const MasterTest: React.FC = () => {
                     marginTop: "10px",
                   }}
                 >
-                  ⏰ TIME'S UP!
+                  ⏰ {t.mst_timesUp}
                 </div>
               )}
 
@@ -750,7 +760,7 @@ const MasterTest: React.FC = () => {
                 )}
 
                 <KidButton
-                  title="Options ▾"
+                  title={`${t.mst_options} ▾`}
                   onClick={() => setShowResultMenu(!showResultMenu)}
                   variant="secondary"
                   icon={<ChevronDown size={20} />}
@@ -813,7 +823,7 @@ const MasterTest: React.FC = () => {
                     <ReviewItem key={q.id} $correct={isCorrect}>
                       <ReviewRow>
                         <KidoText fontSize="md" fontWeight={800} color="textPrimary">
-                          Question {q.id}: {q.prompt}
+                          {t.test_question} {q.id}: {q.prompt}
                         </KidoText>
                         {isCorrect ? (
                           <CheckCircle2 color="#10B981" size={24} />

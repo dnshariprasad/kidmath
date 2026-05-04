@@ -328,10 +328,10 @@ export const getQuestionTextToSpeak = (q: Question) => {
   return q.data.word || q.data.letter || q.prompt;
 };
 
-export const getGradeTitle = (score: number, total: number): string => {
+export const getGradeTitle = (score: number, total: number, t: TranslationKeys): string => {
   const ratio = score / total;
-  if (ratio === 1) return "GRAND MASTER";
-  if (ratio >= 0.9) return "LEGEND";
-  if (ratio >= 0.8) return "PRODIGY";
-  return "KIDDOO HERO";
+  if (ratio === 1) return t.mst_rank1;
+  if (ratio >= 0.9) return t.mst_rank2;
+  if (ratio >= 0.8) return t.mst_rank3;
+  return t.mst_rank4;
 };

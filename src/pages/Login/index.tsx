@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slice/AlphabetSlice";
 import { useNavigate } from "react-router-dom";
 import KidButton from "../../components/KidButton";
+import { TRANSLATIONS } from "../../constants/translations";
 import {
   LoginContainer,
   LoginCard,
@@ -35,6 +36,7 @@ const Login: React.FC = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const t = TRANSLATIONS.en;
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,17 +103,17 @@ const Login: React.FC = () => {
   return (
     <LoginContainer>
       <LoginCard initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <Title>{isLogin ? "Welcome Back!" : "Join Kiddoo"}</Title>
+        <Title>{isLogin ? t.auth_welcomeBack : t.auth_join}</Title>
         <form
           onSubmit={handleAuth}
           style={{ display: "flex", flexDirection: "column", gap: "20px" }}
         >
           {!isLogin && (
             <InputGroup>
-              <Label>Kid's Name</Label>
+              <Label>{t.auth_kidsName}</Label>
               <Input
                 type="text"
-                placeholder="Enter name"
+                placeholder={t.auth_enterName}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -119,20 +121,20 @@ const Login: React.FC = () => {
             </InputGroup>
           )}
           <InputGroup>
-            <Label>Email</Label>
+            <Label>{t.auth_email}</Label>
             <Input
               type="email"
-              placeholder="Enter email"
+              placeholder={t.auth_enterEmail}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </InputGroup>
           <InputGroup>
-            <Label>Password</Label>
+            <Label>{t.auth_password}</Label>
             <Input
               type="password"
-              placeholder="Enter password"
+              placeholder={t.auth_enterPassword}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -142,7 +144,7 @@ const Login: React.FC = () => {
           {error && <ErrorMessage>{error}</ErrorMessage>}
 
           <KidButton
-            title={loading ? "Please wait..." : isLogin ? "Login" : "Sign Up"}
+            title={loading ? t.auth_pleaseWait : isLogin ? t.auth_login : t.auth_signUp}
             onClick={() => {}}
             variant="primary"
             type="submit"
@@ -152,7 +154,7 @@ const Login: React.FC = () => {
         </form>
 
         <Divider>
-          <span>OR</span>
+          <span>{t.auth_or}</span>
         </Divider>
 
         <GoogleButton type="button" onClick={handleGoogleSignIn}>
@@ -174,12 +176,12 @@ const Login: React.FC = () => {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          Sign in with Google
+          {t.auth_googleSignIn}
         </GoogleButton>
 
         <SwitchText>
-          {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <span onClick={() => setIsLogin(!isLogin)}>{isLogin ? "Sign Up" : "Login"}</span>
+          {isLogin ? t.auth_noAccount : t.auth_hasAccount}
+          <span onClick={() => setIsLogin(!isLogin)}>{isLogin ? t.auth_signUp : t.auth_login}</span>
         </SwitchText>
       </LoginCard>
     </LoginContainer>

@@ -23,10 +23,12 @@ import {
 } from "./styles";
 import ChallengeHeader from "../../../../components/ChallengeHeader";
 import DifficultyPicker from "../../../../components/DifficultyPicker";
+import { TRANSLATIONS } from "../../../../constants/translations";
 
 const BIG = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 const AlphabetPage = () => {
+  const t = TRANSLATIONS.en;
   const streak = useSelector((state: RootState) => state.alphabet.gameStats?.alphabet?.streak ?? 0);
   const [index, setIndex] = useState(0);
   const [letterCase, setLetterCase] = useState<"big" | "small">("big");
@@ -38,8 +40,8 @@ const AlphabetPage = () => {
   const handlePrevious = () => setIndex((prev) => (prev - 1 + BIG.length) % BIG.length);
 
   const caseOptions = [
-    { value: "big", label: "BIG LETTERS (A)" },
-    { value: "small", label: "small letters (a)" },
+    { value: "big", label: t.eng_bigLetters },
+    { value: "small", label: t.eng_smallLetters },
   ];
 
   return (
@@ -48,8 +50,8 @@ const AlphabetPage = () => {
         <GameActivityArea data-testid="activity-area">
           <ChallengeHeader
             icon={Type}
-            title="ABC Alphabet"
-            subtitle="Learn letters and phonics with fun!"
+            title={t.eng_alphabetTitle}
+            subtitle={t.eng_alphabetSubtitle}
             streak={streak}
           />
           <LetterDisplayWrapper>
@@ -112,7 +114,7 @@ const AlphabetPage = () => {
 
         <SettingsArea data-testid="settings-area">
           <DifficultyPicker
-            title="Letter Case"
+            title={t.eng_letterCase}
             name="case"
             options={caseOptions}
             currentValue={letterCase}
