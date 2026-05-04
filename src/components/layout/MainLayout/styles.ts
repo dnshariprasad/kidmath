@@ -7,14 +7,14 @@ export const LayoutContainer = styled.div`
   width: 100%; /* Ensure full width */
   background-color: ${(props) => props.theme.colors.background};
   margin-top: 70px !important;
-  padding-top: 16px !important;
+  padding-top: 24px !important;
   overflow: hidden;
 
   @media (max-width: 768px) {
     flex-direction: column;
     height: auto;
     margin-top: 70px !important;
-    padding-top: 16px !important;
+    padding-top: 24px !important;
     overflow: visible;
   }
 `;

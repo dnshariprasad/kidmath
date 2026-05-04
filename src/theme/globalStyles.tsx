@@ -458,13 +458,13 @@ export const GameActivityArea = styled(ActivityArea)`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 16px 40px !important;
+  padding: 32px 40px 16px !important;
   gap: 16px;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
     min-height: 300px;
-    padding: 16px 15px !important;
+    padding: 32px 15px 16px !important;
     gap: 16px;
   }
 `;
@@ -524,7 +524,7 @@ export const ControlBar = styled.div`
 `;
 
 export const NavControlBar = styled(ControlBar)`
-  margin: 0;
+  margin-bottom: 16px;
 `;
 
 export const GameLayout = styled.div`
